@@ -1,26 +1,52 @@
 ---
 title: Installation
-description: Scaffold a site, run it locally, add your first page.
+description: Copy the template, run it locally, add your first page.
 group: Getting started
 order: 2
-updated: 2026-08-19
+updated: 2026-09-10
 ---
+
+import { repositoryUrl, useTemplateUrl } from "@utils/repository";
 
 ## Prerequisites
 
 - Node 22.12 or newer
 - Any package manager — npm, pnpm or yarn
+- A GitHub account. There is no installer and no npm package: the template is a repository you
+  copy and then own.
 
-## Scaffold the site
+## Copy the template
 
-The initializer creates the folder, installs dependencies and writes a starter config.
+Two routes, both ending with a repository of your own.
 
-<CodeTabs
-  tabs={[
-    { label: "npm", language: "bash", code: "npm create docsmith@latest acme-docs\ncd acme-docs\nnpm install" },
-    { label: "pnpm", language: "bash", code: "pnpm create docsmith acme-docs\ncd acme-docs\npnpm install" },
-    { label: "yarn", language: "bash", code: "yarn create docsmith acme-docs\ncd acme-docs\nyarn" },
-  ]}
+### From GitHub
+
+Open <a href={useTemplateUrl}>Use this template</a> on the repository, name your copy, then
+clone it and install:
+
+```bash title="terminal"
+git clone https://github.com/your-org/acme-docs.git
+cd acme-docs
+npm ci
+```
+
+<Alert
+  variant="note"
+  title="npm ci, not npm install"
+  text="`npm ci` installs the exact versions in the lockfile. A bare `npm install` can rewrite it in a way that breaks the Linux build in CI."
+/>
+
+### From CloudCannon
+
+Use the **Deploy to CloudCannon** button on the template's listing. CloudCannon forks the
+repository for you, runs the first build, and opens the site with visual editing already
+wired up — every component on this site carries the CloudCannon configuration that makes it
+editable on the page.
+
+<Alert
+  variant="warning"
+  title="CloudCannon is a paid product"
+  text="Building and hosting a site on CloudCannon requires a paid plan. The template itself is MIT licensed and builds anywhere — see “Do I have to use CloudCannon?” below."
 />
 
 ## Run the dev server
@@ -56,8 +82,9 @@ Subscribe to events and we'll POST them to your endpoint.
 ## Deploy
 
 `npm run build` emits a static `dist/` — search index included — that any static host will
-serve. No server runtime, no database. See [Configuration](/configuration/) for the settings a
-deploy usually needs.
+serve. No server runtime, no database. CloudCannon runs the same command; so does Netlify,
+Vercel or a GitHub Actions job that pushes to Pages. See [Configuration](/configuration/) for
+the settings a deploy usually needs.
 
 ## Common questions
 
@@ -82,7 +109,7 @@ deploy usually needs.
       contentSections: [
         {
           _component: "building-blocks/core-elements/text",
-          text: "No. This is a plain Astro site — `npm run build` emits a static `dist/` whatever you edit it with. The CloudCannon YAML beside each component is what makes the site editable on the page for non-technical teammates; ignore it and nothing breaks.",
+          text: "No. This is a plain Astro site — `npm run build` emits a static `dist/` whatever you edit it with. The template was built for CloudCannon, and the YAML beside each component is what makes the site editable on the page for non-technical teammates; ignore it and nothing breaks. Using CloudCannon does require a paid plan.",
           size: "md",
         },
       ],
@@ -102,10 +129,13 @@ deploy usually needs.
       contentSections: [
         {
           _component: "building-blocks/core-elements/text",
-          text: "Run `npm run reset:starter`. It clears the wordmark, the SEO name and title format, the example domain and the template's own edit-page URL — the placeholders `npm run check` warns about until you do.",
+          text: "Run `npm run reset:starter`. It clears the wordmark, the SEO name and title format, the example domain, the repository URL and the template's own edit-page URL — the placeholders `npm run check` warns about until you do.",
           size: "md",
         },
       ],
     },
   ]}
 />
+
+Once it runs, the repository is yours: <a href={repositoryUrl}>the original</a> is only a
+starting point, and nothing pulls updates back down.

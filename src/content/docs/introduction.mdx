@@ -1,16 +1,22 @@
 ---
 title: Introduction
-description: Docsmith is a documentation template for product teams who want a complete docs site today and don't want to maintain a theme.
+description: Docsmith is an Astro documentation template for product teams who want a complete docs site today and don't want to maintain a theme.
 group: Getting started
 order: 1
-updated: 2026-08-19
+updated: 2026-09-10
 ---
 
 ## What it is
 
-A file-based docs site. You write Markdown in `src/content/docs/`, set a `group` in
+A file-based docs site, distributed as a GitHub template rather than a package. You copy the
+repository once and own the result: write Markdown in `src/content/docs/`, set a `group` in
 frontmatter, and get a site with search, dark mode, an on-page table of contents, a print
-layout and generated reference pages.
+layout and generated reference pages. Nothing updates itself, and there is no theme to keep
+in step.
+
+It is built for [CloudCannon](https://cloudcannon.com/), so every component ships the
+configuration that makes it editable on the page — but the build is plain Astro and runs
+anywhere.
 
 Everything on this site — the sidebar you're using, the ⌘K overlay, the code tabs below — is
 the template itself. There is no separate demo.
@@ -28,7 +34,7 @@ Product teams shipping something that needs docs for three audiences at once:
 | Area         | Ships with                                                                |
 | ------------ | ------------------------------------------------------------------------- |
 | `navigation` | Grouped sidebar, breadcrumbs, prev/next, mobile drawer                    |
-| `discovery`  | Client-side full-text search, keyboard-first overlay, sitemap             |
+| `discovery`  | Full-text search built with the site, keyboard-first overlay, sitemap     |
 | `content`    | Callouts, tabbed code, annotated code, tables, definition lists, diagrams |
 | `lifecycle`  | Changelog page, feedback votes, print layout, 404 with search             |
 
@@ -51,10 +57,10 @@ Product teams shipping something that needs docs for three audiences at once:
   items={[
     {
       contentSections: [
-        { _component: "building-blocks/core-elements/heading", text: "Install", level: "h3", size: "xs" },
+        { _component: "building-blocks/core-elements/heading", text: "Copy it", level: "h3", size: "xs" },
         {
           _component: "building-blocks/core-elements/simple-text",
-          text: "One command scaffolds the site and its dependencies. [Installation](/installation/)",
+          text: "Copy the template on GitHub, or deploy it straight to CloudCannon. [Installation](/installation/)",
           size: "sm",
         },
       ],
@@ -81,5 +87,3 @@ Product teams shipping something that needs docs for three audiences at once:
     },
   ]}
 />
-
-Next: [install the template](/installation/) and run it locally.

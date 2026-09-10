@@ -2,12 +2,12 @@
  * Markdown pipeline pieces shared by `astro.config.mjs`.
  *
  * Fence metadata is the contract with content authors: ```js title="a.js" {2,5}
- * sets the header label and highlights those lines. Astro handles `title=`
- * itself (as `data-title`); the line ranges are ours. Both are also props on
- * the `CodeBlock` component, and the two paths must stay in step — a reader
- * can't tell which one produced a block.
+ * sets the header label and highlights those lines. Both are also props on the
+ * `CodeBlock` component, and the two paths must stay in step — a reader can't
+ * tell which one produced a block.
  */
 const RANGES = /\{([\d,\s-]+)\}/;
+const TITLE = /(?:^|\s)title=(?:"([^"]*)"|'([^']*)'|(\S+))/;
 
 function parseRanges(input) {
   const lines = new Set();
@@ -32,6 +32,13 @@ export function fenceMetaTransformer() {
       // which no stylesheet can override — including the print rules, so a
       // fence would print dark. The palette comes from `--color-code-*`.
       node.properties.style = undefined;
+
+      // `_prose.css` reads the header label off `data-title`, falling back to
+      // the language. Nothing upstream sets it, so the fence's own `title=`
+      // has to be lifted here or every header reads "bash".
+      const title = (this.options.meta?.__raw ?? "").match(TITLE);
+
+      if (title) node.properties["data-title"] = title[1] ?? title[2] ?? title[3];
     },
     line(node, line) {
       const meta = this.options.meta?.__raw ?? "";

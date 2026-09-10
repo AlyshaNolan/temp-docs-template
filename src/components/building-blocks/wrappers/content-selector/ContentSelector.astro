@@ -45,32 +45,36 @@ if (!_component && !hasItems && !hasSlotContent) return;
   {...htmlAttributes}
 >
   <div
-    class:list={["content-selector-items", `nav-${navigationPosition}`, `variant-${variant}`]}
+    class:list={["content-selector-shell", `nav-${navigationPosition}`, `variant-${variant}`]}
     data-space-before={spaceBeforeAttr(spaceBefore)}
-    role="group"
-    {...arrayDataAttributes}
   >
-    <slot>
-      {
-        items?.map((item: ContentSelectorItem, index: number) => (
-          <ContentSelectorPanel
-            title={item.title}
-            subtext={item.subtext}
-            iconName={item.iconName}
-            iconColor={item.iconColor}
-            contentSections={item.contentSections}
-            _component={item._component}
-            checked={index === 0}
-            groupName={groupName}
-            index={index}
-            navigationPosition={navigationPosition}
-            useDefaultEditableBinding={!!effectiveChildrenProp}
-            data-id="building-blocks/wrappers/content-selector/content-selector-panel"
-            data-editable="array-item"
-          />
-        ))
-      }
-    </slot>
+    <div
+      class="content-selector-items"
+      role="group"
+      {...arrayDataAttributes}
+    >
+      <slot>
+        {
+          items?.map((item: ContentSelectorItem, index: number) => (
+            <ContentSelectorPanel
+              title={item.title}
+              subtext={item.subtext}
+              iconName={item.iconName}
+              iconColor={item.iconColor}
+              contentSections={item.contentSections}
+              _component={item._component}
+              checked={index === 0}
+              groupName={groupName}
+              index={index}
+              navigationPosition={navigationPosition}
+              useDefaultEditableBinding={!!effectiveChildrenProp}
+              data-id="building-blocks/wrappers/content-selector/content-selector-panel"
+              data-editable="array-item"
+            />
+          ))
+        }
+      </slot>
+    </div>
   </div>
 </section>
 
@@ -90,7 +94,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
       /* The panel variant frames the whole thing and shrinks the tabs to a
          strip of labels — a demo panel, rather than a section of the page. Only
          meaningful with the tabs on top, so it is scoped to `nav-top`. */
-      > .content-selector-items.variant-panel.nav-top {
+      > .content-selector-shell.variant-panel.nav-top > .content-selector-items {
         border: var(--border-width-sm) solid var(--color-border);
         border-radius: var(--radius-lg);
         overflow: hidden;
@@ -125,12 +129,20 @@ if (!_component && !hasItems && !hasSlotContent) return;
         }
 
         .content-selector-panel {
+          padding: 0;
+        }
+
+        .content-selector-panel-content {
           padding: var(--spacing-lg);
         }
       }
 
-      > .content-selector-items {
+      > .content-selector-shell > .content-selector-items {
         border: 0 solid var(--color-bg-muted);
+        /* The nav-top panel escapes a zero-width grid item at `100cqi`, so that
+           has to measure this element's content box — the section around it is
+           wider by this border. */
+        container: content-selector-items / inline-size;
         width: 100%;
 
         &:not(:has(.content-selector-item > .content-selector-input:checked))
@@ -144,279 +156,279 @@ if (!_component && !hasItems && !hasSlotContent) return;
           > .content-selector-panel {
           display: block;
         }
+      }
 
-        &.nav-start {
-          column-gap: var(--spacing-em-lg);
-          display: grid;
-          grid-template-columns: minmax(min-content, max-content) minmax(0, 1fr);
-          /* One row per tab, plus a filler row that absorbs the panel's extra
+      > .content-selector-shell.nav-start > .content-selector-items {
+        column-gap: var(--spacing-em-lg);
+        display: grid;
+        grid-template-columns: minmax(min-content, max-content) minmax(0, 1fr);
+        /* One row per tab, plus a filler row that absorbs the panel's extra
              height so a tall panel doesn't stretch the tab rows. The count is
              static because this element is the array region root: a value
              derived from the item count would go stale the moment the editor
              adds one. Empty `auto` rows collapse to zero, so overshooting is
              free; past the 12th tab a tab falls back to auto placement. */
-          grid-template-rows: repeat(12, auto) 1fr;
+        grid-template-rows: repeat(12, auto) 1fr;
 
-          .content-selector-tab {
-            border-inline-start: var(--content-selector-border-width) solid var(--color-bg-muted);
-            grid-column: 1;
+        .content-selector-tab {
+          border-inline-start: var(--content-selector-border-width) solid var(--color-bg-muted);
+          grid-column: 1;
 
-            &::before {
-              inset-block: 0;
-              inset-inline-start: calc(var(--content-selector-border-width) * -1);
-              width: var(--content-selector-border-width);
-            }
+          &::before {
+            inset-block: 0;
+            inset-inline-start: calc(var(--content-selector-border-width) * -1);
+            width: var(--content-selector-border-width);
           }
+        }
 
-          /* Items all overlay the same area, so a tab's row has to come from
+        /* Items all overlay the same area, so a tab's row has to come from
              its position in the DOM. Read off `:nth-of-type` rather than a
              prop, so a reorder or a single-item re-render can't leave a stale
              index behind. */
-          .content-selector-item:nth-of-type(1) > .content-selector-tab {
-            grid-row: 1;
-          }
+        .content-selector-item:nth-of-type(1) > .content-selector-tab {
+          grid-row: 1;
+        }
 
-          .content-selector-item:nth-of-type(2) > .content-selector-tab {
-            grid-row: 2;
-          }
+        .content-selector-item:nth-of-type(2) > .content-selector-tab {
+          grid-row: 2;
+        }
 
-          .content-selector-item:nth-of-type(3) > .content-selector-tab {
-            grid-row: 3;
-          }
+        .content-selector-item:nth-of-type(3) > .content-selector-tab {
+          grid-row: 3;
+        }
 
-          .content-selector-item:nth-of-type(4) > .content-selector-tab {
-            grid-row: 4;
-          }
+        .content-selector-item:nth-of-type(4) > .content-selector-tab {
+          grid-row: 4;
+        }
 
-          .content-selector-item:nth-of-type(5) > .content-selector-tab {
-            grid-row: 5;
-          }
+        .content-selector-item:nth-of-type(5) > .content-selector-tab {
+          grid-row: 5;
+        }
 
-          .content-selector-item:nth-of-type(6) > .content-selector-tab {
-            grid-row: 6;
-          }
+        .content-selector-item:nth-of-type(6) > .content-selector-tab {
+          grid-row: 6;
+        }
 
-          .content-selector-item:nth-of-type(7) > .content-selector-tab {
-            grid-row: 7;
-          }
+        .content-selector-item:nth-of-type(7) > .content-selector-tab {
+          grid-row: 7;
+        }
 
-          .content-selector-item:nth-of-type(8) > .content-selector-tab {
-            grid-row: 8;
-          }
+        .content-selector-item:nth-of-type(8) > .content-selector-tab {
+          grid-row: 8;
+        }
 
-          .content-selector-item:nth-of-type(9) > .content-selector-tab {
-            grid-row: 9;
-          }
+        .content-selector-item:nth-of-type(9) > .content-selector-tab {
+          grid-row: 9;
+        }
 
-          .content-selector-item:nth-of-type(10) > .content-selector-tab {
-            grid-row: 10;
-          }
+        .content-selector-item:nth-of-type(10) > .content-selector-tab {
+          grid-row: 10;
+        }
 
-          .content-selector-item:nth-of-type(11) > .content-selector-tab {
-            grid-row: 11;
-          }
+        .content-selector-item:nth-of-type(11) > .content-selector-tab {
+          grid-row: 11;
+        }
 
-          .content-selector-item:nth-of-type(12) > .content-selector-tab {
-            grid-row: 12;
-          }
+        .content-selector-item:nth-of-type(12) > .content-selector-tab {
+          grid-row: 12;
+        }
 
-          .content-selector-panel {
-            grid-column: 2;
-            grid-row: 1 / -1;
-            padding: 0 var(--spacing-md);
+        .content-selector-panel {
+          grid-column: 2;
+          grid-row: 1 / -1;
+          padding: 0 var(--spacing-md);
+          width: 100%;
+        }
+      }
+
+      > .content-selector-shell.nav-top > .content-selector-items {
+        display: grid;
+        /* An explicit track list rather than `grid-auto-flow: column`: the
+             panel spans `1 / -1` so that it starts at the container's inline
+             edge, and `-1` only resolves against explicit tracks. Same static
+             count as nav-start, and empty `max-content` columns collapse. */
+        grid-template-columns: repeat(12, minmax(max-content, auto));
+        grid-template-rows: auto auto;
+        justify-content: start;
+        overflow-x: auto;
+        scroll-snap-type: x proximity;
+
+        /* Content-sized tabs no longer tile the full width, so the strip's
+             baseline rule comes from here. `width: 100cqi` with the matching
+             negative margin draws the full width while contributing nothing to
+             track sizing, which would otherwise re-stretch the tabs. */
+        &::before {
+          align-self: end;
+          background: var(--color-bg-muted);
+          content: "";
+          grid-column: 1;
+          grid-row: 1;
+          height: var(--content-selector-border-width);
+          margin-inline-end: -100cqi;
+          pointer-events: none;
+          width: 100cqi;
+        }
+
+        .content-selector-item:nth-of-type(1) > .content-selector-tab {
+          grid-column: 1;
+        }
+
+        .content-selector-item:nth-of-type(2) > .content-selector-tab {
+          grid-column: 2;
+        }
+
+        .content-selector-item:nth-of-type(3) > .content-selector-tab {
+          grid-column: 3;
+        }
+
+        .content-selector-item:nth-of-type(4) > .content-selector-tab {
+          grid-column: 4;
+        }
+
+        .content-selector-item:nth-of-type(5) > .content-selector-tab {
+          grid-column: 5;
+        }
+
+        .content-selector-item:nth-of-type(6) > .content-selector-tab {
+          grid-column: 6;
+        }
+
+        .content-selector-item:nth-of-type(7) > .content-selector-tab {
+          grid-column: 7;
+        }
+
+        .content-selector-item:nth-of-type(8) > .content-selector-tab {
+          grid-column: 8;
+        }
+
+        .content-selector-item:nth-of-type(9) > .content-selector-tab {
+          grid-column: 9;
+        }
+
+        .content-selector-item:nth-of-type(10) > .content-selector-tab {
+          grid-column: 10;
+        }
+
+        .content-selector-item:nth-of-type(11) > .content-selector-tab {
+          grid-column: 11;
+        }
+
+        .content-selector-item:nth-of-type(12) > .content-selector-tab {
+          grid-column: 12;
+        }
+
+        .content-selector-tab {
+          grid-row: 1;
+          scroll-snap-align: start;
+
+          &::before {
+            background: var(--color-bg-muted);
+            height: var(--content-selector-border-width);
+            inset-block: 100%;
+            inset-inline-start: 0;
             width: 100%;
           }
         }
 
-        &.nav-top {
-          display: grid;
-          /* An explicit track list rather than `grid-auto-flow: column`: the
-             panel spans `1 / -1` so that it starts at the container's inline
-             edge, and `-1` only resolves against explicit tracks. Same static
-             count as nav-start, and empty `max-content` columns collapse. */
-          grid-template-columns: repeat(12, minmax(max-content, auto));
-          grid-template-rows: auto auto;
-          justify-content: start;
-          overflow-x: auto;
-          scroll-snap-type: x proximity;
+        .content-selector-input:checked + .content-selector-tab::before {
+          background: var(--color-border-strong);
+        }
 
-          /* Content-sized tabs no longer tile the full width, so the strip's
-             baseline rule comes from here. `width: 100cqi` with the matching
-             negative margin draws the full width while contributing nothing to
-             track sizing, which would otherwise re-stretch the tabs. */
-          &::before {
-            align-self: end;
-            background: var(--color-bg-muted);
-            content: "";
-            grid-column: 1;
-            grid-row: 1;
-            height: var(--content-selector-border-width);
-            margin-inline-end: -100cqi;
-            pointer-events: none;
-            width: 100cqi;
-          }
-
-          .content-selector-item:nth-of-type(1) > .content-selector-tab {
-            grid-column: 1;
-          }
-
-          .content-selector-item:nth-of-type(2) > .content-selector-tab {
-            grid-column: 2;
-          }
-
-          .content-selector-item:nth-of-type(3) > .content-selector-tab {
-            grid-column: 3;
-          }
-
-          .content-selector-item:nth-of-type(4) > .content-selector-tab {
-            grid-column: 4;
-          }
-
-          .content-selector-item:nth-of-type(5) > .content-selector-tab {
-            grid-column: 5;
-          }
-
-          .content-selector-item:nth-of-type(6) > .content-selector-tab {
-            grid-column: 6;
-          }
-
-          .content-selector-item:nth-of-type(7) > .content-selector-tab {
-            grid-column: 7;
-          }
-
-          .content-selector-item:nth-of-type(8) > .content-selector-tab {
-            grid-column: 8;
-          }
-
-          .content-selector-item:nth-of-type(9) > .content-selector-tab {
-            grid-column: 9;
-          }
-
-          .content-selector-item:nth-of-type(10) > .content-selector-tab {
-            grid-column: 10;
-          }
-
-          .content-selector-item:nth-of-type(11) > .content-selector-tab {
-            grid-column: 11;
-          }
-
-          .content-selector-item:nth-of-type(12) > .content-selector-tab {
-            grid-column: 12;
-          }
-
-          .content-selector-tab {
-            grid-row: 1;
-            scroll-snap-align: start;
-
-            &::before {
-              background: var(--color-bg-muted);
-              height: var(--content-selector-border-width);
-              inset-block: 100%;
-              inset-inline-start: 0;
-              width: 100%;
-            }
-          }
-
-          .content-selector-input:checked + .content-selector-tab::before {
-            background: var(--color-border-strong);
-          }
-
-          /*
+        /*
            * Keep the panel out of grid column sizing by giving it width: 0
            * and letting its inner content (which has width: 100cqi and
            * position: sticky) render over the full visible container width.
            * This lets the tabs row size to its labels and scroll naturally.
            */
-          .content-selector-panel {
-            container-type: normal;
-            grid-column: 1 / -1;
-            grid-row: 2;
-            overflow: visible;
-            width: 0;
-          }
-
-          .content-selector-panel-content {
-            inset-inline-start: 0;
-            margin-top: var(--spacing-md);
-            padding: 0 var(--spacing-md);
-            position: sticky;
-            width: 100cqi;
-          }
+        .content-selector-panel {
+          container-type: normal;
+          grid-column: 1 / -1;
+          grid-row: 2;
+          overflow: visible;
+          width: 0;
         }
 
-        @container content-selector (width < 640px) {
-          &.nav-start,
-          &.nav-top {
-            column-gap: 0;
-            display: block;
-            overflow-x: visible;
-            scroll-snap-type: none;
+        .content-selector-panel-content {
+          inset-inline-start: 0;
+          margin-top: var(--spacing-md);
+          padding: 0 var(--spacing-md);
+          position: sticky;
+          width: 100cqi;
+        }
+      }
 
-            /* Stacked, not overlaid: the item is an ordinary block again and
+      @container content-selector (width < 640px) {
+        > .content-selector-shell.nav-start > .content-selector-items,
+        > .content-selector-shell.nav-top > .content-selector-items {
+          column-gap: 0;
+          display: block;
+          overflow-x: visible;
+          scroll-snap-type: none;
+
+          /* Stacked, not overlaid: the item is an ordinary block again and
                takes its own clicks. */
-            .content-selector-item {
-              display: block;
-              pointer-events: auto;
-            }
+          .content-selector-item {
+            display: block;
+            pointer-events: auto;
+          }
 
-            /* The tab-strip baseline is a grid item; in this block layout it
+          /* The tab-strip baseline is a grid item; in this block layout it
                would render as an inline box and add a line box of height. */
+          &::before {
+            content: none;
+          }
+
+          .content-selector-tab {
+            align-items: center;
+            border-block-start: var(--content-selector-border-width) solid var(--color-bg-muted);
+            border-inline-start: 0;
+            display: flex;
+            gap: var(--spacing-sm);
+            justify-content: space-between;
+            padding: var(--spacing-sm) var(--spacing-md);
+            scroll-snap-align: none;
+            width: 100%;
+
             &::before {
               content: none;
             }
+          }
 
-            .content-selector-tab {
-              align-items: center;
-              border-block-start: var(--content-selector-border-width) solid var(--color-bg-muted);
-              border-inline-start: 0;
-              display: flex;
-              gap: var(--spacing-sm);
-              justify-content: space-between;
-              padding: var(--spacing-sm) var(--spacing-md);
-              scroll-snap-align: none;
-              width: 100%;
+          .content-selector-item:last-of-type .content-selector-tab {
+            border-block-end: var(--content-selector-border-width) solid var(--color-bg-muted);
+          }
 
-              &::before {
-                content: none;
-              }
-            }
-
-            .content-selector-item:last-of-type .content-selector-tab {
-              border-block-end: var(--content-selector-border-width) solid var(--color-bg-muted);
-            }
-
-            .content-selector-input:checked + .content-selector-tab {
-              background: var(--color-state-hover);
-
-              .content-selector-tab-chevron {
-                transform: rotate(180deg);
-              }
-            }
+          .content-selector-input:checked + .content-selector-tab {
+            background: var(--color-state-hover);
 
             .content-selector-tab-chevron {
-              display: block;
+              transform: rotate(180deg);
             }
+          }
 
-            .content-selector-tab-subtext {
-              display: none;
-            }
+          .content-selector-tab-chevron {
+            display: block;
+          }
 
-            .content-selector-panel {
-              container-type: inline-size;
-              grid-column: auto;
-              grid-row: auto;
-              overflow: visible;
-              padding: var(--spacing-sm) var(--spacing-md) var(--spacing-md);
-              width: 100%;
-            }
+          .content-selector-tab-subtext {
+            display: none;
+          }
 
-            .content-selector-panel-content {
-              inset-inline-start: auto;
-              margin-top: 0;
-              padding: 0;
-              position: static;
-              width: auto;
-            }
+          .content-selector-panel {
+            container-type: inline-size;
+            grid-column: auto;
+            grid-row: auto;
+            overflow: visible;
+            padding: var(--spacing-sm) var(--spacing-md) var(--spacing-md);
+            width: 100%;
+          }
+
+          .content-selector-panel-content {
+            inset-inline-start: auto;
+            margin-top: 0;
+            padding: 0;
+            position: static;
+            width: auto;
           }
         }
       }

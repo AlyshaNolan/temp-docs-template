@@ -29,7 +29,9 @@ const {
 
 // The highlight is a substring of the heading rather than its own field, so the
 // heading stays one editable string and one `<h1>` — splitting it into parts
-// would put the reader's sentence in three inputs.
+// would put the reader's sentence in three inputs. A text region would win over
+// the component re-render for this subtree and flatten the highlight span, so
+// the binding below is dropped whenever the highlight actually matched.
 const highlight = String(headingHighlight);
 const highlightAt = highlight ? String(heading).indexOf(highlight) : -1;
 const headingParts =
@@ -65,7 +67,12 @@ const headingParts =
               aria-hidden="true"
             />
           )}
-          <span data-prop="eyebrow">{eyebrow}</span>
+          <span
+            data-editable="text"
+            data-prop="eyebrow"
+          >
+            {eyebrow}
+          </span>
         </span>
       </p>
     )
@@ -74,7 +81,7 @@ const headingParts =
     level={headingLevel}
     size="2xl"
     alignmentHorizontal={alignmentHorizontal}
-    data-prop="heading"
+    data-prop={headingParts ? undefined : "heading"}
   >
     {
       headingParts ? (

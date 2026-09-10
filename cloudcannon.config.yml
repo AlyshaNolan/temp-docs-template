@@ -32,7 +32,7 @@ collections_config:
   documentation:
     path: src/content/docs
     glob:
-      - '**/*.mdx'
+      - "**/*.mdx"
     icon: article
     url: /[full_slug]/
     disable_url: false
@@ -140,7 +140,7 @@ collections_config:
         icon: article
         schema: default
     create:
-      path: '[relative_base_path]/{filename|slugify|lowercase}.mdx'
+      path: "[relative_base_path]/{filename|slugify|lowercase}.mdx"
     disable_add: false
     disable_add_folder: false
     disable_file_actions: false
@@ -156,7 +156,7 @@ collections_config:
   changelog:
     path: src/content/changelog
     glob:
-      - '**/*.md'
+      - "**/*.md"
     icon: history
     disable_url: true
     include_developer_files: false
@@ -237,7 +237,7 @@ collections_config:
         icon: history
         schema: default
     create:
-      path: '[relative_base_path]/{filename|slugify|lowercase}.md'
+      path: "[relative_base_path]/{filename|slugify|lowercase}.md"
     disable_add: false
     disable_add_folder: false
     disable_file_actions: false
@@ -252,7 +252,7 @@ collections_config:
   data:
     path: src/data
     glob:
-      - '**/*.json'
+      - "**/*.json"
     icon: database
     disable_url: true
     include_developer_files: false
@@ -376,6 +376,12 @@ collections_config:
           homeLabel:
             type: text
             comment: Label for the standalone link above the first sidebar group.
+            cascade: true
+          repositoryUrl:
+            type: url
+            comment: The site's source repository. The "Use this template" and repository
+              links in the documentation are built from it; a /tree/<branch> suffix is
+              ignored.
             cascade: true
           editPageBaseUrl:
             type: url

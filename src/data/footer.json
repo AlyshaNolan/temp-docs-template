@@ -10,14 +10,14 @@
     },
     {
       "name": "GitHub",
-      "path": "https://github.com/CloudCannon/docsmith"
+      "path": "https://github.com/AlyshaNolan/temp-docs-template"
     }
   ],
   "socials": [
     {
       "icon": "social/github",
-      "link": "https://github.com/CloudCannon/docsmith"
+      "link": "https://github.com/AlyshaNolan/temp-docs-template"
     }
   ],
-  "footerText": "Docsmith \u2014 a documentation template. MIT licensed."
+  "footerText": "Docsmith \u2014 an Astro documentation template. MIT licensed."
 }

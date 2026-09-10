@@ -1,6 +1,6 @@
 # Docsmith
 
-> A complete documentation template: grouped sidebar, client-side search, reference pages, diagrams, media and a print layout. You write Markdown; the template handles the rest.
+> A complete Astro documentation template: grouped sidebar, built-in search, reference pages, diagrams, media and a print layout. Copied from GitHub, built for CloudCannon. You write Markdown; the template handles the rest.
 
 ## Pages
 
@@ -9,7 +9,7 @@
 ## Getting started
 
 - [Introduction](/introduction/): What it is, who it's for, and what's included.
-- [Installation](/installation/): Scaffold a site, run it locally, add your first page.
+- [Installation](/installation/): Copy the template, run it locally, add your first page.
 
 ## Authoring
 

@@ -6,12 +6,13 @@ order: 1
 updated: 2026-08-12
 ---
 
-export const diffSample = `export default {
--  search: { provider: 'algolia' },
-+  search: { provider: 'local' },
-  nav: [
-~    { group: 'Guides', dir: 'guides' },
-  ],
+export const diffSample = `{
+  "wordmark": "Acme",
+-  "defaultTheme": "light",
++  "defaultTheme": "dark",
+  "navGroups": [
+~    { "name": "Guides", "collapsed": false }
+  ]
 }`
 
 export const treeSample = `src/
@@ -22,11 +23,12 @@ export const treeSample = `src/
     base.css
 astro.config.mjs`
 
-export const annotatedSample = `export default {
-  search: { provider: 'local' },
-  nav: [
-    { group: 'Guides', dir: 'guides' },
-  ],
+export const annotatedSample = `{
+  "search": true,
+  "defaultTheme": "dark",
+  "navGroups": [
+    { "name": "Getting started", "collapsed": false }
+  ]
 }`
 
 ## Frontmatter
@@ -67,16 +69,18 @@ Four kinds. Use them for things a reader would otherwise learn the hard way.
 A fenced block takes a `title` for the header bar and a line range to highlight.
 
 ````md title="fence.md"
-```js title="docsmith.config.js" {2}
-export default {
-  search: { provider: 'local' },
+```json title="src/data/docsSite.json" {3}
+{
+  "wordmark": "Acme",
+  "defaultTheme": "dark"
 }
 ```
 ````
 
-```js title="docsmith.config.js" {2}
-export default {
-  search: { provider: 'local' },
+```json title="src/data/docsSite.json" {3}
+{
+  "wordmark": "Acme",
+  "defaultTheme": "dark"
 }
 ```
 
@@ -88,8 +92,8 @@ colours instead of going flat the way a `diff` fence does — and the copy butto
 hands back the code without them.
 
 <CodeDiff
-  filename="docsmith.config.js"
-  language="js"
+  filename="src/data/docsSite.json"
+  language="json"
   code={diffSample}
 />
 
@@ -126,11 +130,11 @@ Notes sit under the block rather than in comments, so the snippet stays copy-pas
 Each note names the line it marks.
 
 <CodeAnnotations
-  filename="docsmith.config.js"
-  language="js"
+  filename="src/data/docsSite.json"
+  language="json"
   notes={[
-    { line: 2, text: "Builds the index at compile time and ships it with the site — no search service, no API key." },
-    { line: 4, text: "Point a group at a directory and every page in it appears, ordered by frontmatter." },
+    { line: 2, text: "Builds the search index at compile time and ships it with the site — no search service, no API key." },
+    { line: 4, text: "Orders the sidebar groups. A page joins one by naming it in its own frontmatter." },
   ]}
   code={annotatedSample}
 />

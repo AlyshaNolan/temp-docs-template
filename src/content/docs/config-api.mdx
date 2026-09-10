@@ -3,7 +3,7 @@ title: Config API
 description: Every key accepted by src/data/docsSite.json, its type, default and effect.
 group: Reference
 order: 1
-updated: 2026-08-19
+updated: 2026-09-10
 ---
 
 ## site
@@ -14,6 +14,7 @@ updated: 2026-08-19
     { name: "markLetter", type: "string", description: "One character rendered in an accent tile beside the wordmark. Ignored when `logoSource` is set." },
     { name: "logoSource", type: "string", description: "Path to an SVG or PNG, replacing the mark and wordmark. Pair with `logoAlternateSource` to swap per colour mode." },
     { name: "version", type: "string", description: "Badge beside the brand. Empty hides it." },
+    { name: "repositoryUrl", type: "string", description: "The site's source repository. `src/utils/repository.ts` derives the \"Use this template\" and repository links from it; a `/tree/<branch>` suffix is stripped. Empty hides those links." },
   ]}
 />
 

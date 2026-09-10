@@ -261,6 +261,7 @@ if (resetBranding) {
   site.logoAlternateSource = "";
   site.logoAlt = siteName;
   site.version = "";
+  site.repositoryUrl = "";
   site.editPageBaseUrl = "";
   site.topbarLinks = [];
   // Groups are matched to page frontmatter by name, so an inherited list would

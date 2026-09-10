@@ -1,16 +1,16 @@
 ---
 _schema: default
 title: Overview
-description: 'A complete documentation template: search, reference pages, diagrams, media and a print layout. You write Markdown; the template handles the rest.'
+description: 'A complete documentation template for Astro: grouped sidebar, built-in search, reference pages, diagrams, media and a print layout. You write Markdown; the template handles the rest.'
 pageSections:
   - _component: page-sections/heroes/hero-center
     sectionLabel: Hero
-    eyebrow: v2.4 — code annotations, collapsible sections & diagrams
+    eyebrow: Open source Astro template
     eyebrowShowDot: true
     heading: Docs your users actually finish.
     headingHighlight: finish
     headingLevel: h1
-    subtext: 'A complete documentation template for product teams: search, reference pages, diagrams, media and a print layout. You write Markdown; the template handles the rest.'
+    subtext: 'A complete documentation site — grouped sidebar, built-in search, reference pages, diagrams and a print layout. Start from the template on GitHub, write Markdown, and let the rest of your team edit the pages visually in CloudCannon.'
     alignmentHorizontal: start
     buttonSections:
       - _component: building-blocks/core-elements/button
@@ -22,10 +22,15 @@ pageSections:
         iconPosition: after
         variant: primary
         size: md
-      - _component: building-blocks/core-elements/command-line
-        command: npm create docsmith@latest
-        prompt: $
-        showCopy: true
+      - _component: building-blocks/core-elements/button
+        text: What's included
+        hideText: false
+        link: /introduction/
+        iconName: ''
+        iconColor: default
+        iconPosition: before
+        variant: secondary
+        size: md
     maxContentWidth: 2xl
     paddingHorizontal: none
     paddingVertical: lg
@@ -41,26 +46,26 @@ pageSections:
     alignmentHorizontal: start
     subtext: ''
     stats:
-      - number: 0
+      - number: 55
         prefix: ''
         suffix: ''
-        label: runtime dependencies
-        sublabel: ''
-      - number: 41
-        prefix: ''
-        suffix: ' KB'
-        label: search index, 200 pages
-        sublabel: ''
-      - number: 1.4
-        prefix: ''
-        suffix: s
-        label: cold build, 200 pages
-        sublabel: ''
+        label: components
+        sublabel: page sections and building blocks
       - number: 100
         prefix: ''
         suffix: ''
-        label: Lighthouse, out of the box
-        sublabel: ''
+        label: Lighthouse performance
+        sublabel: on the pages this site ships
+      - number: 23
+        prefix: ''
+        suffix: ' KB'
+        label: search index
+        sublabel: built with the site, served from your own origin
+      - number: 33
+        prefix: ''
+        suffix: s
+        label: cold build on CloudCannon
+        sublabel: from clone to live preview
     layout: tiles
     dividers: false
     maxContentWidth: 2xl
@@ -70,131 +75,134 @@ pageSections:
     lockColorScheme: false
     backgroundColor: base
 
-  - _component: page-sections/builders/custom-section
-    label: Feature demos
-    contentSections:
-      - _component: building-blocks/core-elements/heading
-        text: Try the features. Don't read about them.
-        level: h2
-        size: md
-        alignmentHorizontal: start
-      - _component: building-blocks/core-elements/simple-text
-        text: Every panel below is the shipped component, wired up and working.
-        size: md
-        alignmentHorizontal: start
-      - _component: building-blocks/wrappers/content-selector
-        label: Feature demos
-        variant: panel
-        navigationPosition: top
-        items:
-          - title: Callouts
-            subtext: ''
-            contentSections:
-              - _component: building-blocks/core-elements/simple-text
-                text: Four kinds, for the things a reader would otherwise learn the hard way.
-                size: sm
-              - _component: building-blocks/core-elements/alert
-                variant: note
-                title: Note
-                text: Context that helps, but isn't required to succeed.
-                iconName: ''
-              - _component: building-blocks/core-elements/alert
-                variant: warning
-                title: Rotating a key revokes the old one
-                text: Existing clients fail on the next request. Deploy the new key before rotating.
-                iconName: ''
-          - title: Code tabs
-            subtext: ''
-            contentSections:
-              - _component: building-blocks/core-elements/simple-text
-                text: One sample, many languages. The reader's choice is remembered site-wide, so a Python developer stays in Python across every page.
-                size: sm
-              - _component: building-blocks/core-elements/code-tabs
-                filename: ''
-                showCopy: true
-                tabs:
-                  - label: cURL
-                    language: bash
-                    code: |-
-                      curl https://api.acme.com/v1/invoices \
-                        -H "Authorization: Bearer $ACME_KEY" \
-                        -d customer=cus_8Kq2
-                    highlight: ''
-                  - label: Node
-                    language: js
-                    code: |-
-                      import { Acme } from '@acme/sdk'
-
-                      const acme = new Acme(process.env.ACME_KEY)
-                    highlight: ''
-                  - label: Python
-                    language: python
-                    code: |-
-                      from acme import Acme
-
-                      acme = Acme(os.environ['ACME_KEY'])
-                    highlight: ''
-          - title: Annotations
-            subtext: ''
-            contentSections:
-              - _component: building-blocks/core-elements/simple-text
-                text: Notes sit under the block rather than in comments, so the snippet stays copy-paste clean.
-                size: sm
-              - _component: building-blocks/core-elements/code-annotations
-                filename: docsmith.config.js
-                language: js
-                highlight: ''
-                showCopy: true
+  - _component: page-sections/explainers/tabbed-content
+    sectionLabel: Feature demos
+    eyebrow: ''
+    heading: Try the features. Don't read about them.
+    headingLevel: h2
+    subtext: Every panel below is the shipped component, wired up and working.
+    alignmentHorizontal: start
+    variant: panel
+    navigationPosition: top
+    items:
+      - title: Callouts
+        subtext: ''
+        iconName: ''
+        iconColor: default
+        contentSections:
+          - _component: building-blocks/core-elements/simple-text
+            text: Four kinds, for the things a reader would otherwise learn the hard way.
+            size: sm
+          - _component: building-blocks/core-elements/alert
+            variant: note
+            title: Note
+            text: Context that helps, but isn't required to succeed.
+            iconName: ''
+          - _component: building-blocks/core-elements/alert
+            variant: warning
+            title: Rotating a key revokes the old one
+            text: Existing clients fail on the next request. Deploy the new key before rotating.
+            iconName: ''
+      - title: Code tabs
+        subtext: ''
+        iconName: ''
+        iconColor: default
+        contentSections:
+          - _component: building-blocks/core-elements/simple-text
+            text: One sample, many languages. The reader's choice is remembered site-wide, so a Python developer stays in Python across every page.
+            size: sm
+          - _component: building-blocks/core-elements/code-tabs
+            filename: ''
+            showCopy: true
+            tabs:
+              - label: cURL
+                language: bash
                 code: |-
-                  export default {
-                    search: { provider: 'local' },
-                    nav: [
-                      { group: 'Guides', dir: 'guides' },
-                    ],
-                  }
-                notes:
-                  - line: 2
-                    text: Builds the index at compile time and ships it with the site — no search service, no API key.
-                  - line: 4
-                    text: Point a group at a directory and every page in it appears, ordered by frontmatter.
-          - title: Diagrams
-            subtext: ''
-            contentSections:
-              - _component: building-blocks/core-elements/simple-text
-                text: Written as text and rendered in the browser, so they diff in review and whoever inherits the page can edit them without a design tool.
-                size: sm
-              - _component: building-blocks/core-elements/diagram
-                caption: ''
-                definition: |-
-                  flowchart LR
-                    A[Event] --> B{Retry?}
-                    B -- yes --> C[Queue]
-                    B -- no --> D[Dead letter]
-          - title: Reference
-            subtext: ''
-            contentSections:
-              - _component: building-blocks/core-elements/simple-text
-                text: Parameter lists for the pages where a table would be three columns of nothing.
-                size: sm
-              - _component: building-blocks/core-elements/param-list
-                params:
-                  - name: site.name
-                    type: string
-                    required: true
-                    defaultValue: ''
-                    description: Shown in the header, page titles and OG metadata.
-                  - name: site.url
-                    type: string
-                    required: false
-                    defaultValue: ''
-                    description: Canonical origin. Required for the sitemap and absolute OG image URLs.
+                  curl https://api.acme.com/v1/invoices \
+                    -H "Authorization: Bearer $ACME_KEY" \
+                    -d customer=cus_8Kq2
+                highlight: ''
+              - label: Node
+                language: js
+                code: |-
+                  import { Acme } from '@acme/sdk'
+
+                  const acme = new Acme(process.env.ACME_KEY)
+                highlight: ''
+              - label: Python
+                language: python
+                code: |-
+                  from acme import Acme
+
+                  acme = Acme(os.environ['ACME_KEY'])
+                highlight: ''
+      - title: Annotations
+        subtext: ''
+        iconName: ''
+        iconColor: default
+        contentSections:
+          - _component: building-blocks/core-elements/simple-text
+            text: Notes sit under the block rather than in comments, so the snippet stays copy-paste clean.
+            size: sm
+          - _component: building-blocks/core-elements/code-annotations
+            filename: src/data/docsSite.json
+            language: json
+            highlight: ''
+            showCopy: true
+            code: |-
+              {
+                "search": true,
+                "defaultTheme": "dark",
+                "navGroups": [
+                  { "name": "Getting started", "collapsed": false }
+                ]
+              }
+            notes:
+              - line: 2
+                text: Builds the search index at compile time and ships it with the site — no search service, no API key.
+              - line: 4
+                text: Orders the sidebar groups. A page joins one by naming it in its own frontmatter.
+      - title: Diagrams
+        subtext: ''
+        iconName: ''
+        iconColor: default
+        contentSections:
+          - _component: building-blocks/core-elements/simple-text
+            text: Written as text and rendered in the browser, so they diff in review and whoever inherits the page can edit them without a design tool.
+            size: sm
+          - _component: building-blocks/core-elements/diagram
+            caption: ''
+            definition: |-
+              flowchart LR
+                A[Event] --> B{Retry?}
+                B -- yes --> C[Queue]
+                B -- no --> D[Dead letter]
+      - title: Reference
+        subtext: ''
+        iconName: ''
+        iconColor: default
+        contentSections:
+          - _component: building-blocks/core-elements/simple-text
+            text: Parameter lists for the pages where a table would be three columns of nothing.
+            size: sm
+          - _component: building-blocks/core-elements/param-list
+            params:
+              - name: wordmark
+                type: string
+                required: true
+                defaultValue: ''
+                description: Shown in the header, page titles and OG metadata.
+              - name: defaultTheme
+                type: '"dark" | "light" | "system"'
+                required: false
+                defaultValue: '"dark"'
+                description: The colour scheme a reader gets before they choose one.
     maxContentWidth: 2xl
     paddingHorizontal: none
     paddingVertical: lg
     colorScheme: inherit
     lockColorScheme: false
     backgroundColor: base
-    rounded: false
 
   - _component: page-sections/collections/card-collection
     sectionLabel: Browse the docs
@@ -228,7 +236,7 @@ pageSections:
             iconName: arrow-right
             iconPosition: after
           - _component: building-blocks/core-elements/simple-text
-            text: From an empty folder to a running docs site in about four minutes.
+            text: From the GitHub template to a running docs site in about four minutes.
             size: sm
       - image: ''
         imageAlt: ''
@@ -293,89 +301,70 @@ pageSections:
     lockColorScheme: false
     backgroundColor: base
 
-  - _component: page-sections/builders/custom-section
-    label: Also included
-    contentSections:
-      - _component: building-blocks/core-elements/heading
-        text: Also included, no plugins required
-        level: h2
-        size: xs
-        alignmentHorizontal: start
-      # A Spacer replaces the gap either side of it, which is the only way to
-      # get a panel-label gap here: Grid's type default is `loose` (48px) and
-      # `spaceBefore` can only reach `none`, `tight` or `loose`.
-      - _component: building-blocks/core-elements/spacer
-        size: md
-      - _component: building-blocks/wrappers/grid
-        label: ''
-        columns: 3
-        minItemWidth: 200
-        maxItemWidth: null
-        gap: md
-        items:
-          - contentSections:
-              - _component: building-blocks/core-elements/text
-                text: '**Instant search** — client-side index, ⌘K anywhere'
-                size: sm
-                spaceBefore: none
-          - contentSections:
-              - _component: building-blocks/core-elements/text
-                text: '**Dark mode** — token-driven, respects the system'
-                size: sm
-                spaceBefore: none
-          - contentSections:
-              - _component: building-blocks/core-elements/text
-                text: '**Code tabs** — one sample, many languages'
-                size: sm
-                spaceBefore: none
-          - contentSections:
-              - _component: building-blocks/core-elements/text
-                text: '**Code annotations** — highlighted lines, numbered notes'
-                size: sm
-                spaceBefore: none
-          - contentSections:
-              - _component: building-blocks/core-elements/text
-                text: '**On-page TOC** — with scroll tracking'
-                size: sm
-                spaceBefore: none
-          - contentSections:
-              - _component: building-blocks/core-elements/text
-                text: '**Feedback** — per-page helpful votes'
-                size: sm
-                spaceBefore: none
-          - contentSections:
-              - _component: building-blocks/core-elements/text
-                text: '**Mobile drawer** — the full sidebar on small screens'
-                size: sm
-                spaceBefore: none
-          - contentSections:
-              - _component: building-blocks/core-elements/text
-                text: '**Print styles** — a real print layout'
-                size: sm
-                spaceBefore: none
-          - contentSections:
-              - _component: building-blocks/core-elements/text
-                text: '**SEO & OG** — meta, structured data and a sitemap'
-                size: sm
-                spaceBefore: none
+  - _component: page-sections/collections/feature-list
+    sectionLabel: Also included
+    eyebrow: ''
+    heading: Also included, no plugins required
+    headingLevel: h2
+    subtext: ''
+    alignmentHorizontal: start
+    items:
+      - title: Built-in search
+        description: index built with the site, ⌘K anywhere
+        iconName: ''
+        iconColor: default
+      - title: Dark mode
+        description: token-driven, respects the system
+        iconName: ''
+        iconColor: default
+      - title: Code tabs
+        description: one sample, many languages
+        iconName: ''
+        iconColor: default
+      - title: Code annotations
+        description: highlighted lines, numbered notes
+        iconName: ''
+        iconColor: default
+      - title: On-page contents
+        description: with scroll tracking
+        iconName: ''
+        iconColor: default
+      - title: Page feedback
+        description: per-page helpful votes
+        iconName: ''
+        iconColor: default
+      - title: Mobile drawer
+        description: the full sidebar on small screens
+        iconName: ''
+        iconColor: default
+      - title: Print styles
+        description: a real print layout
+        iconName: ''
+        iconColor: default
+      - title: SEO and OG
+        description: meta, structured data and a sitemap
+        iconName: ''
+        iconColor: default
+    columns: 3
+    gap: md
+    rounded: true
     maxContentWidth: 2xl
     paddingHorizontal: lg
     paddingVertical: lg
     colorScheme: inherit
     lockColorScheme: false
     backgroundColor: surface
-    rounded: true
 
   - _component: page-sections/conversion/cta-split
     sectionLabel: Closing CTA
     heading: Ship your docs this week.
     headingLevel: h2
-    subtext: MIT licensed. No runtime, no per-seat pricing, no theme to maintain.
+    subtext: MIT licensed, with no theme to maintain. Every component is source you own and can change.
     imageSource: ''
     imageAlt: ''
     buttonSections:
       - _component: building-blocks/core-elements/button
-        text: Install Docsmith
+        text: Get started
         hideText: false
         link: /installation/
         iconName: ''
@@ -384,9 +373,9 @@ pageSections:
         variant: primary
         size: md
       - _component: building-blocks/core-elements/button
-        text: See every option
+        text: Browse the components
         hideText: false
-        link: /config-api/
+        link: /media-and-components/
         iconName: ''
         iconColor: default
         iconPosition: before

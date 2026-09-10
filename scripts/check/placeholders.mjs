@@ -28,6 +28,7 @@ const strict = process.argv.includes("--strict");
 const PLACEHOLDER_URL = "https://example.com";
 const STARTER_NAME = "Docsmith";
 const STARTER_LOGO = "acs-logo";
+const STARTER_REPO = "AlyshaNolan/temp-docs-template";
 
 function read(relativePath) {
   try {
@@ -91,14 +92,13 @@ if (docsSite?.wordmark === STARTER_NAME) {
     detail: `wordmark is still "${STARTER_NAME}"`,
   });
 }
-if (
-  typeof docsSite?.editPageBaseUrl === "string" &&
-  docsSite.editPageBaseUrl.includes("CloudCannon/docsmith")
-) {
-  branding.push({
-    file: "src/data/docsSite.json",
-    detail: "editPageBaseUrl still points at the template's own repository",
-  });
+for (const key of ["repositoryUrl", "editPageBaseUrl"]) {
+  if (typeof docsSite?.[key] === "string" && docsSite[key].includes(STARTER_REPO)) {
+    branding.push({
+      file: "src/data/docsSite.json",
+      detail: `${key} still points at the template's own repository`,
+    });
+  }
 }
 
 for (const file of ["src/data/docsSite.json", "src/data/footer.json"]) {
