@@ -1,115 +1,172 @@
-# Default for inputs without their own `options.paths`. Top level only — a
-# `paths:` block inside a collection is silently ignored.
 paths:
   uploads: src/assets/images
-
+  uploads_use_relative_path: false
 collections_config:
-  documentation:
-    path: src/content/docs
-    glob:
-      - "**/*.mdx"
+  landing_pages:
+    path: src/content/pages
     url: /[full_slug]/
-    icon: article
+    icon: web
     _enabled_editors:
-      - content
       - visual
     add_options:
-      - name: Add Documentation Page
+      - name: Add New Page
         schema: default
-        icon: article
+        icon: pages
     schemas:
       default:
-        name: New Documentation Page
-        path: .cloudcannon/schemas/doc.mdx
+        name: New Page
+        path: .cloudcannon/schemas/page.md
         remove_extra_inputs: false
     create:
-      path: "[relative_base_path]/{filename|slugify|lowercase}.mdx"
+      path: "[relative_base_path]/{filename|slugify|lowercase}.md"
     new_preview_url: /
-    # The sidebar is derived from these two fields, so they are what an editor
-    # needs to see when scanning the collection.
-    preview:
-      metadata:
-        - icon: folder
-          text:
-            - key: group
-        - icon: format_list_numbered
-          text:
-            - key: order
     _inputs:
       title:
         type: text
-        comment: Page heading, browser title, and the label in the sidebar.
-      description:
-        type: text
-        comment: The lede under the title, and the page's meta description.
-      group:
-        type: select
-        comment: Which sidebar group this page belongs to. Options come from `navGroups` in `src/data/docsSite.json` — add one in [Data → Docs Site](cloudcannon:collections/data/docsSite.json) to make it selectable here.
-        options:
-          values: data.docsSite.navGroups
-          value_key: name
-          allow_create: false
-          preview:
-            text:
-              - key: name
-      order:
-        type: number
-        comment: Position within the group. Lower numbers come first.
-      updated:
-        type: date
-        comment: Shown in the meta line under the title. Leave empty to hide it.
-      showToc:
-        type: switch
-        comment: Show the "On this page" list built from the page's headings.
-      showFeedback:
-        type: switch
-        comment: Show the "Was this page helpful?" block at the foot of the page.
-      showCopyPage:
-        type: switch
-        comment: Show the "Copy page" menu beside the title. Turn the whole feature off in [Data → Docs Site](cloudcannon:collections/data/docsSite.json).
-      showPager:
-        type: switch
-        comment: Show previous/next links across the sidebar's reading order.
+        comment: Controls the metadata title for the page.
       keywords:
         type: array
         comment: Optional meta keywords for this page.
       keywords[*]:
         type: text
+  documentation:
+    path: src/content/docs
+    glob:
+      - '**/*.mdx'
+    icon: article
+    url: /[full_slug]/
+    disable_url: false
+    include_developer_files: false
+    preview:
+      metadata:
+        - text:
+            - key: group
+          icon: folder
+        - text:
+            - key: order
+          icon: format_list_numbered
     _editables:
       content:
-        format: p h2 h3 h4 h5 h6
+        allow_custom_markup: false
+        remove_custom_markup: false
+        blockquote: true
         bold: true
+        bulletedlist: true
+        code: true
+        copyformatting: false
+        embed: false
+        expandable: false
+        format: p h2 h3 h4 h5 h6
+        horizontalrule: true
+        image: true
+        image_size_attributes: false
+        indent: false
         italic: true
         link: true
-        bulletedlist: true
         numberedlist: true
-        blockquote: true
-        code: true
-        horizontalrule: true
-        table: true
-        snippet: true
-        undo: true
+        outdent: false
         redo: true
         removeformat: true
+        resize_style: contain
+        snippet: true
+        strike: false
+        subscript: false
+        superscript: false
+        table: true
+        underline: false
+        undo: true
+    _enabled_editors:
+      - content
+      - visual
+    _inputs:
+      title:
+        type: text
+        comment: Page heading, browser title, and the label in the sidebar.
+        cascade: true
+      description:
+        type: text
+        comment: The lede under the title, and the page's meta description.
+        cascade: true
+      group:
+        type: select
+        options:
+          allow_create: false
+          allow_empty: true
+          values: data.docsSite.navGroups
+          value_key: name
+          preview:
+            text:
+              - key: name
+          required: false
+        comment: Which sidebar group this page belongs to. Options come from `navGroups`
+          in `src/data/docsSite.json` — add one in [Data → Docs
+          Site](cloudcannon:collections/data/docsSite.json) to make it
+          selectable here.
+        cascade: true
+      order:
+        type: number
+        comment: Position within the group. Lower numbers come first.
+        cascade: true
+      updated:
+        type: date
+        comment: Shown in the meta line under the title. Leave empty to hide it.
+        cascade: true
+      showToc:
+        type: switch
+        comment: Show the "On this page" list built from the page's headings.
+        cascade: true
+      showFeedback:
+        type: switch
+        comment: Show the "Was this page helpful?" block at the foot of the page.
+        cascade: true
+      showCopyPage:
+        type: switch
+        comment: Show the "Copy page" menu beside the title. Turn the whole feature off
+          in [Data → Docs Site](cloudcannon:collections/data/docsSite.json).
+        cascade: true
+      showPager:
+        type: switch
+        comment: Show previous/next links across the sidebar's reading order.
+        cascade: true
+      keywords:
+        type: array
+        comment: Optional meta keywords for this page.
+        cascade: true
+      keywords[*]:
+        type: text
+        cascade: true
+    add_options:
+      - name: Add Documentation Page
+        icon: article
+        schema: default
+    create:
+      path: '[relative_base_path]/{filename|slugify|lowercase}.mdx'
+    disable_add: false
+    disable_add_folder: false
+    disable_file_actions: false
+    new_preview_url: /
+    schemas:
+      default:
+        path: .cloudcannon/schemas/doc.mdx
+        reorder_inputs: true
+        hide_extra_inputs: false
+        remove_empty_inputs: false
+        remove_extra_inputs: false
+        name: New Documentation Page
   changelog:
     path: src/content/changelog
     glob:
-      - "**/*.md"
-    disable_url: true
+      - '**/*.md'
     icon: history
-    _enabled_editors:
-      - data
-    add_options:
-      - name: Add Release
-        schema: default
-        icon: history
-    schemas:
-      default:
-        name: New Release
-        path: .cloudcannon/schemas/release.md
-        remove_extra_inputs: false
-    create:
-      path: "[relative_base_path]/{filename|slugify|lowercase}.md"
+    disable_url: true
+    include_developer_files: false
+    preview:
+      text:
+        - key: version
+      metadata:
+        - text:
+            - key: date
+          icon: calendar_month
     sort_options:
       - key: date
         order: desc
@@ -117,74 +174,186 @@ collections_config:
       - key: date
         order: asc
         label: Oldest first
-    preview:
-      text:
-        - key: version
-      metadata:
-        - icon: calendar_month
-          text:
-            - key: date
+    _enabled_editors:
+      - data
     _inputs:
       version:
         type: text
-        comment: The release, e.g. "2.4.0". It becomes the section heading and its anchor.
+        comment: The release, e.g. "2.4.0". It becomes the section heading and its
+          anchor.
+        cascade: true
       date:
         type: date
         comment: Release date. The changelog page orders releases by this, newest first.
+        cascade: true
       summary:
         type: markdown
-        comment: Optional note above this release's changes — what the release is about, or an upgrade warning. Leave empty for none.
         options:
+          allow_resize: true
+          allow_custom_markup: false
+          remove_custom_markup: false
+          initial_height: 320
+          blockquote: true
           bold: true
+          bulletedlist: true
+          code: true
+          copyformatting: false
+          embed: false
+          expandable: false
+          horizontalrule: false
+          image: true
+          image_size_attributes: false
+          indent: false
           italic: true
           link: true
-          code: true
-          bulletedlist: true
+          numberedlist: true
+          outdent: false
+          redo: false
+          removeformat: true
+          resize_style: contain
+          snippet: true
+          strike: false
+          subscript: false
+          superscript: false
+          table: false
+          underline: false
+          undo: false
+          required: false
+        comment: Optional note above this release's changes — what the release is about,
+          or an upgrade warning. Leave empty for none.
+        cascade: true
       changes:
         type: array
-        comment: One line per change.
         options:
           structures: _structures.changelogChanges
+          disable_add: false
+          disable_remove: false
+          disable_reorder: false
+          required: false
+        comment: One line per change.
+        cascade: true
+    add_options:
+      - name: Add Release
+        icon: history
+        schema: default
+    create:
+      path: '[relative_base_path]/{filename|slugify|lowercase}.md'
+    disable_add: false
+    disable_add_folder: false
+    disable_file_actions: false
+    schemas:
+      default:
+        path: .cloudcannon/schemas/release.md
+        reorder_inputs: true
+        hide_extra_inputs: false
+        remove_empty_inputs: false
+        remove_extra_inputs: false
+        name: New Release
   data:
     path: src/data
     glob:
-      - "**/*.json"
-    disable_url: true
+      - '**/*.json'
     icon: database
+    disable_url: true
+    include_developer_files: false
     _enabled_editors:
       - data
+    _inputs:
+      logoSource:
+        type: image
+        options:
+          paths:
+            uploads: src/assets/images
+            uploads_use_relative_path: false
+          disable_upload_file: false
+          disable_direct_input: false
+          disable_upload_file_in_file_browser: false
+          resize_style: contain
+          width: 1920
+          height: 1280
+          expandable: false
+          prevent_resize_existing_files: false
+          required: false
+        cascade: true
+      logoAlternateSource:
+        type: image
+        options:
+          paths:
+            uploads: src/assets/images
+            uploads_use_relative_path: false
+          disable_upload_file: false
+          disable_direct_input: false
+          disable_upload_file_in_file_browser: false
+          resize_style: contain
+          width: 1920
+          height: 1280
+          expandable: false
+          prevent_resize_existing_files: false
+          required: false
+        cascade: true
+      image:
+        type: image
+        options:
+          paths:
+            uploads: src/assets/images
+            uploads_use_relative_path: false
+          disable_upload_file: false
+          disable_direct_input: false
+          disable_upload_file_in_file_browser: false
+          resize_style: contain
+          width: 1920
+          height: 1280
+          expandable: false
+          prevent_resize_existing_files: false
+          required: false
+        cascade: true
+    disable_add: false
+    disable_add_folder: false
+    disable_file_actions: false
     schemas:
       docsSite:
-        name: Docs Site
         path: .cloudcannon/schemas/docsSite.json
+        reorder_inputs: true
+        hide_extra_inputs: false
+        remove_empty_inputs: false
         remove_extra_inputs: false
+        name: Docs Site
         preview:
           text:
             - Docs Site
         _inputs:
           markLetter:
             type: text
-            comment: One character shown in an accent tile beside the name. Ignored when a logo image is set.
+            comment: One character shown in an accent tile beside the name. Ignored when a
+              logo image is set.
+            cascade: true
           wordmark:
             type: text
             comment: The site name shown in the header.
+            cascade: true
           logoSource:
             comment: Optional logo image, replacing the tile and the name.
+            cascade: true
           logoAlternateSource:
             comment: Logo shown in dark mode.
+            cascade: true
           logoAlt:
             type: text
             comment: Alt text for the logo image.
+            cascade: true
           version:
             type: text
             comment: Badge beside the name, e.g. "v2.4". Leave empty to hide it.
+            cascade: true
           themeToggle:
             type: switch
-            comment: Show the light/dark toggle in the header. The site still resolves a colour scheme without it.
+            comment: Show the light/dark toggle in the header. The site still resolves a
+              colour scheme without it.
+            cascade: true
           defaultTheme:
             type: select
-            comment: The colour scheme before a reader chooses one. "System" follows their operating system; "Dark" and "Light" don't.
             options:
+              allow_empty: true
               values:
                 - id: dark
                   name: Dark
@@ -192,41 +361,67 @@ collections_config:
                   name: Light
                 - id: system
                   name: System
+              required: false
+            comment: The colour scheme before a reader chooses one. "System" follows their
+              operating system; "Dark" and "Light" don't.
+            cascade: true
           search:
             type: switch
             comment: Show the search control and bind the ⌘K shortcut.
+            cascade: true
           searchPlaceholder:
             type: text
             comment: Placeholder text inside the search overlay.
+            cascade: true
           homeLabel:
             type: text
             comment: Label for the standalone link above the first sidebar group.
+            cascade: true
           editPageBaseUrl:
             type: url
-            comment: Prefix for the "Edit this page" link. The page's file path is appended, so end it with a slash. Leave empty to hide the link.
+            comment: Prefix for the "Edit this page" link. The page's file path is appended,
+              so end it with a slash. Leave empty to hide the link.
+            cascade: true
           editPageLabel:
             type: text
             comment: Text of the edit link.
+            cascade: true
           topbarLinks:
             type: array
-            comment: Links in the header, right of the site name.
             options:
               structures: _structures.linkItems
+              disable_add: false
+              disable_remove: false
+              disable_reorder: false
+              required: false
+            comment: Links in the header, right of the site name.
+            cascade: true
           navGroups:
             type: array
-            comment: Sidebar group order. A group used by a page but missing here is added at the end rather than dropped.
             options:
               structures: _structures.docsNavGroups
+              disable_add: false
+              disable_remove: false
+              disable_reorder: false
+              required: false
+            comment: Sidebar group order. A group used by a page but missing here is added
+              at the end rather than dropped.
+            cascade: true
           copyPage:
             type: object
             comment: The "Copy page" menu beside each documentation page's title.
+            cascade: true
           feedback:
             type: object
             comment: The "Was this page helpful?" block.
+            cascade: true
       announcementBar:
-        name: Announcement Bar
         path: .cloudcannon/schemas/announcementBar.json
+        reorder_inputs: true
+        hide_extra_inputs: false
+        remove_empty_inputs: false
         remove_extra_inputs: false
+        name: Announcement Bar
         preview:
           text:
             - Announcement Bar
@@ -234,71 +429,94 @@ collections_config:
           enabled:
             type: switch
             comment: Show the announcement bar at the top of every page.
+            cascade: true
           text:
             type: markdown
-            comment: The announcement message. Add a Markdown link for an optional call to action.
             options:
+              allow_resize: true
+              allow_custom_markup: false
+              remove_custom_markup: false
+              initial_height: 320
+              blockquote: true
               bold: true
+              bulletedlist: true
+              code: false
+              copyformatting: false
+              embed: false
+              expandable: false
+              horizontalrule: false
+              image: true
+              image_size_attributes: false
+              indent: false
               italic: true
               link: true
+              numberedlist: true
+              outdent: false
+              redo: false
+              removeformat: true
+              resize_style: contain
+              snippet: true
+              strike: false
+              subscript: false
+              superscript: false
+              table: false
+              underline: false
+              undo: false
+              required: false
+            comment: The announcement message. Add a Markdown link for an optional call to
+              action.
+            cascade: true
       breadcrumbs:
-        name: Breadcrumbs
         path: .cloudcannon/schemas/breadcrumbs.json
+        reorder_inputs: true
+        hide_extra_inputs: false
+        remove_empty_inputs: false
         remove_extra_inputs: false
+        name: Breadcrumbs
         preview:
           text:
             - Breadcrumbs
         _inputs:
           homeLabel:
             comment: Label for the leading crumb that links to the site root.
+            cascade: true
       seo:
-        name: SEO Settings
         path: .cloudcannon/schemas/seo.json
+        reorder_inputs: true
+        hide_extra_inputs: false
+        remove_empty_inputs: false
         remove_extra_inputs: false
+        name: SEO Settings
         preview:
           text:
             - SEO
         _inputs:
           name:
-            comment: Site name used in structured data and as the fallback brand name in SEO metadata.
+            comment: Site name used in structured data and as the fallback brand name in SEO
+              metadata.
+            cascade: true
           url:
             comment: Production site URL used for canonical links and structured data.
+            cascade: true
           description:
             comment: Default meta description used when a page does not provide its own.
+            cascade: true
           logoSource:
-            comment: Default image used for social sharing metadata when a page does not provide its own.
+            comment: Default image used for social sharing metadata when a page does not
+              provide its own.
+            cascade: true
           titleFormat:
-            comment: Browser title template. Include {title} where the page title should appear.
+            comment: Browser title template. Include {title} where the page title should
+              appear.
+            cascade: true
           twitterSite:
-            comment: Optional X (Twitter) handle for the site, including the @, used in social share cards.
-    _inputs:
-      logoSource:
-        type: image
-        options:
-          paths:
-            uploads: src/assets/images
-          resize_style: contain
-          width: 1920
-          height: 1280
-      logoAlternateSource:
-        type: image
-        options:
-          paths:
-            uploads: src/assets/images
-          resize_style: contain
-          width: 1920
-          height: 1280
-      image:
-        type: image
-        options:
-          paths:
-            uploads: src/assets/images
-          resize_style: contain
-          width: 1920
-          height: 1280
+            comment: Optional X (Twitter) handle for the site, including the @, used in
+              social share cards.
+            cascade: true
 collection_groups:
   - heading: Pages
     collections:
+      - landing_pages
       - documentation
   - heading: Changelog
     collections:
@@ -306,25 +524,29 @@ collection_groups:
   - heading: Data
     collections:
       - data
+  - heading: New Collections
+    collections: []
 _inputs:
   pageSections:
     comment: The main sections of the page.
+    cascade: true
   logoSource:
     type: image
+    cascade: true
   logoAlternateSource:
     type: image
+    cascade: true
+_snippets_imports:
+  mdx: true
 data_config:
   icons:
     path: .cloudcannon/data/icons.yml
   autocomplete_tokens:
     path: .cloudcannon/data/autocomplete-tokens.yml
-  # Backs the docs `group` select. Nothing enforces the `navGroups` key name.
   docsSite:
     path: src/data/docsSite.json
-
+timezone: Etc/UTC
 _structures_from_glob:
   - /.cloudcannon/structures/*.cloudcannon.structures.yml
-_snippets_imports:
-  mdx: true
 _snippets_from_glob:
   - /**/*.cloudcannon.snippets.yml
