@@ -4,7 +4,7 @@ paths:
   uploads: src/assets/images
 
 collections_config:
-  docs:
+  documentation:
     path: src/content/docs
     glob:
       - "**/*.mdx"
@@ -91,35 +91,6 @@ collections_config:
         undo: true
         redo: true
         removeformat: true
-  pages:
-    path: src/content/pages
-    glob:
-      - "**/*.md"
-    url: /[full_slug]/
-    icon: web
-    _enabled_editors:
-      - visual
-    add_options:
-      - name: Add New Page
-        schema: default
-        icon: pages
-    schemas:
-      default:
-        name: New Page
-        path: .cloudcannon/schemas/page.md
-        remove_extra_inputs: false
-    create:
-      path: "[relative_base_path]/{filename|slugify|lowercase}.md"
-    new_preview_url: /
-    _inputs:
-      title:
-        type: text
-        comment: Controls the metadata title for the page.
-      keywords:
-        type: array
-        comment: Optional meta keywords for this page.
-      keywords[*]:
-        type: text
   changelog:
     path: src/content/changelog
     glob:
@@ -326,12 +297,9 @@ collections_config:
           width: 1920
           height: 1280
 collection_groups:
-  - heading: Documentation
-    collections:
-      - docs
   - heading: Pages
     collections:
-      - pages
+      - documentation
   - heading: Changelog
     collections:
       - changelog
