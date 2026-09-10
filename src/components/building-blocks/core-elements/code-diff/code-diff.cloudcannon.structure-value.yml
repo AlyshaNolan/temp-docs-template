@@ -1,0 +1,35 @@
+label: Code Diff
+icon: difference
+description: A code sample with added, removed and highlighted lines, still syntax-highlighted in its own language.
+value:
+  _component: building-blocks/core-elements/code-diff
+  code: |-
+    export default {
+    -  search: { provider: 'algolia' },
+    +  search: { provider: 'local' },
+      nav: [
+    ~    { group: 'Guides', dir: 'guides' },
+      ],
+    }
+  language: js
+  filename: docsmith.config.js
+  showCopy: true
+  spaceBefore: default
+preview:
+  text:
+    - Code Diff
+  image: public/component-previews/building-blocks/core-elements/code-diff.svg
+  icon: difference
+  gallery:
+    image: public/component-previews/building-blocks/core-elements/code-diff.svg
+    fit: cover
+picker_preview:
+  text: Code Diff
+  subtext: A code sample with added, removed and highlighted lines, still syntax-highlighted in its own language.
+  image: public/component-previews/building-blocks/core-elements/code-diff.svg
+  gallery:
+    image: public/component-previews/building-blocks/core-elements/code-diff.svg
+    fit: cover
+_inputs_from_glob:
+  - /src/components/building-blocks/core-elements/code-diff/code-diff.cloudcannon.inputs.yml
+  - /.cloudcannon/inputs/space-before.yml

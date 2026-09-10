@@ -1,0 +1,5 @@
+{
+  "_schema": "announcementBar",
+  "enabled": true,
+  "text": "Docsmith 2.4 adds code annotations, collapsible sections and diagrams. [See the changelog](/changelog/)"
+}

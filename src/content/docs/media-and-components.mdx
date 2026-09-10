@@ -1,0 +1,142 @@
+---
+title: Media & components
+description: The blocks that carry the hard parts of a page — optional depth, definitions, diagrams, images and video.
+group: Authoring
+order: 2
+updated: 2026-08-19
+---
+
+## Collapsible sections
+
+Wrap optional depth in a disclosure. It uses the native `<details>` element, so it is
+keyboard accessible and prints expanded.
+
+<Accordion
+  label="Optional depth"
+  items={[
+    {
+      title: "Rotating an API key without downtime",
+      contentSections: [
+        {
+          _component: "building-blocks/core-elements/text",
+          text: "Create the second key, deploy it to every client, confirm traffic on the new key in the dashboard, then revoke the first. Both keys stay valid until you revoke, so there is no cutover window.",
+        },
+      ],
+    },
+    {
+      title: "Full list of retry status codes",
+      contentSections: [
+        {
+          _component: "building-blocks/core-elements/text",
+          text: "408, 429, and any 5xx are retried with exponential backoff. 4xx other than 408 and 429 are treated as permanent failures.",
+        },
+      ],
+    },
+  ]}
+/>
+
+<Alert
+  variant="warning"
+  title="Never hide the answer in one"
+  text="Collapsed text is invisible to browser find (⌘F) and to some third-party crawlers. Use disclosures for optional depth and long output — never for the sentence the reader came for."
+/>
+
+## Definition lists
+
+For glossaries and field-by-field terminology, where a table would be three columns of
+nothing.
+
+<DefinitionList
+  items={[
+    { title: "Idempotency key", text: "A client-generated string that makes a retried request safe. Keys are remembered for 24 hours." },
+    { title: "Dead letter", text: "Where an event lands after its final delivery attempt fails. Replayable from the dashboard for 30 days." },
+    { title: "Soft descriptor", text: "The text your customer sees on their bank statement. Up to 22 characters." },
+  ]}
+/>
+
+## Text-based diagrams
+
+Diagrams are written as Mermaid text, so they diff in review and whoever inherits the page can
+edit them without opening a design tool.
+
+<Diagram
+  caption="A webhook delivery, from event to dead letter."
+  definition={`flowchart LR
+  A[Event] --> B{Retry?}
+  B -- yes --> C[Queue]
+  B -- no --> D[Dead letter]`}
+/>
+
+<Alert
+  variant="note"
+  title="Diagrams render in the browser"
+  text="Mermaid needs a DOM to lay a diagram out, so the source ships in the page and the SVG replaces it once the library loads — only on pages that contain a diagram. With JavaScript off, and on paper, the reader gets the source instead of an empty box."
+/>
+
+## Images
+
+Alt text is required. Captions are optional, light and dark variants are a pair, and any
+image can be clicked to zoom.
+
+<Figure
+  source="/src/assets/images/placeholder.jpg"
+  alt="The webhook log, filtered to failed deliveries"
+  caption="The webhook log, filtered to failed deliveries."
+  aspectRatio="widescreen"
+/>
+
+<Alert
+  variant="tip"
+  title="Light and dark variants"
+  text="Pass `alternateSource` and the template swaps it with the colour mode — no flash, no duplicated Markdown. Screenshots of your own UI stop looking broken in dark mode."
+/>
+
+## Video
+
+Local files or an embed id. Videos are lazy-loaded, never autoplay with sound, and want a
+caption track for anything instructional.
+
+```mdx title="video.mdx"
+<Video
+  source="https://www.youtube.com/watch?v=..."
+  title="Setting up your first webhook endpoint"
+/>
+```
+
+## Status badges
+
+A badge marks the maturity of the thing next to it — a feature, an endpoint, a whole page.
+Put it above the prose it qualifies, so a reader who skims the headings still sees it.
+
+<Badge text="Beta" variant="info" iconName="beaker" />
+
+Badges link, too: pass `link` and the badge becomes an anchor with a trailing arrow, which is
+how a deprecation notice points at its replacement.
+
+<Badge text="Deprecated — use the v2 endpoint" variant="warning" link="/config-api/" size="sm" />
+
+<Alert
+  variant="tip"
+  title="Dot instead of an icon"
+  text="`showDot` swaps the leading icon for a small status-coloured dot. It reads as a state rather than a category, which suits Stable / Beta / Deprecated better than an icon does."
+/>
+
+## Third-party embeds
+
+`Embed` carries raw HTML — a sandbox, a map, a form from another service. Whatever you put
+inside it is scaled to the aspect ratio you pick, so the page reflows without a jump while the
+frame loads.
+
+<Embed aspectRatio="widescreen">
+  <iframe
+    src="https://codepen.io/team/codepen/embed/PNaGbb?default-tab=result"
+    title="An example CodePen, embedded"
+    loading="lazy"
+  ></iframe>
+</Embed>
+
+<Alert
+  variant="note"
+  title="An embed is somebody else's page"
+  text="It loads in the reader's browser, so it carries that provider's cookies and can't be indexed by search. It also prints as an empty box — keep anything essential in the prose around it, not only inside the frame."
+/>

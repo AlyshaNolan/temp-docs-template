@@ -1,0 +1,54 @@
+{
+  "_schema": "docsSite",
+  "markLetter": "D",
+  "wordmark": "Docsmith",
+  "logoSource": "",
+  "logoAlternateSource": "",
+  "logoAlt": "Docsmith",
+  "version": "v2.4",
+  "themeToggle": true,
+  "defaultTheme": "dark",
+  "search": true,
+  "searchPlaceholder": "Search documentation…",
+  "homeLabel": "Overview",
+  "editPageBaseUrl": "https://github.com/CloudCannon/docsmith/edit/main/src/content/docs/",
+  "editPageLabel": "Edit this page",
+  "topbarLinks": [
+    {
+      "name": "GitHub",
+      "path": "https://github.com/CloudCannon/docsmith"
+    }
+  ],
+  "navGroups": [
+    {
+      "name": "Getting started",
+      "collapsed": false
+    },
+    {
+      "name": "Authoring",
+      "collapsed": false
+    },
+    {
+      "name": "Customizing",
+      "collapsed": false
+    },
+    {
+      "name": "Reference",
+      "collapsed": true
+    },
+    {
+      "name": "New group",
+      "collapsed": true
+    }
+  ],
+  "copyPage": {
+    "enabled": true,
+    "label": "Copy page"
+  },
+  "feedback": {
+    "enabled": true,
+    "prompt": "Was this page helpful?",
+    "action": "/",
+    "successMessage": "Thanks — that's logged against this page."
+  }
+}

@@ -1,0 +1,12 @@
+:where(:root) {
+  --radius-none: 0;
+  --radius-xs: 5px;
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-2xl: 28px;
+  --radius-3xl: 40px;
+  --radius-4xl: 56px;
+  --radius-full: 9999px;
+}

@@ -1,0 +1,194 @@
+---
+/**
+ * The documentation shell: topbar, sidebar, article column, on-this-page rail.
+ *
+ * Every route that renders inside the docs chrome goes through here — the
+ * overview page and each `docs` collection entry — so the sidebar, drawer and
+ * footer are defined once. Page-specific furniture (breadcrumbs, meta line,
+ * pager, feedback) is composed by the caller into the default slot.
+ */
+import AnnouncementBar from "@components/navigation/announcement-bar/AnnouncementBar.astro";
+import DocsSidebar from "@components/navigation/docs-sidebar/DocsSidebar.astro";
+import DocsTopbar from "@components/navigation/docs-topbar/DocsTopbar.astro";
+import Footer from "@components/navigation/footer/Footer.astro";
+import CodeSurfaces from "@core-elements/code-block/CodeSurfaces.astro";
+import HeadingLinks from "@components/navigation/heading-links/HeadingLinks.astro";
+import ThemeToggleScript from "@components/navigation/theme-toggle/ThemeToggleScript.astro";
+import announcementBarData from "@data/announcementBar.json";
+import docsSite from "@data/docsSite.json";
+import footerData from "@data/footer.json";
+import Layout from "@layouts/BaseLayout.astro";
+import type { DocsNav } from "@utils/docsNav";
+
+type Props = {
+  nav: DocsNav;
+  title: string;
+  description?: string;
+  keywords?: string[];
+  image?: string;
+  canonical?: string;
+  noindex?: boolean;
+  /** Wide layout drops the on-this-page rail — used by the overview page. */
+  wide?: boolean;
+};
+
+const {
+  nav,
+  title,
+  description,
+  keywords,
+  image,
+  canonical,
+  noindex = false,
+  wide = false,
+} = Astro.props as Props;
+
+const pathname = Astro.url.pathname;
+const hasToc = Astro.slots.has("toc");
+
+// `system` has no baseline of its own, so the markup ships light and the
+// pre-paint script flips it if the reader's OS asks for dark.
+const configuredTheme = docsSite.defaultTheme ?? "system";
+const baselineTheme = configuredTheme === "dark" ? "dark" : "light";
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}
+  image={image}
+  canonical={canonical}
+  noindex={noindex}
+  defaultTheme={baselineTheme}
+>
+  <ThemeToggleScript
+    slot="head"
+    defaultTheme={configuredTheme}
+  />
+  <AnnouncementBar {...announcementBarData} />
+  <DocsTopbar
+    markLetter={docsSite.markLetter}
+    wordmark={docsSite.wordmark}
+    logoSource={docsSite.logoSource}
+    logoAlternateSource={docsSite.logoAlternateSource}
+    logoAlt={docsSite.logoAlt}
+    version={docsSite.version}
+    themeToggle={docsSite.themeToggle}
+    search={docsSite.search}
+    searchPlaceholder={docsSite.searchPlaceholder}
+    topbarLinks={docsSite.topbarLinks}
+    pathname={pathname}
+  />
+
+  <div class:list={["docs-shell", (wide || !hasToc) && "is-wide"]}>
+    <DocsSidebar
+      nav={nav}
+      pathname={pathname}
+    />
+
+    <aside class="docs-toc-rail">
+      <slot name="toc" />
+    </aside>
+
+    <main
+      class="docs-main"
+      data-pagefind-body
+    >
+      <slot />
+    </main>
+  </div>
+
+  <Footer {...footerData} />
+  <CodeSurfaces />
+  <HeadingLinks />
+</Layout>
+
+<style is:global>
+  @layer page-sections {
+    :root {
+      /* Every sticky offset in the shell measures from this one number. */
+      --docs-topbar-height: 3.5rem;
+      /* `Footer.astro`'s rendered height, rounded up. The sticky rails cap
+         their height against it so neither can be pushed under the footer at
+         the end of a page; a taller footer makes the sidebar smoke test fail. */
+      --docs-footer-height: 5.5rem;
+      --docs-shell-gap: var(--spacing-2xl);
+      --docs-sidebar-width: 16rem;
+      --docs-toc-width: 13.5rem;
+    }
+
+    /* Three breakpoints, one rule each. The on-this-page rail is a column only
+       when there is room for it; below that it becomes the disclosure above the
+       article, which is why it is placed before `.docs-main` in the DOM. The
+       `Toc` component switches presentation at the same 1280px line. */
+    .docs-shell {
+      display: grid;
+      gap: 0 var(--docs-shell-gap);
+      grid-template-areas: "sidebar toc" "sidebar main";
+      grid-template-columns: var(--docs-sidebar-width) minmax(0, 1fr);
+      grid-template-rows: auto 1fr;
+      margin-inline: auto;
+      max-width: var(--content-width-3xl);
+      padding-inline: var(--spacing-lg);
+    }
+
+    .docs-main {
+      grid-area: main;
+      min-width: 0;
+      padding-block: var(--spacing-xl) var(--spacing-5xl);
+    }
+
+    .docs-toc-rail {
+      grid-area: toc;
+      min-width: 0;
+    }
+
+    @media (width >= 1280px) {
+      .docs-shell {
+        grid-template-areas: "sidebar main toc";
+        grid-template-columns: var(--docs-sidebar-width) minmax(0, 1fr) var(--docs-toc-width);
+        grid-template-rows: auto;
+      }
+
+      .docs-shell.is-wide {
+        grid-template-areas: "sidebar main";
+        grid-template-columns: var(--docs-sidebar-width) minmax(0, 1fr);
+      }
+
+      /* Same geometry as the sidebar (`DocsSidebar.astro`): claim the footer's
+         top margin to stay pinned across it, and cap the height so the pinned
+         box stops above the footer rather than being pushed under the topbar. */
+      .docs-toc-rail {
+        margin-block-end: calc(-1 * var(--spacing-3xl));
+      }
+
+      .docs-toc-rail > .toc {
+        align-self: start;
+        max-height: calc(100vh - var(--docs-topbar-height) - var(--docs-footer-height));
+        overflow-y: auto;
+        padding-block: var(--spacing-xl);
+        position: sticky;
+        top: var(--docs-topbar-height);
+      }
+    }
+
+    @media (width < 1280px) {
+      .docs-toc-rail:not(:empty) {
+        padding-top: var(--spacing-xl);
+      }
+    }
+
+    @media (width < 1024px) {
+      .docs-shell {
+        grid-template-areas: "toc" "main";
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    @media (width < 640px) {
+      .docs-shell {
+        padding-inline: var(--spacing-md);
+      }
+    }
+  }
+</style>

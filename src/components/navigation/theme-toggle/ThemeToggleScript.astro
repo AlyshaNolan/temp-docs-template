@@ -1,0 +1,57 @@
+---
+/**
+ * Resolves the colour scheme before first paint, so there is no flash.
+ *
+ * Three inputs, in order: the reader's stored choice, then the site's
+ * configured default (`defaultTheme` in `src/data/docsSite.json`), then — only
+ * when that default is `system` — the operating system's preference. A site
+ * that ships dark stays dark for a reader whose OS is light until they say
+ * otherwise.
+ *
+ * `data-theme` on `<html>` is the *baseline*: every themed element is flipped
+ * relative to its own default, which is what lets a section pin a scheme.
+ */
+const { defaultTheme = "system" } = Astro.props;
+---
+
+<script is:inline data-default-mode={defaultTheme}>
+  (function () {
+    function flipTheme(theme) {
+      return theme === "dark" ? "light" : "dark";
+    }
+
+    var root = document.documentElement;
+    var configured = document.currentScript.getAttribute("data-default-mode") || "system";
+
+    root.setAttribute("data-default-mode", configured);
+
+    var defaultTheme = root.getAttribute("data-theme") || "light";
+    var systemTheme = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    var theme =
+      localStorage.getItem("theme") || (configured === "system" ? systemTheme : configured);
+    var isToggled = theme !== defaultTheme;
+
+    Array.from(
+      new Set(
+        [root].concat(
+          Array.prototype.slice.call(
+            document.querySelectorAll(
+              '[data-theme="light"]:not([data-theme-lock]), [data-theme="dark"]:not([data-theme-lock])'
+            )
+          )
+        )
+      )
+    ).forEach(function (element) {
+      var elementTheme = element.getAttribute("data-theme");
+
+      if (elementTheme === "light" || elementTheme === "dark") {
+        element.setAttribute("data-default-theme", elementTheme);
+        element.setAttribute("data-theme", isToggled ? flipTheme(elementTheme) : elementTheme);
+      }
+    });
+
+    if (isToggled) {
+      root.setAttribute("data-theme-toggled", "");
+    }
+  })();
+</script>

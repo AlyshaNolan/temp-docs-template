@@ -1,0 +1,43 @@
+variant:
+  type: select
+  comment: The tone of the callout — note for context, tip for a shortcut, warning for a surprise, danger for data loss.
+  options:
+    values:
+      - id: note
+        name: Note
+      - id: tip
+        name: Tip
+      - id: warning
+        name: Warning
+      - id: danger
+        name: Danger
+      - id: info
+        name: Info
+title:
+  type: text
+  comment: Optional bold first line. Say what the reader needs to know, not "Note".
+text:
+  type: markdown
+  comment: The callout body.
+  options:
+    blockquote: false
+    bold: true
+    format:
+    italic: true
+    link: true
+    strike: false
+    subscript: true
+    superscript: true
+    underline: false
+    bulletedlist: true
+    numberedlist: true
+iconName:
+  type: select
+  comment: Optional icon. Callouts read fine without one — add it only when the icon carries meaning. Sourced from [Heroicons](https://heroicons.com/).
+  options:
+    values: data.icons
+    preview:
+      text:
+        - key: name
+      image:
+        - template: src/icons/{id}.svg

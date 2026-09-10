@@ -1,0 +1,85 @@
+---
+title: Introduction
+description: Docsmith is a documentation template for product teams who want a complete docs site today and don't want to maintain a theme.
+group: Getting started
+order: 1
+updated: 2026-08-19
+---
+
+## What it is
+
+A file-based docs site. You write Markdown in `src/content/docs/`, set a `group` in
+frontmatter, and get a site with search, dark mode, an on-page table of contents, a print
+layout and generated reference pages.
+
+Everything on this site — the sidebar you're using, the ⌘K overlay, the code tabs below — is
+the template itself. There is no separate demo.
+
+## Who it's for
+
+Product teams shipping something that needs docs for three audiences at once:
+
+- **Developers** integrating your API — reference pages, copyable samples in their language.
+- **Operators** configuring your product — option tables, defaults, deprecation notes.
+- **End users** learning the app — task guides with screenshots and callouts.
+
+## What's included
+
+| Area         | Ships with                                                                |
+| ------------ | ------------------------------------------------------------------------- |
+| `navigation` | Grouped sidebar, breadcrumbs, prev/next, mobile drawer                    |
+| `discovery`  | Client-side full-text search, keyboard-first overlay, sitemap             |
+| `content`    | Callouts, tabbed code, annotated code, tables, definition lists, diagrams |
+| `lifecycle`  | Changelog page, feedback votes, print layout, 404 with search             |
+
+## Conventions in these docs
+
+<Alert
+  variant="note"
+  title="Commands are shown for npm"
+  text="Every install snippet has pnpm and yarn tabs — your choice is remembered across pages."
+/>
+
+## Getting there
+
+<Steps
+  heading=""
+  maxContentWidth="none"
+  paddingHorizontal="none"
+  paddingVertical="none"
+  orientation="horizontal"
+  items={[
+    {
+      contentSections: [
+        { _component: "building-blocks/core-elements/heading", text: "Install", level: "h3", size: "xs" },
+        {
+          _component: "building-blocks/core-elements/simple-text",
+          text: "One command scaffolds the site and its dependencies. [Installation](/installation/)",
+          size: "sm",
+        },
+      ],
+    },
+    {
+      contentSections: [
+        { _component: "building-blocks/core-elements/heading", text: "Brand it", level: "h3", size: "xs" },
+        {
+          _component: "building-blocks/core-elements/simple-text",
+          text: "Colour, spacing and type are design tokens; fonts change in one file. [Theming](/theming/)",
+          size: "sm",
+        },
+      ],
+    },
+    {
+      contentSections: [
+        { _component: "building-blocks/core-elements/heading", text: "Write and ship", level: "h3", size: "xs" },
+        {
+          _component: "building-blocks/core-elements/simple-text",
+          text: "Markdown files build to a static site, search index included. [Writing content](/writing-content/)",
+          size: "sm",
+        },
+      ],
+    },
+  ]}
+/>
+
+Next: [install the template](/installation/) and run it locally.

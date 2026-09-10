@@ -1,0 +1,16 @@
+/* Breakpoints — documentation only; this file defines no tokens.
+ *
+ * Custom properties don't work in @media preludes, and the project stays on
+ * vanilla CSS (no PostCSS/custom-media), so breakpoints are literal px. Two
+ * canonical values:
+ *
+ *   640px — mobile / stacking switch (single column below, multi-column above)
+ *   768px — navigation / tablet switch (mobile nav below, desktop nav above)
+ *
+ * Prefer range syntax (`width < 640px`) so a min/max pair shares one edge with
+ * no dead zone; where a file already pairs max/min-width, offset by 1px. Not
+ * 40rem — that only equals 640px at the default root size.
+ *
+ * A component may use its own content-driven threshold with an inline comment
+ * marking it intentionally non-canonical.
+ */

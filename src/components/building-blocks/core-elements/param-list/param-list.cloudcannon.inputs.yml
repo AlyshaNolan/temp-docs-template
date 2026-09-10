@@ -1,0 +1,5 @@
+params:
+  type: array
+  comment: One entry per option. Use this rather than a table when descriptions run long.
+  options:
+    structures: _structures.paramListItems

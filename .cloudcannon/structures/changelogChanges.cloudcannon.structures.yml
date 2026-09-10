@@ -1,0 +1,30 @@
+# Changelog lines, used by the `changes` array input on the `changelog`
+# collection (`cloudcannon.config.yml`).
+changelogChanges:
+  values:
+    - label: Change
+      icon: history
+      value:
+        tag: Added
+        text: ""
+      _inputs:
+        tag:
+          type: select
+          comment: The kind of change. "Breaking" and "Added" are colour-coded; anything else renders neutral.
+          options:
+            values:
+              - Added
+              - Changed
+              - Deprecated
+              - Removed
+              - Fixed
+              - Security
+              - Breaking
+        text:
+          type: markdown
+          comment: What changed, in one line.
+          options:
+            bold: true
+            italic: true
+            link: true
+            code: true

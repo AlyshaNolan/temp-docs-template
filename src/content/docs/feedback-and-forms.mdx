@@ -1,0 +1,118 @@
+---
+title: Feedback & forms
+description: The helpful vote at the foot of every page, and how to collect anything else from readers.
+group: Customizing
+order: 4
+updated: 2026-08-19
+---
+
+## The helpful vote
+
+Every documentation page ends with "Was this page helpful?". It is a real
+`<form method="post">`, so it works with JavaScript disabled — a script upgrades it to
+submit in the background and swap in the thank-you state without a page load.
+
+Turn it off per page with `showFeedback: false` in frontmatter, or site-wide in
+`src/data/docsSite.json`.
+
+## Where the vote goes
+
+The default `action` posts to the site itself, which
+[CloudCannon Forms](https://cloudcannon.com/documentation/articles/introduction-to-forms/)
+captures with no extra setup — submissions appear in the CloudCannon dashboard and you can
+have them emailed. Nothing to deploy.
+
+To send it somewhere else, change one field:
+
+<CodeTabs
+  tabs={[
+    {
+      label: "CloudCannon",
+      language: "json",
+      code: "{\n  \"feedback\": {\n    \"enabled\": true,\n    \"action\": \"/\"\n  }\n}",
+    },
+    {
+      label: "Formspree",
+      language: "json",
+      code: "{\n  \"feedback\": {\n    \"enabled\": true,\n    \"action\": \"https://formspree.io/f/YOUR_ID\"\n  }\n}",
+    },
+    {
+      label: "Netlify",
+      language: "json",
+      code: "{\n  \"feedback\": {\n    \"enabled\": true,\n    \"action\": \"/\"\n  }\n}\n\n// Netlify needs the form to declare itself; the block already\n// posts a `form-name` field, so add data-netlify=\"true\" in\n// navigation/page-feedback/PageFeedback.astro.",
+    },
+    {
+      label: "Your own",
+      language: "json",
+      code: "{\n  \"feedback\": {\n    \"enabled\": true,\n    \"action\": \"https://api.acme.com/docs-feedback\"\n  }\n}",
+    },
+  ]}
+/>
+
+The payload is the same in every case — three fields, posted as `multipart/form-data`:
+
+<ParamList
+  params={[
+    { name: "form-name", type: "string", required: true, description: 'Always `page-feedback`, so one endpoint can serve several forms.' },
+    { name: "page", type: "string", required: true, description: "The path of the page that was voted on, e.g. `/theming/`." },
+    { name: "vote", type: "string", required: true, description: "`yes` or `no`." },
+  ]}
+/>
+
+<Alert
+  variant="warning"
+  title="A cross-origin endpoint needs CORS"
+  text="The upgraded submit uses `fetch`, so an endpoint on another domain must send `Access-Control-Allow-Origin`. Without it the vote is silently dropped — deliberately: a reader who clicked Yes should never be shown an error."
+/>
+
+## Any other form
+
+Forms are built from the same blocks as the rest of the site, and can be dropped into a
+documentation page. The default `action` is again the site itself, so a CloudCannon-hosted
+site collects submissions with no backend.
+
+<Form
+  action="./"
+  formBlocks={[
+    {
+      _component: "building-blocks/forms/input",
+      label: "Your email",
+      name: "email",
+      type: "email",
+      placeholder: "you@company.com",
+      required: true,
+    },
+    {
+      _component: "building-blocks/forms/input",
+      label: "Which page?",
+      name: "page",
+      type: "text",
+      placeholder: "/installation/",
+      required: true,
+    },
+    {
+      _component: "building-blocks/forms/textarea",
+      label: "What's missing?",
+      name: "message",
+      rows: 4,
+      required: true,
+    },
+    {
+      _component: "building-blocks/forms/hidden",
+      name: "form-name",
+      value: "docs-gap",
+    },
+    {
+      _component: "building-blocks/forms/submit",
+      text: "Send",
+      variant: "primary",
+      size: "md",
+    },
+  ]}
+/>
+
+<Alert
+  variant="tip"
+  title="Validation is the browser's, with better messages"
+  text="Fields marked `required` are validated natively; a script replaces the browser's tooltip with an inline message under each field, and focuses the first one that failed."
+/>

@@ -1,0 +1,36 @@
+source:
+  type: image
+  comment: The image. Required.
+  options:
+    paths:
+      uploads: src/assets/images
+alternateSource:
+  type: image
+  comment: Shown in dark mode. Without it, a screenshot of a light UI stays light on a dark page.
+  options:
+    paths:
+      uploads: src/assets/images
+alt:
+  type: text
+  comment: What the image shows, for readers who can't see it. Required.
+caption:
+  type: text
+  comment: Optional caption under the image.
+zoom:
+  type: switch
+  comment: Let readers click the image to see it full-size.
+aspectRatio:
+  type: select
+  comment: Crop the image to a fixed ratio. None keeps its own proportions.
+  options:
+    values:
+      - id: none
+        name: None
+      - id: square
+        name: Square
+      - id: landscape
+        name: Landscape
+      - id: portrait
+        name: Portrait
+      - id: widescreen
+        name: Widescreen

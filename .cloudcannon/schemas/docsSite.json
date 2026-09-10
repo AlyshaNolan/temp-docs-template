@@ -1,0 +1,28 @@
+{
+  "_schema": "docsSite",
+  "markLetter": "D",
+  "wordmark": "Docs",
+  "logoSource": "",
+  "logoAlternateSource": "",
+  "logoAlt": "",
+  "version": "",
+  "themeToggle": true,
+  "defaultTheme": "dark",
+  "search": true,
+  "searchPlaceholder": "Search documentation…",
+  "homeLabel": "Overview",
+  "editPageBaseUrl": "",
+  "editPageLabel": "Edit this page",
+  "topbarLinks": [],
+  "navGroups": [],
+  "copyPage": {
+    "enabled": true,
+    "label": "Copy page"
+  },
+  "feedback": {
+    "enabled": true,
+    "prompt": "Was this page helpful?",
+    "action": "/",
+    "successMessage": "Thanks — that's logged against this page."
+  }
+}

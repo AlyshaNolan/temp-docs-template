@@ -1,0 +1,30 @@
+# Docsmith
+
+> A complete documentation template: grouped sidebar, client-side search, reference pages, diagrams, media and a print layout. You write Markdown; the template handles the rest.
+
+## Pages
+
+- [Overview](/): What the template ships with, and where to start.
+
+## Getting started
+
+- [Introduction](/introduction/): What it is, who it's for, and what's included.
+- [Installation](/installation/): Scaffold a site, run it locally, add your first page.
+
+## Authoring
+
+- [Writing content](/writing-content/): Frontmatter, callouts, code blocks and tabs, annotations, tables, cross-links.
+- [Media & components](/media-and-components/): Collapsible sections, definition lists, diagrams, images, video.
+
+## Customizing
+
+- [Configuration](/configuration/): One data file for the header, the sidebar, search and feedback.
+- [Theming](/theming/): Design tokens, the accent, typography, dark mode.
+- [Search](/search/): How the index works, what gets indexed, hosted alternatives.
+- [Feedback & forms](/feedback-and-forms/): The helpful vote, where it posts, and any other form.
+
+## Reference
+
+- [Config API](/config-api/): Every option, its type, default and effect.
+- [Changelog](/changelog/): Releases, by hand, in the same Markdown as everything else.
+- [Print & PDF](/print-and-pdf/): What changes on paper, and the page setup.

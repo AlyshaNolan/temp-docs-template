@@ -1,0 +1,151 @@
+---
+title: Writing content
+description: Standard Markdown, plus the handful of components docs actually need.
+group: Authoring
+order: 1
+updated: 2026-08-12
+---
+
+export const diffSample = `export default {
+-  search: { provider: 'algolia' },
++  search: { provider: 'local' },
+  nav: [
+~    { group: 'Guides', dir: 'guides' },
+  ],
+}`
+
+export const treeSample = `src/
+  components/
+    Button.astro
++   Callout.astro
+  styles/
+    base.css
+astro.config.mjs`
+
+export const annotatedSample = `export default {
+  search: { provider: 'local' },
+  nav: [
+    { group: 'Guides', dir: 'guides' },
+  ],
+}`
+
+## Frontmatter
+
+Only `title` is required. `group` and `order` place the page in the sidebar; omit `group` and
+the page still builds and is searchable — it just doesn't appear in the nav.
+
+| Key            | Type    | Default | Effect                                             |
+| -------------- | ------- | ------- | -------------------------------------------------- |
+| `title`        | string  | —       | Page heading, browser title, search result         |
+| `description`  | string  | —       | The lede under the title, and the meta description |
+| `group`        | string  | —       | Sidebar group. No group means no sidebar entry     |
+| `order`        | number  | `0`     | Position within the group                          |
+| `updated`      | date    | —       | Shown in the meta line under the title             |
+| `showToc`      | boolean | `true`  | On-this-page rail                                  |
+| `showFeedback` | boolean | `true`  | The helpful vote at the foot of the page           |
+| `showPager`    | boolean | `true`  | Previous/next links                                |
+
+## Callouts
+
+Four kinds. Use them for things a reader would otherwise learn the hard way.
+
+<Alert variant="note" title="Note" text="Context that helps, but isn't required to succeed." />
+<Alert variant="tip" title="Tip" text="A shortcut once the reader knows the basics." />
+<Alert variant="warning" title="Warning" text="Something that will surprise them if they skip it." />
+<Alert variant="danger" title="Danger" text="Data loss, irreversible actions, breaking changes." />
+
+```mdx title="callout.mdx"
+<Alert
+  variant="warning"
+  title="Rotating a key revokes the old one"
+  text="Existing clients fail on the next request. Deploy the new key before rotating."
+/>
+```
+
+## Code blocks
+
+A fenced block takes a `title` for the header bar and a line range to highlight.
+
+````md title="fence.md"
+```js title="docsmith.config.js" {2}
+export default {
+  search: { provider: 'local' },
+}
+```
+````
+
+```js title="docsmith.config.js" {2}
+export default {
+  search: { provider: 'local' },
+}
+```
+
+## Diffs
+
+`CodeDiff` marks changed lines with `+`, `-` and `~` at the start of the line. The
+markers are stripped before highlighting, so the sample keeps its own language
+colours instead of going flat the way a `diff` fence does — and the copy button
+hands back the code without them.
+
+<CodeDiff
+  filename="docsmith.config.js"
+  language="js"
+  code={diffSample}
+/>
+
+A line of real code that begins with `+`, `-` or `~` — a YAML list item, say — is
+read as a marker. Use a plain code block for those.
+
+## File trees
+
+`FileTree` draws the connectors from an indented list of paths, so the tree stays
+editable as text. Any consistent indent unit works, and a path can carry the same
+`+` / `-` / `~` marker as a diff.
+
+<FileTree
+  title="Project structure"
+  paths={treeSample}
+/>
+
+## Language tabs
+
+Use `CodeTabs` for one sample in several languages. The reader's choice is remembered
+site-wide, so a Python developer stays in Python across every page.
+
+<CodeTabs
+  tabs={[
+    { label: "cURL", language: "bash", code: "curl https://api.acme.com/v1/invoices \\\n  -H \"Authorization: Bearer $ACME_KEY\" \\\n  -d customer=cus_8Kq2 \\\n  -d amount=4900" },
+    { label: "Node", language: "js", code: "import { Acme } from '@acme/sdk'\n\nconst acme = new Acme(process.env.ACME_KEY)\n\nconst invoice = await acme.invoices.create({\n  customer: 'cus_8Kq2',\n  amount: 4900,\n})" },
+    { label: "Python", language: "python", code: "from acme import Acme\n\nacme = Acme(os.environ['ACME_KEY'])\n\ninvoice = acme.invoices.create(\n    customer='cus_8Kq2',\n    amount=4900,\n)" },
+  ]}
+/>
+
+## Code annotations
+
+Notes sit under the block rather than in comments, so the snippet stays copy-paste clean.
+Each note names the line it marks.
+
+<CodeAnnotations
+  filename="docsmith.config.js"
+  language="js"
+  notes={[
+    { line: 2, text: "Builds the index at compile time and ships it with the site — no search service, no API key." },
+    { line: 4, text: "Point a group at a directory and every page in it appears, ordered by frontmatter." },
+  ]}
+  code={annotatedSample}
+/>
+
+## Tables
+
+Markdown tables get a bordered panel and horizontal scroll on narrow screens.
+
+| Event          | Retries | Payload            |
+| -------------- | ------- | ------------------ |
+| `invoice.paid` | 5       | Invoice object     |
+| `user.created` | 3       | User object        |
+| `plan.changed` | 3       | Subscription delta |
+
+## Cross-links
+
+Link by URL — `[Configuration](/configuration/)`. `npm run lint:links` fails the build on an
+internal link that points at no page, so a renamed page can't quietly rot.

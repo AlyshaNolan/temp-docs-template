@@ -1,0 +1,25 @@
+items:
+  type: array
+  label: List Items
+  options:
+    structures: _structures.definitionListItems
+layout:
+  type: select
+  comment: Stacked reads as a glossary — term, then its definition indented under it. Grid puts terms in a column, for short spec rows.
+  options:
+    values:
+      - id: stacked
+        name: Stacked
+      - id: grid
+        name: Grid
+alignmentHorizontal:
+  type: select
+  comment: The horizontal alignment of the definition list items. Grid layout only.
+  options:
+    values:
+      - id: start
+        name: Start
+      - id: center
+        name: Center
+      - id: end
+        name: End

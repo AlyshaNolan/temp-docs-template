@@ -1,0 +1,103 @@
+name: Test
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ${{matrix.os}}
+    defaults:
+      run:
+        shell: bash
+    strategy:
+      matrix:
+        include:
+          - build: linux
+            os: ubuntu-24.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-node@v4
+        with:
+          cache: npm
+          node-version-file: .nvmrc
+
+      - name: Verify lockfile is in sync
+        run: |
+          if ! npm ci --dry-run > /dev/null 2>&1; then
+            echo "::error::package-lock.json is out of sync with package.json."
+            echo "This usually happens when running 'npm install' on macOS, which strips Linux-only peer dependencies from the lockfile."
+            echo "Run 'npm run deps:sync' locally, commit the updated package-lock.json, and push again."
+            exit 1
+          fi
+
+      - name: Install
+        run: npm ci
+
+      - name: Check
+        run: npm run check
+
+      - name: Unit tests
+        run: npm run test:unit
+
+  build:
+    name: Build all components
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-node@v4
+        with:
+          cache: npm
+          node-version-file: .nvmrc
+
+      - name: Install
+        run: npm ci
+
+      - name: Render every component's structure defaults
+        run: npm run test:render
+
+  # Interactive smoke tests against the built site. This script locates Chrome
+  # via Playwright's Chromium, so installing it is enough here.
+  browser-tests:
+    name: Smoke tests
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-node@v4
+        with:
+          cache: npm
+          node-version-file: .nvmrc
+
+      - name: Install
+        run: npm ci
+
+      - name: Install Chromium for Playwright
+        run: npx playwright-core install --with-deps chromium
+
+      # COMPONENT_PREVIEWS adds the /preview-renders/ routes the smoke tests
+      # drive components through — see scripts/tests/smoke.mjs.
+      - name: Build the site with the preview-render routes
+        run: COMPONENT_PREVIEWS=true npm run build
+
+      - name: Smoke-test interactive components
+        run: npm run test:smoke

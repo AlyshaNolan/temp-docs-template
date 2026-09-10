@@ -1,0 +1,115 @@
+---
+import { ClientRouter } from "astro:transitions";
+import { fade } from "astro:transitions";
+import SeoHead from "@components/utils/SeoHead.astro";
+import StructuredData from "@components/utils/StructuredData.astro";
+import seoData from "@data/seo.json";
+import "@styles/style.css";
+import SiteFonts from "@layouts/SiteFonts.astro";
+
+export interface Props {
+  title: string;
+  heading?: string | null;
+  description?: string | null;
+  keywords?: string[] | null;
+  image?: string | null;
+  canonical?: string | null;
+  type?: "website" | "article";
+  article?: {
+    publishedTime?: string | null;
+    modifiedTime?: string | null;
+    author?: string | string[] | null;
+    tags?: string[] | null;
+  } | null;
+  noindex?: boolean;
+  /** Colour scheme before any reader preference applies. */
+  defaultTheme?: "light" | "dark";
+}
+
+const props = Astro.props;
+---
+
+<!doctype html>
+<html
+  lang="en"
+  data-theme={props.defaultTheme ?? "light"}
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="/favicon.svg"
+    />
+    <meta
+      name="generator"
+      content={Astro.generator}
+    />
+    <style is:inline>
+      /* `pagefind` sits below `components` so component styles win over the
+         Pagefind Component UI stylesheet (imported into that layer by the
+         search component) without specificity fights or !important. */
+      @layer reset, base, pagefind, components, page-sections, utils, overrides;
+    </style>
+
+    <SiteFonts />
+
+    {
+      import.meta.env.DEV ? (
+        <script
+          type="module"
+          src="/@vite/client"
+        />
+      ) : null
+    }
+
+    <script>
+      if (window.inEditorMode) {
+        import("../../live-editing");
+        import("../../editor-live-sync");
+      }
+    </script>
+
+    <SeoHead
+      site={seoData}
+      title={props.title}
+      description={props.description}
+      keywords={props.keywords}
+      image={props.image}
+      canonical={props.canonical}
+      type={props.type}
+      article={props.article}
+      noindex={props.noindex}
+    />
+
+    <StructuredData
+      site={seoData}
+      heading={props.heading}
+      title={props.title}
+      description={props.description}
+      image={props.image}
+      canonical={props.canonical}
+      type={props.type}
+      article={props.article}
+    />
+
+    <link
+      rel="sitemap"
+      type="application/xml"
+      title="Sitemap"
+      href="/sitemap-index.xml"
+    />
+
+    <slot name="head" />
+    <ClientRouter />
+  </head>
+  <body>
+    <div transition:animate={fade({ duration: "0.2s" })}>
+      <slot />
+    </div>
+  </body>
+</html>

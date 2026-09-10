@@ -1,0 +1,5 @@
+{
+  "_schema": "announcementBar",
+  "enabled": false,
+  "text": "Announce something here. [Read the changelog](/changelog/)"
+}

@@ -1,0 +1,48 @@
+code:
+  type: code
+  comment: 'The sample, one line per line. Start a line with "+", "-" or "~" to mark it added, removed or highlighted — the marker is stripped before highlighting, so the rest of the line must be valid code. A line of real code that begins with one of those characters needs the plain Code Block instead.'
+  options:
+    max_visible_lines: 20
+language:
+  type: select
+  comment: Language for syntax highlighting — the sample keeps its own colours rather than going flat like a `diff` fence. An unlisted language renders as plain text rather than failing the build.
+  options:
+    values:
+      - id: astro
+        name: astro
+      - id: bash
+        name: bash
+      - id: css
+        name: css
+      - id: html
+        name: html
+      - id: js
+        name: js
+      - id: json
+        name: json
+      - id: jsx
+        name: jsx
+      - id: markdown
+        name: markdown
+      - id: mdx
+        name: mdx
+      - id: python
+        name: python
+      - id: ruby
+        name: ruby
+      - id: sh
+        name: sh
+      - id: ts
+        name: ts
+      - id: tsx
+        name: tsx
+      - id: yaml
+        name: yaml
+      - id: text
+        name: text
+filename:
+  type: text
+  comment: Shown in the header bar. Falls back to the language when empty — a real path tells the reader which file to change.
+showCopy:
+  type: switch
+  comment: Show the copy button. It copies the code without the +/- markers.

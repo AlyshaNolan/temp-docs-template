@@ -1,0 +1,26 @@
+label:
+  comment: Optional label for the content selector to help identify it in the editor.
+  type: text
+items:
+  type: array
+  comment: The tabs to switch between. Each item is one tab and the panel it shows.
+  options:
+    structures: _structures.contentSelectorItems
+variant:
+  type: select
+  comment: Panel frames the tabs and content in one bordered box with a compact strip of labels — a demo panel. Plain leaves them as part of the page. Panel needs the tabs on top.
+  options:
+    values:
+      - id: plain
+        name: Plain
+      - id: panel
+        name: Panel
+navigationPosition:
+  type: select
+  comment: Where the tabs sit relative to the panel. Both collapse to an accordion on narrow screens.
+  options:
+    values:
+      - id: start
+        name: Start
+      - id: top
+        name: Top

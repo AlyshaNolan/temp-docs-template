@@ -1,0 +1,82 @@
+[data-theme="light"] {
+  color-scheme: light;
+
+  --color-brand: var(--black);
+  --color-brand-muted: var(--gray-800);
+  --color-brand-subtle: var(--gray-600);
+  --color-brand-on: var(--white);
+
+  /* The accent is the interactive colour — links, active nav, focus, selection.
+     It is deliberately not `--color-brand`: primary buttons stay ink-on-paper,
+     so an accent change never turns the page into a wall of one hue. */
+  --color-accent: var(--teal-700);
+  --color-accent-hover: var(--teal-800);
+  --color-accent-on: var(--white);
+  --color-accent-surface: var(--teal-50);
+  --color-accent-border: var(--teal-200);
+
+  --color-text: var(--black);
+  --color-text-strong: var(--black);
+  --color-text-muted: var(--gray-700);
+  --color-text-on-muted: var(--black);
+  --color-text-on-brand: var(--white);
+  --color-text-inverse: var(--white);
+  --color-text-faint: var(--gray-500);
+  --color-link: var(--color-accent);
+  --color-link-hover: var(--color-accent-hover);
+
+  --color-bg: var(--white);
+  --color-bg-surface: var(--gray-50);
+  --color-bg-muted: var(--gray-100);
+  --color-bg-accent: var(--teal-50);
+  --color-bg-highlight: #fff9d6;
+  --color-bg-brand: var(--color-brand);
+  --color-bg-brand-muted: var(--color-brand-muted);
+  --color-bg-inverse: var(--black);
+
+  --color-bg-code: color-mix(in srgb, var(--black) 7%, transparent);
+
+  /* Code blocks stay dark in both themes: a sample that inverts with the page
+     re-reads as a different snippet, and syntax colours are tuned for one ground. */
+  --color-code-bg: #0c0e12;
+  --color-code-text: #e7eaef;
+  --color-code-muted: #7f8b9e;
+  --color-code-border: #1d222b;
+  --color-code-highlight: #171a1e;
+  --color-code-diff-add-bg: rgba(46, 160, 67, 0.16);
+  --color-code-diff-add-text: #7ee787;
+  --color-code-diff-remove-bg: rgba(248, 81, 73, 0.16);
+  --color-code-diff-remove-text: #ff9492;
+
+  --color-border: var(--gray-200);
+  --color-border-inputs: var(--gray-400);
+  --color-border-strong: var(--gray-300);
+  --color-border-subtle: var(--gray-100);
+
+  /* Opaque "plain" set for chrome sitting on imagery or tints (e.g. the plain
+     Badge) — the theme's base surface, so it flips with light/dark. */
+  --color-bg-plain: var(--white);
+  --color-border-plain: var(--gray-200);
+  --color-text-plain: var(--gray-950);
+
+  --color-state-hover: rgba(0, 0, 0, 0.04);
+  --color-state-active: rgba(0, 0, 0, 0.08);
+  --color-overlay: rgba(8, 9, 11, 0.42);
+
+  --color-focus-ring: rgba(15, 118, 110, 0.45);
+
+  --color-danger: var(--red-600);
+  --color-danger-hover: var(--red-700);
+  --color-danger-bg-subtle: var(--red-50);
+  --color-danger-border-subtle: var(--red-300);
+  --color-info: var(--color-accent);
+  --color-info-bg-subtle: var(--teal-50);
+  --color-info-border-subtle: var(--teal-200);
+  --color-success: var(--green-700);
+  --color-success-bg-subtle: var(--green-50);
+  --color-success-border-subtle: var(--green-300);
+  --color-warning: var(--yellow-700);
+  --color-warning-bg-subtle: var(--yellow-50);
+  --color-warning-border-subtle: var(--yellow-300);
+  --color-error: var(--color-danger);
+}

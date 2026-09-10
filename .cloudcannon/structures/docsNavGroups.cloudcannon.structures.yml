@@ -1,0 +1,22 @@
+# Sidebar group order, used by the `docsSite` data file's `navGroups` input.
+#
+# Coupled to page frontmatter: `name` must match a page's `group` exactly, or
+# the group is treated as a new one and appended. Nothing enforces the match.
+docsNavGroups:
+  values:
+    - label: Group
+      icon: folder
+      value:
+        name: ""
+        collapsed: false
+      preview:
+        text:
+          - key: name
+          - Group
+      _inputs:
+        name:
+          type: text
+          comment: Must match the `group` set on the pages that belong to it.
+        collapsed:
+          type: switch
+          comment: Render the group closed, unless the reader is on a page inside it.

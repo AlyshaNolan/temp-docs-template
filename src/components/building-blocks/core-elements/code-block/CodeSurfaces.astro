@@ -1,0 +1,14 @@
+---
+/**
+ * Registers the copy button on every code surface in the page, including the
+ * ones a Markdown fence produces — those carry no component script of their
+ * own. Renders nothing.
+ */
+---
+
+<script>
+  import { onPageLoad } from "@component-utils/onPageLoad";
+  import { setupAllCodeSurfaces } from "./setup";
+
+  onPageLoad(setupAllCodeSurfaces);
+</script>

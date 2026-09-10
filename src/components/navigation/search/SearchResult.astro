@@ -1,0 +1,25 @@
+---
+/**
+ * The search result row: the page, then the headings within it that matched.
+ *
+ * Results render in the browser at search time, so this partial is rendered
+ * once into an inert `<template>` (see `Search.astro`) and `setup.ts` clones
+ * it per result, filling in the data and repeating `.search-result-sub` per
+ * matched section.
+ */
+---
+
+<li class="search-result">
+  <a class="search-result-link">
+    <span class="search-result-title">Result title</span>
+    <span class="search-result-excerpt">Excerpt</span>
+  </a>
+  <ul class="search-result-subs">
+    <li class="search-result-sub">
+      <a class="search-result-sub-link">
+        <span class="search-result-sub-title">Section</span>
+        <span class="search-result-sub-excerpt">Excerpt</span>
+      </a>
+    </li>
+  </ul>
+</li>

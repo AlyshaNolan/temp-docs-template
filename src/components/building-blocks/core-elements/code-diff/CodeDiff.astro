@@ -1,0 +1,55 @@
+---
+import { highlightCode, parseDiffMarkers } from "@component-utils/highlight";
+import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
+import CodeBlockSurface from "../code-block/CodeBlockSurface.astro";
+
+const {
+  code = "",
+  language = "js",
+  filename = "",
+  showCopy = true,
+  spaceBefore = "default",
+  class: className,
+  useDefaultEditableBinding: _useDefaultEditableBinding = false,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
+
+if (!_component && !code) return;
+
+const { lines, diff } = parseDiffMarkers(String(code));
+const html = await highlightCode(lines.join("\n"), String(language), { diff });
+const label = filename || language;
+---
+
+<div
+  class:list={["code-diff", "stackable", className]}
+  {...htmlAttributes}
+>
+  <CodeBlockSurface
+    showCopy={showCopy}
+    data-space-before={spaceBeforeAttr(spaceBefore)}
+  >
+    {
+      label && (
+        <span
+          slot="header"
+          class="code-surface-label"
+        >
+          {label}
+        </span>
+      )
+    }
+    <div
+      data-code-source
+      set:html={html}
+    />
+  </CodeBlockSurface>
+</div>
+
+<script>
+  import { onPageLoad } from "@component-utils/onPageLoad";
+  import { setupAllCodeSurfaces } from "../code-block/setup";
+
+  onPageLoad(setupAllCodeSurfaces);
+</script>

@@ -1,0 +1,53 @@
+code:
+  type: code
+  comment: The sample itself. Indentation is preserved exactly as typed.
+  options:
+    max_visible_lines: 20
+language:
+  type: select
+  comment: Language for syntax highlighting. An unlisted language renders as plain text rather than failing the build.
+  options:
+    values:
+      - id: astro
+        name: astro
+      - id: bash
+        name: bash
+      - id: css
+        name: css
+      - id: diff
+        name: diff
+      - id: html
+        name: html
+      - id: js
+        name: js
+      - id: json
+        name: json
+      - id: jsx
+        name: jsx
+      - id: markdown
+        name: markdown
+      - id: mdx
+        name: mdx
+      - id: python
+        name: python
+      - id: ruby
+        name: ruby
+      - id: sh
+        name: sh
+      - id: ts
+        name: ts
+      - id: tsx
+        name: tsx
+      - id: yaml
+        name: yaml
+      - id: text
+        name: text
+filename:
+  type: text
+  comment: Shown in the header bar. Falls back to the language when empty — a real path tells the reader where the code goes.
+highlight:
+  type: text
+  comment: 'Lines to highlight, 1-based: "2" or "1,4-6". Empty highlights nothing.'
+showCopy:
+  type: switch
+  comment: Show the copy button.

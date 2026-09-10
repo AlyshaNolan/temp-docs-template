@@ -1,0 +1,38 @@
+code-annotations:
+  template: mdx_component
+  inline: false
+  preview:
+    text:
+      - Annotated Code
+    image: public/component-previews/building-blocks/core-elements/code-annotations.svg
+    icon: format_list_numbered
+    gallery:
+      image: public/component-previews/building-blocks/core-elements/code-annotations.svg
+      fit: cover
+  definitions:
+    component_name: CodeAnnotations
+    named_args:
+      - editor_key: code
+        type: string
+      - editor_key: language
+        type: string
+        optional: true
+        remove_empty: true
+      - editor_key: filename
+        type: string
+        optional: true
+        remove_empty: true
+      - editor_key: highlight
+        type: string
+        optional: true
+        remove_empty: true
+      - editor_key: notes
+        type: array
+        optional: true
+        remove_empty: true
+      - editor_key: showCopy
+        type: boolean
+        optional: true
+        remove_empty: true
+  _inputs_from_glob:
+    - /src/components/building-blocks/core-elements/code-annotations/code-annotations.cloudcannon.inputs.yml

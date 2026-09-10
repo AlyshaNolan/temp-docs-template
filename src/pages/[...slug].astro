@@ -1,0 +1,269 @@
+---
+/**
+ * The site's only route. It serves two collections, both mounted at the site
+ * root: `pages` (page-builder entries — the overview) and `docs` (Markdown
+ * articles). A slug claimed by both is a build error rather than a coin toss
+ * over which one wins.
+ */
+import Breadcrumbs from "@components/navigation/breadcrumbs/Breadcrumbs.astro";
+import CopyPage from "@components/navigation/copy-page/CopyPage.astro";
+import DocsPager from "@components/navigation/docs-pager/DocsPager.astro";
+import PageFeedback from "@components/navigation/page-feedback/PageFeedback.astro";
+import Toc from "@components/navigation/toc/Toc.astro";
+import MainComponent from "@components/utils/MainComponent.astro";
+import { mdxComponents } from "@components/utils/mdxComponents";
+import docsSite from "@data/docsSite.json";
+import Docs from "@layouts/Docs.astro";
+import { markdownHref } from "@utils/docsMarkdown";
+import { docHref, findCrumbs, findPager, getDocsNav } from "@utils/docsNav";
+import { getCollection, render, type CollectionEntry } from "astro:content";
+
+export async function getStaticPaths() {
+  const [pages, docs] = await Promise.all([getCollection("pages"), getCollection("docs")]);
+
+  const paths = [
+    ...pages.map((page: CollectionEntry<"pages">) => ({
+      params: { slug: page.id.replace(/\/?index$/, "") || undefined },
+      props: { page, doc: undefined },
+    })),
+    ...docs.map((doc: CollectionEntry<"docs">) => ({
+      params: { slug: doc.id.replace(/\/?index$/, "") || undefined },
+      props: { page: undefined, doc },
+    })),
+  ];
+
+  const seen = new Map<string, string>();
+
+  for (const path of paths) {
+    const key = path.params.slug ?? "";
+    const source = path.props.doc ? "src/content/docs" : "src/content/pages";
+
+    if (seen.has(key)) {
+      throw new Error(
+        `Two entries claim the URL "/${key}" — ${seen.get(key)} and ${source}. Rename one.`
+      );
+    }
+
+    seen.set(key, source);
+  }
+
+  return paths;
+}
+
+type Props = {
+  page?: CollectionEntry<"pages">;
+  doc?: CollectionEntry<"docs">;
+};
+
+const { page, doc } = Astro.props as Props;
+const entry = (doc ?? page)!;
+const nav = await getDocsNav();
+const { Content, headings } = await render(entry as CollectionEntry<"docs">);
+
+const showToc = Boolean(doc?.data.showToc);
+const tocHeadings = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
+const hasToc = showToc && tocHeadings.length > 0;
+
+const href = docHref(entry.id);
+const { prev, next } = findPager(nav, href);
+const crumbs = findCrumbs(nav, href);
+
+const updated = doc?.data.updated
+  ? doc.data.updated.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    })
+  : "";
+const editUrl = docsSite.editPageBaseUrl ? `${docsSite.editPageBaseUrl}${entry.id}.mdx` : "";
+// Opt-out, not opt-in: a page missing the frontmatter default (a content
+// entry parsed before the field existed) must still get the control.
+const showCopyPage = Boolean(doc && doc.data.showCopyPage !== false && docsSite.copyPage.enabled);
+---
+
+<Docs
+  nav={nav}
+  title={entry.data.title}
+  description={entry.data.description}
+  keywords={entry.data.keywords}
+  image={entry.data.image}
+  noindex={entry.data.noindex}
+  wide={!doc}
+>
+  {
+    hasToc && (
+      <Toc
+        slot="toc"
+        headings={tocHeadings}
+      />
+    )
+  }
+
+  {
+    doc ? (
+      <article class="doc">
+        <Breadcrumbs
+          class="doc-breadcrumbs"
+          items={crumbs.length > 0 ? crumbs : [{ label: doc.data.title }]}
+        />
+        <div class="doc-heading">
+          <h1
+            class="doc-title"
+            data-pagefind-meta="title"
+          >
+            {doc.data.title}
+          </h1>
+          {showCopyPage && (
+            <CopyPage
+              label={docsSite.copyPage.label}
+              markdownHref={markdownHref(href)}
+            />
+          )}
+        </div>
+
+        {(updated || editUrl) && (
+          <p class="doc-meta">
+            {updated && <span>Updated {updated}</span>}
+            {updated && editUrl && (
+              <span
+                class="doc-meta-separator"
+                aria-hidden="true"
+              >
+                ·
+              </span>
+            )}
+            {editUrl && <a href={editUrl}>{docsSite.editPageLabel || "Edit this page"}</a>}
+          </p>
+        )}
+
+        {doc.data.description && (
+          <p
+            class="doc-lede"
+            data-pagefind-meta="description"
+            data-pagefind-weight="3"
+          >
+            {doc.data.description}
+          </p>
+        )}
+
+        <div
+          class="prose"
+          data-editable="text"
+          data-prop="@content"
+        >
+          <Content components={mdxComponents} />
+        </div>
+
+        <div
+          class="doc-footer"
+          data-pagefind-ignore
+        >
+          {doc.data.showFeedback && docsSite.feedback?.enabled && (
+            <PageFeedback
+              prompt={docsSite.feedback.prompt}
+              action={docsSite.feedback.action}
+              successMessage={docsSite.feedback.successMessage}
+              page={href}
+            />
+          )}
+          {doc.data.showPager && (
+            <DocsPager
+              prev={prev}
+              next={next}
+            />
+          )}
+        </div>
+      </article>
+    ) : (
+      <>
+        {page!.data.pageSections?.length > 0 && (
+          <MainComponent sections={page!.data.pageSections} />
+        )}
+        <div class="prose">
+          <Content components={mdxComponents} />
+        </div>
+      </>
+    )
+  }
+</Docs>
+
+<style is:global>
+  @layer page-sections {
+    .doc {
+      max-width: var(--content-width-lg);
+    }
+
+    .doc-breadcrumbs {
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .doc-heading {
+      align-items: start;
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--spacing-md);
+      margin-bottom: var(--spacing-md);
+    }
+
+    /* Keeps the control at the right edge on the row it lands on, wrapped or
+       not — `space-between` would flush it left once it had a row to itself. */
+    .doc-heading > .copy-page {
+      flex: none;
+      margin-inline-start: auto;
+    }
+
+    /* Wide enough for a heading column beside the control: the title takes the
+       remaining space and wraps its own text, so the control holds the corner.
+       Narrower than this the two share a line only by squeezing the title into
+       a column that breaks words mid-way, so it wraps to its own row instead. */
+    @media (width >= 640px) {
+      .doc-heading {
+        flex-wrap: nowrap;
+      }
+
+      .doc-title {
+        flex: 1 1 0;
+        min-width: 0;
+      }
+    }
+
+    .doc-title {
+      font-size: var(--font-size-heading-lg);
+      letter-spacing: var(--letter-spacing-tighter);
+      line-height: var(--line-height-heading-lg);
+      margin-block: 0;
+    }
+
+    .doc-meta {
+      align-items: center;
+      color: var(--color-text-faint);
+      display: flex;
+      flex-wrap: wrap;
+      font-size: var(--font-size-xs);
+      gap: var(--spacing-sm);
+      margin-block: 0 var(--spacing-lg);
+
+      a {
+        color: var(--color-text-muted);
+        text-decoration: none;
+
+        &:hover {
+          color: var(--color-text-strong);
+        }
+      }
+    }
+
+    .doc-lede {
+      color: var(--color-text-muted);
+      font-size: var(--font-size-lg);
+      line-height: var(--line-height-relaxed);
+      margin-block: 0 var(--spacing-2xl);
+    }
+
+    .doc-footer {
+      border-top: var(--border-width-sm) solid var(--color-border);
+      margin-top: var(--spacing-3xl);
+      padding-top: var(--spacing-xl);
+    }
+  }
+</style>

@@ -1,0 +1,69 @@
+---
+title: Configuration
+description: Site-wide settings live in one data file, editable in CloudCannon without touching code.
+group: Customizing
+order: 1
+updated: 2026-07-02
+---
+
+## The config file
+
+`src/data/docsSite.json` controls the header, the sidebar grouping, the edit link and the
+feedback block. It is a CloudCannon data file, so an editor changes it in the app rather than
+in a pull request.
+
+```json title="src/data/docsSite.json"
+{
+  "markLetter": "D",
+  "wordmark": "Docsmith",
+  "version": "v2.4",
+  "search": true,
+  "themeToggle": true,
+  "editPageBaseUrl": "https://github.com/acme/docs/edit/main/src/content/docs/",
+  "navGroups": [
+    { "name": "Getting started", "collapsed": false },
+    { "name": "Reference", "collapsed": true }
+  ],
+  "feedback": { "enabled": true, "action": "/" }
+}
+```
+
+<ParamList
+  params={[
+    { name: "wordmark", type: "string", description: "Brand name in the header. Pair it with `markLetter` for the square mark, or set `logoSource` to use an image instead." },
+    { name: "version", type: "string", description: "Badge beside the wordmark. Leave it empty to hide the badge." },
+    { name: "editPageBaseUrl", type: "string", description: "Prefix for the \"Edit this page\" link. The page's file path is appended, so it should end in a slash." },
+    { name: "navGroups", type: "{ name, collapsed }[]", description: "Sidebar group order. A group used in frontmatter but missing here is appended rather than dropped." },
+  ]}
+/>
+
+## Navigation
+
+The sidebar is derived from page frontmatter, not from a list you maintain by hand. A page's
+`group` puts it in a group and `order` places it within one.
+
+<Alert
+  variant="tip"
+  title="A page can exist outside the nav"
+  text="A page with no `group` still builds and is searchable — useful for landing pages you link to directly."
+/>
+
+Set `collapsed: true` on a group in `navGroups` and it renders as a disclosure, closed unless
+the reader is on a page inside it.
+
+## Versions
+
+The header badge is a label, not a switcher: it says which version of the product these docs
+describe. Change it in `docsSite.json` when you cut a release.
+
+<Alert
+  variant="warning"
+  title="Serving several versions at once is a hosting decision"
+  text="This template builds one version of the docs. Publishing an older set means building that branch separately and mounting it at its own path — the template has no opinion about how."
+/>
+
+## Environment
+
+Anything secret — a feedback endpoint, analytics keys — belongs in the environment at build
+time rather than in `docsSite.json`, which is public. See the
+[Config API](/config-api/) for every key and its default.

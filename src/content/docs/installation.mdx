@@ -1,0 +1,111 @@
+---
+title: Installation
+description: Scaffold a site, run it locally, add your first page.
+group: Getting started
+order: 2
+updated: 2026-08-19
+---
+
+## Prerequisites
+
+- Node 22.12 or newer
+- Any package manager — npm, pnpm or yarn
+
+## Scaffold the site
+
+The initializer creates the folder, installs dependencies and writes a starter config.
+
+<CodeTabs
+  tabs={[
+    { label: "npm", language: "bash", code: "npm create docsmith@latest acme-docs\ncd acme-docs\nnpm install" },
+    { label: "pnpm", language: "bash", code: "pnpm create docsmith acme-docs\ncd acme-docs\npnpm install" },
+    { label: "yarn", language: "bash", code: "yarn create docsmith acme-docs\ncd acme-docs\nyarn" },
+  ]}
+/>
+
+## Run the dev server
+
+```bash title="terminal"
+npm run dev
+
+  → docs ready at http://localhost:4321
+  → watching src/content/docs for changes
+```
+
+<Alert
+  variant="tip"
+  title="Port already in use?"
+  text="Pass `--port 5000`, or set `server.port` in `astro.config.mjs`."
+/>
+
+## Add your first page
+
+Create a Markdown file anywhere under `src/content/docs/`. The path becomes the URL.
+
+```mdx title="src/content/docs/webhooks.mdx"
+---
+title: Webhooks
+description: Receive events as they happen.
+group: Guides
+order: 2
+---
+
+Subscribe to events and we'll POST them to your endpoint.
+```
+
+## Deploy
+
+`npm run build` emits a static `dist/` — search index included — that any static host will
+serve. No server runtime, no database. See [Configuration](/configuration/) for the settings a
+deploy usually needs.
+
+## Common questions
+
+<FaqSection
+  heading=""
+  maxContentWidth="none"
+  paddingHorizontal="none"
+  paddingVertical="none"
+  items={[
+    {
+      title: "My new page isn't in the sidebar. Is it broken?",
+      contentSections: [
+        {
+          _component: "building-blocks/core-elements/text",
+          text: "No — the sidebar is derived, not configured. A page appears in it once its frontmatter has a `group`; without one the page still builds, still has a URL and is still searchable, it just has no sidebar entry. `order` places it within the group, and the groups themselves are ordered by `navGroups` in `src/data/docsSite.json`.",
+          size: "md",
+        },
+      ],
+    },
+    {
+      title: "Do I have to use CloudCannon?",
+      contentSections: [
+        {
+          _component: "building-blocks/core-elements/text",
+          text: "No. This is a plain Astro site — `npm run build` emits a static `dist/` whatever you edit it with. The CloudCannon YAML beside each component is what makes the site editable on the page for non-technical teammates; ignore it and nothing breaks.",
+          size: "md",
+        },
+      ],
+    },
+    {
+      title: "Where do the colours and fonts live?",
+      contentSections: [
+        {
+          _component: "building-blocks/core-elements/text",
+          text: "Colours, spacing, radius and shadows are design tokens under `src/styles/` — see [Theming](/theming/) and the [token reference](/theming/token-reference/). Fonts are the one exception: they change in `site-fonts.mjs` only, so the preload tags and the CSS can't disagree.",
+          size: "md",
+        },
+      ],
+    },
+    {
+      title: "How do I get rid of the Docsmith branding?",
+      contentSections: [
+        {
+          _component: "building-blocks/core-elements/text",
+          text: "Run `npm run reset:starter`. It clears the wordmark, the SEO name and title format, the example domain and the template's own edit-page URL — the placeholders `npm run check` warns about until you do.",
+          size: "md",
+        },
+      ],
+    },
+  ]}
+/>

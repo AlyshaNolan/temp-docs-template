@@ -1,0 +1,124 @@
+@layer base {
+  /**
+   * A print layout, not a squeezed screen layout. On-call engineers print
+   * runbooks; a page that is followed under pressure has to work on paper.
+   */
+  @media print {
+    @page {
+      margin: 18mm 16mm 20mm;
+      size: a4;
+    }
+
+    .docs-topbar,
+    .docs-sidebar,
+    .docs-nav-scrim,
+    .docs-toc-rail,
+    .docs-pager,
+    .page-feedback,
+    .copy-page,
+    .announcement-bar,
+    .footer,
+    .doc-breadcrumbs,
+    .figure-caption-hint,
+    .code-surface-copy,
+    .heading-anchor {
+      display: none !important;
+    }
+
+    .docs-shell {
+      display: block;
+      max-width: none;
+      padding: 0;
+    }
+
+    .docs-main {
+      padding: 0;
+    }
+
+    .doc,
+    .prose {
+      max-width: none;
+    }
+
+    .doc-footer {
+      border: 0;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* A paper copy stays followable only if the URL is on the page. */
+    .prose a[href^="http"]::after {
+      color: var(--color-text-faint);
+      content: " (" attr(href) ")";
+      font-size: 0.85em;
+      word-break: break-all;
+    }
+
+    :is(h1, h2, h3) {
+      break-after: avoid;
+    }
+
+    pre,
+    table,
+    figure,
+    details,
+    dl,
+    .code-surface,
+    .alert,
+    .param-list {
+      break-inside: avoid;
+    }
+
+    /* Paper has no disclosure triangle, so nothing may stay collapsed. The
+       UA hides a closed disclosure through `::details-content`, not `display`,
+       so both rules are needed. */
+    details::details-content {
+      content-visibility: visible;
+    }
+
+    details > :not(summary) {
+      display: block !important;
+    }
+  }
+}
+
+/* Deliberately outside `@layer base`: the theme files in `src/styles/themes/`
+   are unlayered, and an unlayered declaration beats any layered one whatever
+   its specificity — inside a layer these overrides silently lose and code
+   blocks print dark. */
+@media print {
+  /* Syntax colours are per-token inline styles from Shiki, so ink-on-white on
+     paper needs `!important`. Print is the one place that earns it. */
+  .prose pre code,
+  .prose pre code span,
+  .code-surface pre code,
+  .code-surface pre code span {
+    color: var(--color-code-text) !important;
+  }
+
+  /* Forced light, and dropped to plain black on white — a themed page costs
+     a cartridge of toner and reads worse. */
+  :root,
+  [data-theme] {
+    --color-accent: #000;
+    --color-bg: #fff;
+    --color-bg-muted: #fff;
+    --color-bg-surface: #fff;
+    --color-border: #bbb;
+    --color-border-strong: #999;
+    --color-code-bg: #fff;
+    --color-code-border: #bbb;
+    --color-code-highlight: #eee;
+    --color-code-diff-add-bg: #eaf5ea;
+    --color-code-diff-add-text: #000;
+    --color-code-diff-remove-bg: #f7ecec;
+    --color-code-diff-remove-text: #000;
+    --color-code-text: #000;
+    --color-text: #000;
+    --color-text-faint: #444;
+    --color-text-muted: #222;
+    --color-text-strong: #000;
+
+    color-scheme: light;
+  }
+}

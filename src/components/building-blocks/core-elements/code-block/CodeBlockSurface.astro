@@ -1,0 +1,190 @@
+---
+/**
+ * The chrome every code sample shares: bordered dark panel, a header bar, and
+ * the copy button. `CodeBlock`, `CodeTabs`, `CodeAnnotations`, `CodeDiff` and
+ * `FileTree` all render through this, so a change to the code surface lands in
+ * one place — and it owns the `.code-*` styles they rely on.
+ *
+ * The copy button reads `.innerText` of `[data-code-source]`, so only the code
+ * itself must carry that attribute — never the header or a notes footer.
+ */
+const { showCopy = true, class: className, ...htmlAttributes } = Astro.props;
+const hasHeader = Astro.slots.has("header");
+---
+
+<div
+  class:list={["code-surface", className]}
+  {...htmlAttributes}
+>
+  {
+    (hasHeader || showCopy) && (
+      <div class="code-surface-header">
+        <div class="code-surface-header-start">
+          <slot name="header" />
+        </div>
+        {showCopy && (
+          <button
+            type="button"
+            class="code-surface-copy"
+          >
+            <span class="code-surface-copy-idle">Copy</span>
+            <span class="code-surface-copy-done">Copied</span>
+          </button>
+        )}
+      </div>
+    )
+  }
+  <slot />
+</div>
+
+<style is:global>
+  @layer components {
+    .code-surface {
+      /* Gutter the diff +/- signs sit in. */
+      --code-diff-gutter: 1.25rem;
+
+      background-color: var(--color-code-bg);
+      border: var(--border-width-sm) solid var(--color-code-border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+
+    .code-surface-header {
+      align-items: center;
+      background-color: var(--color-bg-surface);
+      border-bottom: var(--border-width-sm) solid var(--color-border);
+      display: flex;
+      gap: var(--spacing-md);
+      justify-content: space-between;
+      min-height: 2.5rem;
+      padding: 0 var(--spacing-sm) 0 var(--spacing-md);
+    }
+
+    .code-surface-header-start {
+      align-items: center;
+      display: flex;
+      gap: var(--spacing-xs);
+      min-width: 0;
+    }
+
+    .code-surface-label {
+      color: var(--color-text-muted);
+      font-family: var(--font-mono);
+      font-size: var(--font-size-xs);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .code-surface-copy {
+      background: none;
+      border: none;
+      border-radius: var(--radius-xs);
+      color: var(--color-text-muted);
+      cursor: pointer;
+      flex: none;
+      font: inherit;
+      font-size: var(--font-size-xs);
+      padding: var(--spacing-xs) var(--spacing-sm);
+
+      &:hover {
+        background-color: var(--color-state-hover);
+        color: var(--color-text-strong);
+      }
+    }
+
+    .code-surface-copy-done {
+      display: none;
+    }
+
+    .code-surface-copy[data-state="copied"] {
+      .code-surface-copy-idle {
+        display: none;
+      }
+
+      .code-surface-copy-done {
+        display: inline;
+      }
+    }
+
+    /* `.code-pre` is what our highlighter adds; `.astro-code` is what Astro
+       puts on a Markdown fence. A fence is its own panel (see
+       `base/_prose.css`), but the code inside must look identical. */
+    /* A `<pre>` carries a UA margin; inside a surface it has to go, but a fence
+       in prose keeps the margins `base/_prose.css` gives it. */
+    .code-surface .code-pre {
+      margin: 0;
+    }
+
+    .code-surface .code-pre,
+    .prose .astro-code {
+      background-color: var(--color-code-bg);
+      color: var(--color-code-text);
+      font-size: var(--font-size-sm);
+      line-height: var(--line-height-normal);
+      overflow-x: auto;
+      padding: 0;
+      tab-size: 2;
+
+      /* Grid, not block: Shiki separates its `.line` spans with real newline
+         text nodes, and grid drops whitespace-only anonymous items — under
+         `display: block` each newline renders as a second, empty line.
+         The block padding sits here rather than on the `<pre>`: a fence's
+         header is a `::before` *inside* the pre, so padding there would push
+         the header down off the panel's top edge. */
+      code {
+        display: grid;
+        font-family: var(--font-mono);
+        min-width: max-content;
+        padding-block: var(--spacing-md);
+      }
+
+      .line {
+        display: block;
+        padding-inline: var(--spacing-md);
+      }
+
+      .line.is-highlighted {
+        background-color: var(--color-code-highlight);
+        box-shadow: inset var(--border-width-md) 0 0 var(--color-accent);
+      }
+    }
+
+    /* Diff markers (`CodeDiff`, `FileTree`). The +/- signs are `::before`
+       content, not text, so the copy button — which reads `.innerText` — hands
+       back source without them. The gutter only appears on a surface that has
+       markers, so an unmarked block keeps its flush left edge. */
+    .code-surface:has(.line[data-diff]) .line {
+      padding-inline-start: calc(var(--spacing-md) + var(--code-diff-gutter));
+      position: relative;
+    }
+
+    .code-surface .line[data-diff]::before {
+      inset-inline-start: var(--spacing-md);
+      position: absolute;
+    }
+
+    .code-surface .line[data-diff="add"] {
+      background-color: var(--color-code-diff-add-bg);
+
+      &::before {
+        color: var(--color-code-diff-add-text);
+        content: "+";
+      }
+    }
+
+    .code-surface .line[data-diff="remove"] {
+      background-color: var(--color-code-diff-remove-bg);
+
+      &::before {
+        color: var(--color-code-diff-remove-text);
+        content: "-";
+      }
+    }
+
+    .code-surface .line[data-diff="highlight"] {
+      background-color: var(--color-code-highlight);
+      box-shadow: inset var(--border-width-md) 0 0 var(--color-accent);
+    }
+  }
+</style>

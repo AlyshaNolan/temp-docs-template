@@ -1,0 +1,9 @@
+command:
+  type: text
+  comment: The command, without a leading prompt character.
+prompt:
+  type: text
+  comment: The prompt shown before the command. Decorative — it is hidden from screen readers and never copied.
+showCopy:
+  type: switch
+  comment: Show the copy button.
