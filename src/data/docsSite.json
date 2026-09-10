@@ -12,7 +12,6 @@
   "search": true,
   "searchPlaceholder": "Search documentation…",
   "homeLabel": "Overview",
-  "editPageBaseUrl": "https://github.com/AlyshaNolan/temp-docs-template/edit/main/src/content/docs/",
   "editPageLabel": "Edit this page",
   "topbarLinks": [
     {

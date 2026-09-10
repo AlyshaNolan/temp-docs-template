@@ -3,7 +3,6 @@ title: Configuration
 description: Site-wide settings live in one data file, editable in CloudCannon without touching code.
 group: Customizing
 order: 1
-updated: 2026-09-10
 ---
 
 ## The config file
@@ -20,7 +19,6 @@ in a pull request.
   "repositoryUrl": "https://github.com/acme/docs",
   "search": true,
   "themeToggle": true,
-  "editPageBaseUrl": "https://github.com/acme/docs/edit/main/src/content/docs/",
   "navGroups": [
     { "name": "Getting started", "collapsed": false },
     { "name": "Reference", "collapsed": true }
@@ -33,8 +31,7 @@ in a pull request.
   params={[
     { name: "wordmark", type: "string", description: "Brand name in the header. Pair it with `markLetter` for the square mark, or set `logoSource` to use an image instead." },
     { name: "version", type: "string", description: "Badge beside the wordmark. Leave it empty to hide the badge." },
-    { name: "repositoryUrl", type: "string", description: "The site's source repository. The \"Use this template\" and repository links on [Installation](/installation/) are built from it, so a fork only has to set it once. A `/tree/<branch>` suffix is ignored." },
-    { name: "editPageBaseUrl", type: "string", description: "Prefix for the \"Edit this page\" link. The page's file path is appended, so it should end in a slash." },
+    { name: "repositoryUrl", type: "string", description: "The site's source repository. The \"Use this template\" and repository links on [Installation](/installation/), and every page's \"Edit this page\" link, are built from it — a fork only has to set it once. A `/tree/<branch>` suffix names the branch edit links target." },
     { name: "navGroups", type: "{ name, collapsed }[]", description: "Sidebar group order. A group used in frontmatter but missing here is appended rather than dropped." },
   ]}
 />

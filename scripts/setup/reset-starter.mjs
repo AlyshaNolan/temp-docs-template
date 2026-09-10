@@ -262,7 +262,6 @@ if (resetBranding) {
   site.logoAlt = siteName;
   site.version = "";
   site.repositoryUrl = "";
-  site.editPageBaseUrl = "";
   site.topbarLinks = [];
   // Groups are matched to page frontmatter by name, so an inherited list would
   // point at groups the new site's pages don't use.

@@ -1,6 +1,18 @@
 paths:
   uploads: src/assets/images
   uploads_use_relative_path: false
+# Astro parses content with GFM. CloudCannon's editor defaults to plain
+# CommonMark, so without this a Markdown table round-trips out of the editor as
+# HTML (or as literal pipe text) with nothing reporting an error.
+markdown:
+  engine: commonmark
+  options:
+    gfm: true
+    table: true
+    strikethrough: true
+    linkify: true
+    code_block_fences: "```"
+    escape_snippets_in_code_blocks: true
 collections_config:
   landing_pages:
     path: src/content/pages
@@ -106,10 +118,6 @@ collections_config:
       order:
         type: number
         comment: Position within the group. Lower numbers come first.
-        cascade: true
-      updated:
-        type: date
-        comment: Shown in the meta line under the title. Leave empty to hide it.
         cascade: true
       showToc:
         type: switch
@@ -379,14 +387,9 @@ collections_config:
             cascade: true
           repositoryUrl:
             type: url
-            comment: The site's source repository. The "Use this template" and repository
-              links in the documentation are built from it; a /tree/<branch> suffix is
-              ignored.
-            cascade: true
-          editPageBaseUrl:
-            type: url
-            comment: Prefix for the "Edit this page" link. The page's file path is appended,
-              so end it with a slash. Leave empty to hide the link.
+            comment: The site's source repository. The "Use this template", repository and
+              per-page "Edit this page" links are all built from it. A /tree/<branch>
+              suffix names the branch edit links target. Leave empty to hide those links.
             cascade: true
           editPageLabel:
             type: text

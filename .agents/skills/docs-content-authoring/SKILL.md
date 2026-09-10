@@ -50,7 +50,6 @@ Validated by `docSchema` in `src/content.config.ts`; an unknown key is a build e
 | `description`  | string   | —       | The lede under the title, and the meta description.                         |
 | `group`        | string   | —       | Sidebar group. **No group means no sidebar entry** — the page still builds. |
 | `order`        | number   | `0`     | Position within the group. Ties break alphabetically by title.              |
-| `updated`      | date     | —       | Shown in the meta line. Omit and the line hides.                            |
 | `keywords`     | string[] | —       | Meta keywords.                                                              |
 | `image`        | string   | —       | Social share image.                                                         |
 | `noindex`      | boolean  | `false` | Keeps the page out of search engines.                                       |
@@ -59,6 +58,8 @@ Validated by `docSchema` in `src/content.config.ts`; an unknown key is a build e
 | `showPager`    | boolean  | `true`  | Previous/next links across the sidebar's reading order.                     |
 
 `group` must match a `navGroups` entry in `src/data/docsSite.json` to be ordered deliberately; an unlisted group is appended rather than dropped.
+
+There is no `updated` key. The date in the meta line is the file's last commit, read at build time by `src/utils/gitDates.mjs`, so an edit dates itself.
 
 ## Body: plain Markdown
 

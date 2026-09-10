@@ -16,6 +16,8 @@ import docsSite from "@data/docsSite.json";
 import Docs from "@layouts/Docs.astro";
 import { markdownHref } from "@utils/docsMarkdown";
 import { docHref, findCrumbs, findPager, getDocsNav } from "@utils/docsNav";
+import { gitLastModified } from "@utils/gitDates.mjs";
+import { editPageUrl } from "@utils/repository";
 import { getCollection, render, type CollectionEntry } from "astro:content";
 
 export async function getStaticPaths() {
@@ -68,14 +70,15 @@ const href = docHref(entry.id);
 const { prev, next } = findPager(nav, href);
 const crumbs = findCrumbs(nav, href);
 
-const updated = doc?.data.updated
-  ? doc.data.updated.toLocaleDateString("en-GB", {
+const updatedDate = doc ? gitLastModified(doc.filePath) : null;
+const updated = updatedDate
+  ? updatedDate.toLocaleDateString("en-GB", {
       day: "2-digit",
       month: "short",
       year: "numeric",
     })
   : "";
-const editUrl = docsSite.editPageBaseUrl ? `${docsSite.editPageBaseUrl}${entry.id}.mdx` : "";
+const editUrl = doc ? editPageUrl(doc.filePath) : "";
 // Opt-out, not opt-in: a page missing the frontmatter default (a content
 // entry parsed before the field existed) must still get the control.
 const showCopyPage = Boolean(doc && doc.data.showCopyPage !== false && docsSite.copyPage.enabled);

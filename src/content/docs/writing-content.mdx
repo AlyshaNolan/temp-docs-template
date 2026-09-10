@@ -3,7 +3,6 @@ title: Writing content
 description: Standard Markdown, plus the handful of components docs actually need.
 group: Authoring
 order: 1
-updated: 2026-08-12
 ---
 
 export const diffSample = `{
@@ -42,10 +41,12 @@ the page still builds and is searchable — it just doesn't appear in the nav.
 | `description`  | string  | —       | The lede under the title, and the meta description |
 | `group`        | string  | —       | Sidebar group. No group means no sidebar entry     |
 | `order`        | number  | `0`     | Position within the group                          |
-| `updated`      | date    | —       | Shown in the meta line under the title             |
 | `showToc`      | boolean | `true`  | On-this-page rail                                  |
 | `showFeedback` | boolean | `true`  | The helpful vote at the foot of the page           |
 | `showPager`    | boolean | `true`  | Previous/next links                                |
+
+The "Updated" date beside each page's title is not frontmatter — it is the file's last
+commit, read when the site builds. Edit a page and the date follows.
 
 ## Callouts
 

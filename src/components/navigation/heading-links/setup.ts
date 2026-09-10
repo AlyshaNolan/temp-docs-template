@@ -36,7 +36,9 @@ export function setupHeadingLinks(): void {
       ".prose h2[id], .prose h3[id]"
     );
 
-    if (!heading) return;
+    // Steps render their own card headings; those carry no anchor affordance
+    // (see `base/_prose.css`), so they must not copy a link either.
+    if (!heading || heading.closest(".step-content")) return;
 
     event.preventDefault();
 

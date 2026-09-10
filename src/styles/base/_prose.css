@@ -116,6 +116,16 @@
       }
     }
 
+    /* A step's card heading is a label inside a section, not a place in the
+       document — the section's own heading above it is the linkable one. */
+    .step-content :is(h2, h3)[id] {
+      cursor: auto;
+
+      &::after {
+        content: none;
+      }
+    }
+
     blockquote {
       border-inline-start: var(--border-width-lg) solid var(--color-border);
       padding-inline-start: var(--spacing-md);
@@ -273,5 +283,20 @@
       font-size: var(--font-size-sm);
       margin-top: var(--spacing-sm);
     }
+  }
+}
+
+/* Deliberately outside `@layer base`: a page section dropped into an article
+   brings its own gutters, max-width and band padding, and all three fight the
+   article that already supplies them. The classes setting those live in the
+   `utils` layer, so only a `utils` rule can countermand them. */
+@layer utils {
+  .prose .custom-section > .outer-content > .content {
+    --section-max-width: initial;
+    --section-pad-x: 0px;
+
+    max-width: none;
+    padding-block: 0;
+    padding-inline: 0;
   }
 }

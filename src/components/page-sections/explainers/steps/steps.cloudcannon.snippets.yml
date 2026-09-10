@@ -18,26 +18,6 @@ steps:
   definitions:
     component_name: Steps
     named_args:
-      - editor_key: sectionLabel
-        type: string
-        optional: true
-        remove_empty: true
-      - editor_key: maxContentWidth
-        type: string
-        optional: true
-        remove_empty: true
-      - editor_key: paddingHorizontal
-        type: string
-        optional: true
-        remove_empty: true
-      - editor_key: paddingVertical
-        type: string
-        optional: true
-        remove_empty: true
-      - editor_key: eyebrow
-        type: string
-        optional: true
-        remove_empty: true
       - editor_key: heading
         type: string
         optional: true
@@ -53,14 +33,6 @@ steps:
         optional: true
         remove_empty: true
       - editor_key: imageAspectRatio
-        type: string
-        optional: true
-        remove_empty: true
-      - editor_key: colorScheme
-        type: string
-        optional: true
-        remove_empty: true
-      - editor_key: backgroundColor
         type: string
         optional: true
         remove_empty: true

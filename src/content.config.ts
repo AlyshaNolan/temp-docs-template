@@ -16,13 +16,13 @@ const pageSchema = z.object({
 
 // A documentation page. `group` and `order` place it in the sidebar; both are
 // optional, and a page with neither still builds and is searchable — it just
-// doesn't appear in the nav. See `src/utils/docsNav.ts`.
+// doesn't appear in the nav. See `src/utils/docsNav.ts`. There is no `updated`
+// field: the meta line's date is the file's last commit (`src/utils/gitDates.mjs`).
 const docSchema = z.object({
   title: z.string(),
   description: z.string().optional(),
   group: z.string().optional(),
   order: z.number().default(0),
-  updated: z.coerce.date().optional(),
   keywords: z.array(z.string()).optional(),
   image: z.string().optional(),
   noindex: z.boolean().optional(),

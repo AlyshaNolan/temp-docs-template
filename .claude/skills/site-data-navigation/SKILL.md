@@ -72,13 +72,15 @@ A page with no `group` still builds and is searchable; it just has no sidebar en
 
 ## The "Edit this page" link
 
-`editPageBaseUrl` is a prefix. The page's file path is appended, so it must end in a slash:
+`repositoryUrl` is the only URL to set. `src/utils/repository.ts` builds the link as `<repo>/edit/<branch>/<the page's file path>`, taking the branch from a `/tree/<branch>` suffix and defaulting to `main`:
 
 ```
-"editPageBaseUrl": "https://github.com/acme/docs/edit/main/src/content/docs/"
+"repositoryUrl": "https://github.com/acme/docs/tree/main"
 ```
 
-Empty hides the link. `editPageLabel` sets its text.
+Empty hides the link — and the "Use this template" and repository links with it. `editPageLabel` sets the link's text.
+
+The date beside it is the page file's last commit, read at build time by `src/utils/gitDates.mjs`. There is no frontmatter field for it. A shallow clone has no per-file history, so the date is omitted rather than wrong.
 
 ## Feedback
 

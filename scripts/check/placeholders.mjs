@@ -92,7 +92,7 @@ if (docsSite?.wordmark === STARTER_NAME) {
     detail: `wordmark is still "${STARTER_NAME}"`,
   });
 }
-for (const key of ["repositoryUrl", "editPageBaseUrl"]) {
+for (const key of ["repositoryUrl"]) {
   if (typeof docsSite?.[key] === "string" && docsSite[key].includes(STARTER_REPO)) {
     branding.push({
       file: "src/data/docsSite.json",

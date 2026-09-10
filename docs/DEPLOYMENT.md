@@ -78,7 +78,7 @@ in `optionalDependencies` alongside the equivalent `sharp` and `rollup` packages
 - `npm run build && npm run preview` — production build with search indexed.
 - Confirm `src/data/seo.json` has your name, description, and logo, and that
   `src/data/docsSite.json` no longer carries the template's wordmark, version badge or
-  `editPageBaseUrl`. `npm run check:placeholders` lists what is still unset.
+  `repositoryUrl`. `npm run check:placeholders` lists what is still unset.
 - Edit `public/llms.txt` so it lists _your_ pages, not the template's.
 - `npm run lint:links` — a page renamed late in the project leaves dead links behind, and
   nothing else notices.
