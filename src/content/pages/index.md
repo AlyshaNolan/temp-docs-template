@@ -7,8 +7,7 @@ pageSections:
     sectionLabel: Hero
     eyebrow: Open source Astro template
     eyebrowShowDot: true
-    heading: Docs your users actually finish.
-    headingHighlight: finish
+    heading: Docs your users actually <span class="highlight">finish</span>.
     headingLevel: h1
     subtext: 'A complete documentation site — grouped sidebar, built-in search, reference pages, diagrams and a print layout. Start from the template on GitHub, write Markdown, and let the rest of your team edit the pages visually in CloudCannon.'
     alignmentHorizontal: start

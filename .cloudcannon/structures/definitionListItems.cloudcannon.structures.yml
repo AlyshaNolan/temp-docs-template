@@ -1,0 +1,27 @@
+# Term/definition rows, used by the `definition-list` component's `items` array
+# input.
+#
+# Shared here rather than inline in the structure value: the component's MDX
+# snippet points at the same `_structures.definitionListItems`, and a structure
+# declared inside a structure value is invisible to it — the array renders as
+# free text.
+definitionListItems:
+  values:
+    - label: Definition List Item
+      value:
+        title: "My definition title"
+        text: "My definition content"
+      preview:
+        icon: list
+        text:
+          - key: title
+          - Definition List Item
+        subtext:
+          - key: text
+      _inputs:
+        title:
+          type: text
+          comment: A bolded title for the list item.
+        text:
+          type: textarea
+          comment: The text content of the list item.

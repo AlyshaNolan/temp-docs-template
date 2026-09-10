@@ -7,6 +7,7 @@ value:
   items: []
   navigationPosition: start
   variant: plain
+  spaceBefore: default
 preview:
   text:
     - Content Selector
@@ -26,7 +27,6 @@ picker_preview:
     fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/wrappers/content-selector/content-selector.cloudcannon.inputs.yml
-  - /.cloudcannon/inputs/space-before.yml
 _structures:
   contentSelectorItems:
     values:
@@ -37,7 +37,10 @@ _structures:
           subtext: ""
           iconName: ""
           iconColor: default
-          contentSections: []
+          contentSections:
+            - _component: building-blocks/core-elements/text
+              text: What this panel covers.
+              size: md
         preview:
           text:
             - key: title

@@ -508,6 +508,107 @@ for (const [abs, maps] of arraySources) {
   }
 }
 
+// Check 8 — Unresolvable `_structures` reference (FAIL): an input that says
+// `options.structures: _structures.<name>` only works where `<name>` is in
+// scope — declared in the same document, pulled in by its own
+// `_structures_from_glob`, or global via the root config. A name that resolves
+// in a structure value but not in the component's MDX snippet is the silent
+// case this exists for: the snippet loads, the array renders as free text, and
+// nothing errors. (Both the FAQ and Steps sections shipped that way.)
+
+/** Structure names a root-level `_structures_from_glob` makes global. */
+const globalStructureNames = new Set();
+
+{
+  const config = loadYaml(join(root, "cloudcannon.config.yml")) || {};
+
+  for (const name of Object.keys(config._structures || {})) globalStructureNames.add(name);
+  for (const pattern of config._structures_from_glob || [])
+    for (const file of await glob(pattern.replace(/^\//, ""), { cwd: root }))
+      for (const name of Object.keys(loadYaml(join(root, file)) || {}))
+        globalStructureNames.add(name);
+}
+
+/** Every `_structures.<name>` an `options.structures` in this tree points at. */
+function collectStructureRefs(node, out = new Set()) {
+  if (Array.isArray(node)) {
+    for (const item of node) collectStructureRefs(item, out);
+  } else if (node && typeof node === "object") {
+    for (const [key, value] of Object.entries(node)) {
+      if (key === "structures" && typeof value === "string" && value.startsWith("_structures."))
+        out.add(value.slice("_structures.".length));
+      else collectStructureRefs(value, out);
+    }
+  }
+  return out;
+}
+
+/** Every structure name this document brings into scope itself. */
+async function collectStructureNames(node, out = new Set()) {
+  if (Array.isArray(node)) {
+    for (const item of node) await collectStructureNames(item, out);
+  } else if (node && typeof node === "object") {
+    for (const [key, value] of Object.entries(node)) {
+      if (key === "_structures" && value && typeof value === "object" && !Array.isArray(value))
+        for (const name of Object.keys(value)) out.add(name);
+      if (key === "_structures_from_glob" && Array.isArray(value))
+        for (const pattern of value)
+          for (const file of await glob(pattern.replace(/^\//, ""), { cwd: root }))
+            for (const name of Object.keys(loadYaml(join(root, file)) || {})) out.add(name);
+      await collectStructureNames(value, out);
+    }
+  }
+  return out;
+}
+
+/** `_inputs_from_glob` paths anywhere in a document. */
+function collectInputGlobs(node, out = []) {
+  if (Array.isArray(node)) {
+    for (const item of node) collectInputGlobs(item, out);
+  } else if (node && typeof node === "object") {
+    for (const [key, value] of Object.entries(node)) {
+      if (key === "_inputs_from_glob" && Array.isArray(value)) out.push(...value);
+      collectInputGlobs(value, out);
+    }
+  }
+  return out;
+}
+
+// Only documents CloudCannon loads as their own scope. An `inputs.yml` is
+// always pulled into one by `_inputs_from_glob`, so its references are checked
+// against the scope of every document that pulls it, never on its own.
+const structureScopes = [
+  join(root, "cloudcannon.config.yml"),
+  ...structureFiles,
+  ...yamlPaths
+    .filter(
+      (relYaml) => relYaml.endsWith(".structure-value.yml") || relYaml.endsWith(".snippets.yml")
+    )
+    .map((relYaml) => join(componentsDir, relYaml)),
+];
+
+for (const abs of structureScopes) {
+  const doc = loadYaml(abs) || {};
+  const inScope = new Set([...globalStructureNames, ...(await collectStructureNames(doc))]);
+  const needed = collectStructureRefs(doc);
+
+  // An input file pulled in by glob shares the pulling document's scope.
+  for (const pattern of collectInputGlobs(doc))
+    for (const file of await glob(pattern.replace(/^\//, ""), { cwd: root }))
+      collectStructureRefs(loadYaml(join(root, file)), needed);
+
+  const unresolved = [...needed].filter((name) => !inScope.has(name));
+
+  if (unresolved.length) {
+    fail(
+      rel(abs),
+      `\`options.structures\` names structure(s) this document cannot see — CloudCannon renders the array as free text with no error. Move them to .cloudcannon/structures/, or add a \`_structures_from_glob\` entry: ${unresolved.join(", ")}`
+    );
+  } else if (needed.size) {
+    ok(`structure refs ${rel(abs)}`);
+  }
+}
+
 for (const label of oks) console.log(`ok     ${label}`);
 for (const { file, reason } of warns) console.warn(`WARN   ${file}\n   ${reason}`);
 for (const { file, reason } of fails) console.error(`FAIL   ${file}\n   ${reason}`);

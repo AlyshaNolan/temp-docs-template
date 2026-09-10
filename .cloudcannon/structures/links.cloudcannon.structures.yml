@@ -5,8 +5,8 @@ links:
       icon: link
       description: A footer link with name and path.
       value:
-        name: ""
-        path: ""
+        name: Link text
+        path: /
       preview:
         text:
           - key: name

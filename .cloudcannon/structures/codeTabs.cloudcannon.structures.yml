@@ -7,9 +7,9 @@ codeTabs:
     - label: Tab
       icon: tab
       value:
-        label: ""
+        label: npm
         language: bash
-        code: ""
+        code: npm install
         highlight: ""
       _inputs:
         label:

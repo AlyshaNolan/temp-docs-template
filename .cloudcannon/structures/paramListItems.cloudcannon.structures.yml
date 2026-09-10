@@ -7,11 +7,11 @@ paramListItems:
     - label: Parameter
       icon: list_alt
       value:
-        name: ""
-        type: ""
+        name: parameterName
+        type: string
         required: false
         defaultValue: ""
-        description: ""
+        description: What this parameter controls.
       _inputs:
         name:
           type: text

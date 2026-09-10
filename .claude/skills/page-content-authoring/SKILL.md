@@ -143,7 +143,7 @@ In short: `colorScheme` sets the section's theme; `backgroundColor` paints its b
 Three options worth knowing when building a landing page:
 
 - **`backgroundColor: inverse`** — a band that is dark on a light page and light on a dark one. Text and buttons inside it flip with it. Good for a closing call to action; bad for anything long.
-- **`hero-center`'s `headingHighlight`** — a word or phrase from the heading, painted in the accent. It must appear in the heading exactly; anything else is ignored, so the heading is never split across fields.
+- **`hero-center`'s `heading`** — inline markdown, so accent words are marked up in place: wrap them in `<span class="highlight">…</span>`. That is the same span CloudCannon's Styles menu inserts, so a hand-authored heading and an editor-authored one are identical.
 - **`content-selector`'s `variant: panel`** (with `navigationPosition: top`) — frames the tabs and their content in one bordered box with a compact strip of labels. It is how the overview page demos the shipped components: each panel holds the real thing, not a screenshot.
 
 A **Command Line** block (`building-blocks/core-elements/command-line`) can sit in any `buttonSections` row, so a hero's primary button can be followed by the install command.

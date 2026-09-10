@@ -7,6 +7,7 @@ value:
   title: Good to know
   text: Callouts hold a short piece of prose, and the body can carry a [link](#).
   iconName: ""
+  spaceBefore: default
 preview:
   text:
     - Callout
@@ -26,4 +27,3 @@ picker_preview:
     fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/core-elements/alert/alert.cloudcannon.inputs.yml
-  - /.cloudcannon/inputs/space-before.yml

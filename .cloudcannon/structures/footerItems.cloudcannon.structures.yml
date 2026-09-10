@@ -11,8 +11,8 @@ linkItems:
     - label: Navigation Link
       icon: link
       value:
-        name: ""
-        path: ""
+        name: Link text
+        path: /
       _inputs:
         name:
           type: text
@@ -29,8 +29,8 @@ socialItems:
     - label: Social Link
       icon: share
       value:
-        icon: ""
-        link: ""
+        icon: social/github
+        link: https://github.com/
         label: ""
       _inputs:
         icon:

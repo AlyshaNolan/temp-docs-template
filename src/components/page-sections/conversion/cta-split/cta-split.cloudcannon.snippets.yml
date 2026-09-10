@@ -1,3 +1,5 @@
+# Wrapper knobs that a documentation page overrides anyway are left off: the
+# `.prose` rules zero a nested section's max-width and both paddings.
 ctaSplit:
   template: mdx_component
   inline: false
@@ -14,22 +16,6 @@ ctaSplit:
   definitions:
     component_name: CtaSplit
     named_args:
-      - editor_key: sectionLabel
-        type: string
-        optional: true
-        remove_empty: true
-      - editor_key: maxContentWidth
-        type: string
-        optional: true
-        remove_empty: true
-      - editor_key: paddingHorizontal
-        type: string
-        optional: true
-        remove_empty: true
-      - editor_key: paddingVertical
-        type: string
-        optional: true
-        remove_empty: true
       - editor_key: heading
         type: string
         optional: true

@@ -246,10 +246,13 @@ if (!_component && !hasItems && !hasSlotContent) return;
         /* An explicit track list rather than `grid-auto-flow: column`: the
              panel spans `1 / -1` so that it starts at the container's inline
              edge, and `-1` only resolves against explicit tracks. Same static
-             count as nav-start, and empty `max-content` columns collapse. */
-        grid-template-columns: repeat(12, minmax(max-content, auto));
+             count as nav-start, and empty `max-content` columns collapse.
+             The trailing `1fr` is not decorative: each item overlays tracks
+             `1 / -1`, and that box is the array-item region CloudCannon
+             outlines — without a filler track the outline stops at the last
+             tab rather than spanning the panel below it. */
+        grid-template-columns: repeat(12, minmax(max-content, auto)) 1fr;
         grid-template-rows: auto auto;
-        justify-content: start;
         overflow-x: auto;
         scroll-snap-type: x proximity;
 

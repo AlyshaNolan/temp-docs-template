@@ -6,7 +6,7 @@ changelogChanges:
       icon: history
       value:
         tag: Added
-        text: ""
+        text: What changed, in one line.
       _inputs:
         tag:
           type: select

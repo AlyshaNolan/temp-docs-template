@@ -9,7 +9,7 @@ codeAnnotations:
       icon: format_list_numbered
       value:
         line: 1
-        text: ""
+        text: What this line does.
       _inputs:
         line:
           type: number

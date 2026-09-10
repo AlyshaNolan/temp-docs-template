@@ -18,6 +18,10 @@ steps:
   definitions:
     component_name: Steps
     named_args:
+      - editor_key: eyebrow
+        type: string
+        optional: true
+        remove_empty: true
       - editor_key: heading
         type: string
         optional: true
@@ -38,3 +42,6 @@ steps:
         remove_empty: true
   _inputs_from_glob:
     - /src/components/page-sections/explainers/steps/steps.cloudcannon.inputs.yml
+  _structures_from_glob:
+    - /.cloudcannon/structures/explainerStepsItems.cloudcannon.structures.yml
+    - /.cloudcannon/structures/stepsItemSections.cloudcannon.structures.yml

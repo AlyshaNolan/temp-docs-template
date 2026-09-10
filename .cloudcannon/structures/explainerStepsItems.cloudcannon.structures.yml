@@ -1,0 +1,49 @@
+# Steps for the `steps` page section's `items` array input. (The `steps`
+# building block has its own, narrower rows — see stepsItems.)
+#
+# Shared here rather than inline in the structure value: the component's MDX
+# snippet points at the same `_structures.explainerStepsItems`, and a structure
+# declared inside a structure value is invisible to it — the array renders as
+# free text.
+explainerStepsItems:
+  values:
+    - label: Step
+      icon: format_list_numbered
+      value:
+        image: ""
+        imageAlt: ""
+        contentSections:
+          - _component: building-blocks/core-elements/heading
+            text: Step heading
+            level: h3
+            size: xs
+          - _component: building-blocks/core-elements/simple-text
+            text: What happens in this step.
+            size: sm
+      preview:
+        text:
+          - key: contentSections.0.text
+          - Step
+        subtext:
+          - key: contentSections.1.text
+        image:
+          - key: image
+      _inputs:
+        image:
+          type: image
+          comment: Optional product or process photo. Every step shares the section's image aspect ratio.
+          options:
+            paths:
+              static: ""
+              uploads: src/assets/images
+        imageAlt:
+          type: text
+          comment: Accessible description of the step image.
+        contentSections:
+          type: array
+          label: Step content
+          comment: Building blocks for this step — typically a heading and a short description.
+          options:
+            structures: _structures.stepsItemSections
+      _structures_from_glob:
+        - /.cloudcannon/structures/stepsItemSections.cloudcannon.structures.yml

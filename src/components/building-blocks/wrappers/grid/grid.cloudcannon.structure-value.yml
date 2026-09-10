@@ -9,6 +9,7 @@ value:
   maxItemWidth: null
   items: []
   gap: md
+  spaceBefore: default
 preview:
   text:
     - Grid
@@ -28,13 +29,19 @@ picker_preview:
     fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/wrappers/grid/grid.cloudcannon.inputs.yml
-  - /.cloudcannon/inputs/space-before.yml
 _structures:
   gridItems:
     values:
       - label: Grid Item
         value:
-          contentSections: []
+          contentSections:
+            - _component: building-blocks/core-elements/heading
+              text: Grid item
+              level: h3
+              size: xs
+            - _component: building-blocks/core-elements/simple-text
+              text: One or two lines about this cell.
+              size: sm
         preview:
           icon: grid_view
           text: Grid Item

@@ -43,7 +43,6 @@ picker_preview:
     fit: cover
 _inputs_from_glob:
   - /src/components/page-sections/builders/custom-section/custom-section.cloudcannon.inputs.yml
-  - /.cloudcannon/inputs/background-mask.yml
 groups:
   - heading: Content
     inputs:

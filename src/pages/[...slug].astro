@@ -105,6 +105,10 @@ const showCopyPage = Boolean(doc && doc.data.showCopyPage !== false && docsSite.
   {
     doc ? (
       <article class="doc">
+        {/* No editable region on the trail or on the show* switches below: the
+            crumbs are derived from the sidebar tree, not stored on the page,
+            and a region can only bind text, an image or an array — never a
+            boolean. Both are edited in the page's data panel. */}
         <Breadcrumbs
           class="doc-breadcrumbs"
           items={crumbs.length > 0 ? crumbs : [{ label: doc.data.title }]}
@@ -113,6 +117,9 @@ const showCopyPage = Boolean(doc && doc.data.showCopyPage !== false && docsSite.
           <h1
             class="doc-title"
             data-pagefind-meta="title"
+            data-editable="text"
+            data-type="span"
+            data-prop="title"
           >
             {doc.data.title}
           </h1>
@@ -144,6 +151,9 @@ const showCopyPage = Boolean(doc && doc.data.showCopyPage !== false && docsSite.
             class="doc-lede"
             data-pagefind-meta="description"
             data-pagefind-weight="3"
+            data-editable="text"
+            data-type="span"
+            data-prop="description"
           >
             {doc.data.description}
           </p>

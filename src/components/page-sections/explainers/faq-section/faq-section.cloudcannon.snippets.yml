@@ -1,3 +1,7 @@
+# Only the section's own content, plus the two wrapper knobs that still do
+# something in a documentation page: `.prose` zeroes a nested section's
+# max-width and both paddings (see `_prose.css`), so offering those here would
+# be four fields that change nothing.
 faqSection:
   template: mdx_component
   inline: false
@@ -14,23 +18,11 @@ faqSection:
   definitions:
     component_name: FaqSection
     named_args:
-      - editor_key: sectionLabel
-        type: string
-        optional: true
-        remove_empty: true
-      - editor_key: maxContentWidth
-        type: string
-        optional: true
-        remove_empty: true
-      - editor_key: paddingHorizontal
-        type: string
-        optional: true
-        remove_empty: true
-      - editor_key: paddingVertical
-        type: string
-        optional: true
-        remove_empty: true
       - editor_key: heading
+        type: string
+        optional: true
+        remove_empty: true
+      - editor_key: headingLevel
         type: string
         optional: true
         remove_empty: true
@@ -46,3 +38,6 @@ faqSection:
         remove_empty: true
   _inputs_from_glob:
     - /src/components/page-sections/explainers/faq-section/faq-section.cloudcannon.inputs.yml
+  _structures_from_glob:
+    - /.cloudcannon/structures/faqItems.cloudcannon.structures.yml
+    - /.cloudcannon/structures/accordionSections.cloudcannon.structures.yml

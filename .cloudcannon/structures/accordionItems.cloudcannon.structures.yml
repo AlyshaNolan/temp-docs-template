@@ -1,0 +1,35 @@
+# Disclosure panels, used by the `accordion` component's `items` array input.
+#
+# Shared here rather than inline in the structure value: the component's MDX
+# snippet points at the same `_structures.accordionItems`, and a structure
+# declared inside a structure value is invisible to it — the array renders as
+# free text.
+accordionItems:
+  values:
+    - label: Item
+      icon: place_item
+      value:
+        title: Question or section title
+        contentSections:
+          - _component: building-blocks/core-elements/text
+            text: The answer, or the detail this panel hides.
+            size: md
+      preview:
+        text:
+          - key: title
+          - Item
+        subtext:
+          - key: contentSections.0.text
+          - Add the panel's content
+      _inputs:
+        title:
+          comment: The title of the accordion item.
+          type: text
+        contentSections:
+          type: array
+          label: Panel content
+          comment: Building blocks shown when the panel is open — typically a text block.
+          options:
+            structures: _structures.accordionSections
+      _structures_from_glob:
+        - /.cloudcannon/structures/accordionSections.cloudcannon.structures.yml

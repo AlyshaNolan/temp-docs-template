@@ -12,9 +12,9 @@ Place these directly in a page's `pageSections` array. **All page sections also 
 
 ### Heroes
 
-| `_component`                       | Use for                                                     | Key content props                                                                                                                                                               |
-| ---------------------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `page-sections/heroes/hero-center` | Centered hero with a heading, supporting text, and buttons. | `eyebrow`, `eyebrowShowDot`, `heading`, `headingHighlight`, `headingLevel` (`h1`/`h2`/`h3`), `subtext` (markdown), `alignmentHorizontal` (`center`/`start`), `buttonSections[]` |
+| `_component`                       | Use for                                                     | Key content props                                                                                                                                                      |
+| ---------------------------------- | ----------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `page-sections/heroes/hero-center` | Centered hero with a heading, supporting text, and buttons. | `eyebrow`, `eyebrowShowDot`, `heading` (markdown), `headingLevel` (`h1`/`h2`/`h3`), `subtext` (markdown), `alignmentHorizontal` (`center`/`start`), `buttonSections[]` |
 
 ### Builders
 

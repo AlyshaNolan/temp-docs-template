@@ -8,7 +8,7 @@ breadcrumbItems:
     - label: Breadcrumb
       icon: chevron_right
       value:
-        label: ""
+        label: Page name
         url: ""
       _inputs:
         label:

@@ -8,6 +8,7 @@ value:
   honeypotName: null
   successMessage: null
   formBlocks: []
+  spaceBefore: default
 preview:
   text:
     - Form
@@ -27,4 +28,3 @@ picker_preview:
     fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/forms/form/form.cloudcannon.inputs.yml
-  - /.cloudcannon/inputs/space-before.yml

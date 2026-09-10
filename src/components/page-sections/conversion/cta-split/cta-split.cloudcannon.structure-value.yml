@@ -57,7 +57,6 @@ picker_preview:
     fit: cover
 _inputs_from_glob:
   - /src/components/page-sections/conversion/cta-split/cta-split.cloudcannon.inputs.yml
-  - /.cloudcannon/inputs/background-mask.yml
 groups:
   - heading: Content
     inputs:

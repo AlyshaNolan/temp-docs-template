@@ -17,6 +17,7 @@ const {
   class: className,
   useDefaultEditableBinding = false,
   "data-prop": customDataProp,
+  "data-type": dataType,
   _component,
   ...htmlAttributes
 } = Astro.props;
@@ -76,7 +77,7 @@ if (htmlAttributes.id) {
 
 const effectiveDataProp = customDataProp ?? (useDefaultEditableBinding ? "text" : null);
 const textDataAttributes = effectiveDataProp
-  ? { "data-editable": "text", "data-prop": effectiveDataProp }
+  ? { "data-editable": "text", "data-prop": effectiveDataProp, "data-type": dataType }
   : {};
 
 let MarkdownText = renderMarkdownInline(text);

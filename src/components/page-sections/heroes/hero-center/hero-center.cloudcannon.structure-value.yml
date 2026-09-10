@@ -6,8 +6,7 @@ value:
   sectionLabel: ""
   eyebrow: Introducing
   eyebrowShowDot: false
-  heading: A clear promise in one line
-  headingHighlight: ""
+  heading: A clear promise in <span class="highlight">one line</span>
   headingLevel: h1
   subtext: One or two sentences on who this is for and what they get.
   alignmentHorizontal: center
@@ -59,14 +58,12 @@ picker_preview:
     fit: cover
 _inputs_from_glob:
   - /src/components/page-sections/heroes/hero-center/hero-center.cloudcannon.inputs.yml
-  - /.cloudcannon/inputs/background-mask.yml
 groups:
   - heading: Content
     inputs:
       - eyebrow
       - eyebrowShowDot
       - heading
-      - headingHighlight
       - subtext
       - buttonSections
   - heading: Section settings

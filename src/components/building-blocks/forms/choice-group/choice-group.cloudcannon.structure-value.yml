@@ -38,9 +38,9 @@ _structures:
   choiceOptions:
     values:
       - value:
-          value: null
-          label: null
-          checked: null
+          value: option-1
+          label: Option 1
+          checked: false
         preview:
           icon: check_box
           text:

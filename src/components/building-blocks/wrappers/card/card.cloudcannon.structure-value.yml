@@ -28,6 +28,7 @@ value:
   showBeforeAfter: false
   beforeContentSections: []
   afterContentSections: []
+  spaceBefore: default
 preview:
   text:
     - Card
@@ -47,4 +48,3 @@ picker_preview:
     fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/wrappers/card/card.cloudcannon.inputs.yml
-  - /.cloudcannon/inputs/space-before.yml

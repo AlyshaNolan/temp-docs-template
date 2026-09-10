@@ -41,9 +41,9 @@ _structures:
   segmentOptions:
     values:
       - value:
-          value: null
-          label: Item
-          checked: null
+          value: option-1
+          label: Option 1
+          checked: false
           icon: bolt
         preview:
           icon: radio_button_partial

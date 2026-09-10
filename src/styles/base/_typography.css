@@ -138,4 +138,11 @@
   .subtext {
     color: var(--color-text-muted);
   }
+
+  /* The one text style CloudCannon's Styles dropdown offers — the class name is
+     the menu label, and `public/cloudcannon/editor-styles.css` must declare the
+     same selector or the option disappears from the editor. */
+  .highlight {
+    color: var(--color-accent);
+  }
 }

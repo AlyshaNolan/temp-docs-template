@@ -59,8 +59,9 @@ collections_config:
           icon: format_list_numbered
     _editables:
       content:
-        allow_custom_markup: false
+        allow_custom_markup: true
         remove_custom_markup: false
+        styles: public/cloudcannon/editor-styles.css
         blockquote: true
         bold: true
         bulletedlist: true
@@ -535,6 +536,41 @@ collection_groups:
       - data
   - heading: New Collections
     collections: []
+# Applies to every Visual Editor text region. `block` is the only region tier
+# that can carry a Styles menu, which is why the Hero Center heading opts into
+# it with `data-type="block"` — a `text` region has no `styles` key at all, and
+# `allow_custom_markup` has to stay on or the style's `<span>` is stripped on
+# save.
+_editables:
+  block:
+    allow_custom_markup: true
+    remove_custom_markup: false
+    styles: public/cloudcannon/editor-styles.css
+    blockquote: false
+    bold: true
+    bulletedlist: false
+    code: false
+    embed: false
+    format: false
+    horizontalrule: false
+    image: false
+    italic: true
+    link: true
+    numberedlist: false
+    redo: true
+    removeformat: true
+    snippet: false
+    table: false
+    undo: true
+  text:
+    allow_custom_markup: true
+    remove_custom_markup: false
+    bold: true
+    italic: true
+    link: true
+    redo: true
+    removeformat: true
+    undo: true
 _inputs:
   pageSections:
     comment: The main sections of the page.

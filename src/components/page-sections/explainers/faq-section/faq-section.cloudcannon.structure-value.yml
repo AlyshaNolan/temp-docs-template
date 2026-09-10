@@ -59,37 +59,6 @@ picker_preview:
     fit: cover
 _inputs_from_glob:
   - /src/components/page-sections/explainers/faq-section/faq-section.cloudcannon.inputs.yml
-  - /.cloudcannon/inputs/background-mask.yml
-_structures:
-  faqItems:
-    values:
-      - label: FAQ Item
-        icon: help
-        value:
-          title: Question text
-          contentSections:
-            - _component: building-blocks/core-elements/text
-              text: Answer text goes here.
-              size: md
-        preview:
-          text:
-            - key: title
-            - FAQ Item
-          subtext:
-            - key: contentSections.0.text
-            - Add answer text
-        _inputs:
-          title:
-            type: text
-            comment: The question text.
-          contentSections:
-            type: array
-            label: Answer Content
-            comment: Content sections for the answer (typically text).
-            options:
-              structures: _structures.accordionSections
-        _structures_from_glob:
-          - /.cloudcannon/structures/accordionSections.cloudcannon.structures.yml
 groups:
   - heading: Content
     inputs:

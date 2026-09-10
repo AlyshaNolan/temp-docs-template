@@ -8,7 +8,6 @@ const {
   eyebrow = "",
   eyebrowShowDot = false,
   heading = "",
-  headingHighlight = "",
   headingLevel = "h1",
   subtext = "",
   alignmentHorizontal = "center",
@@ -26,22 +25,6 @@ const {
   _component,
   ...htmlAttributes
 } = Astro.props;
-
-// The highlight is a substring of the heading rather than its own field, so the
-// heading stays one editable string and one `<h1>` — splitting it into parts
-// would put the reader's sentence in three inputs. A text region would win over
-// the component re-render for this subtree and flatten the highlight span, so
-// the binding below is dropped whenever the highlight actually matched.
-const highlight = String(headingHighlight);
-const highlightAt = highlight ? String(heading).indexOf(highlight) : -1;
-const headingParts =
-  highlightAt === -1
-    ? null
-    : {
-        before: String(heading).slice(0, highlightAt),
-        match: highlight,
-        after: String(heading).slice(highlightAt + highlight.length),
-      };
 ---
 
 <CustomSection
@@ -81,20 +64,10 @@ const headingParts =
     level={headingLevel}
     size="2xl"
     alignmentHorizontal={alignmentHorizontal}
-    data-prop={headingParts ? undefined : "heading"}
-  >
-    {
-      headingParts ? (
-        <>
-          {headingParts.before}
-          <span class="hero-center-highlight">{headingParts.match}</span>
-          {headingParts.after}
-        </>
-      ) : (
-        heading
-      )
-    }
-  </Heading>
+    data-prop="heading"
+    data-type="block"
+    text={heading}
+  />
   <Text
     alignmentHorizontal={alignmentHorizontal}
     class="subtext"
@@ -168,10 +141,6 @@ const headingParts =
         flex: none;
         height: 0.375rem;
         width: 0.375rem;
-      }
-
-      .hero-center-highlight {
-        color: var(--color-accent);
       }
     }
   }

@@ -7,6 +7,7 @@ value:
   items: []
   openFirst: false
   singleOpen: false
+  spaceBefore: default
 preview:
   text:
     - Accordion
@@ -26,20 +27,3 @@ picker_preview:
     fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/wrappers/accordion/accordion.cloudcannon.inputs.yml
-  - /.cloudcannon/inputs/space-before.yml
-_structures:
-  accordionItems:
-    values:
-      - label: Item
-        icon: place_item
-        value:
-          title: My Title
-          contentSections: []
-        _inputs:
-          title:
-            comment: The title of the accordion item.
-            type: text
-          contentSections:
-            type: array
-            options:
-              structures: _structures.accordionSections

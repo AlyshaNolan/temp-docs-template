@@ -42,8 +42,8 @@ _structures:
   selectOptions:
     values:
       - value:
-          value: null
-          label: null
+          value: option-1
+          label: Option 1
         preview:
           icon: check_circle
           text:

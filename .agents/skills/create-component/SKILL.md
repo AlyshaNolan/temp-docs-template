@@ -90,7 +90,7 @@ Full context list and how to add a new nested content area: [cloudcannon-yaml.md
 **MUST:** use CSS custom properties for all values — no hardcoded colors, spacing, radii, shadows, or breakpoint magic numbers. Token names live in `src/styles/variables/*` and `src/styles/themes/*`; the [theming skill](../theming/SKILL.md) owns them.
 **MUST NOT:** use `:global()` — every block is already global, so it is redundant.
 **MUST NOT:** put `data-editable` or `display: contents` on the root element (see [component-templates.md](component-templates.md)).
-**MUST NOT:** give the root a margin — sibling spacing comes from the flow system. Stackable blocks mark the root `stackable`, emit `data-space-before={spaceBeforeAttr(spaceBefore)}`, and add the shared `/.cloudcannon/inputs/space-before.yml` glob entry; declare a `--space-before` type default only when the block shouldn't fall back to `--space-before-default`.
+**MUST NOT:** give the root a margin — sibling spacing comes from the flow system. Stackable blocks mark the root `stackable`, emit `data-space-before={spaceBeforeAttr(spaceBefore)}`, seed `spaceBefore: default` in `value:` and carry the `spaceBefore` select in the component's own `inputs.yml`; declare a `--space-before` type default only when the block shouldn't fall back to `--space-before-default`.
 **Flow vs internal:** if the children come from YAML (`contentSections`-style), the containing element takes the `flow` class; if they come from the template (form fields, item chrome), use `gap` or explicit margins in the component's own CSS — never `flow`. A container uses `gap` OR `flow`, never both. Overlaps are a component's design, never a `spaceBefore` value.
 
 ## Verify your work

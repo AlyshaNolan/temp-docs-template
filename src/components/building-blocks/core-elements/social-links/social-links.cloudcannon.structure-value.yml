@@ -19,6 +19,7 @@ value:
   variant: ghost
   size: md
   alignmentHorizontal: none
+  spaceBefore: default
 preview:
   text:
     - Social Links
@@ -38,4 +39,3 @@ picker_preview:
     fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/core-elements/social-links/social-links.cloudcannon.inputs.yml
-  - /.cloudcannon/inputs/space-before.yml

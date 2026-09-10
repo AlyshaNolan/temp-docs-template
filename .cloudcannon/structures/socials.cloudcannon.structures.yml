@@ -5,8 +5,8 @@ socials:
       icon: share
       description: A social media link with icon and URL.
       value:
-        icon: ""
-        link: ""
+        icon: social/github
+        link: https://github.com/
         label: ""
       preview:
         text:

@@ -37,6 +37,7 @@ value:
         - _component: building-blocks/core-elements/simple-text
           text: Publish from the editor. The CDN and SSL are already handled.
           size: sm
+  spaceBefore: default
 preview:
   text:
     - Steps
@@ -56,7 +57,6 @@ picker_preview:
     fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/wrappers/steps/steps.cloudcannon.inputs.yml
-  - /.cloudcannon/inputs/space-before.yml
 _structures:
   stepsItems:
     values:
@@ -65,7 +65,14 @@ _structures:
         value:
           image: ""
           imageAlt: ""
-          contentSections: []
+          contentSections:
+            - _component: building-blocks/core-elements/heading
+              text: Step heading
+              level: h3
+              size: xs
+            - _component: building-blocks/core-elements/simple-text
+              text: What happens in this step.
+              size: sm
         preview:
           text:
             - key: contentSections.0.text

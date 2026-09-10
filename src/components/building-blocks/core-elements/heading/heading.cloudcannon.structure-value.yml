@@ -10,6 +10,7 @@ value:
   iconName: null
   iconColor: default
   iconPosition: before
+  spaceBefore: default
 preview:
   image: public/component-previews/building-blocks/core-elements/heading.svg
   icon: title
@@ -29,4 +30,3 @@ picker_preview:
     fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/core-elements/heading/heading.cloudcannon.inputs.yml
-  - /.cloudcannon/inputs/space-before.yml

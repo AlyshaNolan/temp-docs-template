@@ -7,7 +7,7 @@ docsNavGroups:
     - label: Group
       icon: folder
       value:
-        name: ""
+        name: New group
         collapsed: false
       preview:
         text:

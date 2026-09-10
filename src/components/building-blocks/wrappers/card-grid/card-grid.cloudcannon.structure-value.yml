@@ -57,6 +57,7 @@ value:
         - _component: building-blocks/core-elements/simple-text
           text: Your content moved across, page by page, with redirects and no lost search rankings.
           size: sm
+  spaceBefore: default
 preview:
   text:
     - Card Grid
@@ -77,7 +78,6 @@ picker_preview:
     fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/wrappers/card-grid/card-grid.cloudcannon.inputs.yml
-  - /.cloudcannon/inputs/space-before.yml
 _structures:
   cardGridItems:
     values:
@@ -87,7 +87,19 @@ _structures:
           image: ""
           imageAlt: ""
           link: ""
-          contentSections: []
+          contentSections:
+            - _component: building-blocks/core-elements/badge
+              text: Category
+              variant: plain
+              size: sm
+              showArrow: false
+            - _component: building-blocks/core-elements/heading
+              text: Card title
+              level: h3
+              size: xs
+            - _component: building-blocks/core-elements/simple-text
+              text: One or two lines on what the reader gets from this card.
+              size: sm
         preview:
           text:
             - key: contentSections.1.text

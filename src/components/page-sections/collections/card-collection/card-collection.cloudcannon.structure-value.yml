@@ -100,7 +100,6 @@ picker_preview:
     fit: cover
 _inputs_from_glob:
   - /src/components/page-sections/collections/card-collection/card-collection.cloudcannon.inputs.yml
-  - /.cloudcannon/inputs/background-mask.yml
 _structures:
   cardCollectionItems:
     values:
@@ -110,7 +109,19 @@ _structures:
           image: ""
           imageAlt: ""
           link: ""
-          contentSections: []
+          contentSections:
+            - _component: building-blocks/core-elements/badge
+              text: Category
+              variant: plain
+              size: sm
+              showArrow: false
+            - _component: building-blocks/core-elements/heading
+              text: Card title
+              level: h3
+              size: xs
+            - _component: building-blocks/core-elements/simple-text
+              text: One or two lines on what the reader gets from this card.
+              size: sm
         preview:
           text:
             - key: contentSections.1.text

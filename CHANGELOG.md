@@ -8,9 +8,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- MDX snippets for **Accordion**, **Definition List** and **Badge**. All three are used on `/media-and-components/` and all three showed as "unknown snippet" in the Content Editor, because a component only appears there if it has a `*.cloudcannon.snippets.yml`.
+- A Styles menu in CloudCannon's rich-text editors, backed by `public/cloudcannon/editor-styles.css`. It offers one option, **Highlight**, which wraps the selection in `<span class="highlight">` and paints it in the accent colour; the same stylesheet gives the Content Editor code-block, blockquote and table styling, so a Markdown fence stops reading as unstyled text there.
+- Inline editing of a documentation page's **title** and **description** — both are editable regions on the page now, not data-panel-only fields. The breadcrumb trail and the `show*` switches are deliberately left out: the crumbs are derived from the sidebar tree rather than stored on the page, and an editable region can only bind text, an image or an array, never a boolean.
+- `npm run lint:cms` fails on an `options.structures: _structures.x` that names a structure the loading document cannot see. A name declared inside a `structure-value.yml` is invisible to the sibling `snippets.yml`, and CloudCannon then renders the array as free text with no error anywhere — which is how the FAQ and Steps snippets shipped.
+
 - **Tabbed Content** (`page-sections/explainers/tabbed-content`): a page section for tabbed panels — heading, subtext and a Content Selector, each tab holding its own stack of blocks. The overview page's feature demos were a generic Custom Section wrapping a Content Selector by hand, which gave the editor a nested pile of anonymous blocks instead of a section with tabs.
 - **Feature List** (`page-sections/collections/feature-list`): a compact grid of short feature labels, one line of detail each, with an optional icon per entry. Replaces the hand-built Custom Section + Grid + Text stack the overview page used for its "Also included" list, which the editor could only reach three levels deep.
-- `repositoryUrl` in `src/data/docsSite.json` — the site's source repository, in one place. `src/utils/repository.ts` derives the "Use this template" and repository links on `/installation/` from it (a pasted `/tree/<branch>` browse URL is normalised), so a fork sets it once instead of editing prose. `npm run reset:starter` clears it and `npm run check` warns while it still points at the template's own repository.
+- `repositoryUrl` in `src/data/docsSite.json` — the site's source repository, in one place. `src/utils/repository.ts` derives every page's "Edit this page" link from it (a pasted `/tree/<branch>` browse URL is normalised), so a fork sets it once. `npm run reset:starter` clears it and `npm run check` warns while it still points at the template's own repository.
 
 - Status badges and third-party embeds are documented on `/media-and-components/`, each with a live example: a `Badge` marking a feature as Beta and a linked one pointing at a replacement, and an `Embed` framing a sandbox at a fixed aspect ratio.
 - A **Getting there** walkthrough on `/introduction/` and a **Common questions** FAQ on `/installation/`, built from the Steps and FAQ page sections. Both sit in the prose, their heading written as a Markdown `##` so the on-this-page rail lists it.
@@ -41,7 +46,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - `defaultTheme` in `src/data/docsSite.json` — `dark`, `light` or `system`. The site ships **dark**, and stays dark for a reader whose operating system is light until they say otherwise; `system` restores the previous behaviour of following the OS. A reader's own choice always wins, and is still applied before first paint.
 - **Command Line** (`building-blocks/core-elements/command-line`): a single copyable shell command sized to sit in a row of buttons, for the "run this to start" line. Offered anywhere buttons are.
-- Hero Center takes `headingHighlight` — a word or phrase from the heading painted in the accent — and renders its `eyebrow` as a pill, with `eyebrowShowDot` for an accent dot. The heading stays one editable string and one `<h1>`.
+- Hero Center renders its `eyebrow` as a pill, with `eyebrowShowDot` for an accent dot, and its heading takes inline markup so a word can be painted in the accent — see Changed below. The heading stays one editable field and one `<h1>`.
 - Stats takes `layout`: `tiles` gives each figure a bordered card (the new default), `rule` keeps the hairline separators.
 - Content Selector takes `variant: panel`, which frames the tabs and their content in one bordered box with a compact strip of labels — a demo panel rather than a section of the page.
 - `inverse` joins every section's `backgroundColor` options: a band that is dark on a light page and light on a dark one. Text and buttons inside it flip with it, so a primary button doesn't end up the same colour as the band.
@@ -52,6 +57,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - **File Tree** (`building-blocks/core-elements/file-tree`): a directory tree drawn from an indented list of paths, so the tree stays editable as plain text instead of hand-drawn box characters. Any consistent indent unit works, and an entry can carry the same `+`/`-`/`~` marker as a diff. Offered as a page-builder block and as an MDX snippet.
 
 ### Changed
+
+- Hero Center's heading is one rich-text field instead of a heading plus a `headingHighlight` substring. Accent words are marked up in place (`<span class="highlight">…</span>`), which is what CloudCannon's Highlight style inserts — so the heading is inline-editable again. It was not editable at all whenever the highlight matched, because the region that owned the heading had to be dropped to stop it flattening the accent span.
+- The `spaceBefore` select, and page sections' background-fade select, are declared in each component's own `inputs.yml` rather than pulled from a shared file in `.cloudcannon/inputs/`. Only the first `_inputs_from_glob` entry of a structure value reached the editor, so both fields rendered as free text. `.cloudcannon/inputs/` is gone.
+- Adding an array item in CloudCannon starts from filled-in content — a card with a badge, heading and line of copy; a step with a heading and description; a parameter with a name, type and description — rather than empty strings an editor has to find and replace. Every stackable block also seeds `spaceBefore` so the control is present on a freshly added block.
+- The FAQ, CTA Split and Steps snippets drop the section-wrapper knobs that do nothing inside a documentation page: `.prose` zeroes a nested section's max-width and both paddings, so max width, horizontal padding, vertical padding and the editor-only section label were four fields that changed nothing. Heading, heading level, colour scheme and background colour stay.
+- The Installation page links to the repository with plain Markdown links instead of MDX `import` + `{expression}`. CloudCannon's Content Editor does not evaluate either, so the imported values rendered as nothing and the link was dead in the editor. `src/utils/repository.ts` keeps only `editPageUrl`, which the page template calls.
 
 - The "Updated" date on a documentation page is the file's last commit, read at build time by `src/utils/gitDates.mjs`, instead of an `updated` frontmatter field an author had to remember to bump. A date nobody maintained was worse than none. A shallow clone has no per-file history, so the line is omitted rather than shown wrong — fetch full history in CI if it matters.
 - The "Edit this page" link is derived from `repositoryUrl` in `src/data/docsSite.json` rather than configured a second time as a full `editPageBaseUrl` prefix. `src/utils/repository.ts` builds `<repo>/edit/<branch>/<the page's file path>`, taking the branch from a `/tree/<branch>` suffix and defaulting to `main`, so the repository URL is the one thing a fork sets.
@@ -123,6 +134,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - The `blog-mdx-content` skill, replaced by `docs-content-authoring`.
 
 ### Fixed
+
+- The editable region on a Tabbed Content tab covered only the tab strip, not the panel below it. Each tab overlays the whole tab grid, and with every track sized to a label that grid stopped at the last tab; a trailing `1fr` track makes it span the section, so the region CloudCannon outlines matches what the tab actually renders.
 
 - A Steps card's heading offered a copyable `#` anchor on hover, the same affordance as a real section heading. A step is a label inside a section, not a place in the document; only the section's own heading is a destination now.
 
