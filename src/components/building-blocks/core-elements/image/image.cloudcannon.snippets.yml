@@ -7,10 +7,13 @@ image:
       - Image
     subtext:
       - key: alt
+    image: public/component-previews/building-blocks/core-elements/image.svg
     icon: image
     gallery:
       image:
         - key: source
+        - public/component-previews/building-blocks/core-elements/image.svg
+      fit: cover
   definitions:
     component_name: Image
     named_args:
