@@ -85,8 +85,8 @@ These are available in any `.mdx` page with no import, and each has a CloudCanno
 | `CodeBlock`       | A code sample from a prop rather than a fence                         | `code`, `language`, `filename`, `highlight`                         |
 | `CodeTabs`        | One sample in several languages, choice remembered site-wide          | `tabs[]` of `{ label, language, code, highlight }`, `filename`      |
 | `CodeAnnotations` | Code with numbered notes underneath                                   | `code`, `language`, `filename`, `notes[]` of `{ line, text }`       |
-| `CodeDiff`        | A sample with changed lines marked, still highlighted in its language | `code` (lines prefixed `+`/`-`/`~`), `language`, `filename`         |
-| `FileTree`        | A directory tree drawn from an indented list of paths                 | `paths`, `title`                                                    |
+| `CodeDiff`        | A sample with changed lines marked, still highlighted in its language | `code`, `language`, `filename`, `added`, `removed`, `highlight`     |
+| `FileTree`        | A directory tree drawn from an indented list of paths                 | `paths`, `title`, `added`, `removed`, `highlight`                   |
 | `ParamList`       | API reference entries where descriptions run long                     | `params[]` of `{ name, type, required, defaultValue, description }` |
 | `DefinitionList`  | Glossaries and field terminology                                      | `items[]` of `{ title, text }`, `layout` (`stacked`/`grid`)         |
 | `Diagram`         | A Mermaid diagram                                                     | `definition`, `caption`                                             |
@@ -164,6 +164,12 @@ teaser on another page.
 | A directory layout                   | `FileTree`        |
 
 All five hold their code in a prop, so it is a field an editor can change and the sample renders identically in Git, in the Content Editor and in the Visual Editor.
+
+### Marked lines are always named by number
+
+Every one of them names a line the same way — `highlight="2"`, `added="3,7-9"`, `removed="1-2"`, or `CodeAnnotations`' `notes[].line`. Nothing is marked by a character inside the code, so the `code` prop is always the literal sample: copy-pasteable, and free of the collision where a YAML list item or a leading unary minus reads as a marker.
+
+The cost is that line numbers don't move when the sample does. After adding or removing a line, re-check the ranges — nothing validates them, and an out-of-range number marks nothing rather than failing.
 
 ## Diagrams
 

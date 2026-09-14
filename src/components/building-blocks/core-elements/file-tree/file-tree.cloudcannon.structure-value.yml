@@ -12,6 +12,9 @@ value:
         base.css
     astro.config.mjs
   title: Project structure
+  added: ""
+  removed: ""
+  highlight: ""
   showCopy: false
   spaceBefore: default
 preview:

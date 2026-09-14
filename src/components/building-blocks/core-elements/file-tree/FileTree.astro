@@ -1,12 +1,15 @@
 ---
 import { drawFileTree } from "@component-utils/fileTree";
-import { highlightCode, parseDiffMarkers } from "@component-utils/highlight";
+import { highlightCode, parseDiffLines } from "@component-utils/highlight";
 import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
 import CodeBlockSurface from "../code-block/CodeBlockSurface.astro";
 
 const {
   paths = "",
   title = "",
+  added = "",
+  removed = "",
+  highlight = "",
   showCopy = false,
   spaceBefore = "default",
   class: className,
@@ -17,14 +20,13 @@ const {
 
 if (!_component && !paths) return;
 
-// Blank lines go before the markers are read, so the diff line numbers below
-// still index the rendered tree one-for-one.
-const source = String(paths)
+// Blank lines are dropped before the line numbers are read, so `added` and the
+// rest count the rendered rows rather than the rows as typed.
+const lines = String(paths)
   .split("\n")
-  .filter((line) => line.trim())
-  .join("\n");
+  .filter((line) => line.trim());
 
-const { lines, diff } = parseDiffMarkers(source, { preserveColumns: true });
+const diff = parseDiffLines({ added, removed, highlight });
 const html = await highlightCode(drawFileTree(lines).join("\n"), "text", { diff });
 ---
 

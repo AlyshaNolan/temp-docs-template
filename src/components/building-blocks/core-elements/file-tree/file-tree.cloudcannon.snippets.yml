@@ -18,6 +18,18 @@ file-tree:
         type: string
         optional: true
         remove_empty: true
+      - editor_key: added
+        type: string
+        optional: true
+        remove_empty: true
+      - editor_key: removed
+        type: string
+        optional: true
+        remove_empty: true
+      - editor_key: highlight
+        type: string
+        optional: true
+        remove_empty: true
       - editor_key: showCopy
         type: boolean
         optional: true

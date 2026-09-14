@@ -114,38 +114,22 @@ export function parseLineRanges(input: string | undefined): number[] {
   return lines;
 }
 
-const DIFF_PREFIXES: Record<string, DiffMarker> = {
-  "+": "add",
-  "-": "remove",
-  "~": "highlight",
-};
-
 /**
- * Splits leading `+` / `-` / `~` markers off each line of `code`.
+ * Builds the `diff` map from three 1-based line-range strings ("3", "1,4-6").
  *
- * The markers have to come off before the grammar runs — Shiki would otherwise
- * parse `+  search: {}` as broken source. A line of real code that starts with
- * one of those characters (a YAML list item, a leading unary minus) is eaten as
- * a marker, which is why only `CodeDiff` and `FileTree` run input through this.
- *
- * `preserveColumns` swaps the marker for a space instead of dropping it, so a
- * marked line stays aligned with its unmarked siblings — indentation is
- * meaningful in a file tree.
+ * A line named by more than one wins in source order, so `highlight` beats
+ * `added` beats `removed`.
  */
-export function parseDiffMarkers(
-  code: string,
-  { preserveColumns = false } = {}
-): { lines: string[]; diff: Map<number, DiffMarker> } {
+export function parseDiffLines(ranges: {
+  removed?: string;
+  added?: string;
+  highlight?: string;
+}): Map<number, DiffMarker> {
   const diff = new Map<number, DiffMarker>();
-  const lines = code.split("\n").map((text, index) => {
-    const marker = DIFF_PREFIXES[text[0] ?? ""];
 
-    if (!marker) return text;
+  for (const line of parseLineRanges(ranges.removed)) diff.set(line, "remove");
+  for (const line of parseLineRanges(ranges.added)) diff.set(line, "add");
+  for (const line of parseLineRanges(ranges.highlight)) diff.set(line, "highlight");
 
-    diff.set(index + 1, marker);
-
-    return (preserveColumns ? " " : "") + text.slice(1);
-  });
-
-  return { lines, diff };
+  return diff;
 }

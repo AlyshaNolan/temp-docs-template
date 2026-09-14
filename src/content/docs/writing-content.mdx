@@ -59,29 +59,34 @@ only form that keeps its indentation.
 
 ## Diffs
 
-`CodeDiff` marks changed lines with `+`, `-` and `~` at the start of the line. The
-markers are stripped before highlighting, so the sample keeps its own language
-colours instead of going flat the way a `diff` fence does — and the copy button
-hands back the code without them.
+`CodeDiff` names its changed lines in `added`, `removed` and `highlight`, the same
+`"2"` or `"1,4-6"` form every code component uses. The code stays the literal sample,
+so it keeps its own language colours instead of going flat the way a `diff` fence
+does, and the copy button hands back something that runs.
 
 <CodeDiff
   filename="src/data/docsSite.json"
   language="json"
-  code={'{\n  "wordmark": "Acme",\n-  "defaultTheme": "light",\n+  "defaultTheme": "dark",\n  "navGroups": [\n~    { "name": "Guides", "collapsed": false }\n  ]\n}'}
+  removed="3"
+  added="4"
+  highlight="6"
+  code={'{\n  "wordmark": "Acme",\n  "defaultTheme": "light",\n  "defaultTheme": "dark",\n  "navGroups": [\n    { "name": "Guides", "collapsed": false }\n  ]\n}'}
 />
 
-A line of real code that begins with `+`, `-` or `~` — a YAML list item, say — is
-read as a marker. Use a plain code block for those.
+Line numbers count the sample's own lines, so they need a look after an edit that
+adds or removes one.
 
 ## File trees
 
 `FileTree` draws the connectors from an indented list of paths, so the tree stays
-editable as text. Any consistent indent unit works, and a path can carry the same
-`+` / `-` / `~` marker as a diff.
+editable as text. Any consistent indent unit works, and it takes the same `added`,
+`removed` and `highlight` line numbers as a diff — counting the rendered rows, so a
+blank line in the list doesn't shift them.
 
 <FileTree
   title="Project structure"
-  paths={"src/\n  components/\n    Button.astro\n+   Callout.astro\n  styles/\n    base.css\nastro.config.mjs"}
+  added="4"
+  paths={"src/\n  components/\n    Button.astro\n    Callout.astro\n  styles/\n    base.css\nastro.config.mjs"}
 />
 
 ## Language tabs
