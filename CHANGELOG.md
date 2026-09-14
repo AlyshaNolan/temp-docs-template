@@ -58,7 +58,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 
-- The Content Editor's code-block control offers the same language list as the **Code Block** component, so a fence can't be tagged with a language Shiki won't highlight.
+- **Documentation content no longer uses Markdown fences.** All 14 became **Code Block** snippets, carrying their `title=` across as `filename` and their `{n}` as `highlight`, and the code-block control is off in every rich-text surface (`code_block: false`; inline code stays). A fence cannot survive CloudCannon: the editor models a language and nothing else, so `title=` and `{2,5-7}` are dropped on save; it is redrawn with the editor's own chrome rather than the site's, so the same sample looks like two different components either side of a save; and `code_block_fences` is three backticks with no second level, so a fence documenting fence syntax breaks the parse for the rest of the file. The fence pipeline itself is untouched for Markdown outside `src/content/`.
 
 - Hero Center's heading is one rich-text field instead of a heading plus a `headingHighlight` substring. Accent words are marked up in place (`<span class="highlight">…</span>`), which is what CloudCannon's Highlight style inserts — so the heading is inline-editable again. It was not editable at all whenever the highlight matched, because the region that owned the heading had to be dropped to stop it flattening the accent span.
 - The `spaceBefore` select, and page sections' background-fade select, are declared in each component's own `inputs.yml` rather than pulled from a shared file in `.cloudcannon/inputs/`. Only the first `_inputs_from_glob` entry of a structure value reached the editor, so both fields rendered as free text. `.cloudcannon/inputs/` is gone.
@@ -136,6 +136,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - The `blog-mdx-content` skill, replaced by `docs-content-authoring`.
 
 ### Fixed
+
+- Everything below the "Code blocks" heading on `/writing-content/` — Code Diff, File Tree, Code Tabs, Code Annotations — rendered as plain text in CloudCannon. The section documented fence syntax with four backticks wrapped around three, and CloudCannon reads only the three-backtick form: it closed the outer fence on the inner one and swallowed the rest of the file. Nothing reported it, and the page built and rendered correctly the whole time.
 
 - Multi-line code samples on `/writing-content/` were held in `export const` blocks above the prose. CloudCannon shows a file's ESM as plain text and cannot resolve `code={sample}`, so the export read as stray code to an editor and the Code Diff, File Tree and Annotated Code blocks referencing it failed to parse as snippets — all four rendered as plain text. The samples now sit in the prop itself as `{"…\n…"}`. That form is the only faithful one: MDX drops two leading spaces from every continuation line of a template literal, and _all_ leading whitespace from a quoted attribute spanning lines, so indentation silently changed the sample. The Mermaid diagram on `/media-and-components/` moved off a template literal for the same reason.
 

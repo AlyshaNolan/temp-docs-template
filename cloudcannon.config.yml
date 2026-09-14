@@ -68,7 +68,12 @@ collections_config:
         blockquote: true
         bold: true
         bulletedlist: true
-        code: true
+        code_inline: true
+        # Off because a fence can't survive this editor: its `title=` and `{n}`
+        # meta have nowhere to live, CloudCannon draws it with its own chrome
+        # rather than the site's, and a fence holding a fence breaks the parse
+        # for the rest of the file. `CodeBlock` is the snippet that replaces it.
+        code_block: false
         copyformatting: false
         embed: false
         expandable: false
@@ -85,49 +90,6 @@ collections_config:
         removeformat: true
         resize_style: contain
         snippet: true
-        # Same vocabulary as the `code-block` component's `language` input. A
-        # fence language outside this list renders as plain text rather than
-        # failing the build, so drift here is silent.
-        code_block_options:
-          language:
-            type: select
-            comment: Language for syntax highlighting.
-            options:
-              values:
-                - id: astro
-                  name: astro
-                - id: bash
-                  name: bash
-                - id: css
-                  name: css
-                - id: diff
-                  name: diff
-                - id: html
-                  name: html
-                - id: js
-                  name: js
-                - id: json
-                  name: json
-                - id: jsx
-                  name: jsx
-                - id: markdown
-                  name: markdown
-                - id: mdx
-                  name: mdx
-                - id: python
-                  name: python
-                - id: ruby
-                  name: ruby
-                - id: sh
-                  name: sh
-                - id: ts
-                  name: ts
-                - id: tsx
-                  name: tsx
-                - id: yaml
-                  name: yaml
-                - id: text
-                  name: text
         strike: false
         subscript: false
         superscript: false
@@ -251,7 +213,8 @@ collections_config:
           blockquote: true
           bold: true
           bulletedlist: true
-          code: true
+          code_inline: true
+          code_block: false
           copyformatting: false
           embed: false
           expandable: false

@@ -15,7 +15,8 @@ text:
     numberedlist: true
     indent: true
     outdent: true
-    code: true
+    code_inline: true
+    code_block: false
     allow_custom_markup: true
     styles: public/cloudcannon/editor-styles.css
 alignmentHorizontal:

@@ -32,33 +32,30 @@ Four kinds. Use them for things a reader would otherwise learn the hard way.
 <Alert variant="warning" title="Warning" text="Something that will surprise them if they skip it." />
 <Alert variant="danger" title="Danger" text="Data loss, irreversible actions, breaking changes." />
 
-```mdx title="callout.mdx"
-<Alert
-  variant="warning"
-  title="Rotating a key revokes the old one"
-  text="Existing clients fail on the next request. Deploy the new key before rotating."
+<CodeBlock
+  language="mdx"
+  filename="callout.mdx"
+  code={'<Alert\n  variant="warning"\n  title="Rotating a key revokes the old one"\n  text="Existing clients fail on the next request. Deploy the new key before rotating."\n/>'}
 />
-```
 
 ## Code blocks
 
-A fenced block takes a `title` for the header bar and a line range to highlight.
+`CodeBlock` takes the sample, its language, a `filename` for the header bar and a line range
+to highlight. Write the sample as a single-line string with `\n` between lines — that is the
+only form that keeps its indentation.
 
-````md title="fence.md"
-```json title="src/data/docsSite.json" {3}
-{
-  "wordmark": "Acme",
-  "defaultTheme": "dark"
-}
-```
-````
+<CodeBlock
+  language="mdx"
+  filename="sample.mdx"
+  code={'<CodeBlock\n  language="json"\n  filename="src/data/docsSite.json"\n  highlight="3"\n  code={…}\n/>'}
+/>
 
-```json title="src/data/docsSite.json" {3}
-{
-  "wordmark": "Acme",
-  "defaultTheme": "dark"
-}
-```
+<CodeBlock
+  language="json"
+  filename="src/data/docsSite.json"
+  highlight="3"
+  code={'{\n  "wordmark": "Acme",\n  "defaultTheme": "dark"\n}'}
+/>
 
 ## Diffs
 

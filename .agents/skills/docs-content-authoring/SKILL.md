@@ -67,17 +67,13 @@ Headings, lists, tables, blockquotes, links and inline code all work and are sty
 
 Link internally by URL: `[Configuration](/configuration/)`. `npm run lint:links` fails the build on an internal link that resolves to no page, so a renamed page can't quietly rot.
 
-### Code fences
+### No code fences
 
-A fence takes a filename and line highlights in its meta string:
+Code goes in a `CodeBlock`, never a Markdown fence. The fence pipeline still exists — `fenceMetaTransformer` in `src/utils/markdown.mjs` reads `title=` and `{2,5-7}` off the meta string — but nothing in `src/content/` uses it, and the Content Editor's code-block control is off (`code_block: false`), because a fence cannot survive CloudCannon:
 
-````md
-```js title="docsmith.config.js" {2,5-7}
-
-```
-````
-
-`title=` becomes the header label (Astro handles it), and `{2,5-7}` marks those lines (`fenceMetaTransformer` in `src/utils/markdown.mjs`). Untitled fences label themselves with the language. A copy button is added by script — see `code-block/setup.ts` for why it isn't in the HTML.
+- Its `title=` and `{2,5-7}` meta have nowhere to live; the editor models a language and nothing else.
+- CloudCannon draws it with its own chrome, so the same sample looks like two different components either side of a save.
+- A fence holding a fence — four backticks around three, the only way to document fence syntax — breaks the parse for **the rest of the file**, and every component below it renders as plain text. `code_block_fences` is three backticks and there is no second level.
 
 ## Body: components
 
@@ -157,18 +153,17 @@ an anchor on the changelog page.
 `<Changelog limit={3} />` renders only the most recent three, for a release-notes
 teaser on another page.
 
-## Choosing between a fence, `CodeBlock` and `CodeTabs`
+## Choosing a code component
 
-| You have                                      | Use               |
-| --------------------------------------------- | ----------------- |
-| One sample, written by a developer in Git     | a fence           |
-| One sample an editor should change in the CMS | `CodeBlock`       |
-| The same sample in several languages          | `CodeTabs`        |
-| Lines that need explaining                    | `CodeAnnotations` |
-| Before/after of the same file                 | `CodeDiff`        |
-| A directory layout                            | `FileTree`        |
+| You have                             | Use               |
+| ------------------------------------ | ----------------- |
+| One sample                           | `CodeBlock`       |
+| The same sample in several languages | `CodeTabs`        |
+| Lines that need explaining           | `CodeAnnotations` |
+| Before/after of the same file        | `CodeDiff`        |
+| A directory layout                   | `FileTree`        |
 
-A fence is the lightest and reads best in a diff. `CodeBlock` exists because a fence is not an editable field in CloudCannon — its `code` prop is.
+All five hold their code in a prop, so it is a field an editor can change and the sample renders identically in Git, in the Content Editor and in the Visual Editor.
 
 ## Diagrams
 

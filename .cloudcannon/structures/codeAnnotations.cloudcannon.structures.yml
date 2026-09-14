@@ -21,4 +21,5 @@ codeAnnotations:
             bold: true
             italic: true
             link: true
-            code: true
+            code_inline: true
+            code_block: false

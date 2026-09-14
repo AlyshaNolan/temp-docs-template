@@ -43,23 +43,19 @@ there.
 
 Site-wide, in `src/data/docsSite.json`:
 
-```json title="src/data/docsSite.json"
-{
-  "copyPage": {
-    "enabled": true,
-    "label": "Copy page"
-  }
-}
-```
+<CodeBlock
+  language="json"
+  filename="src/data/docsSite.json"
+  code={'{\n  "copyPage": {\n    "enabled": true,\n    "label": "Copy page"\n  }\n}'}
+/>
 
 Per page, in frontmatter — the same switch as `showFeedback` and `showPager`:
 
-```mdx title="src/content/docs/internal-runbook.mdx"
----
-title: Internal runbook
-showCopyPage: false
----
-```
+<CodeBlock
+  language="mdx"
+  filename="src/content/docs/internal-runbook.mdx"
+  code={"---\ntitle: Internal runbook\nshowCopyPage: false\n---"}
+/>
 
 The `.md` twin is still built for a page with the menu switched off. Remove the route if you
 want no Markdown copies of the site at all.

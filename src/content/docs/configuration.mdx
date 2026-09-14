@@ -11,21 +11,11 @@ order: 1
 feedback block. It is a CloudCannon data file, so an editor changes it in the app rather than
 in a pull request.
 
-```json title="src/data/docsSite.json"
-{
-  "markLetter": "D",
-  "wordmark": "Docsmith",
-  "version": "v2.4",
-  "repositoryUrl": "https://github.com/acme/docs",
-  "search": true,
-  "themeToggle": true,
-  "navGroups": [
-    { "name": "Getting started", "collapsed": false },
-    { "name": "Reference", "collapsed": true }
-  ],
-  "feedback": { "enabled": true, "action": "/" }
-}
-```
+<CodeBlock
+  language="json"
+  filename="src/data/docsSite.json"
+  code={'{\n  "markLetter": "D",\n  "wordmark": "Docsmith",\n  "version": "v2.4",\n  "repositoryUrl": "https://github.com/acme/docs",\n  "search": true,\n  "themeToggle": true,\n  "navGroups": [\n    { "name": "Getting started", "collapsed": false },\n    { "name": "Reference", "collapsed": true }\n  ],\n  "feedback": { "enabled": true, "action": "/" }\n}'}
+/>
 
 <ParamList
   params={[

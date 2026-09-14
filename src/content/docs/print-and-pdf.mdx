@@ -29,19 +29,11 @@ than sitting there dead.
 
 ## Page setup
 
-```css title="src/styles/base/_print.css"
-@page {
-  margin: 18mm 16mm 20mm;
-  size: A4;
-}
-
-@media print {
-  .prose a[href^="http"]::after { content: " (" attr(href) ")"; }
-  :is(h1, h2, h3) { break-after: avoid; }
-  pre, table, figure { break-inside: avoid; }
-  details::details-content { content-visibility: visible; }
-}
-```
+<CodeBlock
+  language="css"
+  filename="src/styles/base/_print.css"
+  code={'@page {\n  margin: 18mm 16mm 20mm;\n  size: A4;\n}\n\n@media print {\n  .prose a[href^="http"]::after { content: " (" attr(href) ")"; }\n  :is(h1, h2, h3) { break-after: avoid; }\n  pre, table, figure { break-inside: avoid; }\n  details::details-content { content-visibility: visible; }\n}'}
+/>
 
 <Alert
   variant="note"

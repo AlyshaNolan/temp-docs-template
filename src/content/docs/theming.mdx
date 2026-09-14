@@ -12,14 +12,11 @@ in `src/styles/variables/`, semantic tokens in `src/styles/themes/`, and compone
 properties on a component's own root. Components consume the semantic tier only, so a
 rebrand is a token change rather than a component change.
 
-```css title="src/styles/themes/_light.css"
-[data-theme="light"] {
-  --color-accent: var(--teal-700);
-  --color-text: var(--black);
-  --color-bg: var(--white);
-  --color-border: var(--gray-200);
-}
-```
+<CodeBlock
+  language="css"
+  filename="src/styles/themes/_light.css"
+  code={'[data-theme="light"] {\n  --color-accent: var(--teal-700);\n  --color-text: var(--black);\n  --color-bg: var(--white);\n  --color-border: var(--gray-200);\n}'}
+/>
 
 <Alert
   variant="danger"
@@ -44,12 +41,11 @@ on the site follows.
 One sans for interface and prose, one mono for code and labels, both registered in
 `site-fonts.mjs` — the only place to change them.
 
-```js title="site-fonts.mjs"
-export const siteFonts = [
-  { name: "Instrument Sans", cssVariable: "--font-body", weights: ["400 700"] },
-  { name: "JetBrains Mono", cssVariable: "--font-mono", weights: ["400 600"] },
-];
-```
+<CodeBlock
+  language="js"
+  filename="site-fonts.mjs"
+  code={'export const siteFonts = [\n  { name: "Instrument Sans", cssVariable: "--font-body", weights: ["400 700"] },\n  { name: "JetBrains Mono", cssVariable: "--font-mono", weights: ["400 600"] },\n];'}
+/>
 
 Sizes are a fixed scale: headings step 42 / 24 / 18, body sits at 16 with a 1.72 line height
 for long reads.

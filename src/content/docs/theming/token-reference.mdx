@@ -8,10 +8,10 @@ order: 1
 This page is a **child of [Theming](/theming/)** — it sits under it in the sidebar because of
 where its file lives, not because of anything in its frontmatter:
 
-```
-src/content/docs/theming.mdx                  →  /theming/
-src/content/docs/theming/token-reference.mdx  →  /theming/token-reference/
-```
+<CodeBlock
+  language="text"
+  code={"src/content/docs/theming.mdx                  →  /theming/\nsrc/content/docs/theming/token-reference.mdx  →  /theming/token-reference/"}
+/>
 
 A page nests when a page exists at its parent path. It inherits that parent's `group`, so the
 two levels can't disagree — and moving the file is the only thing that changes the nesting.
