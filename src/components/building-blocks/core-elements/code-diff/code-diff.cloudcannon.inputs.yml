@@ -1,8 +1,3 @@
-code:
-  type: code
-  comment: The sample itself, exactly as it should read after the change. Indentation is preserved exactly as typed.
-  options:
-    max_visible_lines: 20
 language:
   type: select
   comment: Language for syntax highlighting — the sample keeps its own colours rather than going flat like a `diff` fence. An unlisted language renders as plain text rather than failing the build.
@@ -40,9 +35,11 @@ language:
         name: yaml
       - id: text
         name: text
-filename:
-  type: text
-  comment: Shown in the header bar. Falls back to the language when empty — a real path tells the reader which file to change.
+code:
+  type: code
+  comment: The sample itself, exactly as it should read after the change. Indentation is preserved exactly as typed.
+  options:
+    max_visible_lines: 20
 added:
   type: text
   comment: 'Lines added, 1-based: "3" or "3,7-9". Empty marks nothing.'
@@ -52,6 +49,9 @@ removed:
 highlight:
   type: text
   comment: 'Lines to highlight, 1-based: "2" or "1,4-6". Empty highlights nothing.'
+filename:
+  type: text
+  comment: Shown in the header bar. Falls back to the language when empty — a real path tells the reader which file to change.
 showCopy:
   type: switch
   comment: Show the copy button.

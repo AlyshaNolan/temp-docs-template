@@ -3,16 +3,16 @@ icon: format_list_numbered
 description: Code with numbered notes underneath, so the snippet stays copy-paste clean.
 value:
   _component: building-blocks/core-elements/code-annotations
+  language: js
   code: |-
     export default {
       search: { provider: 'local' },
     }
-  language: js
-  filename: docsmith.config.js
-  highlight: ""
   notes:
     - line: 2
       text: Builds the index at compile time and ships it with the site.
+  highlight: ""
+  filename: docsmith.config.js
   showCopy: true
   spaceBefore: default
 preview:

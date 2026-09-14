@@ -12,22 +12,22 @@ code-annotations:
   definitions:
     component_name: CodeAnnotations
     named_args:
-      - editor_key: code
-        type: string
       - editor_key: language
         type: string
         optional: true
         remove_empty: true
-      - editor_key: filename
+      - editor_key: code
         type: string
+      - editor_key: notes
+        type: array
         optional: true
         remove_empty: true
       - editor_key: highlight
         type: string
         optional: true
         remove_empty: true
-      - editor_key: notes
-        type: array
+      - editor_key: filename
+        type: string
         optional: true
         remove_empty: true
       - editor_key: showCopy

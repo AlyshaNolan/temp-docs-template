@@ -12,17 +12,17 @@ code-block:
   definitions:
     component_name: CodeBlock
     named_args:
-      - editor_key: code
-        type: string
       - editor_key: language
         type: string
         optional: true
         remove_empty: true
-      - editor_key: filename
+      - editor_key: code
+        type: string
+      - editor_key: highlight
         type: string
         optional: true
         remove_empty: true
-      - editor_key: highlight
+      - editor_key: filename
         type: string
         optional: true
         remove_empty: true

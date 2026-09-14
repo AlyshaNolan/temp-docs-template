@@ -3,6 +3,7 @@ icon: difference
 description: A code sample with added, removed and highlighted lines, still syntax-highlighted in its own language.
 value:
   _component: building-blocks/core-elements/code-diff
+  language: js
   code: |-
     export default {
       search: { provider: 'algolia' },
@@ -11,11 +12,10 @@ value:
         { group: 'Guides', dir: 'guides' },
       ],
     }
-  language: js
-  filename: docsmith.config.js
   added: "3"
   removed: "2"
   highlight: "5"
+  filename: docsmith.config.js
   showCopy: true
   spaceBefore: default
 preview:

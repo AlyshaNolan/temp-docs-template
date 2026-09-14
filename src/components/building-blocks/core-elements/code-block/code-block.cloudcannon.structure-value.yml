@@ -3,13 +3,13 @@ icon: code
 description: A syntax-highlighted code sample with a filename bar and a copy button.
 value:
   _component: building-blocks/core-elements/code-block
+  language: js
   code: |-
     export default {
       search: { provider: 'local' },
     }
-  language: js
-  filename: docsmith.config.js
   highlight: ""
+  filename: docsmith.config.js
   showCopy: true
   spaceBefore: default
 preview:

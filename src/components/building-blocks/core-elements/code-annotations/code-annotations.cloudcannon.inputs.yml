@@ -1,8 +1,3 @@
-code:
-  type: code
-  comment: The sample itself. Indentation is preserved exactly as typed.
-  options:
-    max_visible_lines: 20
 language:
   type: select
   comment: Language for syntax highlighting.
@@ -42,17 +37,22 @@ language:
         name: yaml
       - id: text
         name: text
-filename:
-  type: text
-  comment: Shown in the header bar. Falls back to the language when empty.
-highlight:
-  type: text
-  comment: 'Extra lines to highlight beyond the annotated ones: "1,4-6".'
+code:
+  type: code
+  comment: The sample itself. Indentation is preserved exactly as typed.
+  options:
+    max_visible_lines: 20
 notes:
   type: array
   comment: One note per marked line. A note pointing past the end of the code is dropped rather than rendered against nothing.
   options:
     structures: _structures.codeAnnotations
+highlight:
+  type: text
+  comment: 'Extra lines to highlight beyond the annotated ones: "1,4-6".'
+filename:
+  type: text
+  comment: Shown in the header bar. Falls back to the language when empty.
 showCopy:
   type: switch
   comment: Show the copy button.

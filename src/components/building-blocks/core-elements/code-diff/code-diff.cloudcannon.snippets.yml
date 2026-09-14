@@ -12,16 +12,12 @@ code-diff:
   definitions:
     component_name: CodeDiff
     named_args:
-      - editor_key: code
-        type: string
       - editor_key: language
         type: string
         optional: true
         remove_empty: true
-      - editor_key: filename
+      - editor_key: code
         type: string
-        optional: true
-        remove_empty: true
       - editor_key: added
         type: string
         optional: true
@@ -31,6 +27,10 @@ code-diff:
         optional: true
         remove_empty: true
       - editor_key: highlight
+        type: string
+        optional: true
+        remove_empty: true
+      - editor_key: filename
         type: string
         optional: true
         remove_empty: true

@@ -14,10 +14,6 @@ file-tree:
     named_args:
       - editor_key: paths
         type: string
-      - editor_key: title
-        type: string
-        optional: true
-        remove_empty: true
       - editor_key: added
         type: string
         optional: true
@@ -27,6 +23,10 @@ file-tree:
         optional: true
         remove_empty: true
       - editor_key: highlight
+        type: string
+        optional: true
+        remove_empty: true
+      - editor_key: title
         type: string
         optional: true
         remove_empty: true
