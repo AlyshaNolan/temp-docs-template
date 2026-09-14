@@ -26,12 +26,36 @@ two levels can't disagree — and moving the file is the only thing that changes
 
 <ParamList
   params={[
-    { name: "--color-text", type: "colour", description: "Body copy. Prose is set on this, not on `--color-text-strong`." },
-    { name: "--color-text-strong", type: "colour", description: "Headings, and anything that has to win against body copy." },
-    { name: "--color-text-muted", type: "colour", description: "Supporting copy: ledes, table cells, callout bodies." },
-    { name: "--color-text-faint", type: "colour", description: "Metadata that should recede — dates, captions, group labels." },
-    { name: "--color-text-inverse", type: "colour", description: "Text on an inverse band. Flips with the theme." },
-    { name: "--color-link", type: "colour", description: "Links. Points at `--color-accent` by default." },
+    {
+      "name": "--color-text",
+      "type": "colour",
+      "description": "Body copy. Prose is set on this, not on `--color-text-strong`."
+    },
+    {
+      "name": "--color-text-strong",
+      "type": "colour",
+      "description": "Headings, and anything that has to win against body copy."
+    },
+    {
+      "name": "--color-text-muted",
+      "type": "colour",
+      "description": "Supporting copy: ledes, table cells, callout bodies."
+    },
+    {
+      "name": "--color-text-faint",
+      "type": "colour",
+      "description": "Metadata that should recede — dates, captions, group labels."
+    },
+    {
+      "name": "--color-text-inverse",
+      "type": "colour",
+      "description": "Text on an inverse band. Flips with the theme."
+    },
+    {
+      "name": "--color-link",
+      "type": "colour",
+      "description": "Links. Points at `--color-accent` by default."
+    }
   ]}
 />
 
@@ -39,12 +63,36 @@ two levels can't disagree — and moving the file is the only thing that changes
 
 <ParamList
   params={[
-    { name: "--color-bg", type: "colour", description: "The page." },
-    { name: "--color-bg-surface", type: "colour", description: "One step off the page: panels, table headers, the tab strip." },
-    { name: "--color-bg-muted", type: "colour", description: "Two steps off: the active sidebar item, inline code." },
-    { name: "--color-bg-inverse", type: "colour", description: "The opposite end of the ramp. Dark on a light page, light on a dark one." },
-    { name: "--color-border", type: "colour", description: "Hairlines and panel edges." },
-    { name: "--color-border-strong", type: "colour", description: "A border that has to be noticed — a hovered card, a focused field." },
+    {
+      "name": "--color-bg",
+      "type": "colour",
+      "description": "The page."
+    },
+    {
+      "name": "--color-bg-surface",
+      "type": "colour",
+      "description": "One step off the page: panels, table headers, the tab strip."
+    },
+    {
+      "name": "--color-bg-muted",
+      "type": "colour",
+      "description": "Two steps off: the active sidebar item, inline code."
+    },
+    {
+      "name": "--color-bg-inverse",
+      "type": "colour",
+      "description": "The opposite end of the ramp. Dark on a light page, light on a dark one."
+    },
+    {
+      "name": "--color-border",
+      "type": "colour",
+      "description": "Hairlines and panel edges."
+    },
+    {
+      "name": "--color-border-strong",
+      "type": "colour",
+      "description": "A border that has to be noticed — a hovered card, a focused field."
+    }
   ]}
 />
 
@@ -52,11 +100,31 @@ two levels can't disagree — and moving the file is the only thing that changes
 
 <ParamList
   params={[
-    { name: "--color-accent", type: "colour", description: "The interactive colour: links, active nav, focus rings, annotation markers." },
-    { name: "--color-accent-hover", type: "colour", description: "Its hover state." },
-    { name: "--color-accent-on", type: "colour", description: "Text sitting **on** the accent. Check the contrast if you change either." },
-    { name: "--color-accent-surface", type: "colour", description: "A tint of the accent: note callouts, the announcement bar, a soft band." },
-    { name: "--color-accent-border", type: "colour", description: "A border on that tint." },
+    {
+      "name": "--color-accent",
+      "type": "colour",
+      "description": "The interactive colour: links, active nav, focus rings, annotation markers."
+    },
+    {
+      "name": "--color-accent-hover",
+      "type": "colour",
+      "description": "Its hover state."
+    },
+    {
+      "name": "--color-accent-on",
+      "type": "colour",
+      "description": "Text sitting **on** the accent. Check the contrast if you change either."
+    },
+    {
+      "name": "--color-accent-surface",
+      "type": "colour",
+      "description": "A tint of the accent: note callouts, the announcement bar, a soft band."
+    },
+    {
+      "name": "--color-accent-border",
+      "type": "colour",
+      "description": "A border on that tint."
+    }
   ]}
 />
 
@@ -66,11 +134,31 @@ Code blocks stay dark in both themes, so these four don't flip.
 
 <ParamList
   params={[
-    { name: "--color-code-bg", type: "colour", description: "The code panel." },
-    { name: "--color-code-text", type: "colour", description: "Code that carries no syntax colour of its own." },
-    { name: "--color-code-muted", type: "colour", description: "Comments, and the prompt in a command line." },
-    { name: "--color-code-border", type: "colour", description: "The panel's edge, and the rule above a block's notes." },
-    { name: "--color-code-highlight", type: "colour", description: "A highlighted line's background. The accent draws its left bar." },
+    {
+      "name": "--color-code-bg",
+      "type": "colour",
+      "description": "The code panel."
+    },
+    {
+      "name": "--color-code-text",
+      "type": "colour",
+      "description": "Code that carries no syntax colour of its own."
+    },
+    {
+      "name": "--color-code-muted",
+      "type": "colour",
+      "description": "Comments, and the prompt in a command line."
+    },
+    {
+      "name": "--color-code-border",
+      "type": "colour",
+      "description": "The panel's edge, and the rule above a block's notes."
+    },
+    {
+      "name": "--color-code-highlight",
+      "type": "colour",
+      "description": "A highlighted line's background. The accent draws its left bar."
+    }
   ]}
 />
 

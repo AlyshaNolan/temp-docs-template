@@ -36,6 +36,9 @@ collections_config:
       title:
         type: text
         comment: Controls the metadata title for the page.
+      description:
+        type: textarea
+        comment: The page's meta description.
       keywords:
         type: array
         comment: Optional meta keywords for this page.
@@ -82,6 +85,49 @@ collections_config:
         removeformat: true
         resize_style: contain
         snippet: true
+        # Same vocabulary as the `code-block` component's `language` input. A
+        # fence language outside this list renders as plain text rather than
+        # failing the build, so drift here is silent.
+        code_block_options:
+          language:
+            type: select
+            comment: Language for syntax highlighting.
+            options:
+              values:
+                - id: astro
+                  name: astro
+                - id: bash
+                  name: bash
+                - id: css
+                  name: css
+                - id: diff
+                  name: diff
+                - id: html
+                  name: html
+                - id: js
+                  name: js
+                - id: json
+                  name: json
+                - id: jsx
+                  name: jsx
+                - id: markdown
+                  name: markdown
+                - id: mdx
+                  name: mdx
+                - id: python
+                  name: python
+                - id: ruby
+                  name: ruby
+                - id: sh
+                  name: sh
+                - id: ts
+                  name: ts
+                - id: tsx
+                  name: tsx
+                - id: yaml
+                  name: yaml
+                - id: text
+                  name: text
         strike: false
         subscript: false
         superscript: false
@@ -97,7 +143,7 @@ collections_config:
         comment: Page heading, browser title, and the label in the sidebar.
         cascade: true
       description:
-        type: text
+        type: textarea
         comment: The lede under the title, and the page's meta description.
         cascade: true
       group:
@@ -509,6 +555,7 @@ collections_config:
             comment: Production site URL used for canonical links and structured data.
             cascade: true
           description:
+            type: textarea
             comment: Default meta description used when a page does not provide its own.
             cascade: true
           logoSource:

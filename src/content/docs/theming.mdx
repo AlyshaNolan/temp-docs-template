@@ -63,9 +63,22 @@ Three things decide it, in order:
 
 <ParamList
   params={[
-    { name: "The reader's choice", type: "localStorage", description: "Always wins, and persists across pages and reloads." },
-    { name: "defaultTheme", type: '"dark" | "light" | "system"', defaultValue: '"dark"', description: "The site's own default, set in `src/data/docsSite.json`. This template ships dark." },
-    { name: "The operating system", type: "prefers-color-scheme", description: "Consulted only when `defaultTheme` is `system`." },
+    {
+      "name": "The reader's choice",
+      "type": "localStorage",
+      "description": "Always wins, and persists across pages and reloads."
+    },
+    {
+      "name": "defaultTheme",
+      "type": "\"dark\" | \"light\" | \"system\"",
+      "defaultValue": "\"dark\"",
+      "description": "The site's own default, set in `src/data/docsSite.json`. This template ships dark."
+    },
+    {
+      "name": "The operating system",
+      "type": "prefers-color-scheme",
+      "description": "Consulted only when `defaultTheme` is `system`."
+    }
   ]}
 />
 

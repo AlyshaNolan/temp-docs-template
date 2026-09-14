@@ -232,6 +232,30 @@
       margin-block: var(--spacing-lg);
     }
 
+    /* CloudCannon's inline editor re-renders this region with its own Markdown
+       pass, so in the Visual Editor a fence is a bare <pre> with none of
+       Shiki's classes or token colours. Without this it draws no panel and the
+       text falls back to `--color-text`. */
+    pre:not(.astro-code, .code-pre) {
+      background-color: var(--color-code-bg);
+      border: var(--border-width-sm) solid var(--color-code-border);
+      border-radius: var(--radius-md);
+      color: var(--color-code-text);
+      font-size: var(--font-size-sm);
+      line-height: var(--line-height-normal);
+      overflow-x: auto;
+      padding: var(--spacing-md);
+
+      & code {
+        background: none;
+        border: 0;
+        color: inherit;
+        font-family: var(--font-mono);
+        font-size: inherit;
+        padding: 0;
+      }
+    }
+
     /* A Markdown fence is a bare <pre>, not the `CodeBlockSurface` markup, so
        it grows its own panel and filename bar here. The copy button is added by
        script (`code-block/setup.ts`) because copying needs JS anyway — with it

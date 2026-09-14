@@ -9,11 +9,32 @@ order: 1
 
 <ParamList
   params={[
-    { name: "wordmark", type: "string", required: true, description: "Shown in the header, page titles and OG metadata." },
-    { name: "markLetter", type: "string", description: "One character rendered in an accent tile beside the wordmark. Ignored when `logoSource` is set." },
-    { name: "logoSource", type: "string", description: "Path to an SVG or PNG, replacing the mark and wordmark. Pair with `logoAlternateSource` to swap per colour mode." },
-    { name: "version", type: "string", description: "Badge beside the brand. Empty hides it." },
-    { name: "repositoryUrl", type: "string", description: "The site's source repository. `src/utils/repository.ts` derives the per-page \"Edit this page\" link from it; a `/tree/<branch>` suffix names the branch edit links target, defaulting to `main`. Empty hides the link." },
+    {
+      "name": "wordmark",
+      "type": "string",
+      "required": true,
+      "description": "Shown in the header, page titles and OG metadata."
+    },
+    {
+      "name": "markLetter",
+      "type": "string",
+      "description": "One character rendered in an accent tile beside the wordmark. Ignored when `logoSource` is set."
+    },
+    {
+      "name": "logoSource",
+      "type": "string",
+      "description": "Path to an SVG or PNG, replacing the mark and wordmark. Pair with `logoAlternateSource` to swap per colour mode."
+    },
+    {
+      "name": "version",
+      "type": "string",
+      "description": "Badge beside the brand. Empty hides it."
+    },
+    {
+      "name": "repositoryUrl",
+      "type": "string",
+      "description": "The site's source repository. `src/utils/repository.ts` derives the per-page \"Edit this page\" link from it; a `/tree/<branch>` suffix names the branch edit links target, defaulting to `main`. Empty hides the link."
+    }
   ]}
 />
 
@@ -21,9 +42,22 @@ order: 1
 
 <ParamList
   params={[
-    { name: "homeLabel", type: "string", defaultValue: '"Overview"', description: "Label for the standalone link above the first sidebar group." },
-    { name: "navGroups", type: "{ name, collapsed }[]", description: "Sidebar group order. A group used in frontmatter but absent here is appended alphabetically." },
-    { name: "topbarLinks", type: "{ name, path }[]", description: "Links in the header, to the right of the brand. Hidden below 640px." },
+    {
+      "name": "homeLabel",
+      "type": "string",
+      "defaultValue": "\"Overview\"",
+      "description": "Label for the standalone link above the first sidebar group."
+    },
+    {
+      "name": "navGroups",
+      "type": "{ name, collapsed }[]",
+      "description": "Sidebar group order. A group used in frontmatter but absent here is appended alphabetically."
+    },
+    {
+      "name": "topbarLinks",
+      "type": "{ name, path }[]",
+      "description": "Links in the header, to the right of the brand. Hidden below 640px."
+    }
   ]}
 />
 
@@ -31,8 +65,18 @@ order: 1
 
 <ParamList
   params={[
-    { name: "defaultTheme", type: '"dark" | "light" | "system"', defaultValue: '"dark"', description: "The colour scheme before a reader chooses one. `system` follows their operating system; the other two don't. See [Theming](/theming/#dark-mode)." },
-    { name: "themeToggle", type: "boolean", defaultValue: "true", description: "Shows the light/dark control in the header. The scheme is still resolved without it." },
+    {
+      "name": "defaultTheme",
+      "type": "\"dark\" | \"light\" | \"system\"",
+      "defaultValue": "\"dark\"",
+      "description": "The colour scheme before a reader chooses one. `system` follows their operating system; the other two don't. See [Theming](/theming/#dark-mode)."
+    },
+    {
+      "name": "themeToggle",
+      "type": "boolean",
+      "defaultValue": "true",
+      "description": "Shows the light/dark control in the header. The scheme is still resolved without it."
+    }
   ]}
 />
 
@@ -40,8 +84,17 @@ order: 1
 
 <ParamList
   params={[
-    { name: "search", type: "boolean", defaultValue: "true", description: "Shows the search control and binds ⌘K." },
-    { name: "searchPlaceholder", type: "string", description: "Placeholder inside the overlay's input." },
+    {
+      "name": "search",
+      "type": "boolean",
+      "defaultValue": "true",
+      "description": "Shows the search control and binds ⌘K."
+    },
+    {
+      "name": "searchPlaceholder",
+      "type": "string",
+      "description": "Placeholder inside the overlay's input."
+    }
   ]}
 />
 
@@ -49,9 +102,23 @@ order: 1
 
 <ParamList
   params={[
-    { name: "feedback.enabled", type: "boolean", defaultValue: "true", description: "Shows the helpful vote at the foot of every documentation page." },
-    { name: "feedback.action", type: "string", defaultValue: '"/"', description: "Where the vote is posted. The default posts to the site itself, which CloudCannon Forms captures with no extra setup." },
-    { name: "feedback.successMessage", type: "string", description: "Shown once a reader has voted." },
+    {
+      "name": "feedback.enabled",
+      "type": "boolean",
+      "defaultValue": "true",
+      "description": "Shows the helpful vote at the foot of every documentation page."
+    },
+    {
+      "name": "feedback.action",
+      "type": "string",
+      "defaultValue": "\"/\"",
+      "description": "Where the vote is posted. The default posts to the site itself, which CloudCannon Forms captures with no extra setup."
+    },
+    {
+      "name": "feedback.successMessage",
+      "type": "string",
+      "description": "Shown once a reader has voted."
+    }
   ]}
 />
 
@@ -59,8 +126,18 @@ order: 1
 
 <ParamList
   params={[
-    { name: "copyPage.enabled", type: "boolean", defaultValue: "true", description: "Shows the [Copy page](/copy-page/) menu beside each documentation page's title. A page can opt out with `showCopyPage: false` in its frontmatter." },
-    { name: "copyPage.label", type: "string", defaultValue: '"Copy page"', description: "Text on the menu's trigger." },
+    {
+      "name": "copyPage.enabled",
+      "type": "boolean",
+      "defaultValue": "true",
+      "description": "Shows the [Copy page](/copy-page/) menu beside each documentation page's title. A page can opt out with `showCopyPage: false` in its frontmatter."
+    },
+    {
+      "name": "copyPage.label",
+      "type": "string",
+      "defaultValue": "\"Copy page\"",
+      "description": "Text on the menu's trigger."
+    }
   ]}
 />
 
@@ -71,8 +148,16 @@ config loader to learn.
 
 <CodeTabs
   tabs={[
-    { label: "Astro", language: "astro", code: "---\nimport docsSite from \"@data/docsSite.json\";\n---\n\n<p>{docsSite.wordmark} {docsSite.version}</p>" },
-    { label: "Node", language: "js", code: "import docsSite from \"./src/data/docsSite.json\" with { type: \"json\" };\n\nconsole.log(docsSite.navGroups.map((group) => group.name));" },
+    {
+      "label": "Astro",
+      "language": "astro",
+      "code": "---\nimport docsSite from \"@data/docsSite.json\";\n---\n\n<p>{docsSite.wordmark} {docsSite.version}</p>"
+    },
+    {
+      "label": "Node",
+      "language": "js",
+      "code": "import docsSite from \"./src/data/docsSite.json\" with { type: \"json\" };\n\nconsole.log(docsSite.navGroups.map((group) => group.name));"
+    }
   ]}
 />
 

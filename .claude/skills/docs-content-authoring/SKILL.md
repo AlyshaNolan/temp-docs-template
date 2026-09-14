@@ -118,19 +118,17 @@ Every building block in the library can be used the same way — the table lists
 />
 ```
 
-**MDX quoting bites here.** A prop value in double quotes cannot contain a double quote — the parser reads it as the end of the attribute and then fails on the next character. Use a template literal for multi-line code (``code={`…`}``) and avoid quoted words inside prop text.
+**MDX quoting bites here.** A prop value in double quotes cannot contain a double quote — the parser reads it as the end of the attribute and then fails on the next character. Avoid quoted words inside prop text.
 
-**Multi-line code goes in an `export const`, not inline.** MDX strips up to two leading spaces from every continuation line of a JSX attribute, so a template literal written inline silently loses one indent level — the page builds and the sample just renders wrong. An ESM block above the prose is not touched:
+**Multi-line code is one line, with `\n` escapes.** Only a braces-wrapped JS string keeps the indentation: MDX strips two leading spaces from every continuation line of a template literal, and _all_ leading whitespace from a quoted attribute that spans lines. Both build fine and render the sample wrong.
 
 ```mdx
-export const sample = `export default {
-  search: { provider: 'local' },
-}`;
-
-<CodeBlock language="js" code={sample} />
+<CodeBlock language="js" code={"export default {\n  search: { provider: 'local' },\n}"} />
 ```
 
-This bites hardest on `FileTree` and `CodeDiff`, where the indentation _is_ the content: two lost spaces re-parent a whole subtree.
+Reach for `{'…'}` when the sample contains double quotes, so the JSON inside stays unescaped. This bites hardest on `FileTree` and `CodeDiff`, where the indentation _is_ the content: two lost spaces re-parent a whole subtree.
+
+**Never an `export const`, and never a bare `{identifier}`.** CloudCannon has no expression to evaluate: the export renders as plain text in the Content Editor, and the component whose prop reads it fails to parse as a snippet, so it renders as plain text too. The value has to sit in the attribute.
 
 ## Changelog releases
 

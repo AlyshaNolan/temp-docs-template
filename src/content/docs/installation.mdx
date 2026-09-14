@@ -89,45 +89,45 @@ the settings a deploy usually needs.
   heading=""
   items={[
     {
-      title: "My new page isn't in the sidebar. Is it broken?",
-      contentSections: [
+      "title": "My new page isn't in the sidebar. Is it broken?",
+      "contentSections": [
         {
-          _component: "building-blocks/core-elements/text",
-          text: "No — the sidebar is derived, not configured. A page appears in it once its frontmatter has a `group`; without one the page still builds, still has a URL and is still searchable, it just has no sidebar entry. `order` places it within the group, and the groups themselves are ordered by `navGroups` in `src/data/docsSite.json`.",
-          size: "md",
-        },
-      ],
+          "_component": "building-blocks/core-elements/text",
+          "text": "No — the sidebar is derived, not configured. A page appears in it once its frontmatter has a `group`; without one the page still builds, still has a URL and is still searchable, it just has no sidebar entry. `order` places it within the group, and the groups themselves are ordered by `navGroups` in `src/data/docsSite.json`.",
+          "size": "md"
+        }
+      ]
     },
     {
-      title: "Do I have to use CloudCannon?",
-      contentSections: [
+      "title": "Do I have to use CloudCannon?",
+      "contentSections": [
         {
-          _component: "building-blocks/core-elements/text",
-          text: "No. This is a plain Astro site — `npm run build` emits a static `dist/` whatever you edit it with. The template was built for CloudCannon, and the YAML beside each component is what makes the site editable on the page for non-technical teammates; ignore it and nothing breaks. Using CloudCannon does require a paid plan.",
-          size: "md",
-        },
-      ],
+          "_component": "building-blocks/core-elements/text",
+          "text": "No. This is a plain Astro site — `npm run build` emits a static `dist/` whatever you edit it with. The template was built for CloudCannon, and the YAML beside each component is what makes the site editable on the page for non-technical teammates; ignore it and nothing breaks. Using CloudCannon does require a paid plan.",
+          "size": "md"
+        }
+      ]
     },
     {
-      title: "Where do the colours and fonts live?",
-      contentSections: [
+      "title": "Where do the colours and fonts live?",
+      "contentSections": [
         {
-          _component: "building-blocks/core-elements/text",
-          text: "Colours, spacing, radius and shadows are design tokens under `src/styles/` — see [Theming](/theming/) and the [token reference](/theming/token-reference/). Fonts are the one exception: they change in `site-fonts.mjs` only, so the preload tags and the CSS can't disagree.",
-          size: "md",
-        },
-      ],
+          "_component": "building-blocks/core-elements/text",
+          "text": "Colours, spacing, radius and shadows are design tokens under `src/styles/` — see [Theming](/theming/) and the [token reference](/theming/token-reference/). Fonts are the one exception: they change in `site-fonts.mjs` only, so the preload tags and the CSS can't disagree.",
+          "size": "md"
+        }
+      ]
     },
     {
-      title: "How do I get rid of the Docsmith branding?",
-      contentSections: [
+      "title": "How do I get rid of the Docsmith branding?",
+      "contentSections": [
         {
-          _component: "building-blocks/core-elements/text",
-          text: "Run `npm run reset:starter`. It clears the wordmark, the SEO name and title format, the example domain, the repository URL and the template's own edit-page URL — the placeholders `npm run check` warns about until you do.",
-          size: "md",
-        },
-      ],
-    },
+          "_component": "building-blocks/core-elements/text",
+          "text": "Run `npm run reset:starter`. It clears the wordmark, the SEO name and title format, the example domain, the repository URL and the template's own edit-page URL — the placeholders `npm run check` warns about until you do.",
+          "size": "md"
+        }
+      ]
+    }
   ]}
 />
 

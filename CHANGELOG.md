@@ -58,6 +58,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 
+- The Content Editor's code-block control offers the same language list as the **Code Block** component, so a fence can't be tagged with a language Shiki won't highlight.
+
 - Hero Center's heading is one rich-text field instead of a heading plus a `headingHighlight` substring. Accent words are marked up in place (`<span class="highlight">…</span>`), which is what CloudCannon's Highlight style inserts — so the heading is inline-editable again. It was not editable at all whenever the highlight matched, because the region that owned the heading had to be dropped to stop it flattening the accent span.
 - The `spaceBefore` select, and page sections' background-fade select, are declared in each component's own `inputs.yml` rather than pulled from a shared file in `.cloudcannon/inputs/`. Only the first `_inputs_from_glob` entry of a structure value reached the editor, so both fields rendered as free text. `.cloudcannon/inputs/` is gone.
 - Adding an array item in CloudCannon starts from filled-in content — a card with a badge, heading and line of copy; a step with a heading and description; a parameter with a name, type and description — rather than empty strings an editor has to find and replace. Every stackable block also seeds `spaceBefore` so the control is present on a freshly added block.
@@ -134,6 +136,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - The `blog-mdx-content` skill, replaced by `docs-content-authoring`.
 
 ### Fixed
+
+- Multi-line code samples on `/writing-content/` were held in `export const` blocks above the prose. CloudCannon shows a file's ESM as plain text and cannot resolve `code={sample}`, so the export read as stray code to an editor and the Code Diff, File Tree and Annotated Code blocks referencing it failed to parse as snippets — all four rendered as plain text. The samples now sit in the prop itself as `{"…\n…"}`. That form is the only faithful one: MDX drops two leading spaces from every continuation line of a template literal, and _all_ leading whitespace from a quoted attribute spanning lines, so indentation silently changed the sample. The Mermaid diagram on `/media-and-components/` moved off a template literal for the same reason.
+
+- Array props in documentation pages (`params`, `items`, `tabs`, `notes`, `formBlocks`) were written as JavaScript object literals — unquoted keys and trailing commas — which is not JSON, so CloudCannon could not parse the surrounding snippet and the component rendered as plain text in the Content Editor. They are strict JSON now, which is also what CloudCannon writes back, so an editor's save no longer reformats the file.
+
+- Code blocks in CloudCannon's editors took their background from one stylesheet and their text colour from another, leaving light text on the Content Editor's light panel and the editor's dark text on the Visual Editor's dark page. `public/cloudcannon/editor-styles.css` now forces the pair together. The site also styles a bare `<pre>` inside `.prose`, which is what CloudCannon's inline editor renders in the Visual Editor — it has neither Shiki's classes nor its token colours, so without it a fence drew no panel at all.
+
+- A documentation page's `description` is a textarea rather than a single-line text input — it is a full sentence that also becomes the meta description. The page-builder collection had no `description` input declared at all, and the SEO default had no type.
 
 - The editable region on a Tabbed Content tab covered only the tab strip, not the panel below it. Each tab overlays the whole tab grid, and with every track sized to a label that grid stopped at the last tab; a trailing `1fr` track makes it span the section, so the region CloudCannon outlines matches what the tab actually renders.
 

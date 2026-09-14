@@ -5,31 +5,6 @@ group: Authoring
 order: 1
 ---
 
-export const diffSample = `{
-  "wordmark": "Acme",
--  "defaultTheme": "light",
-+  "defaultTheme": "dark",
-  "navGroups": [
-~    { "name": "Guides", "collapsed": false }
-  ]
-}`
-
-export const treeSample = `src/
-  components/
-    Button.astro
-+   Callout.astro
-  styles/
-    base.css
-astro.config.mjs`
-
-export const annotatedSample = `{
-  "search": true,
-  "defaultTheme": "dark",
-  "navGroups": [
-    { "name": "Getting started", "collapsed": false }
-  ]
-}`
-
 ## Frontmatter
 
 Only `title` is required. `group` and `order` place the page in the sidebar; omit `group` and
@@ -95,7 +70,7 @@ hands back the code without them.
 <CodeDiff
   filename="src/data/docsSite.json"
   language="json"
-  code={diffSample}
+  code={'{\n  "wordmark": "Acme",\n-  "defaultTheme": "light",\n+  "defaultTheme": "dark",\n  "navGroups": [\n~    { "name": "Guides", "collapsed": false }\n  ]\n}'}
 />
 
 A line of real code that begins with `+`, `-` or `~` — a YAML list item, say — is
@@ -109,7 +84,7 @@ editable as text. Any consistent indent unit works, and a path can carry the sam
 
 <FileTree
   title="Project structure"
-  paths={treeSample}
+  paths={"src/\n  components/\n    Button.astro\n+   Callout.astro\n  styles/\n    base.css\nastro.config.mjs"}
 />
 
 ## Language tabs
@@ -119,9 +94,21 @@ site-wide, so a Python developer stays in Python across every page.
 
 <CodeTabs
   tabs={[
-    { label: "cURL", language: "bash", code: "curl https://api.acme.com/v1/invoices \\\n  -H \"Authorization: Bearer $ACME_KEY\" \\\n  -d customer=cus_8Kq2 \\\n  -d amount=4900" },
-    { label: "Node", language: "js", code: "import { Acme } from '@acme/sdk'\n\nconst acme = new Acme(process.env.ACME_KEY)\n\nconst invoice = await acme.invoices.create({\n  customer: 'cus_8Kq2',\n  amount: 4900,\n})" },
-    { label: "Python", language: "python", code: "from acme import Acme\n\nacme = Acme(os.environ['ACME_KEY'])\n\ninvoice = acme.invoices.create(\n    customer='cus_8Kq2',\n    amount=4900,\n)" },
+    {
+      "label": "cURL",
+      "language": "bash",
+      "code": "curl https://api.acme.com/v1/invoices \\\n  -H \"Authorization: Bearer $ACME_KEY\" \\\n  -d customer=cus_8Kq2 \\\n  -d amount=4900"
+    },
+    {
+      "label": "Node",
+      "language": "js",
+      "code": "import { Acme } from '@acme/sdk'\n\nconst acme = new Acme(process.env.ACME_KEY)\n\nconst invoice = await acme.invoices.create({\n  customer: 'cus_8Kq2',\n  amount: 4900,\n})"
+    },
+    {
+      "label": "Python",
+      "language": "python",
+      "code": "from acme import Acme\n\nacme = Acme(os.environ['ACME_KEY'])\n\ninvoice = acme.invoices.create(\n    customer='cus_8Kq2',\n    amount=4900,\n)"
+    }
   ]}
 />
 
@@ -134,10 +121,16 @@ Each note names the line it marks.
   filename="src/data/docsSite.json"
   language="json"
   notes={[
-    { line: 2, text: "Builds the search index at compile time and ships it with the site — no search service, no API key." },
-    { line: 4, text: "Orders the sidebar groups. A page joins one by naming it in its own frontmatter." },
+    {
+      "line": 2,
+      "text": "Builds the search index at compile time and ships it with the site — no search service, no API key."
+    },
+    {
+      "line": 4,
+      "text": "Orders the sidebar groups. A page joins one by naming it in its own frontmatter."
+    }
   ]}
-  code={annotatedSample}
+  code={'{\n  "search": true,\n  "defaultTheme": "dark",\n  "navGroups": [\n    { "name": "Getting started", "collapsed": false }\n  ]\n}'}
 />
 
 ## Tables

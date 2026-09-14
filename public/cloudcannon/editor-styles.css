@@ -18,11 +18,21 @@ span.highlight {
 
 /* Editor canvas only, below. */
 
+/* Both editors bring their own code-block colours, and they override whichever
+   half of this pair loses the cascade — leaving light text on the Content
+   Editor's light panel, or the editor's dark text on the Visual Editor's dark
+   page. Forced together so the two can never be split. The values are the
+   site's `--color-code-bg` / `--color-code-text`. */
+pre,
+pre code {
+  background-color: #0c0e12 !important;
+  border: 0;
+  color: #e7eaef !important;
+}
+
 pre {
-  background-color: #0b1220;
-  border: 1px solid #1e293b;
+  border: 1px solid #1d222b;
   border-radius: 8px;
-  color: #e2e8f0;
   font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 0.8125rem;
   line-height: 1.6;
@@ -31,9 +41,6 @@ pre {
 }
 
 pre code {
-  background: none;
-  border: 0;
-  color: inherit;
   font-size: inherit;
   padding: 0;
 }
@@ -42,6 +49,7 @@ code {
   background-color: #f1f5f9;
   border: 1px solid #e2e8f0;
   border-radius: 4px;
+  color: #0f172a;
   font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 0.875em;
   padding: 0.1em 0.3em;
