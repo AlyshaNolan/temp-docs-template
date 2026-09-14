@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- A CloudCannon _Site Dashboard_ readme (`.cloudcannon/README.md`), shown on the Summary tab when someone opens the site in CloudCannon — a tour of the Visual Editor, the documentation collection in the Content Editor, and the data files behind the sidebar, header and footer.
 - MDX snippets for **Accordion**, **Definition List** and **Badge**. All three are used on `/media-and-components/` and all three showed as "unknown snippet" in the Content Editor, because a component only appears there if it has a `*.cloudcannon.snippets.yml`.
 - A Styles menu in CloudCannon's rich-text editors, backed by `public/cloudcannon/editor-styles.css`. It offers one option, **Highlight**, which wraps the selection in `<span class="highlight">` and paints it in the accent colour; the same stylesheet gives the Content Editor code-block, blockquote and table styling, so a Markdown fence stops reading as unstyled text there.
 - Inline editing of a documentation page's **title** and **description** — both are editable regions on the page now, not data-panel-only fields. The breadcrumb trail and the `show*` switches are deliberately left out: the crumbs are derived from the sidebar tree rather than stored on the page, and an editable region can only bind text, an image or an array, never a boolean.
