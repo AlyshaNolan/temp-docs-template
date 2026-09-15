@@ -13,6 +13,10 @@
  * The change handler writes custom properties onto `<html>`. They inherit, so
  * every element — including a section pinning its own `data-theme` — repaints in
  * the same frame, with no re-render and no stylesheet rewriting.
+ *
+ * The `themeSelector` switch is read from that same handle rather than gated at
+ * build time, so unticking it hides the button in the same frame — a build-time
+ * gate would leave no element to hide, and no way back without a rebuild.
  */
 
 import type {
@@ -24,6 +28,7 @@ import { themeCustomProperties } from "@utils/themeTokens.mjs";
 import { onPageLoad } from "@component-utils/onPageLoad";
 
 const THEME_DATASET = "theme";
+const VISIBILITY_KEY = "themeSelector";
 const THEME_FILE = "src/data/theme.json";
 const THEME_SLUG = "theme";
 
@@ -39,6 +44,7 @@ declare const window: CloudCannonEditorWindow;
  * was built, so unsaved edits have to be reapplied over it.
  */
 let applied: Record<string, string> = {};
+let visible = false;
 
 function apply(properties: Record<string, string>) {
   const { style } = document.documentElement;
@@ -52,6 +58,24 @@ function apply(properties: Record<string, string>) {
   }
 
   applied = properties;
+}
+
+/**
+ * Every selector in the document, not the one `wire` was handed: a client-side
+ * navigation swaps in a fresh copy that ships `hidden`.
+ */
+function setVisible(next: boolean) {
+  visible = next;
+
+  document.querySelectorAll<HTMLElement>(".theme-selector").forEach((element) => {
+    element.hidden = !visible;
+  });
+}
+
+function readVisible(data: unknown): boolean {
+  if (!data || typeof data !== "object" || Array.isArray(data)) return true;
+
+  return (data as Record<string, unknown>)[VISIBILITY_KEY] !== false;
 }
 
 function readTheme(data: unknown): Record<string, unknown> {
@@ -102,55 +126,88 @@ async function resolveSource(api: CloudCannonJavaScriptV1API): Promise<Source | 
   return undefined;
 }
 
+interface Live {
+  /** The resolved data handle, for opening the panel. */
+  file: CloudCannonJavaScriptV1APIFile;
+  /** Starts the fallback poll when no change event has proven the subscription. */
+  startPolling: () => void;
+}
+
+/**
+ * One subscription for the document. A client-side navigation re-runs setup
+ * against a fresh element; re-resolving would stack a second set of change
+ * listeners on the same handle, each re-reading on every drag of the picker.
+ */
+let live: Promise<Live | undefined> | undefined;
+
+function connect(api: CloudCannonJavaScriptV1API): Promise<Live | undefined> {
+  live ??= (async () => {
+    const source = await resolveSource(api);
+
+    if (!source) {
+      console.warn(`[theme-selector] ${THEME_FILE} is not editable here.`);
+
+      return undefined;
+    }
+
+    const { file, emitters } = source;
+
+    let queued = false;
+
+    const repaint = () => {
+      if (queued) return;
+      queued = true;
+
+      requestAnimationFrame(async () => {
+        queued = false;
+
+        const data = await file.data.get();
+
+        apply(themeCustomProperties(readTheme(data)));
+        setVisible(readVisible(data));
+      });
+    };
+
+    // A change event proves the subscription reaches this frame, which is what
+    // retires the poll below. Never assume it: this ran for a release subscribed
+    // only to the file handle, where it never arrived.
+    let liveEvents = false;
+    let poll: ReturnType<typeof setInterval> | undefined;
+
+    const stopPolling = () => {
+      clearInterval(poll);
+      poll = undefined;
+    };
+
+    for (const emitter of emitters) {
+      emitter.addEventListener("change", () => {
+        liveEvents = true;
+        stopPolling();
+        repaint();
+      });
+    }
+
+    const startPolling = () => {
+      if (liveEvents || poll) return;
+
+      poll = setInterval(repaint, POLL_INTERVAL);
+      setTimeout(stopPolling, POLL_LIMIT);
+    };
+
+    repaint();
+
+    return { file, startPolling };
+  })();
+
+  return live;
+}
+
 async function wire(element: HTMLElement, api: CloudCannonJavaScriptV1API) {
-  const source = await resolveSource(api);
+  const connection = await connect(api);
 
-  if (!source) {
-    console.warn(`[theme-selector] ${THEME_FILE} is not editable here.`);
+  if (!connection) return;
 
-    return;
-  }
-
-  const { file, emitters } = source;
-
-  let queued = false;
-
-  const repaint = () => {
-    if (queued) return;
-    queued = true;
-
-    requestAnimationFrame(async () => {
-      queued = false;
-      apply(themeCustomProperties(readTheme(await file.data.get())));
-    });
-  };
-
-  // A change event proves the subscription reaches this frame, which is what
-  // retires the poll below. Never assume it: this ran for a release subscribed
-  // only to the file handle, where it never arrived.
-  let liveEvents = false;
-  let poll: ReturnType<typeof setInterval> | undefined;
-
-  const stopPolling = () => {
-    clearInterval(poll);
-    poll = undefined;
-  };
-
-  for (const emitter of emitters) {
-    emitter.addEventListener("change", () => {
-      liveEvents = true;
-      stopPolling();
-      repaint();
-    });
-  }
-
-  const startPolling = () => {
-    if (liveEvents || poll) return;
-
-    poll = setInterval(repaint, POLL_INTERVAL);
-    setTimeout(stopPolling, POLL_LIMIT);
-  };
-
+  const { file, startPolling } = connection;
   const trigger = element.querySelector<HTMLButtonElement>(".theme-selector-trigger");
 
   trigger?.addEventListener("click", (event) => {
@@ -171,15 +228,25 @@ async function wire(element: HTMLElement, api: CloudCannonJavaScriptV1API) {
     startPolling();
   });
 
+  setVisible(visible);
+}
+
+let pageLoadBound = false;
+
+function bindPageLoad() {
+  if (pageLoadBound) return;
+  pageLoadBound = true;
+
   onPageLoad(() => {
     apply(applied);
+    setVisible(visible);
+    setupAllThemeSelectors();
   });
-
-  repaint();
-  element.hidden = false;
 }
 
 export function setupThemeSelector(element: HTMLElement) {
+  bindPageLoad();
+
   if (element.dataset.themeSelectorInitialized !== undefined) return;
   element.dataset.themeSelectorInitialized = "";
 
@@ -194,6 +261,8 @@ export function setupThemeSelector(element: HTMLElement) {
 }
 
 export function setupAllThemeSelectors(root: ParentNode = document) {
+  bindPageLoad();
+
   root
     .querySelectorAll<HTMLElement>(".theme-selector:not([data-theme-selector-initialized])")
     .forEach(setupThemeSelector);

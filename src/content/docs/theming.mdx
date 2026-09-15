@@ -78,7 +78,9 @@ computed-value time and fails silently.
 In the Visual Editor a swatch button sits in the bottom corner of the preview. It opens
 `theme.json` in a data panel, and the page repaints as you drag the colour picker — no save, no
 reload. Set `themeSelector` to `false` to hide the button and edit the colours from the data
-file instead; it never renders for a site visitor either way.
+file instead — the preview drops it the moment you untick the switch, with no save and no
+rebuild, because `setup.ts` reads that key from the same live handle as the colours. It never
+renders for a site visitor either way.
 
 That button is the starter's worked example of the [CloudCannon Visual Editor JavaScript
 API](https://cloudcannon.com/documentation/developer-articles/read-and-write-data-with-the-visual-editor-api/),
