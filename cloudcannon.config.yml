@@ -53,6 +53,10 @@ collections_config:
     disable_url: false
     include_developer_files: false
     preview:
+      text:
+        - key: title
+      subtext:
+        - key: description
       metadata:
         - text:
             - key: group
@@ -195,12 +199,6 @@ collections_config:
         remove_extra_inputs: false
         name: New Documentation Page
         icon: article
-        preview:
-          text:
-            - New Documentation Page
-          subtext:
-            - A prose page. Headings, callouts, code samples.
-          icon: article
       reference:
         path: .cloudcannon/schemas/reference.mdx
         reorder_inputs: true
@@ -209,12 +207,6 @@ collections_config:
         remove_extra_inputs: false
         name: New Reference Page
         icon: list_alt
-        preview:
-          text:
-            - New Reference Page
-          subtext:
-            - Seeded with a parameter list and a worked example.
-          icon: list_alt
   changelog:
     path: src/content/changelog
     glob:
