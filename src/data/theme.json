@@ -1,4 +1,5 @@
 {
+  "themeSelector": true,
   "theme": {
     "accentLight": "#0f766e",
     "accentDark": "#5eead4",

@@ -373,6 +373,12 @@ collections_config:
           a family — hover, surface, border and the legible text colour on top are
           derived from it, so there is one swatch to pick per role.
         cascade: true
+      themeSelector:
+        type: switch
+        comment: Show the swatch button in the bottom corner of the Visual Editor preview.
+          It is editor-only either way — a site visitor never sees it — so turning it off
+          just means the theme is edited from this file instead.
+        cascade: true
       accentLight:
         type: color
         options:

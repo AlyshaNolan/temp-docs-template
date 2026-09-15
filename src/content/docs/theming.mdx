@@ -45,7 +45,7 @@ properties on `<html>`, and the theme files read those as optional overrides.
 <CodeBlock
   language="json"
   filename="src/data/theme.json"
-  code={'{\n  "theme": {\n    "accentLight": "#0f766e",\n    "accentDark": "#5eead4",\n    "brandLight": "#08090b",\n    "brandDark": "#ffffff"\n  }\n}'}
+  code={'{\n  "themeSelector": true,\n  "theme": {\n    "accentLight": "#0f766e",\n    "accentDark": "#5eead4",\n    "brandLight": "#08090b",\n    "brandDark": "#ffffff"\n  }\n}'}
 />
 
 Each colour is one swatch, not a set. `src/utils/themeTokens.mjs` derives the rest of the
@@ -77,7 +77,8 @@ computed-value time and fails silently.
 
 In the Visual Editor a swatch button sits in the bottom corner of the preview. It opens
 `theme.json` in a data panel, and the page repaints as you drag the colour picker — no save, no
-reload.
+reload. Set `themeSelector` to `false` to hide the button and edit the colours from the data
+file instead; it never renders for a site visitor either way.
 
 That button is the starter's worked example of the [CloudCannon Visual Editor JavaScript
 API](https://cloudcannon.com/documentation/developer-articles/read-and-write-data-with-the-visual-editor-api/),

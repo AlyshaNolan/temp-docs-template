@@ -117,6 +117,6 @@ const themeStyle = themeStyleAttribute(themeData.theme);
     <div transition:animate={fade({ duration: "0.2s" })}>
       <slot />
     </div>
-    <ThemeSelector />
+    {themeData.themeSelector !== false && <ThemeSelector />}
   </body>
 </html>
