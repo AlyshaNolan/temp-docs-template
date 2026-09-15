@@ -363,6 +363,61 @@ collections_config:
           prevent_resize_existing_files: false
           required: false
         cascade: true
+      theme:
+        type: object
+        options:
+          preview:
+            text: Theme
+            icon: palette
+        comment: Accent, brand and corner radius for the whole site. Each colour seeds
+          a family — hover, surface, border and the legible text colour on top are
+          derived from it, so there is one swatch to pick per role.
+        cascade: true
+      accentLight:
+        type: color
+        options:
+          format: hex
+          alpha: false
+          required: false
+        comment: The interactive colour in light mode — links, the active sidebar item,
+          focus rings, the brand tile. Pick something that carries white text.
+        cascade: true
+      accentDark:
+        type: color
+        options:
+          format: hex
+          alpha: false
+          required: false
+        comment: The same role in dark mode. Use a paler step than the light one — a
+          fully saturated accent vibrates against near-black.
+        cascade: true
+      brandLight:
+        type: color
+        options:
+          format: hex
+          alpha: false
+          required: false
+        comment: Primary button and brand fill in light mode. The starter ships near-black
+          so an accent change never floods the page with one hue.
+        cascade: true
+      brandDark:
+        type: color
+        options:
+          format: hex
+          alpha: false
+          required: false
+        comment: Primary button and brand fill in dark mode.
+        cascade: true
+      radius:
+        type: range
+        options:
+          min: 0
+          max: 24
+          step: 1
+          required: false
+        comment: Corner rounding in pixels, driving the whole radius scale. 0 is square,
+          10 is the shipped look. Pills and avatars stay round at every setting.
+        cascade: true
     disable_add: false
     disable_add_folder: false
     disable_file_actions: false

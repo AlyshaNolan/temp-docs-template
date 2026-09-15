@@ -49,6 +49,7 @@ import {
   setupAllMasonry,
   setupMasonry,
 } from "./src/components/building-blocks/wrappers/masonry/setup";
+import { setupAllThemeSelectors } from "./src/components/navigation/theme-selector/setup";
 
 const DEBUG = import.meta.env.DEV;
 
@@ -202,5 +203,6 @@ setupAllPageFeedback();
 setupAllPrintButtons();
 setupAllCopyPage();
 setupHeadingLinks();
+setupAllThemeSelectors();
 
 log("observer active");

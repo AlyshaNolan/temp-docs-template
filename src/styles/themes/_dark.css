@@ -1,22 +1,22 @@
 [data-theme="dark"] {
   color-scheme: dark;
 
-  --color-brand: var(--white);
-  --color-brand-muted: var(--gray-200);
-  --color-brand-subtle: var(--gray-400);
-  --color-brand-on: var(--black);
+  --color-brand: var(--brand-dark, var(--white));
+  --color-brand-muted: var(--brand-dark-muted, var(--gray-200));
+  --color-brand-subtle: var(--brand-dark-subtle, var(--gray-400));
+  --color-brand-on: var(--brand-dark-on, var(--black));
 
-  --color-accent: var(--teal-300);
-  --color-accent-hover: var(--teal-200);
-  --color-accent-on: var(--black);
-  --color-accent-surface: #102422;
-  --color-accent-border: #1e4740;
+  --color-accent: var(--accent-dark, var(--teal-300));
+  --color-accent-hover: var(--accent-dark-hover, var(--teal-200));
+  --color-accent-on: var(--accent-dark-on, var(--black));
+  --color-accent-surface: var(--accent-dark-surface, #102422);
+  --color-accent-border: var(--accent-dark-border, #1e4740);
 
   --color-text: #f3f5f8;
   --color-text-strong: var(--white);
   --color-text-muted: #9aa1ac;
   --color-text-on-muted: var(--white);
-  --color-text-on-brand: var(--black);
+  --color-text-on-brand: var(--color-brand-on);
   --color-text-inverse: var(--black);
   --color-text-faint: var(--gray-600);
   --color-link: var(--color-accent);
@@ -58,7 +58,7 @@
   --color-state-active: rgba(255, 255, 255, 0.09);
   --color-overlay: rgba(8, 9, 11, 0.72);
 
-  --color-focus-ring: rgba(94, 234, 212, 0.5);
+  --color-focus-ring: color-mix(in srgb, var(--color-accent) 50%, transparent);
 
   --color-danger: var(--red-400);
   --color-danger-hover: var(--red-300);

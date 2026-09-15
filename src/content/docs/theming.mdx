@@ -36,6 +36,77 @@ is the calmer step for a dark page — a fully saturated accent vibrates against
 Swap both, and `--color-accent-surface` / `--color-accent-border` with them, and every accent
 on the site follows.
 
+## The theme file
+
+`src/data/theme.json` holds the decisions an editor is allowed to make without touching CSS:
+two accent colours, two brand colours and a corner radius. `BaseLayout` turns them into custom
+properties on `<html>`, and the theme files read those as optional overrides.
+
+<CodeBlock
+  language="json"
+  filename="src/data/theme.json"
+  code={'{\n  "theme": {\n    "accentLight": "#0f766e",\n    "accentDark": "#5eead4",\n    "brandLight": "#08090b",\n    "brandDark": "#ffffff",\n    "radius": 10\n  }\n}'}
+/>
+
+Each colour is one swatch, not a set. `src/utils/themeTokens.mjs` derives the rest of the
+family from it — the hover state, the tinted surface, the border, and the legible text colour
+to sit on top, chosen by relative luminance so a pale accent gets ink and a deep one gets
+paper. `radius` drives the whole `--radius-*` scale from a single base; `--radius-full` stays
+out of it, so pills and avatars are round at every setting.
+
+<ParamList
+  params={[
+    {
+      "name": "accentLight / accentDark",
+      "type": "hex colour",
+      "description": "The interactive colour — links, active sidebar item, focus rings, the brand tile. Use a paler step for dark: a fully saturated accent vibrates against near-black."
+    },
+    {
+      "name": "brandLight / brandDark",
+      "type": "hex colour",
+      "description": "Primary button and brand fill. Shipped near-black on light and white on dark, so an accent change never floods the page with one hue."
+    },
+    {
+      "name": "radius",
+      "type": "0–24",
+      "defaultValue": "10",
+      "description": "Corner rounding in pixels, driving the whole scale. 0 is square."
+    }
+  ]}
+/>
+
+Nothing is required. The theme files read every one as `var(--accent-light, var(--teal-700))`,
+so a missing or malformed value leaves the shipped design standing rather than blanking a
+token — which matters, because an unresolved `var()` with no fallback is invalid at
+computed-value time and fails silently.
+
+### Editing it in CloudCannon
+
+In the Visual Editor a swatch button sits in the bottom corner of the preview. It opens
+`theme.json` in a data panel, and the page repaints as you drag the colour picker — no save, no
+reload.
+
+That button is the starter's worked example of the [CloudCannon Visual Editor JavaScript
+API](https://cloudcannon.com/documentation/developer-articles/read-and-write-data-with-the-visual-editor-api/).
+The whole feature is four calls, in `src/components/navigation/theme-selector/setup.ts`:
+
+<CodeBlock
+  language="js"
+  filename="src/components/navigation/theme-selector/setup.ts"
+  code={'const api = window.CloudCannonAPI.useVersion("v1", true);\nconst file = api.file("src/data/theme.json");\n\n// Open CloudCannon\'s own inputs panel, anchored to the button.\nfile.data.edit({ slug: "theme", position });\n\n// Fires on every keystroke and every drag of the picker.\nfile.data.addEventListener("change", async () => {\n  apply(themeCustomProperties(await file.data.get()));\n});'}
+/>
+
+`apply` only calls `style.setProperty()` on `<html>`. Custom properties inherit, so a section
+pinning its own `data-theme` repaints in the same frame as the rest of the page — no
+re-render, no stylesheet rewriting, and no state to keep in sync between the editor and the
+preview.
+
+<Alert
+  variant="note"
+  title="The button never reaches your readers"
+  text="`ThemeSelector.astro` ships `hidden`, and only `editor-live-sync.js` — which loads solely inside CloudCannon — reveals it. On the live site it is inert markup."
+/>
+
 ## Typography
 
 One sans for interface and prose, one mono for code and labels, both registered in

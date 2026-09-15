@@ -1,0 +1,9 @@
+{
+  "theme": {
+    "accentLight": "#0f766e",
+    "accentDark": "#6139b5",
+    "brandLight": "#4765a2",
+    "brandDark": "#dd6767",
+    "radius": 10
+  }
+}

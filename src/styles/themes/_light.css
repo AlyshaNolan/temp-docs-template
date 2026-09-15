@@ -1,25 +1,25 @@
 [data-theme="light"] {
   color-scheme: light;
 
-  --color-brand: var(--black);
-  --color-brand-muted: var(--gray-800);
-  --color-brand-subtle: var(--gray-600);
-  --color-brand-on: var(--white);
+  --color-brand: var(--brand-light, var(--black));
+  --color-brand-muted: var(--brand-light-muted, var(--gray-800));
+  --color-brand-subtle: var(--brand-light-subtle, var(--gray-600));
+  --color-brand-on: var(--brand-light-on, var(--white));
 
   /* The accent is the interactive colour — links, active nav, focus, selection.
      It is deliberately not `--color-brand`: primary buttons stay ink-on-paper,
      so an accent change never turns the page into a wall of one hue. */
-  --color-accent: var(--teal-700);
-  --color-accent-hover: var(--teal-800);
-  --color-accent-on: var(--white);
-  --color-accent-surface: var(--teal-50);
-  --color-accent-border: var(--teal-200);
+  --color-accent: var(--accent-light, var(--teal-700));
+  --color-accent-hover: var(--accent-light-hover, var(--teal-800));
+  --color-accent-on: var(--accent-light-on, var(--white));
+  --color-accent-surface: var(--accent-light-surface, var(--teal-50));
+  --color-accent-border: var(--accent-light-border, var(--teal-200));
 
   --color-text: var(--black);
   --color-text-strong: var(--black);
   --color-text-muted: var(--gray-700);
   --color-text-on-muted: var(--black);
-  --color-text-on-brand: var(--white);
+  --color-text-on-brand: var(--color-brand-on);
   --color-text-inverse: var(--white);
   --color-text-faint: var(--gray-500);
   --color-link: var(--color-accent);
@@ -28,7 +28,7 @@
   --color-bg: var(--white);
   --color-bg-surface: var(--gray-50);
   --color-bg-muted: var(--gray-100);
-  --color-bg-accent: var(--teal-50);
+  --color-bg-accent: var(--color-accent-surface);
   --color-bg-highlight: #fff9d6;
   --color-bg-brand: var(--color-brand);
   --color-bg-brand-muted: var(--color-brand-muted);
@@ -63,15 +63,15 @@
   --color-state-active: rgba(0, 0, 0, 0.08);
   --color-overlay: rgba(8, 9, 11, 0.42);
 
-  --color-focus-ring: rgba(15, 118, 110, 0.45);
+  --color-focus-ring: color-mix(in srgb, var(--color-accent) 45%, transparent);
 
   --color-danger: var(--red-600);
   --color-danger-hover: var(--red-700);
   --color-danger-bg-subtle: var(--red-50);
   --color-danger-border-subtle: var(--red-300);
   --color-info: var(--color-accent);
-  --color-info-bg-subtle: var(--teal-50);
-  --color-info-border-subtle: var(--teal-200);
+  --color-info-bg-subtle: var(--color-accent-surface);
+  --color-info-border-subtle: var(--color-accent-border);
   --color-success: var(--green-700);
   --color-success-bg-subtle: var(--green-50);
   --color-success-border-subtle: var(--green-300);
