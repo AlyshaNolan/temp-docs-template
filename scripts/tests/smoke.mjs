@@ -339,25 +339,29 @@ const tests = [
     },
   },
   {
-    name: "code fence gets a copy button that reports success",
+    name: "code sample gets a copy button that reports success",
     path: "/writing-content/",
     viewport: DESKTOP,
     async run(page, context) {
       await context.grantPermissions(["clipboard-read", "clipboard-write"]);
 
-      // A Markdown fence gets its copy button injected; the component renders
-      // one. Both must work, so this drives the fence — the harder path.
-      const fence = page.locator(".prose > pre.astro-code").first();
+      // Content carries no Markdown fences by convention, so the fence branch
+      // of `setupCodeFence` has nothing to drive here — this is the surface.
+      const surface = page.locator(".prose .code-surface").first();
 
-      await fence.waitFor();
+      await surface.waitFor();
+
+      // The button ships in the markup; only the click handler waits on JS.
       await page.waitForFunction(
-        () => document.querySelector(".prose > pre.astro-code .code-surface-copy") !== null
+        () =>
+          document.querySelector(".prose .code-surface")?.hasAttribute("data-code-initialized") ??
+          false
       );
-      await fence.locator(".code-surface-copy").click();
+      await surface.locator(".code-surface-copy").first().click();
 
       await page.waitForFunction(
         () =>
-          document.querySelector(".prose > pre.astro-code .code-surface-copy")?.dataset.state ===
+          document.querySelector(".prose .code-surface .code-surface-copy")?.dataset.state ===
           "copied"
       );
 
