@@ -690,13 +690,6 @@ collections_config:
             comment: Optional X (Twitter) handle for the site, including the @, used in
               social share cards.
             cascade: true
-# Commit and Pull Request templates offered when an editor saves. `[changes]`,
-# `[author]` and `[default_commit_message]` are CloudCannon's own placeholders;
-# `{summary}` is the input declared beneath each template.
-#
-# The Pull Request body is read from `.github/PULL_REQUEST_TEMPLATE.md` rather
-# than inlined here, so GitHub and CloudCannon show the same checklist and it
-# can only drift in one place.
 commit_templates:
   - label: Describe the change
     template_string: |-
@@ -706,7 +699,7 @@ commit_templates:
     _inputs:
       summary:
         type: text
-        comment: One line in the imperative, e.g. "Rewrite the installation intro".
+        comment: A brief summary of your changes, e.g. "Rewrite the installation intro".
         options:
           required: true
           max_length: 72
@@ -717,15 +710,32 @@ commit_templates:
       [changes]
 pull_request_templates:
   - label: Docs change
-    title: "{summary}"
     template_path: .github/PULL_REQUEST_TEMPLATE.md
     _inputs:
-      summary:
+      title:
         type: text
-        comment: The Pull Request title. Say what changed, not which files moved.
+        comment: Short summary of changes
         options:
           required: true
           max_length: 72
+      body:
+        type: markdown
+        comment: Fill in each section and tick the checklist before publishing.
+        options:
+          format: p h2 h3
+          bold: true
+          italic: true
+          link: true
+          bulletedlist: true
+          numberedlist: true
+          code_inline: true
+          code_block: false
+          blockquote: true
+          horizontalrule: true
+          table: true
+          undo: true
+          redo: true
+          removeformat: true
 collection_groups:
   - heading: Pages
     collections:
