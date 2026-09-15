@@ -2,17 +2,17 @@
  * Theme selector — the starter's worked example of the CloudCannon Visual
  * Editor JavaScript API.
  *
- * Four API calls carry the whole feature:
+ * The API call that matters for live preview is `api.dataset("theme")`, not
+ * `api.file("src/data/theme.json")`. Both read the same JSON, but CloudCannon
+ * fires `change` on the *dataset* handle while a panel is open; the file handle
+ * only settles up later, which shows as a theme that repaints on navigation but
+ * not while you drag the colour picker. `@cloudcannon/editable-regions` resolves
+ * every `@data[key]` binding the same way — see `nodes/editable.ts`. The dataset
+ * only exists because `data_config.theme` is declared in `cloudcannon.config.yml`.
  *
- *   window.CloudCannonAPI.useVersion("v1", true)   the API, without the global install
- *   api.file(path)                                 address a file that is not the open one
- *   file.data.edit({ slug, position })             open CloudCannon's own inputs panel
- *   file.data.addEventListener("change", …)        fires on every keystroke in that panel
- *
- * The change handler only writes custom properties onto `<html>`. They inherit,
- * so every element — including a section pinning its own `data-theme` — repaints
- * in the same frame. Nothing re-renders and no stylesheet is rewritten, which is
- * why a dragged colour picker tracks live.
+ * The change handler writes custom properties onto `<html>`. They inherit, so
+ * every element — including a section pinning its own `data-theme` — repaints in
+ * the same frame, with no re-render and no stylesheet rewriting.
  */
 
 import type {
@@ -23,14 +23,20 @@ import type {
 import { themeCustomProperties } from "@utils/themeTokens.mjs";
 import { onPageLoad } from "@component-utils/onPageLoad";
 
+const THEME_DATASET = "theme";
 const THEME_FILE = "src/data/theme.json";
 const THEME_SLUG = "theme";
+
+/** How often the fallback poll re-reads while a panel is open, in ms. */
+const POLL_INTERVAL = 300;
+/** How long that poll runs before giving up, in ms. */
+const POLL_LIMIT = 300_000;
 
 declare const window: CloudCannonEditorWindow;
 
 /**
- * The properties this module last wrote. A client-side navigation serves the
- * page as it was built, so unsaved edits have to be reapplied over it.
+ * What this module last wrote. A client-side navigation serves the page as it
+ * was built, so unsaved edits have to be reapplied over it.
  */
 let applied: Record<string, string> = {};
 
@@ -58,19 +64,36 @@ function readTheme(data: unknown): Record<string, unknown> {
     : {};
 }
 
+interface Source {
+  /** The file to open a panel on and read through. */
+  file: CloudCannonJavaScriptV1APIFile;
+  /** Every handle that might emit `change` for this data. */
+  emitters: { addEventListener(event: "change", fn: () => void): void }[];
+}
+
 /**
+ * Resolve the theme data, preferring the dataset handle.
+ *
  * CloudCannon has answered to both the bare and the leading-slash spelling of a
- * source path. A wrong guess throws nothing useful — `data.get()` just resolves
- * `undefined` — so probe once and keep the spelling that returns data.
+ * source path, and a wrong guess throws nothing useful — `data.get()` just
+ * resolves `undefined` — so probe and keep whichever returns data.
  */
-async function resolveThemeFile(
-  api: CloudCannonJavaScriptV1API
-): Promise<CloudCannonJavaScriptV1APIFile | undefined> {
+async function resolveSource(api: CloudCannonJavaScriptV1API): Promise<Source | undefined> {
+  try {
+    const dataset = api.dataset(THEME_DATASET);
+    const items = await dataset.items();
+    const file = Array.isArray(items) ? items[0] : items;
+
+    if (file && (await file.data.get())) return { file, emitters: [dataset, file, api] };
+  } catch {
+    // No such dataset — fall through to the file paths.
+  }
+
   for (const path of [THEME_FILE, `/${THEME_FILE}`]) {
     try {
       const file = api.file(path);
 
-      if (await file.data.get()) return file;
+      if (await file.data.get()) return { file, emitters: [file, api] };
     } catch {
       // Next spelling.
     }
@@ -80,15 +103,53 @@ async function resolveThemeFile(
 }
 
 async function wire(element: HTMLElement, api: CloudCannonJavaScriptV1API) {
-  const file = await resolveThemeFile(api);
+  const source = await resolveSource(api);
 
-  if (!file) {
+  if (!source) {
     console.warn(`[theme-selector] ${THEME_FILE} is not editable here.`);
 
     return;
   }
 
-  const repaint = async () => apply(themeCustomProperties(readTheme(await file.data.get())));
+  const { file, emitters } = source;
+
+  let queued = false;
+
+  const repaint = () => {
+    if (queued) return;
+    queued = true;
+
+    requestAnimationFrame(async () => {
+      queued = false;
+      apply(themeCustomProperties(readTheme(await file.data.get())));
+    });
+  };
+
+  // A change event proves the subscription reaches this frame, which is what
+  // retires the poll below. Never assume it: this ran for a release subscribed
+  // only to the file handle, where it never arrived.
+  let liveEvents = false;
+  let poll: ReturnType<typeof setInterval> | undefined;
+
+  const stopPolling = () => {
+    clearInterval(poll);
+    poll = undefined;
+  };
+
+  for (const emitter of emitters) {
+    emitter.addEventListener("change", () => {
+      liveEvents = true;
+      stopPolling();
+      repaint();
+    });
+  }
+
+  const startPolling = () => {
+    if (liveEvents || poll) return;
+
+    poll = setInterval(repaint, POLL_INTERVAL);
+    setTimeout(stopPolling, POLL_LIMIT);
+  };
 
   const trigger = element.querySelector<HTMLButtonElement>(".theme-selector-trigger");
 
@@ -106,14 +167,15 @@ async function wire(element: HTMLElement, api: CloudCannonJavaScriptV1API) {
         height: rect.height,
       },
     });
+
+    startPolling();
   });
 
-  file.data.addEventListener("change", repaint);
   onPageLoad(() => {
     apply(applied);
   });
 
-  await repaint();
+  repaint();
   element.hidden = false;
 }
 

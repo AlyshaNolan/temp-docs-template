@@ -62,13 +62,12 @@ Font **families** (`--font-body`, `--font-headings`) are not in `_fonts.css` —
 
 ## The editable theme (`src/data/theme.json`)
 
-Five values are exposed to an editor rather than living only in CSS:
+Four values are exposed to an editor rather than living only in CSS:
 
-| Key                          | Type       | Drives                                            | Shipped      |
-| ---------------------------- | ---------- | ------------------------------------------------- | ------------ |
-| `accentLight` / `accentDark` | hex colour | the whole `--color-accent*` family, per theme     | teal 700/300 |
-| `brandLight` / `brandDark`   | hex colour | the whole `--color-brand*` family, per theme      | ink / paper  |
-| `radius`                     | 0–24       | `--radius-base`, and the whole `--radius-*` scale | `10`         |
+| Key                          | Type       | Drives                                        | Shipped      |
+| ---------------------------- | ---------- | --------------------------------------------- | ------------ |
+| `accentLight` / `accentDark` | hex colour | the whole `--color-accent*` family, per theme | teal 700/300 |
+| `brandLight` / `brandDark`   | hex colour | the whole `--color-brand*` family, per theme  | ink / paper  |
 
 **The mechanism is inheritance, not specificity.** `BaseLayout.astro` calls
 `themeStyleAttribute()` from `src/utils/themeTokens.mjs` and puts the result in `style` on
@@ -99,9 +98,22 @@ but no editor can reach it; nothing validates the four against each other.
 `src/components/navigation/theme-selector/` is a floating swatch button, `hidden` in the markup
 and revealed only by `editor-live-sync.js` (which loads solely inside CloudCannon). Its
 `setup.ts` is the starter's worked example of the Visual Editor JavaScript API —
-`useVersion("v1")`, `api.file(path)`, `file.data.edit({ slug, position })` to open CloudCannon's
-own inputs panel, and `file.data.addEventListener("change", …)` to repaint. The handler only
-calls `style.setProperty()` on `<html>`, which is what makes a dragged colour picker track live.
+`useVersion("v1")`, `api.dataset("theme")`, `file.data.edit({ slug, position })` to open
+CloudCannon's own inputs panel, and `dataset.addEventListener("change", …)` to repaint. The
+handler only calls `style.setProperty()` on `<html>`, which is what makes a dragged colour
+picker track live.
+
+**MUST:** subscribe to `api.dataset("theme")`, not `api.file("src/data/theme.json")`.
+**Why:** both read the same JSON, but CloudCannon fires `change` on the _dataset_ handle while a
+panel is open; the file handle settles up later. Subscribed to the file, the preview repaints on
+navigation but not while the picker is dragged — which looks like the feature half-working rather
+than like a bug. `@cloudcannon/editable-regions` resolves every `@data[key]` binding the same way
+(`nodes/editable.ts`). The dataset exists only because `data_config.theme` is declared in
+`cloudcannon.config.yml`; deleting that entry silently kills live preview.
+
+`setup.ts` also polls while a panel is open, and retires that poll the first time a real `change`
+event arrives. Keep it: it is the difference between a wrong guess about the event channel being
+invisible and being a broken feature.
 
 ## The `@layer` architecture
 

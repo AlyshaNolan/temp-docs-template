@@ -408,16 +408,6 @@ collections_config:
           required: false
         comment: Primary button and brand fill in dark mode.
         cascade: true
-      radius:
-        type: range
-        options:
-          min: 0
-          max: 24
-          step: 1
-          required: false
-        comment: Corner rounding in pixels, driving the whole radius scale. 0 is square,
-          10 is the shipped look. Pills and avatars stay round at every setting.
-        cascade: true
     disable_add: false
     disable_add_folder: false
     disable_file_actions: false
@@ -797,6 +787,11 @@ _inputs:
 _snippets_imports:
   mdx: true
 data_config:
+  # The theme selector subscribes to `api.dataset("theme")` for live updates —
+  # a dataset is the handle CloudCannon fires change events on while a panel is
+  # open. Removing this entry makes the editor preview stop repainting live.
+  theme:
+    path: src/data/theme.json
   icons:
     path: .cloudcannon/data/icons.yml
   autocomplete_tokens:

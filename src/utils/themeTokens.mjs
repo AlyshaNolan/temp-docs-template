@@ -106,12 +106,6 @@ export function themeCustomProperties(theme = {}) {
     }
   }
 
-  const radius = Number(theme.radius);
-
-  if (Number.isFinite(radius) && radius >= 0) {
-    properties["--radius-base"] = `${radius}px`;
-  }
-
   return properties;
 }
 

@@ -39,20 +39,19 @@ on the site follows.
 ## The theme file
 
 `src/data/theme.json` holds the decisions an editor is allowed to make without touching CSS:
-two accent colours, two brand colours and a corner radius. `BaseLayout` turns them into custom
+two accent colours and two brand colours. `BaseLayout` turns them into custom
 properties on `<html>`, and the theme files read those as optional overrides.
 
 <CodeBlock
   language="json"
   filename="src/data/theme.json"
-  code={'{\n  "theme": {\n    "accentLight": "#0f766e",\n    "accentDark": "#5eead4",\n    "brandLight": "#08090b",\n    "brandDark": "#ffffff",\n    "radius": 10\n  }\n}'}
+  code={'{\n  "theme": {\n    "accentLight": "#0f766e",\n    "accentDark": "#5eead4",\n    "brandLight": "#08090b",\n    "brandDark": "#ffffff"\n  }\n}'}
 />
 
 Each colour is one swatch, not a set. `src/utils/themeTokens.mjs` derives the rest of the
 family from it — the hover state, the tinted surface, the border, and the legible text colour
 to sit on top, chosen by relative luminance so a pale accent gets ink and a deep one gets
-paper. `radius` drives the whole `--radius-*` scale from a single base; `--radius-full` stays
-out of it, so pills and avatars are round at every setting.
+paper.
 
 <ParamList
   params={[
@@ -66,12 +65,6 @@ out of it, so pills and avatars are round at every setting.
       "type": "hex colour",
       "description": "Primary button and brand fill. Shipped near-black on light and white on dark, so an accent change never floods the page with one hue."
     },
-    {
-      "name": "radius",
-      "type": "0–24",
-      "defaultValue": "10",
-      "description": "Corner rounding in pixels, driving the whole scale. 0 is square."
-    }
   ]}
 />
 
@@ -87,19 +80,25 @@ In the Visual Editor a swatch button sits in the bottom corner of the preview. I
 reload.
 
 That button is the starter's worked example of the [CloudCannon Visual Editor JavaScript
-API](https://cloudcannon.com/documentation/developer-articles/read-and-write-data-with-the-visual-editor-api/).
-The whole feature is four calls, in `src/components/navigation/theme-selector/setup.ts`:
+API](https://cloudcannon.com/documentation/developer-articles/read-and-write-data-with-the-visual-editor-api/),
+in `src/components/navigation/theme-selector/setup.ts`:
 
 <CodeBlock
   language="js"
   filename="src/components/navigation/theme-selector/setup.ts"
-  code={'const api = window.CloudCannonAPI.useVersion("v1", true);\nconst file = api.file("src/data/theme.json");\n\n// Open CloudCannon\'s own inputs panel, anchored to the button.\nfile.data.edit({ slug: "theme", position });\n\n// Fires on every keystroke and every drag of the picker.\nfile.data.addEventListener("change", async () => {\n  apply(themeCustomProperties(await file.data.get()));\n});'}
+  code={'const api = window.CloudCannonAPI.useVersion("v1", true);\n\n// The dataset, not api.file() — see the note below.\nconst dataset = api.dataset("theme");\nconst file = await dataset.items();\n\n// Open CloudCannon\'s own inputs panel, anchored to the button.\nfile.data.edit({ slug: "theme", position });\n\n// Fires while the panel is open, on every drag of the picker.\ndataset.addEventListener("change", async () => {\n  apply(themeCustomProperties(await file.data.get()));\n});'}
 />
 
 `apply` only calls `style.setProperty()` on `<html>`. Custom properties inherit, so a section
 pinning its own `data-theme` repaints in the same frame as the rest of the page — no
 re-render, no stylesheet rewriting, and no state to keep in sync between the editor and the
 preview.
+
+<Alert
+  variant="warning"
+  title="Subscribe to the dataset, not the file"
+  text="`api.file()` on the same path reads the same JSON, but CloudCannon fires `change` on the **dataset** handle while a panel is open — the file handle only settles up later. Subscribed to the file, the preview repaints when you navigate away and back, but not while you drag the picker. The dataset exists only because `data_config.theme` is declared in `cloudcannon.config.yml`; delete that entry and live preview stops."
+/>
 
 <Alert
   variant="note"

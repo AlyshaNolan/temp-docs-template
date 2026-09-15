@@ -47,12 +47,5 @@ describe("themeCustomProperties", () => {
   it("omits every property it has no usable value for", () => {
     expect(themeCustomProperties({})).toEqual({});
     expect(themeCustomProperties({ accentLight: "not a colour" })).toEqual({});
-    expect(themeCustomProperties({ radius: "wide" })).toEqual({});
-  });
-
-  it("emits the radius base only for a usable, non-negative number", () => {
-    expect(themeCustomProperties({ radius: 0 })["--radius-base"]).toBe("0px");
-    expect(themeCustomProperties({ radius: 16 })["--radius-base"]).toBe("16px");
-    expect(themeCustomProperties({ radius: -4 })["--radius-base"]).toBeUndefined();
   });
 });
