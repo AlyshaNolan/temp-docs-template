@@ -1,5 +1,6 @@
 /**
- * Regenerate the component tables in the page-content-authoring skill.
+ * Regenerate the component tables in the page-content-authoring skill, and the
+ * component counts in the README.
  *
  *   npm run docs:catalog          rewrite the generated blocks
  *   npm run docs:catalog:check    fail if they are stale
@@ -17,6 +18,7 @@ import * as yaml from "js-yaml";
 
 const root = join(import.meta.dirname, "..", "..");
 const catalogPath = join(root, ".agents/skills/page-content-authoring/component-catalog.md");
+const readmePath = join(root, "README.md");
 const check = process.argv.includes("--check");
 
 /** Props every page section shares; listed once in the skill, not per row. */
@@ -171,32 +173,85 @@ function buildingBlocksBlock() {
     .join("\n\n");
 }
 
+function countsBlock() {
+  const tally = (prefix) =>
+    components.filter((component) => component.key.startsWith(prefix)).length;
+  const sections = tally("page-sections/");
+  const blocks = tally("building-blocks/");
+  const navBlocks = tally("navigation/");
+  const chromeDirs = new Set(
+    glob
+      .sync("src/components/navigation/*/", { cwd: root })
+      .map((dir) => basename(dir.replace(/\/$/, "")))
+  );
+
+  for (const component of components) {
+    if (component.key.startsWith("navigation/")) chromeDirs.delete(component.key.split("/").pop());
+  }
+
+  const icons = glob.sync("src/icons/**/*.svg", { cwd: root }).length;
+
+  return (
+    `${sections + blocks + navBlocks} page-builder components — ${sections} page sections, ` +
+    `${blocks} building blocks and ${navBlocks} navigation blocks — plus\n` +
+    `${chromeDirs.size} pieces of site chrome and ${icons} icons.`
+  );
+}
+
 function replaceBlock(source, name, body) {
   const start = source.indexOf(`<!-- generated:catalog:${name}:start`);
   const startEnd = source.indexOf("-->", start) + 3;
   const end = source.indexOf(`<!-- generated:catalog:${name}:end -->`);
 
   if (start === -1 || end === -1) {
-    throw new Error(`component-catalog.md is missing the ${name} generated markers`);
+    throw new Error(`a generated file is missing the ${name} markers`);
   }
 
   return `${source.slice(0, startEnd)}\n\n${body}\n\n${source.slice(end)}`;
 }
 
-const original = readFileSync(catalogPath, "utf8");
-let next = replaceBlock(original, "page-sections", pageSectionsBlock());
+const targets = [
+  {
+    path: catalogPath,
+    name: "component-catalog.md",
+    original: readFileSync(catalogPath, "utf8"),
+    blocks: [
+      ["page-sections", pageSectionsBlock()],
+      ["building-blocks", buildingBlocksBlock()],
+    ],
+  },
+  {
+    path: readmePath,
+    name: "README.md",
+    original: readFileSync(readmePath, "utf8"),
+    blocks: [["counts", countsBlock()]],
+  },
+];
 
-next = replaceBlock(next, "building-blocks", buildingBlocksBlock());
+const stale = [];
 
-if (next === original) {
+for (const target of targets) {
+  target.next = target.blocks.reduce(
+    (source, [name, body]) => replaceBlock(source, name, body),
+    target.original
+  );
+
+  if (target.next !== target.original) stale.push(target);
+}
+
+if (stale.length === 0) {
   console.log(`ok     component catalog is up to date (${components.length} components).`);
   process.exit(0);
 }
 
 if (check) {
-  console.error("FAIL   component-catalog.md is stale. Run `npm run docs:catalog`.");
+  console.error(
+    `FAIL   ${stale.map((target) => target.name).join(" and ")} stale. Run \`npm run docs:catalog\`.`
+  );
   process.exit(1);
 }
 
-writeFileSync(catalogPath, next);
-console.log(`Rewrote the component catalog (${components.length} components).`);
+for (const target of stale) writeFileSync(target.path, target.next);
+console.log(
+  `Rewrote ${stale.map((target) => target.name).join(" and ")} (${components.length} components).`
+);

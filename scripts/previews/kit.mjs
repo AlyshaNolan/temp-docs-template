@@ -92,8 +92,6 @@ export const ink = role("ink");
 export const onInk = role("on-ink");
 export const accent = role("accent");
 
-// Scales
-
 /** Type scale. Text is a fully-rounded bar at one of these five heights. */
 export const TYPE = {
   display: 40,

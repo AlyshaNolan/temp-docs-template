@@ -99,10 +99,12 @@ in a pull request.
 
 ## Components
 
-68 page-builder components — 12 page sections, 53 building blocks and 3 navigation blocks —
-plus 8 pieces of site chrome (topbar, sidebar, table of contents, search, pager, feedback,
-theme toggle, heading links) and 343 icons. Thumbnails for every one are in
-`public/component-previews/`; `npm run previews:montage` renders them as a single contact sheet.
+
+58 page-builder components — 9 page sections, 46 building blocks and 3 navigation blocks — plus
+9 pieces of site chrome and 343 icons.
+
+Thumbnails for every one are in `public/component-previews/`; `npm run previews:montage` renders
+them as a single contact sheet.
 
 ![A documentation page built from the library](docs/images/components.png)
 

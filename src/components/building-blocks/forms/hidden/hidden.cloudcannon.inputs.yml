@@ -1,6 +1,6 @@
 name:
   type: text
-  comment: The name attribute for the hidden input field.
+  comment: The key this value arrives under in the submission. Must be unique within the form.
 value:
   type: text
   comment: The value to be stored in the hidden field.

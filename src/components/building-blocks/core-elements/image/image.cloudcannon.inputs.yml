@@ -43,7 +43,7 @@ height:
   hidden: true
 rounded:
   type: switch
-  comment: Whether to apply rounded corners to the image.
+  comment: Round the image's corners.
 aspectRatio:
   type: select
   comment: Set a fixed aspect ratio for the image.

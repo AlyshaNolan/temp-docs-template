@@ -48,3 +48,26 @@ picker_preview:
     fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/wrappers/card/card.cloudcannon.inputs.yml
+groups:
+  - heading: Content
+    inputs:
+      - contentSections
+      - link
+      - showBeforeAfter
+      - beforeContentSections
+      - afterContentSections
+  - heading: Card settings
+    comment: Width, spacing, color scheme, and background for this card.
+    collapsed: true
+    inputs:
+      - label
+      - maxContentWidth
+      - paddingHorizontal
+      - paddingVertical
+      - colorScheme
+      - lockColorScheme
+      - backgroundColor
+      - background
+      - rounded
+      - border
+      - spaceBefore

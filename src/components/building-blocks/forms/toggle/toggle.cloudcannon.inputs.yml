@@ -3,7 +3,7 @@ label:
   comment: The label text for the toggle field.
 name:
   type: text
-  comment: The name attribute for the toggle field.
+  comment: The key this field's answer arrives under in the submission. Must be unique within the form.
 checked:
   type: switch
   comment: Whether the toggle is checked by default.

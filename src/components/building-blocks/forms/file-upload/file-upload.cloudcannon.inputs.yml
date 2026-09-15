@@ -3,7 +3,7 @@ label:
   comment: The label text for the file upload field.
 name:
   type: text
-  comment: A unique name attribute for the file upload field.
+  comment: The key this field's answer arrives under in the submission. Must be unique within the form.
   options:
     required: true
     required_message: Only form elements with a name will have their values passed when submitting a form.

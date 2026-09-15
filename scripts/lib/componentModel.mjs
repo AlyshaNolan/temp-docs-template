@@ -144,8 +144,6 @@ function firstTopLevelDelimiter(part) {
   return -1;
 }
 
-// Shared helpers
-
 export function loadYaml(absPath) {
   return yaml.load(readFileSync(absPath, "utf8"));
 }

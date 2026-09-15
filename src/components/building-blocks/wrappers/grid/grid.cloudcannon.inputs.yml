@@ -21,14 +21,12 @@ columns:
 minItemWidth:
   comment: Auto columns only — the minimum width for each item in pixels.
   type: number
-  hidden: "columns !== 'auto'"
 maxItemWidth:
   comment: Auto columns only — optional cap on item width in pixels (leave empty to let items stretch).
   type: number
-  hidden: "columns !== 'auto'"
 items:
   label: Grid Items
-  comment: Array of grid items, each containing content blocks to render.
+  comment: The cells of the grid, each holding its own blocks.
   type: array
   options:
     structures: _structures.gridItems

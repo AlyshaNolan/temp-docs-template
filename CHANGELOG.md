@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- `npm run lint:cms` fails on a `hidden:` value that is a comparison expression rather than a boolean or a sibling input name. CloudCannon reads the string as an input name, so an expression silently hides nothing, and `lint:schema` passes it because the schema types the key as a string. 87 of them had accumulated.
 - **Editor-managed redirects.** A new **Redirects** data file (`src/data/redirects.json`) lets an editor send an old URL to the page that replaced it, without a pull request. `npm run build` merges those rules ahead of the ones in `.cloudcannon/routing.json` and writes the result to `dist/_cloudcannon/routing.json`, which CloudCannon reads in preference to the source file. Security headers stay in the source file and out of the editor's reach. Renaming a documentation page silently breaks every link anyone has already shared; `npm run lint:links` only sees the site's own links, so nothing else catches it.
 - **A skip-to-content link** as the first focusable element on every page, jumping past the topbar, sidebar and announcement bar to the article. Off-screen until focused rather than `display: none`, which would take it out of the tab order, and hidden in print.
 - **A second schema for the documentation collection.** The `+` menu now offers **Add Reference Page** alongside **Add Documentation Page**; it seeds the `Reference` group, a parameter list and a worked example, so an API page starts in the shape the reference pages already use.
@@ -66,6 +67,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - **File Tree** (`building-blocks/core-elements/file-tree`): a directory tree drawn from an indented list of paths, so the tree stays editable as plain text instead of hand-drawn box characters. Any consistent indent unit works, and an entry can carry the same `+`/`-`/`~` marker as a diff. Offered as a page-builder block and as an MDX snippet.
 
 ### Changed
+
+- **Card, Split, Image, Range, Input and Select group their editor inputs.** Each opened as a flat list — Card's ran to 26 entries with `contentSections` sitting between `maxContentWidth` and `showBeforeAfter` — while every page section already split **Content** from a collapsed settings group. Content now comes first and the plumbing collapses.
+- **Video asks where the video lives.** Its type picker had no comment (the only input in the library without one) and offered "Local Source". It is now labelled **Where the video lives** and explained, its file option reads **Uploaded file**, and the title, ID and file inputs each open by naming the type they apply to.
+- Editor comments on the forms and wrapper components are written for the person filling them in. A form field's `name` says it is the key the answer arrives under and must be unique within the form, rather than "The name attribute for the toggle field"; the container arrays describe what goes in them rather than restating that they are arrays.
+- `npm run docs:catalog` also generates the component counts in the README, and `docs:catalog:check` fails when they drift. They had reached "68 page-builder components — 12 page sections, 53 building blocks" against an actual 58, 9 and 46.
 
 - **The Badge snippet is inline.** It can sit inside a sentence — "the `/webhooks/retries` endpoint <Badge> is the one place this matters" — instead of only on its own line. Its root element is a `<span>` rather than a `<div>` for that reason: a block-level root inside a paragraph ends the paragraph early in the browser's parser. It is the only component in the library that works inline.
 - A new changelog release gets today's date automatically (`instance_value: NOW`), instead of the fixed placeholder date the schema seeded and an author had to notice and correct.
@@ -150,6 +156,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - The `blog-mdx-content` skill, replaced by `docs-content-authoring`.
 
 ### Fixed
+
+- **87 `hidden:` rules that never ran.** Inputs across the background blocks, Video, Grid and Card Grid carried conditions like `hidden: "background.type !== 'image'"`. CloudCannon's `hidden:` takes a boolean or the name of a sibling input — optionally negated with `!` — not a comparison expression, so every one of these was inert and the inputs always showed. Nothing reported it: the schema types the key as a string, so `npm run lint:schema` passed. They are removed, and each affected input now names the type it applies to in its comment ("Pattern backgrounds only — …"), which is what the rest of the library already did.
 
 - `.cloudcannon/initial-site-settings.json` set `preserveOutput` and `includeGit`, which CloudCannon ignores — the keys are `preserve_output` and `include_git`. Build settings a fresh site inherited were silently not what the file said.
 

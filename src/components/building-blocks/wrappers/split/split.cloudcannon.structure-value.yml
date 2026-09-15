@@ -33,3 +33,21 @@ picker_preview:
     fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/wrappers/split/split.cloudcannon.inputs.yml
+groups:
+  - heading: Content
+    inputs:
+      - firstColumnContentSections
+      - secondColumnContentSections
+  - heading: Layout
+    comment: How the two columns divide the width, align, and behave on mobile.
+    collapsed: true
+    inputs:
+      - label
+      - distributionMode
+      - fixedWidth
+      - minSplitWidth
+      - alignmentVertical
+      - gap
+      - reverse
+      - reverseOrderOnMobile
+      - spaceBefore

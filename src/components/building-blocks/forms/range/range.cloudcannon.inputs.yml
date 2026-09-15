@@ -1,9 +1,9 @@
 label:
   type: text
-  comment: The label text for the range field.
+  comment: The label shown above the slider.
 name:
   type: text
-  comment: The name attribute for the range field.
+  comment: The key this field's answer arrives under in the submission. Must be unique within the form.
 min:
   type: number
   comment: The minimum value of the range.
@@ -24,7 +24,7 @@ required:
   comment: Whether the field is required.
 showValue:
   type: switch
-  comment: Whether to display the current value next to the label.
+  comment: Show the current number beside the label as the visitor drags.
 hint:
   type: text
   comment: Optional help text shown between the label and the slider, announced to assistive technology.

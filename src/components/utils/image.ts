@@ -119,15 +119,9 @@ export const getResponsiveWidths = (candidates: unknown, maxWidth?: number) => {
     return [nativeWidth];
   }
 
-  // The preset steps almost never land on an asset's own width, so filtering
-  // alone caps the srcset at the largest step *below* native and the detail in
-  // between becomes unreachable — a 1181px source served at 640w. Offering the
-  // native width too costs one variant and can't make smaller viewports
-  // download more, since the browser takes the smallest adequate candidate.
-  //
-  // Two cases stay out. Above every step, the cap is deliberate: it stops a
-  // 6000px camera upload from becoming a 6000px variant. Within the tolerance
-  // of the largest step, the gain doesn't justify the transform.
+  // Without the native width, the srcset caps at the largest step *below* it and
+  // a 1181px source is served at 640w. The two exclusions are deliberate: above
+  // every step, the cap stops a 6000px upload becoming a 6000px variant.
   const largestCandidate = normalizedWidths[normalizedWidths.length - 1];
   const largestStep = filteredWidths[filteredWidths.length - 1];
   const fillsGapBetweenSteps =

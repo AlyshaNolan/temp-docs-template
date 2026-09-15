@@ -3,7 +3,7 @@ label:
   type: text
 buttonSections:
   type: array
-  comment: Array of button components to render within the group.
+  comment: The buttons in this group, in the order they appear.
   options:
     structures: _structures.buttonSections
 direction:

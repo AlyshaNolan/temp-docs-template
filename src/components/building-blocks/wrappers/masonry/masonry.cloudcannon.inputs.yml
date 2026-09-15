@@ -31,7 +31,7 @@ gap:
         name: 3xl
 items:
   label: Masonry Items
-  comment: Array of masonry items, each containing content blocks to render. Reading order is preserved left-to-right.
+  comment: The tiles in the wall, each holding its own blocks. They stay in the order you list them, reading left to right.
   type: array
   options:
     structures: _structures.masonryItems

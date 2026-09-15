@@ -287,6 +287,34 @@ for (const relYaml of yamlPaths.filter(
   else ok(`group cover ${rel(yamlAbs)}`);
 }
 
+// Check 3b — `hidden:` expressions (FAIL). CloudCannon's `hidden:` takes a
+// boolean, or the name of a sibling input optionally negated with `!`. A
+// comparison (`hidden: "background.type !== 'image'"`) is read as an input name,
+// never matches, and silently does nothing — and the JSON Schema types the key
+// as a string, so `lint:schema` passes. Put the condition in `comment:` instead.
+
+const HIDDEN_NAME = /^!?[A-Za-z_$][\w$]*(\.[A-Za-z_$][\w$]*)*$/;
+
+function checkHidden(abs, node, path = []) {
+  if (!node || typeof node !== "object") return;
+
+  for (const [key, value] of Object.entries(node)) {
+    if (key === "hidden" && typeof value === "string" && !HIDDEN_NAME.test(value.trim())) {
+      fail(
+        rel(abs),
+        `\`hidden: "${value}"\` at ${path.join(".") || "root"} is an expression, not a sibling input name`
+      );
+    }
+    if (value && typeof value === "object") checkHidden(abs, value, [...path, key]);
+  }
+}
+
+for (const relYaml of yamlPaths) {
+  const abs = join(componentsDir, relYaml);
+
+  checkHidden(abs, loadYaml(abs) || {});
+}
+
 // Check 4 — `_component` resolution (FAIL): every `_component` value found in
 // structure YAML (co-located + .cloudcannon/structures) and in content
 // frontmatter must resolve to a real component key. All sources are parsed as

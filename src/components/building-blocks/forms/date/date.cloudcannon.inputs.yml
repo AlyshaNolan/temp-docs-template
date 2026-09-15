@@ -3,7 +3,7 @@ label:
   comment: The label text for the date field.
 name:
   type: text
-  comment: The name attribute for the date field.
+  comment: The key this field's answer arrives under in the submission. Must be unique within the form.
 required:
   type: switch
   comment: Whether the field is required.

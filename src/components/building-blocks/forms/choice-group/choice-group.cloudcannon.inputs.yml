@@ -3,7 +3,7 @@ title:
   comment: Optional title text for the fieldset.
 name:
   type: text
-  comment: A unique name attribute for the input group.
+  comment: Ties these choices together — they all share this name — and is the key the answer arrives under. Must be unique within the form.
   options:
     required: true
     required_message: Only form elements with a name will have their values passed when submitting a form.
@@ -12,7 +12,7 @@ required:
   comment: Whether the field is required.
 options:
   type: array
-  comment: Array of choice options with value, label, and checked state.
+  comment: The choices offered. Label is what the visitor reads; value is what gets submitted.
   options:
     structures: _structures.choiceOptions
     min_items: 1

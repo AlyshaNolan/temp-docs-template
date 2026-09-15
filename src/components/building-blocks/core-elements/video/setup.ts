@@ -84,14 +84,9 @@ function repairAndPlay(video: HTMLVideoElement) {
 function tryPlay(video: HTMLVideoElement) {
   video.play().catch(() => {});
 
-  // A <video> adopted via a view-transition swap can end up genuinely
-  // stuck (Firefox: "All candidate resources failed to load", without
-  // ever setting video.error). By the time this runs the browser has
-  // usually already tried and failed, so the synchronous check catches
-  // it with no added delay; the one deferred recheck covers a failure
-  // that lands moments later. Repair only on confirmed failure — a
-  // video whose load is merely still in flight would be aborted by an
-  // unconditional load() (seen in Chrome).
+  // A <video> adopted via a view-transition swap can stick without ever setting
+  // video.error (Firefox). Repair only on confirmed failure — an unconditional
+  // load() aborts a load that is merely still in flight (Chrome).
   if (isBroken(video)) {
     repairAndPlay(video);
     return;

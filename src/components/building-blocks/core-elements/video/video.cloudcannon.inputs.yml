@@ -1,5 +1,7 @@
 type:
   type: select
+  label: Where the video lives
+  comment: Embed from YouTube or Vimeo, or play a file uploaded to this site.
   options:
     values:
       - id: youtube
@@ -7,17 +9,18 @@ type:
       - id: vimeo
         name: Vimeo
       - id: local-source
-        name: Local Source
+        name: Uploaded file
 title:
   type: text
-  comment: Used for externally hosted videos - The video title provides accessibility information for assistive technologies (like screen readers) and can display a tooltip when a user hovers over the video.
+  comment: YouTube and Vimeo only — what the video is called. Screen readers announce it, and it shows as a tooltip on hover.
 videoId:
   type: text
-  comment: Used for externally hosted videos - Enter the YouTube or Vimeo video ID.
+  label: Video ID
+  comment: YouTube and Vimeo only — the ID from the video's URL, the part after `v=` on YouTube or the number on Vimeo.
 source:
   type: file
-  label: Video Source
-  comment: Used for locally hosted videos - Select a video file; matching sibling formats with the same filename are added as additional sources automatically.
+  label: Video file
+  comment: Uploaded files only — the video to play. Other formats uploaded under the same filename are offered to the browser automatically.
   options:
     accepts_mime_types:
       - video/mp4
@@ -34,7 +37,7 @@ loop:
   comment: Restart the video from the beginning when it ends.
 thumbnail:
   type: image
-  comment: Poster image before the video plays. Use /src/assets/images/... like the Image component (optimized at build time), or a public or absolute URL.
+  comment: Still image shown before the video plays.
   options:
     accepts_mime_types:
       - image/jpeg

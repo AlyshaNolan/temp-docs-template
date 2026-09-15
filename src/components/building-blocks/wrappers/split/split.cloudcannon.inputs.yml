@@ -3,12 +3,12 @@ label:
   type: text
 firstColumnContentSections:
   type: array
-  comment: Array of content sections to render in the first column.
+  comment: The blocks that fill the first column.
   options:
     structures: _structures.splitSections
 secondColumnContentSections:
   type: array
-  comment: Array of content sections to render in the second column.
+  comment: The blocks that fill the second column.
   options:
     structures: _structures.splitSections
 distributionMode:
