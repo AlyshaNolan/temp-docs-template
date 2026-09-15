@@ -1,6 +1,6 @@
 badge:
   template: mdx_component
-  inline: false
+  inline: true
   preview:
     text:
       - template: "Badge - {text}"

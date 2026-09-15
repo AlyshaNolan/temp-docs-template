@@ -33,7 +33,7 @@ const innerAttributes = hasLink ? { href: link } : {};
 if (!_component && !hasText && !hasIcon) return;
 ---
 
-<div
+<span
   class:list={["badge", className]}
   {...htmlAttributes}
 >
@@ -74,10 +74,12 @@ if (!_component && !hasText && !hasIcon) return;
       )
     }
   </Inner>
-</div>
+</span>
 
 <style is:global>
   @layer components {
+    /* A `span` root, not a `div`: the badge is an inline snippet, so it renders
+       inside a `<p>` and a block-level root would close that paragraph early. */
     .badge {
       display: inline-block;
       max-width: 100%;

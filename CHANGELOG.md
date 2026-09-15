@@ -8,6 +8,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- **Editor-managed redirects.** A new **Redirects** data file (`src/data/redirects.json`) lets an editor send an old URL to the page that replaced it, without a pull request. `npm run build` merges those rules ahead of the ones in `.cloudcannon/routing.json` and writes the result to `dist/_cloudcannon/routing.json`, which CloudCannon reads in preference to the source file. Security headers stay in the source file and out of the editor's reach. Renaming a documentation page silently breaks every link anyone has already shared; `npm run lint:links` only sees the site's own links, so nothing else catches it.
+- **A skip-to-content link** as the first focusable element on every page, jumping past the topbar, sidebar and announcement bar to the article. Off-screen until focused rather than `display: none`, which would take it out of the tab order, and hidden in print.
+- **A second schema for the documentation collection.** The `+` menu now offers **Add Reference Page** alongside **Add Documentation Page**; it seeds the `Reference` group, a parameter list and a worked example, so an API page starts in the shape the reference pages already use.
+- **Commit and Pull Request templates.** Saving in CloudCannon offers a commit message built from a one-line summary plus CloudCannon's own `[changes]` list, or the default message. The Pull Request body comes from `.github/PULL_REQUEST_TEMPLATE.md` — one file, so GitHub and CloudCannon show the same checklist.
+- `npm run lint:schema` now validates `.cloudcannon/routing.json`, the generated `dist/_cloudcannon/routing.json` and `.cloudcannon/initial-site-settings.json` against their official schemas. None of the three were checked before.
+- Expandable **context** panels on the editor inputs whose behaviour cannot fit in a one-line comment: a documentation page's **Group** (how the sidebar is derived, and why a page without one still builds), `repositoryUrl` (the three links built from it, and the `/tree/<branch>` suffix), `titleFormat` (the `{title}` placeholder) and the new **Redirects** array.
+- The **Callout** variant picker describes each tone under its name — what the reader loses by skipping a Note versus a Danger — instead of packing all five into the field's comment.
+
 - A CloudCannon _Site Dashboard_ readme (`.cloudcannon/README.md`), shown on the Summary tab when someone opens the site in CloudCannon — a tour of the Visual Editor, the documentation collection in the Content Editor, and the data files behind the sidebar, header and footer.
 - MDX snippets for **Accordion**, **Definition List** and **Badge**. All three are used on `/media-and-components/` and all three showed as "unknown snippet" in the Content Editor, because a component only appears there if it has a `*.cloudcannon.snippets.yml`.
 - A Styles menu in CloudCannon's rich-text editors, backed by `public/cloudcannon/editor-styles.css`. It offers one option, **Highlight**, which wraps the selection in `<span class="highlight">` and paints it in the accent colour; the same stylesheet gives the Content Editor code-block, blockquote and table styling, so a Markdown fence stops reading as unstyled text there.
@@ -58,6 +66,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - **File Tree** (`building-blocks/core-elements/file-tree`): a directory tree drawn from an indented list of paths, so the tree stays editable as plain text instead of hand-drawn box characters. Any consistent indent unit works, and an entry can carry the same `+`/`-`/`~` marker as a diff. Offered as a page-builder block and as an MDX snippet.
 
 ### Changed
+
+- **The Badge snippet is inline.** It can sit inside a sentence — "the `/webhooks/retries` endpoint <Badge> is the one place this matters" — instead of only on its own line. Its root element is a `<span>` rather than a `<div>` for that reason: a block-level root inside a paragraph ends the paragraph early in the browser's parser. It is the only component in the library that works inline.
+- A new changelog release gets today's date automatically (`instance_value: NOW`), instead of the fixed placeholder date the schema seeded and an author had to notice and correct.
 
 - **Every code component marks lines the same way — by number, in its own input.** `CodeDiff` and `FileTree` took `+` / `-` / `~` prefixes inside the code; they now take `added`, `removed` and `highlight` line ranges (`"3"`, `"3,7-9"`), the form **Code Block**, **Code Tabs** and **Annotated Code** already used. Two reasons for that direction over the other: the markers could never have covered **Annotated Code**, which keys note text to a line and so needs a field regardless; and a prefix marker collides with real code — a YAML list item or a leading unary minus was silently eaten, which the `code` input had to warn about and which the plain **Code Block** was the documented workaround for. The `code` prop is now always the literal sample. Line numbers don't move when the sample does, so re-check the ranges after adding or removing a line. The fields are ordered the same way in all of them — language, then the code, then anything that points at a line (notes, then the marked ranges), then the header-bar label and the chrome toggles. That order is set in three places that have to agree: the `value:` seed, the `_inputs` file and the snippet's `named_args`.
 
@@ -139,6 +150,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - The `blog-mdx-content` skill, replaced by `docs-content-authoring`.
 
 ### Fixed
+
+- `.cloudcannon/initial-site-settings.json` set `preserveOutput` and `includeGit`, which CloudCannon ignores — the keys are `preserve_output` and `include_git`. Build settings a fresh site inherited were silently not what the file said.
 
 - The **Image** snippet showed a blank card in the Content Editor's `+` menu. Its gallery preview was bound only to `key: source`, which resolves to nothing in the picker because no content exists yet, and it carried no static thumbnail. The component thumbnail is now a fallback behind the author's own image, so an inserted Image still previews its real source.
 

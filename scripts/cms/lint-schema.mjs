@@ -52,6 +52,20 @@ const TARGETS = [
     schema: "_structures_from_glob",
     pattern: ".cloudcannon/structures/*.cloudcannon.structures.yml",
   },
+  // Both the hand-written source file and the one the build merges the editor's
+  // redirects into — a bad route in either is a silent 404 in production.
+  {
+    schema: "routing",
+    pattern: ".cloudcannon/routing.json",
+  },
+  {
+    schema: "routing",
+    pattern: "dist/_cloudcannon/routing.json",
+  },
+  {
+    schema: "settings",
+    pattern: ".cloudcannon/initial-site-settings.json",
+  },
 ];
 
 let checked = 0;

@@ -119,10 +119,31 @@ collections_config:
             text:
               - key: name
           required: false
-        comment: Which sidebar group this page belongs to. Options come from `navGroups`
-          in `src/data/docsSite.json` — add one in [Data → Docs
-          Site](cloudcannon:collections/data/docsSite.json) to make it
-          selectable here.
+        comment: Which sidebar group this page belongs to.
+        context:
+          title: How the sidebar is built
+          icon: menu_book
+          content: >-
+            The sidebar is derived from your pages — there is no separate file
+            listing them.
+
+
+            **Group** places this page in a sidebar group. **Order** positions
+            it inside that group, lowest number first.
+
+
+            A page with no group still builds and is still findable in search.
+            It simply has no sidebar entry — useful for pages you only link to
+            directly.
+
+
+            The groups you can pick from come from `navGroups` in [Data → Docs
+            Site](cloudcannon:collections/data/docsSite.json). Add one there to
+            make it selectable here.
+
+
+            Pages nest by file path: `theming/tokens.mdx` becomes a child of
+            `theming.mdx` and inherits its group.
         cascade: true
       order:
         type: number
@@ -156,6 +177,9 @@ collections_config:
       - name: Add Documentation Page
         icon: article
         schema: default
+      - name: Add Reference Page
+        icon: list_alt
+        schema: reference
     create:
       path: "[relative_base_path]/{filename|slugify|lowercase}.mdx"
     disable_add: false
@@ -170,6 +194,27 @@ collections_config:
         remove_empty_inputs: false
         remove_extra_inputs: false
         name: New Documentation Page
+        icon: article
+        preview:
+          text:
+            - New Documentation Page
+          subtext:
+            - A prose page. Headings, callouts, code samples.
+          icon: article
+      reference:
+        path: .cloudcannon/schemas/reference.mdx
+        reorder_inputs: true
+        hide_extra_inputs: false
+        remove_empty_inputs: false
+        remove_extra_inputs: false
+        name: New Reference Page
+        icon: list_alt
+        preview:
+          text:
+            - New Reference Page
+          subtext:
+            - Seeded with a parameter list and a worked example.
+          icon: list_alt
   changelog:
     path: src/content/changelog
     glob:
@@ -201,6 +246,7 @@ collections_config:
         cascade: true
       date:
         type: date
+        instance_value: NOW
         comment: Release date. The changelog page orders releases by this, newest first.
         cascade: true
       summary:
@@ -397,9 +443,27 @@ collections_config:
             cascade: true
           repositoryUrl:
             type: url
-            comment: The site's source repository. The "Use this template", repository and
-              per-page "Edit this page" links are all built from it. A /tree/<branch>
-              suffix names the branch edit links target. Leave empty to hide those links.
+            comment: The site's source repository. Leave empty to hide every link built
+              from it.
+            context:
+              title: What this URL controls
+              icon: account_tree
+              content: >-
+                Three things are built from this one value: the repository link
+                in the header, the "Use this template" button, and the "Edit
+                this page" link at the foot of every documentation page.
+
+
+                Plain repository URL — `https://github.com/you/your-docs` — and
+                edit links target the `main` branch.
+
+
+                Add a `/tree/<branch>` suffix —
+                `https://github.com/you/your-docs/tree/develop` — to point edit
+                links at a different branch.
+
+
+                Leave it empty and all three disappear. Nothing else changes.
             cascade: true
           editPageLabel:
             type: text
@@ -499,6 +563,48 @@ collections_config:
           homeLabel:
             comment: Label for the leading crumb that links to the site root.
             cascade: true
+      redirects:
+        path: .cloudcannon/schemas/redirects.json
+        reorder_inputs: true
+        hide_extra_inputs: false
+        remove_empty_inputs: false
+        remove_extra_inputs: false
+        name: Redirects
+        icon: alt_route
+        preview:
+          text:
+            - Redirects
+          icon: alt_route
+        _inputs:
+          routes:
+            type: array
+            options:
+              structures: _structures.redirectRoutes
+              disable_add: false
+              disable_remove: false
+              disable_reorder: false
+              required: false
+            comment: Old URLs and where they should go now.
+            context:
+              title: When to add a redirect
+              icon: alt_route
+              content: >-
+                Renaming or moving a documentation page changes its URL. Every
+                link anyone has already shared — bookmarks, chat messages, other
+                sites — keeps pointing at the old one, which now shows the 404
+                page.
+
+
+                Adding the old path here sends those readers to the new page
+                instead.
+
+
+                Rules are matched top to bottom and the first match wins, so put
+                the most specific ones first.
+
+
+                Redirects go live on the next build, not the moment you save.
+            cascade: true
       seo:
         path: .cloudcannon/schemas/seo.json
         reorder_inputs: true
@@ -526,13 +632,63 @@ collections_config:
               provide its own.
             cascade: true
           titleFormat:
-            comment: Browser title template. Include {title} where the page title should
-              appear.
+            comment: Browser title template.
+            context:
+              title: Writing the template
+              icon: title
+              content: >-
+                `{title}` is replaced with the page's own title. Everything else
+                is kept literally.
+
+
+                `{title} — Docsmith` renders as "Installation — Docsmith" on the
+                installation page.
+
+
+                Drop `{title}` entirely and every page in the site shares one
+                browser title, which search engines and browser tabs both handle
+                badly.
             cascade: true
           twitterSite:
             comment: Optional X (Twitter) handle for the site, including the @, used in
               social share cards.
             cascade: true
+# Commit and Pull Request templates offered when an editor saves. `[changes]`,
+# `[author]` and `[default_commit_message]` are CloudCannon's own placeholders;
+# `{summary}` is the input declared beneath each template.
+#
+# The Pull Request body is read from `.github/PULL_REQUEST_TEMPLATE.md` rather
+# than inlined here, so GitHub and CloudCannon show the same checklist and it
+# can only drift in one place.
+commit_templates:
+  - label: Describe the change
+    template_string: |-
+      {summary}
+
+      [changes]
+    _inputs:
+      summary:
+        type: text
+        comment: One line in the imperative, e.g. "Rewrite the installation intro".
+        options:
+          required: true
+          max_length: 72
+  - label: Let CloudCannon write it
+    template_string: |-
+      [default_commit_message]
+
+      [changes]
+pull_request_templates:
+  - label: Docs change
+    title: "{summary}"
+    template_path: .github/PULL_REQUEST_TEMPLATE.md
+    _inputs:
+      summary:
+        type: text
+        comment: The Pull Request title. Say what changed, not which files moved.
+        options:
+          required: true
+          max_length: 72
 collection_groups:
   - heading: Pages
     collections:

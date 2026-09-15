@@ -1,6 +1,6 @@
 ---
 version: ''
-date: 2026-01-01
+date:
 summary: ''
 changes: []
 ---

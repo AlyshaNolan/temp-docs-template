@@ -283,6 +283,12 @@ if (resetBranding) {
   announcement.text = "";
   writeJson("src/data/announcementBar.json", announcement);
   record("src/data/announcementBar.json  disabled and cleared");
+
+  const redirects = readJson("src/data/redirects.json");
+
+  redirects.routes = [];
+  writeJson("src/data/redirects.json", redirects);
+  record("src/data/redirects.json  demo redirect removed");
 }
 
 rl.close();

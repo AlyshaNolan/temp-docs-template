@@ -65,6 +65,12 @@ const baselineTheme = configuredTheme === "dark" ? "dark" : "light";
     slot="head"
     defaultTheme={configuredTheme}
   />
+  <a
+    class="skip-link"
+    href="#main-content"
+  >
+    Skip to content
+  </a>
   <AnnouncementBar {...announcementBarData} />
   <DocsTopbar
     markLetter={docsSite.markLetter}
@@ -91,8 +97,10 @@ const baselineTheme = configuredTheme === "dark" ? "dark" : "light";
     </aside>
 
     <main
+      id="main-content"
       class="docs-main"
       data-pagefind-body
+      tabindex="-1"
     >
       <slot />
     </main>
@@ -136,6 +144,34 @@ const baselineTheme = configuredTheme === "dark" ? "dark" : "light";
       grid-area: main;
       min-width: 0;
       padding-block: var(--spacing-xl) var(--spacing-5xl);
+
+      /* Focused only via the skip link, so the ring would be noise. */
+      &:focus {
+        outline: none;
+      }
+    }
+
+    /* Off-screen rather than `display: none`, which would take it out of the
+       tab order and defeat the point. */
+    .skip-link {
+      background-color: var(--color-bg-brand);
+      border-radius: var(--radius-md);
+      color: var(--color-text-on-brand);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+      inset-block-start: var(--spacing-sm);
+      inset-inline-start: var(--spacing-sm);
+      padding: var(--spacing-sm) var(--spacing-md);
+      position: fixed;
+      text-decoration: none;
+      transform: translateY(calc(-100% - var(--spacing-xl)));
+      z-index: var(--layer-8);
+
+      &:focus-visible {
+        outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring);
+        outline-offset: var(--spacing-xs);
+        transform: none;
+      }
     }
 
     .docs-toc-rail {

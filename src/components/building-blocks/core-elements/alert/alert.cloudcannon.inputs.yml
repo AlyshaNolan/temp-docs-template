@@ -1,18 +1,28 @@
 variant:
   type: select
-  comment: The tone of the callout — note for context, tip for a shortcut, warning for a surprise, danger for data loss.
+  comment: The tone of the callout. Pick by what the reader loses if they skip it.
   options:
+    preview:
+      text:
+        - key: name
+      subtext:
+        - key: description
     values:
       - id: note
         name: Note
+        description: Context worth knowing. Nothing breaks if it is skipped.
       - id: tip
         name: Tip
-      - id: warning
-        name: Warning
-      - id: danger
-        name: Danger
+        description: A shortcut or better way to do what they are already doing.
       - id: info
         name: Info
+        description: A neutral aside — version support, related reading, scope.
+      - id: warning
+        name: Warning
+        description: Something surprising that costs them time to discover alone.
+      - id: danger
+        name: Danger
+        description: Irreversible. Data loss, downtime, or a breaking change.
 title:
   type: text
   comment: Optional bold first line. Say what the reader needs to know, not "Note".
