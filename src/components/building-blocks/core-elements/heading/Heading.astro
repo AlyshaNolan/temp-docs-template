@@ -158,6 +158,17 @@ if (!_component && !hasText && !hasSlotContent) return;
       > .heading-inner {
         display: block;
 
+        /* CloudCannon only offers a Styles menu on a `block` text region, and
+           that region's editor wraps the value in a `<p>` the base layer then
+           styles as body copy. Editor-only markup — `renderMarkdownInline`
+           never emits it. */
+        .heading-text > p {
+          color: inherit;
+          font-size: inherit;
+          line-height: inherit;
+          margin: 0;
+        }
+
         .heading-icon {
           bottom: 0.1em;
           display: inline-block;
