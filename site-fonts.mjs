@@ -34,5 +34,15 @@ export const siteFonts = [
     weights: ["400 600"],
     styles: ["normal"],
     subsets: ["latin"],
+    fallbacks: [
+      "ui-monospace",
+      "SFMono-Regular",
+      "Menlo",
+      "Consolas",
+      "Liberation Mono",
+      "DejaVu Sans Mono",
+      "monospace",
+    ],
+    optimizedFallbacks: false,
   },
 ];
