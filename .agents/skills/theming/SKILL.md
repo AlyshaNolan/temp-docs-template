@@ -60,6 +60,61 @@ Read the file for the exact names and values — do not rely on memory or a copy
 
 Font **families** (`--font-body`, `--font-headings`) are not in `_fonts.css` — Astro's `<Font />` injects them from `site-fonts.mjs`. See [adding-fonts](../adding-fonts/SKILL.md).
 
+## The editable theme (`src/data/theme.json`)
+
+Four values are exposed to an editor rather than living only in CSS:
+
+| Key                          | Type       | Drives                                        | Shipped      |
+| ---------------------------- | ---------- | --------------------------------------------- | ------------ |
+| `accentLight` / `accentDark` | hex colour | the whole `--color-accent*` family, per theme | teal 700/300 |
+| `brandLight` / `brandDark`   | hex colour | the whole `--color-brand*` family, per theme  | ink / paper  |
+
+**The mechanism is inheritance, not specificity.** `BaseLayout.astro` calls
+`themeStyleAttribute()` from `src/utils/themeTokens.mjs` and puts the result in `style` on
+`<html>`; the theme files read each one as `var(--accent-light, var(--teal-700))`. Because
+custom properties inherit, a section pinning its own `data-theme` picks them up with no extra
+selectors — do not scope these properties to a selector, and do not reintroduce
+`[data-*="…"]` preset rules for them.
+
+**MUST:** every override in `_light.css` / `_dark.css` keeps a `var(…, <shipped value>)`
+fallback.
+**Why:** the values come from an editable JSON file. An unresolved `var()` with no fallback is
+invalid at computed-value time, so one cleared field would silently blank a token rather than
+fall back. This is also why `lint:css-vars` skips fallback forms — it cannot check them for you.
+
+**Derivation lives in `themeTokens.mjs`, not in CSS.** One picked swatch yields its hover,
+surface, border and legible-text-on-top (chosen by relative luminance). Add a derived token
+there and give it a fallback in both theme files, in the same change. It is dependency-free ESM
+because it runs in Astro frontmatter at build time and in the editor bundle at runtime, and the
+two must agree — `tests/unit/themeTokens.test.ts` pins the arithmetic.
+
+Adding a knob means four edits: the key in `src/data/theme.json`, its derivation in
+`themeTokens.mjs`, a `var(…, fallback)` in **both** theme files, and an input in
+`cloudcannon.config.yml` (the `data` collection's `_inputs`). Miss the config and the knob works
+but no editor can reach it; nothing validates the four against each other.
+
+### The editor control
+
+`src/components/navigation/theme-selector/` is a floating swatch button, `hidden` in the markup
+and revealed only by `editor-live-sync.js` (which loads solely inside CloudCannon). Its
+`setup.ts` is the starter's worked example of the Visual Editor JavaScript API —
+`useVersion("v1")`, `api.dataset("theme")`, `file.data.edit({ slug, position })` to open
+CloudCannon's own inputs panel, and `dataset.addEventListener("change", …)` to repaint. The
+handler only calls `style.setProperty()` on `<html>`, which is what makes a dragged colour
+picker track live.
+
+**MUST:** subscribe to `api.dataset("theme")`, not `api.file("src/data/theme.json")`.
+**Why:** both read the same JSON, but CloudCannon fires `change` on the _dataset_ handle while a
+panel is open; the file handle settles up later. Subscribed to the file, the preview repaints on
+navigation but not while the picker is dragged — which looks like the feature half-working rather
+than like a bug. `@cloudcannon/editable-regions` resolves every `@data[key]` binding the same way
+(`nodes/editable.ts`). The dataset exists only because `data_config.theme` is declared in
+`cloudcannon.config.yml`; deleting that entry silently kills live preview.
+
+`setup.ts` also polls while a panel is open, and retires that poll the first time a real `change`
+event arrives. Keep it: it is the difference between a wrong guess about the event channel being
+invisible and being a broken feature.
+
 ## The `@layer` architecture
 
 Cascade layers are declared once as an inline `<style>` in `src/layouts/BaseLayout.astro` (and mirrored in the docs' `LibraryLayout.astro`) so the order is fixed before any component style loads:

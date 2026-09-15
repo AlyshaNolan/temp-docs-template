@@ -1,0 +1,9 @@
+{
+  "themeSelector": true,
+  "theme": {
+    "accentLight": "#0f766e",
+    "accentDark": "#5eead4",
+    "brandLight": "#08090b",
+    "brandDark": "#ffffff"
+  }
+}

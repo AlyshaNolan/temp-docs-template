@@ -363,6 +363,57 @@ collections_config:
           prevent_resize_existing_files: false
           required: false
         cascade: true
+      theme:
+        type: object
+        options:
+          preview:
+            text: Theme
+            icon: palette
+        comment: Accent, brand and corner radius for the whole site. Each colour seeds
+          a family — hover, surface, border and the legible text colour on top are
+          derived from it, so there is one swatch to pick per role.
+        cascade: true
+      themeSelector:
+        type: switch
+        comment: Show the swatch button in the bottom corner of the Visual Editor preview.
+          It is editor-only either way — a site visitor never sees it — so turning it off
+          just means the theme is edited from this file instead.
+        cascade: true
+      accentLight:
+        type: color
+        options:
+          format: hex
+          alpha: false
+          required: false
+        comment: The interactive colour in light mode — links, the active sidebar item,
+          focus rings, the brand tile. Pick something that carries white text.
+        cascade: true
+      accentDark:
+        type: color
+        options:
+          format: hex
+          alpha: false
+          required: false
+        comment: The same role in dark mode. Use a paler step than the light one — a
+          fully saturated accent vibrates against near-black.
+        cascade: true
+      brandLight:
+        type: color
+        options:
+          format: hex
+          alpha: false
+          required: false
+        comment: Primary button and brand fill in light mode. The starter ships near-black
+          so an accent change never floods the page with one hue.
+        cascade: true
+      brandDark:
+        type: color
+        options:
+          format: hex
+          alpha: false
+          required: false
+        comment: Primary button and brand fill in dark mode.
+        cascade: true
     disable_add: false
     disable_add_folder: false
     disable_file_actions: false
@@ -645,13 +696,6 @@ collections_config:
             comment: Optional X (Twitter) handle for the site, including the @, used in
               social share cards.
             cascade: true
-# Commit and Pull Request templates offered when an editor saves. `[changes]`,
-# `[author]` and `[default_commit_message]` are CloudCannon's own placeholders;
-# `{summary}` is the input declared beneath each template.
-#
-# The Pull Request body is read from `.github/PULL_REQUEST_TEMPLATE.md` rather
-# than inlined here, so GitHub and CloudCannon show the same checklist and it
-# can only drift in one place.
 commit_templates:
   - label: Describe the change
     template_string: |-
@@ -661,7 +705,7 @@ commit_templates:
     _inputs:
       summary:
         type: text
-        comment: One line in the imperative, e.g. "Rewrite the installation intro".
+        comment: A brief summary of your changes, e.g. "Rewrite the installation intro".
         options:
           required: true
           max_length: 72
@@ -672,15 +716,32 @@ commit_templates:
       [changes]
 pull_request_templates:
   - label: Docs change
-    title: "{summary}"
     template_path: .github/PULL_REQUEST_TEMPLATE.md
     _inputs:
-      summary:
+      title:
         type: text
-        comment: The Pull Request title. Say what changed, not which files moved.
+        comment: Short summary of changes
         options:
           required: true
           max_length: 72
+      body:
+        type: markdown
+        comment: Fill in each section and tick the checklist before publishing.
+        options:
+          format: p h2 h3
+          bold: true
+          italic: true
+          link: true
+          bulletedlist: true
+          numberedlist: true
+          code_inline: true
+          code_block: false
+          blockquote: true
+          horizontalrule: true
+          table: true
+          undo: true
+          redo: true
+          removeformat: true
 collection_groups:
   - heading: Pages
     collections:
@@ -742,6 +803,11 @@ _inputs:
 _snippets_imports:
   mdx: true
 data_config:
+  # The theme selector subscribes to `api.dataset("theme")` for live updates —
+  # a dataset is the handle CloudCannon fires change events on while a panel is
+  # open. Removing this entry makes the editor preview stop repainting live.
+  theme:
+    path: src/data/theme.json
   icons:
     path: .cloudcannon/data/icons.yml
   autocomplete_tokens:

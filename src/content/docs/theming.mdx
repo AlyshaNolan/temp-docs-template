@@ -36,6 +36,79 @@ is the calmer step for a dark page — a fully saturated accent vibrates against
 Swap both, and `--color-accent-surface` / `--color-accent-border` with them, and every accent
 on the site follows.
 
+## The theme file
+
+`src/data/theme.json` holds the decisions an editor is allowed to make without touching CSS:
+two accent colours and two brand colours. `BaseLayout` turns them into custom
+properties on `<html>`, and the theme files read those as optional overrides.
+
+<CodeBlock
+  language="json"
+  filename="src/data/theme.json"
+  code={'{\n  "themeSelector": true,\n  "theme": {\n    "accentLight": "#0f766e",\n    "accentDark": "#5eead4",\n    "brandLight": "#08090b",\n    "brandDark": "#ffffff"\n  }\n}'}
+/>
+
+Each colour is one swatch, not a set. `src/utils/themeTokens.mjs` derives the rest of the
+family from it — the hover state, the tinted surface, the border, and the legible text colour
+to sit on top, chosen by relative luminance so a pale accent gets ink and a deep one gets
+paper.
+
+<ParamList
+  params={[
+    {
+      "name": "accentLight / accentDark",
+      "type": "hex colour",
+      "description": "The interactive colour — links, active sidebar item, focus rings, the brand tile. Use a paler step for dark: a fully saturated accent vibrates against near-black."
+    },
+    {
+      "name": "brandLight / brandDark",
+      "type": "hex colour",
+      "description": "Primary button and brand fill. Shipped near-black on light and white on dark, so an accent change never floods the page with one hue."
+    },
+  ]}
+/>
+
+Nothing is required. The theme files read every one as `var(--accent-light, var(--teal-700))`,
+so a missing or malformed value leaves the shipped design standing rather than blanking a
+token — which matters, because an unresolved `var()` with no fallback is invalid at
+computed-value time and fails silently.
+
+### Editing it in CloudCannon
+
+In the Visual Editor a swatch button sits in the bottom corner of the preview. It opens
+`theme.json` in a data panel, and the page repaints as you drag the colour picker — no save, no
+reload. Set `themeSelector` to `false` to hide the button and edit the colours from the data
+file instead — the preview drops it the moment you untick the switch, with no save and no
+rebuild, because `setup.ts` reads that key from the same live handle as the colours. It never
+renders for a site visitor either way.
+
+That button is the starter's worked example of the [CloudCannon Visual Editor JavaScript
+API](https://cloudcannon.com/documentation/developer-articles/read-and-write-data-with-the-visual-editor-api/),
+in `src/components/navigation/theme-selector/setup.ts`:
+
+<CodeBlock
+  language="js"
+  filename="src/components/navigation/theme-selector/setup.ts"
+  code={'const api = window.CloudCannonAPI.useVersion("v1", true);\n\n// The dataset, not api.file() — see the note below.\nconst dataset = api.dataset("theme");\nconst file = await dataset.items();\n\n// Open CloudCannon\'s own inputs panel, anchored to the button.\nfile.data.edit({ slug: "theme", position });\n\n// Fires while the panel is open, on every drag of the picker.\ndataset.addEventListener("change", async () => {\n  apply(themeCustomProperties(await file.data.get()));\n});'}
+/>
+
+`apply` only calls `style.setProperty()` on `<html>`. Custom properties inherit, so a section
+pinning its own `data-theme` repaints in the same frame as the rest of the page — no
+re-render, no stylesheet rewriting, and no state to keep in sync between the editor and the
+preview.
+
+<Alert
+  variant="warning"
+  title="Subscribe to the dataset, not the file"
+  text="`api.file()` on the same path reads the same JSON, but CloudCannon fires `change` on the **dataset** handle while a panel is open — the file handle only settles up later. Subscribed to the file, the preview repaints when you navigate away and back, but not while you drag the picker. The dataset exists only because `data_config.theme` is declared in `cloudcannon.config.yml`; delete that entry and live preview stops."
+/>
+
+<Alert
+  variant="note"
+  title="The button never reaches your readers"
+  text="`ThemeSelector.astro` ships `hidden`, and only `editor-live-sync.js` — which loads solely inside CloudCannon — reveals it. On the live site it is inert markup."
+/>
+
 ## Typography
 
 One sans for interface and prose, one mono for code and labels, both registered in

@@ -1,10 +1,10 @@
 ## What changed
 
-<!-- One paragraph. What a reader of the site would notice. -->
+One paragraph. What a reader of the site would notice.
 
 ## Why
 
-<!-- The problem this solves. Link an issue if there is one. -->
+The problem this solves. Link an issue if there is one.
 
 ## Checklist
 

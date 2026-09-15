@@ -102,7 +102,7 @@ in a pull request.
 <!-- generated:catalog:counts:start (npm run docs:catalog) -->
 
 58 page-builder components — 9 page sections, 46 building blocks and 3 navigation blocks — plus
-9 pieces of site chrome and 343 icons.
+10 pieces of site chrome and 343 icons.
 
 <!-- generated:catalog:counts:end -->
 
