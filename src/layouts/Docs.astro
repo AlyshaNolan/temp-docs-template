@@ -106,7 +106,10 @@ const baselineTheme = configuredTheme === "dark" ? "dark" : "light";
     </main>
   </div>
 
-  <Footer {...footerData} />
+  <Footer
+    {...footerData}
+    editableSource="@data[footer]"
+  />
   <CodeSurfaces />
   <HeadingLinks />
 </Layout>
@@ -209,7 +212,9 @@ const baselineTheme = configuredTheme === "dark" ? "dark" : "light";
     }
 
     @media (width < 1280px) {
-      .docs-toc-rail:not(:empty) {
+      /* The rail always holds the table of contents, hidden or not, so an
+         `:empty` test would keep this padding on a page that switched it off. */
+      .docs-toc-rail:has(> .toc:not([data-toggle-hidden])) {
         padding-top: var(--spacing-xl);
       }
     }

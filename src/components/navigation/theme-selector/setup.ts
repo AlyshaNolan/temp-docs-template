@@ -3,12 +3,10 @@
  * Editor JavaScript API.
  *
  * The API call that matters for live preview is `api.dataset("theme")`, not
- * `api.file("src/data/theme.json")`. Both read the same JSON, but CloudCannon
- * fires `change` on the *dataset* handle while a panel is open; the file handle
- * only settles up later, which shows as a theme that repaints on navigation but
- * not while you drag the colour picker. `@cloudcannon/editable-regions` resolves
- * every `@data[key]` binding the same way — see `nodes/editable.ts`. The dataset
- * only exists because `data_config.theme` is declared in `cloudcannon.config.yml`.
+ * `api.file("src/data/theme.json")` — see `resolveDataSource` in
+ * `@component-utils/editorData`, which both this and `@component-utils/siteChrome` use.
+ * `@cloudcannon/editable-regions` resolves every `@data[key]` binding the same
+ * way — see `nodes/editable.ts`.
  *
  * The change handler writes custom properties onto `<html>`. They inherit, so
  * every element — including a section pinning its own `data-theme` — repaints in
@@ -26,6 +24,7 @@ import type {
 } from "@cloudcannon/javascript-api";
 import { themeCustomProperties } from "@utils/themeTokens.mjs";
 import { onPageLoad } from "@component-utils/onPageLoad";
+import { framed, resolveDataSource } from "@component-utils/editorData";
 
 const THEME_DATASET = "theme";
 const VISIBILITY_KEY = "themeSelector";
@@ -88,44 +87,6 @@ function readTheme(data: unknown): Record<string, unknown> {
     : {};
 }
 
-interface Source {
-  /** The file to open a panel on and read through. */
-  file: CloudCannonJavaScriptV1APIFile;
-  /** Every handle that might emit `change` for this data. */
-  emitters: { addEventListener(event: "change", fn: () => void): void }[];
-}
-
-/**
- * Resolve the theme data, preferring the dataset handle.
- *
- * CloudCannon has answered to both the bare and the leading-slash spelling of a
- * source path, and a wrong guess throws nothing useful — `data.get()` just
- * resolves `undefined` — so probe and keep whichever returns data.
- */
-async function resolveSource(api: CloudCannonJavaScriptV1API): Promise<Source | undefined> {
-  try {
-    const dataset = api.dataset(THEME_DATASET);
-    const items = await dataset.items();
-    const file = Array.isArray(items) ? items[0] : items;
-
-    if (file && (await file.data.get())) return { file, emitters: [dataset, file, api] };
-  } catch {
-    // No such dataset — fall through to the file paths.
-  }
-
-  for (const path of [THEME_FILE, `/${THEME_FILE}`]) {
-    try {
-      const file = api.file(path);
-
-      if (await file.data.get()) return { file, emitters: [file, api] };
-    } catch {
-      // Next spelling.
-    }
-  }
-
-  return undefined;
-}
-
 interface Live {
   /** The resolved data handle, for opening the panel. */
   file: CloudCannonJavaScriptV1APIFile;
@@ -142,7 +103,7 @@ let live: Promise<Live | undefined> | undefined;
 
 function connect(api: CloudCannonJavaScriptV1API): Promise<Live | undefined> {
   live ??= (async () => {
-    const source = await resolveSource(api);
+    const source = await resolveDataSource(api, { dataset: THEME_DATASET, path: THEME_FILE });
 
     if (!source) {
       console.warn(`[theme-selector] ${THEME_FILE} is not editable here.`);
@@ -152,21 +113,12 @@ function connect(api: CloudCannonJavaScriptV1API): Promise<Live | undefined> {
 
     const { file, emitters } = source;
 
-    let queued = false;
+    const repaint = framed(async () => {
+      const data = await file.data.get();
 
-    const repaint = () => {
-      if (queued) return;
-      queued = true;
-
-      requestAnimationFrame(async () => {
-        queued = false;
-
-        const data = await file.data.get();
-
-        apply(themeCustomProperties(readTheme(data)));
-        setVisible(readVisible(data));
-      });
-    };
+      apply(themeCustomProperties(readTheme(data)));
+      setVisible(readVisible(data));
+    });
 
     // A change event proves the subscription reaches this frame, which is what
     // retires the poll below. Never assume it: this ran for a release subscribed

@@ -5,14 +5,29 @@
 # valid key in an `_inputs_from_glob` file.
 #
 # Distinct from the field-name-matched `links` / `socials` structures used by the
-# data files in `src/data/` — same idea, different consumers.
+# data files in `src/data/` — same idea, different consumers. Keep the `preview`
+# blocks in step with those: without one a structure-backed row has no
+# representation to draw, in the data panel or on canvas.
 linkItems:
+  style: modal
   values:
     - label: Navigation Link
       icon: link
+      description: A navigation link with text and a target.
       value:
         name: Link text
         path: /
+      preview:
+        text:
+          - key: name
+          - Navigation Link
+        subtext:
+          - key: path
+          - Add path
+      picker_preview:
+        text: Navigation Link
+        subtext: A navigation link with text and a target.
+        icon: link
       _inputs:
         name:
           type: text
@@ -25,13 +40,27 @@ linkItems:
             hide_link_to_email_address: true
             hide_link_to_telephone: true
 socialItems:
+  style: modal
   values:
     - label: Social Link
       icon: share
+      description: An icon linking to a social profile.
       value:
         icon: social/github
         link: https://github.com/
         label: ""
+      preview:
+        text:
+          - key: label
+          - key: icon
+          - Social Link
+        subtext:
+          - key: link
+          - Add link
+      picker_preview:
+        text: Social Link
+        subtext: An icon linking to a social profile.
+        icon: share
       _inputs:
         icon:
           type: select

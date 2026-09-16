@@ -3,6 +3,11 @@
  * The fixed documentation header: drawer trigger, brand + version badge,
  * optional top-level links, search, theme toggle. Site chrome fed by
  * `src/data/docsSite.json` — no CloudCannon YAML, wired by hand in `Docs.astro`.
+ *
+ * The editable regions bind to `@data[docsSite]`, not the current file, so the
+ * header is edited on canvas from whatever page is open. The prefix needs
+ * `data_config.docsSite` in `cloudcannon.config.yml`; `@file[<path>]` resolves
+ * through `CloudCannon.file()` instead and does not answer to these paths.
  */
 import { DOCS_NAV_TOGGLE_ID } from "@components/navigation/docs-sidebar/navToggle";
 import Search from "@components/navigation/search/Search.astro";
@@ -59,12 +64,41 @@ const {
         />
       ) : (
         <>
-          {markLetter && <span class="docs-topbar-mark">{markLetter}</span>}
-          {wordmark && <span class="docs-topbar-wordmark">{wordmark}</span>}
+          {markLetter && (
+            <span
+              class="docs-topbar-mark"
+              data-editable="text"
+              data-type="span"
+              data-prop="@data[docsSite].markLetter"
+            >
+              {markLetter}
+            </span>
+          )}
+          {wordmark && (
+            <span
+              class="docs-topbar-wordmark"
+              data-editable="text"
+              data-type="span"
+              data-prop="@data[docsSite].wordmark"
+            >
+              {wordmark}
+            </span>
+          )}
         </>
       )
     }
-    {version && <span class="docs-topbar-version">{version}</span>}
+    {
+      version && (
+        <span
+          class="docs-topbar-version"
+          data-editable="text"
+          data-type="span"
+          data-prop="@data[docsSite].version"
+        >
+          {version}
+        </span>
+      )
+    }
   </a>
 
   <div class="docs-topbar-end">
@@ -73,20 +107,32 @@ const {
         <nav
           class="docs-topbar-links"
           aria-label="Site"
+          data-editable="array"
+          data-prop="@data[docsSite].topbarLinks"
         >
           {topbarLinks.map((link: TopbarLink) => (
             <a
               href={link.path}
               aria-current={link.path === pathname ? "page" : undefined}
+              data-editable="array-item"
             >
-              {link.name}
+              <span
+                data-editable="text"
+                data-type="span"
+                data-prop="name"
+              >
+                {link.name}
+              </span>
             </a>
           ))}
         </nav>
       )
     }
-    {search && <Search placeholder={searchPlaceholder} />}
-    {themeToggle && <ThemeToggle />}
+    <Search
+      placeholder={searchPlaceholder}
+      data-toggle-hidden={search ? undefined : ""}
+    />
+    <ThemeToggle data-toggle-hidden={themeToggle ? undefined : ""} />
   </div>
 </header>
 

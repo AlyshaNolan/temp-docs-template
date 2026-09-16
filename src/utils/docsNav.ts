@@ -15,6 +15,7 @@
  *   child whose parent page doesn't exist falls back to its own `group`.
  */
 import docsSite from "@data/docsSite.json";
+import { comparePages, orderGroupNames } from "@utils/navOrder";
 import { getCollection, type CollectionEntry } from "astro:content";
 
 export type DocsNavPage = {
@@ -23,6 +24,8 @@ export type DocsNavPage = {
   description?: string;
   href: string;
   group?: string;
+  /** Sidebar position within the group or parent. Always set — the schema defaults it to 0. */
+  order: number;
   children: DocsNavPage[];
 };
 
@@ -53,19 +56,16 @@ function toNavPage(entry: CollectionEntry<"docs">): DocsNavPage {
     description: entry.data.description,
     href: docHref(entry.id),
     group: entry.data.group,
+    order: entry.data.order,
     children: [],
   };
 }
 
 export async function getDocsNav(): Promise<DocsNav> {
   const entries = await getCollection("docs");
-  const order = new Map(entries.map((entry) => [entry.id, entry.data.order]));
   const byId = new Map(entries.map((entry) => [entry.id, toNavPage(entry)]));
 
-  const sortPages = (pages: DocsNavPage[]) =>
-    pages.sort(
-      (a, b) => (order.get(a.id) ?? 0) - (order.get(b.id) ?? 0) || a.title.localeCompare(b.title)
-    );
+  const sortPages = (pages: DocsNavPage[]) => pages.sort(comparePages);
 
   // Nest before grouping: a child's group is its parent's, whatever its own
   // frontmatter says, so the two levels can't disagree in the sidebar.
@@ -99,18 +99,16 @@ export async function getDocsNav(): Promise<DocsNav> {
 
   for (const pages of byGroup.values()) sortPages(pages);
 
-  const extras = [...byGroup.keys()].filter((name) => !configuredNames.includes(name)).sort();
-
-  const groups: DocsNavGroup[] = [...configuredNames, ...extras]
-    .filter((name) => byGroup.has(name))
-    .map((name) => ({
+  const groups: DocsNavGroup[] = orderGroupNames(configuredNames, [...byGroup.keys()]).map(
+    (name) => ({
       name,
       collapsed: configured.find((group) => group.name === name)?.collapsed ?? false,
       pages: byGroup.get(name) ?? [],
-    }));
+    })
+  );
 
   const lead: DocsNavPage[] = [
-    { id: "__home", title: docsSite.homeLabel || "Overview", href: "/", children: [] },
+    { id: "__home", title: docsSite.homeLabel || "Overview", href: "/", order: 0, children: [] },
   ];
 
   const reading: DocsNavPage[] = [...lead];

@@ -6,8 +6,12 @@ import breadcrumbsData from "@data/breadcrumbs.json";
 /**
  * `items` is the trail after the leading Home crumb, in order. The last item is
  * the current page; items with a `url` render as links, the rest as text.
+ *
+ * `currentProp` binds the last crumb to a prop on the page being edited — the
+ * crumb is a copy of the page title, so editing it renames the page. The rest
+ * of the trail is derived by joining files and has no single path to bind to.
  */
-const { items = [], class: className, ...htmlAttributes } = Astro.props;
+const { items = [], currentProp, class: className, ...htmlAttributes } = Astro.props;
 
 const homeLabel = String(breadcrumbsData.homeLabel ?? "").trim() || "Home";
 const trail = [{ label: homeLabel, url: "/" }, ...items];
@@ -48,6 +52,9 @@ const structuredData = breadcrumbListJsonLd(items, {
               <a
                 class="breadcrumbs-link"
                 href={item.url}
+                data-editable={index === 0 ? "text" : undefined}
+                data-type={index === 0 ? "span" : undefined}
+                data-prop={index === 0 ? "@data[breadcrumbs].homeLabel" : undefined}
               >
                 {item.label}
               </a>
@@ -55,6 +62,9 @@ const structuredData = breadcrumbListJsonLd(items, {
               <span
                 class="breadcrumbs-current"
                 aria-current={isCurrent ? "page" : undefined}
+                data-editable={isCurrent && currentProp ? "text" : undefined}
+                data-type={isCurrent && currentProp ? "span" : undefined}
+                data-prop={isCurrent && currentProp ? currentProp : undefined}
               >
                 {item.label}
               </span>

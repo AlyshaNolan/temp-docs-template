@@ -3,6 +3,11 @@
  * A one-line site footer: legal text, links, socials. Docs pages carry their
  * own navigation in the sidebar, so the footer stays out of the way rather
  * than repeating it as a sitemap.
+ *
+ * `editableSource` prefixes the editable-region paths. The shell passes
+ * `@data[footer]` because the site footer reads `footer.json`, not the open
+ * page; placed in a page builder the prop is absent and the bindings fall back
+ * to the page's own frontmatter. Hardcoding either one breaks the other use.
  */
 import SocialLinks from "@core-elements/social-links/SocialLinks.astro";
 import type { SocialLink } from "../../../types";
@@ -13,11 +18,14 @@ const {
   links = [] as FooterLink[],
   socials = [] as SocialLink[],
   footerText = "",
+  editableSource = "",
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
   _component,
   class: className,
   ...htmlAttributes
 } = Astro.props;
+
+const prop = (path: string) => (editableSource ? `${editableSource}.${path}` : path);
 ---
 
 <footer
@@ -25,16 +33,40 @@ const {
   {...htmlAttributes}
 >
   <div class="footer-inner">
-    {footerText && <p class="footer-text">{footerText}</p>}
+    {
+      footerText && (
+        <p
+          class="footer-text"
+          data-editable="text"
+          data-type="span"
+          data-prop={prop("footerText")}
+        >
+          {footerText}
+        </p>
+      )
+    }
 
     {
       links.length > 0 && (
         <nav
           class="footer-links"
           aria-label="Footer"
+          data-editable="array"
+          data-prop={prop("links")}
         >
           {(links as FooterLink[]).map((link) => (
-            <a href={link.path}>{link.name}</a>
+            <a
+              href={link.path}
+              data-editable="array-item"
+            >
+              <span
+                data-editable="text"
+                data-type="span"
+                data-prop="name"
+              >
+                {link.name}
+              </span>
+            </a>
           ))}
         </nav>
       )
@@ -49,6 +81,7 @@ const {
           size="sm"
           alignmentHorizontal="end"
           useDefaultEditableBinding={false}
+          data-children-prop={prop("socials")}
         />
       )
     }

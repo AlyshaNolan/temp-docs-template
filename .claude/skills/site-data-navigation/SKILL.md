@@ -103,9 +103,60 @@ Set `name`, `url` (must match `site` in `astro.config.mjs`), `description`, `tit
 - Array fields get their shape from **global structures matched by field name**, loaded by the root `_structures_from_glob`. `topbarLinks` and `footer.links` use `linkItems`, `socials` uses `socialItems` (both in `footerItems.cloudcannon.structures.yml`), and `navGroups` uses `docsNavGroups.cloudcannon.structures.yml`.
 - Renaming a field in a data file means renaming it in the matching structure file too, or the editor shows the raw key.
 
+## Editing site chrome on canvas
+
+An editable region can bind **across files**: a `data-prop` beginning `@file[path]`, `@data[key]` or `@collections[key]` resolves against that source instead of the open page (`parseSource` in `@cloudcannon/editable-regions/nodes/editable.ts`). Both directions work — such a region reads back on change and writes through `set` / `add-array-item` / `move-array-item`.
+
+**MUST:** use `@data[<key>]` for a `src/data` file, and declare the key under `data_config`. `@file[<path>]` goes through `CloudCannon.file()`, which does not answer to these paths — every region bound that way renders an error card instead.
+
+A dataset resolves through `items()`, typed `File[] | File`. On the **array** branch the next path segment is consumed as an index, so `@data[docsSite].wordmark` would look up `wordmark` on an array and error. In practice a single-file `data_config` entry resolves to one `File` and the plain path is right — but that is the shape to check first if a whole file's worth of regions errors at once.
+
+So anything **stored in one file** is a plain region, not JavaScript:
+
+| Chrome                         | Binding                                                                                 |
+| ------------------------------ | --------------------------------------------------------------------------------------- |
+| Topbar mark, wordmark, version | `@data[docsSite].markLetter` / `.wordmark` / `.version`                                 |
+| Topbar links (the main nav)    | `@data[docsSite].topbarLinks` — an `array` region, so add/remove/reorder work on canvas |
+| Footer text, links, socials    | `@data[footer].footerText` / `.links` / `.socials`                                      |
+| The Home crumb                 | `@data[breadcrumbs].homeLabel`                                                          |
+| The current crumb              | `title` on the open page — editing it renames the page                                  |
+
+**MUST:** pass the source in as a prop for a component that is _both_ site chrome and a page-builder block. `Footer.astro` takes `editableSource`, which `Docs.astro` sets to `@data[footer]`; placed in a page builder the prop is absent and the bindings fall back to the page's own frontmatter. Hardcoding either one breaks the other use.
+
+## What regions still cannot reach
+
+`getDocsNav()` _derives_ the sidebar tree and the crumb trail by joining the whole `docs` collection with `docsSite.json`. No single path holds "where this page sits", so there is nothing to bind. `src/components/utils/siteChrome.ts` patches those through the JavaScript API instead, registered in `editor-live-sync.js`:
+
+| Edit                 | What moves                                                                      |
+| -------------------- | ------------------------------------------------------------------------------- |
+| A page's `group`     | Its sidebar entry between groups (creating or pruning one), and the group crumb |
+| A page's `order`     | Its position among its siblings                                                 |
+| A page's `title`     | Its sidebar link (the crumb is a region)                                        |
+| `docsSite.homeLabel` | The sidebar's lead link                                                         |
+| `docsSite.navGroups` | Group order and collapsed state                                                 |
+
+**MUST:** keep the two ordering rules in `src/utils/navOrder.ts`. `docsNav.ts` and the live patcher both import them, so the canvas and the rebuild agree on where a page lands.
+
+**MUST NOT:** re-derive group _membership_ or page nesting client-side. Both need every doc's frontmatter, not the open file's — reimplementing `getDocsNav()` against the API gives the sidebar a second ordering that nothing keeps in sync.
+
+**MUST NOT:** put a text region on a sidebar group label. It would write `navGroups[i].name`, but membership comes from each page's `group` frontmatter — so the rename shows as taking on canvas and the rebuild undoes it, orphaning the old name into the alphabetical tail. Group names are renamed in the data panel, and every page in the group re-tagged.
+
+## Switches
+
+A boolean has no region type — `text`, `image`, `array`, `array-item`, `component` and `source` are the whole list — but the JavaScript API shows and hides them fine. The catch is build-time gating: `{showCopyPage && <CopyPage/>}` leaves the editor **no element to reveal** when the switch goes back on.
+
+**MUST:** render an editor-switchable control always, and mark it `data-toggle-hidden` when off (`src/styles/base/_html-elements.css` hides it with `display: none !important`). Never gate it out of the markup. `siteChrome.ts` then flips the attribute live. This covers `showCopyPage`, `showFeedback`, `showPager`, `showToc`, and `docsSite.search` / `themeToggle` / `copyPage.enabled` / `feedback.enabled`.
+
+**MUST NOT:** use `hidden` for this. Several components already use `hidden` as their own JS-reveal mechanism (`CopyPage` ships hidden and `setup.ts` reveals it), so a switch riding the same attribute fights them.
+
+A control gated by both a page switch and a site switch is the AND of the two, so both handles feed one pass in `applyToggles()`. Anything whose layout depends on a control being present — the table of contents holds a grid column — needs the dependent rule keyed off the same attribute (`.docs-toc-rail:has(> .toc:not([data-toggle-hidden]))`), not off `:empty`.
+
+The sidebar markup carries `data-group`, `data-href` and `data-order` purely so the patcher can find and place things; a page with a `logoSource` skips the brand text regions, which need a real re-render to swap.
+
 ## Verify your work
 
 - `npm run check` — exit 0, no drift. `lint:schema` validates the data schemas against CloudCannon's own.
 - `npm run dev`: confirm the header, sidebar order and footer reflect the change.
 - If you edited `seo.json`, view source and confirm `<title>`, `og:*` and the `application/ld+json` script.
 - In CloudCannon, open Data → Docs Site and confirm every field renders with a label. An unlabeled raw JSON field usually means a structure file's key no longer matches the data field name.
+- In the Visual Editor, change a page's **Group** and confirm the sidebar entry and the group crumb move without a reload. Nothing moving means `siteChrome.ts` did not resolve its handle — check the console for its warning.

@@ -814,6 +814,13 @@ data_config:
     path: .cloudcannon/data/autocomplete-tokens.yml
   docsSite:
     path: src/data/docsSite.json
+  # `site-chrome/setup.ts` live-updates the Home crumb from this handle. Without
+  # the dataset entry it falls back to the file handle, which only settles after
+  # the panel closes.
+  breadcrumbs:
+    path: src/data/breadcrumbs.json
+  footer:
+    path: src/data/footer.json
 timezone: Etc/UTC
 _structures_from_glob:
   - /.cloudcannon/structures/*.cloudcannon.structures.yml

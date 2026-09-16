@@ -73,7 +73,10 @@ const groupHasCurrent = (pages: { href: string; children?: { href: string }[] }[
   <div class="docs-sidebar-inner">
     {
       nav.lead.length > 0 && (
-        <ul class="docs-sidebar-list">
+        <ul
+          class="docs-sidebar-list"
+          data-nav-lead
+        >
           {nav.lead.map((page) => (
             <li>
               <a
@@ -92,6 +95,7 @@ const groupHasCurrent = (pages: { href: string; children?: { href: string }[] }[
       nav.groups.map((group) => (
         <details
           class:list={["docs-sidebar-group", group.collapsed && "is-collapsible"]}
+          data-group={group.name}
           open={!group.collapsed || groupHasCurrent(group.pages)}
         >
           <summary class="docs-sidebar-group-label">
@@ -112,7 +116,10 @@ const groupHasCurrent = (pages: { href: string; children?: { href: string }[] }[
           </summary>
           <ul class="docs-sidebar-list">
             {group.pages.map((page) => (
-              <li>
+              <li
+                data-href={page.href}
+                data-order={page.order}
+              >
                 <a
                   href={page.href}
                   aria-current={isCurrent(page.href) ? "page" : undefined}
@@ -122,7 +129,10 @@ const groupHasCurrent = (pages: { href: string; children?: { href: string }[] }[
                 {page.children.length > 0 && (
                   <ul class="docs-sidebar-list docs-sidebar-children">
                     {page.children.map((child) => (
-                      <li>
+                      <li
+                        data-href={child.href}
+                        data-order={child.order}
+                      >
                         <a
                           href={child.href}
                           aria-current={isCurrent(child.href) ? "page" : undefined}

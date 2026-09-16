@@ -62,9 +62,11 @@ const entry = (doc ?? page)!;
 const nav = await getDocsNav();
 const { Content, headings } = await render(entry as CollectionEntry<"docs">);
 
-const showToc = Boolean(doc?.data.showToc);
 const tocHeadings = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
-const hasToc = showToc && tocHeadings.length > 0;
+// Rendered whenever the page has headings to list, then hidden if the switch is
+// off — a build-time gate would leave the editor nothing to reveal.
+const hasToc = tocHeadings.length > 0;
+const showToc = Boolean(doc?.data.showToc) && hasToc;
 
 const href = docHref(entry.id);
 const { prev, next } = findPager(nav, href);
@@ -82,6 +84,7 @@ const editUrl = doc ? editPageUrl(doc.filePath) : "";
 // Opt-out, not opt-in: a page missing the frontmatter default (a content
 // entry parsed before the field existed) must still get the control.
 const showCopyPage = Boolean(doc && doc.data.showCopyPage !== false && docsSite.copyPage.enabled);
+const showFeedback = Boolean(doc?.data.showFeedback && docsSite.feedback?.enabled);
 ---
 
 <Docs
@@ -91,13 +94,14 @@ const showCopyPage = Boolean(doc && doc.data.showCopyPage !== false && docsSite.
   keywords={entry.data.keywords}
   image={entry.data.image}
   noindex={entry.data.noindex}
-  wide={!doc}
+  wide={!doc || !showToc}
 >
   {
     hasToc && (
       <Toc
         slot="toc"
         headings={tocHeadings}
+        data-toggle-hidden={showToc ? undefined : ""}
       />
     )
   }
@@ -105,12 +109,12 @@ const showCopyPage = Boolean(doc && doc.data.showCopyPage !== false && docsSite.
   {
     doc ? (
       <article class="doc">
-        {/* No editable region on the trail or on the show* switches below: the
-            crumbs are derived from the sidebar tree, not stored on the page,
-            and a region can only bind text, an image or an array — never a
-            boolean. Both are edited in the page's data panel. */}
+        {/* Only the Home and current crumbs have a path to bind: the group and
+            parent crumbs are derived by joining files. `@component-utils/siteChrome`
+            keeps those live in the editor instead. */}
         <Breadcrumbs
           class="doc-breadcrumbs"
+          currentProp="title"
           items={crumbs.length > 0 ? crumbs : [{ label: doc.data.title }]}
         />
         <div class="doc-heading">
@@ -123,12 +127,11 @@ const showCopyPage = Boolean(doc && doc.data.showCopyPage !== false && docsSite.
           >
             {doc.data.title}
           </h1>
-          {showCopyPage && (
-            <CopyPage
-              label={docsSite.copyPage.label}
-              markdownHref={markdownHref(href)}
-            />
-          )}
+          <CopyPage
+            label={docsSite.copyPage.label}
+            markdownHref={markdownHref(href)}
+            data-toggle-hidden={showCopyPage ? undefined : ""}
+          />
         </div>
 
         {(updated || editUrl) && (
@@ -171,20 +174,18 @@ const showCopyPage = Boolean(doc && doc.data.showCopyPage !== false && docsSite.
           class="doc-footer"
           data-pagefind-ignore
         >
-          {doc.data.showFeedback && docsSite.feedback?.enabled && (
-            <PageFeedback
-              prompt={docsSite.feedback.prompt}
-              action={docsSite.feedback.action}
-              successMessage={docsSite.feedback.successMessage}
-              page={href}
-            />
-          )}
-          {doc.data.showPager && (
-            <DocsPager
-              prev={prev}
-              next={next}
-            />
-          )}
+          <PageFeedback
+            prompt={docsSite.feedback.prompt}
+            action={docsSite.feedback.action}
+            successMessage={docsSite.feedback.successMessage}
+            page={href}
+            data-toggle-hidden={showFeedback ? undefined : ""}
+          />
+          <DocsPager
+            prev={prev}
+            next={next}
+            data-toggle-hidden={doc.data.showPager ? undefined : ""}
+          />
         </div>
       </article>
     ) : (

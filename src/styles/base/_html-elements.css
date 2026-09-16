@@ -73,3 +73,14 @@
     }
   }
 }
+
+@layer base {
+  /* An editor switch that is off. These controls are always rendered and hidden
+     here rather than gated at build time, so the Visual Editor has an element to
+     reveal when the switch is turned back on — a gate leaves nothing to show.
+     Not `[hidden]`: that is already several components' own JS-reveal
+     mechanism, and this has to outrank their `display` either way. */
+  [data-toggle-hidden] {
+    display: none !important;
+  }
+}

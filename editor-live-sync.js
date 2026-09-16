@@ -50,6 +50,7 @@ import {
   setupMasonry,
 } from "./src/components/building-blocks/wrappers/masonry/setup";
 import { setupAllThemeSelectors } from "./src/components/navigation/theme-selector/setup";
+import { setupSiteChrome } from "./src/components/utils/siteChrome";
 
 const DEBUG = import.meta.env.DEV;
 
@@ -204,5 +205,6 @@ setupAllPrintButtons();
 setupAllCopyPage();
 setupHeadingLinks();
 setupAllThemeSelectors();
+setupSiteChrome();
 
 log("observer active");
