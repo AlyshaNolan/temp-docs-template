@@ -802,10 +802,15 @@ _inputs:
     cascade: true
 _snippets_imports:
   mdx: true
+# Every key here does two jobs: it makes `@data[<key>]` resolve for the editable
+# regions that bind site chrome across files, and it gives the JavaScript API a
+# dataset handle. Prefer the dataset over `api.file()` — CloudCannon fires
+# `change` on it while a panel is open, where the file handle only settles after
+# the panel closes. Remove an entry and both stop working, silently.
 data_config:
-  # The theme selector subscribes to `api.dataset("theme")` for live updates —
-  # a dataset is the handle CloudCannon fires change events on while a panel is
-  # open. Removing this entry makes the editor preview stop repainting live.
+  # Read by `theme-selector/setup.ts`, which repaints `<html>` as the colour
+  # picker is dragged. No region can do this: a theme is CSS custom properties,
+  # not the content of any element.
   theme:
     path: src/data/theme.json
   icons:
@@ -814,9 +819,6 @@ data_config:
     path: .cloudcannon/data/autocomplete-tokens.yml
   docsSite:
     path: src/data/docsSite.json
-  # `site-chrome/setup.ts` live-updates the Home crumb from this handle. Without
-  # the dataset entry it falls back to the file handle, which only settles after
-  # the panel closes.
   breadcrumbs:
     path: src/data/breadcrumbs.json
   footer:
