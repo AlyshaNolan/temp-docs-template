@@ -121,7 +121,7 @@ So anything **stored in one file** is a plain region, not JavaScript:
 | The Home crumb                 | `@data[breadcrumbs].homeLabel`                                                          |
 | The current crumb              | `title` on the open page — editing it renames the page                                  |
 
-**MUST:** pass the source in as a prop for a component that is _both_ site chrome and a page-builder block. `Footer.astro` takes `editableSource`, which `Docs.astro` sets to `@data[footer]`; placed in a page builder the prop is absent and the bindings fall back to the page's own frontmatter. Hardcoding either one breaks the other use.
+**MUST:** pass the source in as a prop for a component that is _both_ site chrome and a page-builder block. `Footer.astro` and `AnnouncementBar.astro` take `editableSource`, which `Docs.astro` sets to `@data[footer]` / `@data[announcementBar]`; placed in a page builder the prop is absent and the bindings fall back to the page's own frontmatter. Hardcoding either one breaks the other use.
 
 ## What regions still cannot reach
 
@@ -145,7 +145,9 @@ So anything **stored in one file** is a plain region, not JavaScript:
 
 A boolean has no region type — `text`, `image`, `array`, `array-item`, `component` and `source` are the whole list — but the JavaScript API shows and hides them fine. The catch is build-time gating: `{showCopyPage && <CopyPage/>}` leaves the editor **no element to reveal** when the switch goes back on.
 
-**MUST:** render an editor-switchable control always, and mark it `data-toggle-hidden` when off (`src/styles/base/_html-elements.css` hides it with `display: none !important`). Never gate it out of the markup. `siteChrome.ts` then flips the attribute live. This covers `showCopyPage`, `showFeedback`, `showPager`, `showToc`, and `docsSite.search` / `themeToggle` / `copyPage.enabled` / `feedback.enabled`.
+**MUST:** render an editor-switchable control always, and mark it `data-toggle-hidden` when off (`src/styles/base/_html-elements.css` hides it with `display: none !important`). Never gate it out of the markup. `siteChrome.ts` then flips the attribute live. This covers `showCopyPage`, `showFeedback`, `showPager`, `showToc`, `docsSite.search` / `themeToggle` / `copyPage.enabled` / `feedback.enabled`, and `announcementBar.enabled`.
+
+**MUST NOT:** put `data-toggle-hidden` on the root of a component that has CloudCannon YAML. It is prop-driven, and `lint:roots` fails it — CloudCannon's re-render keeps a region root and swaps its contents, so the attribute goes stale. Put it on a direct child and hoist it back with `:has()`, the way `AnnouncementBar.astro` hides the whole bar from a marker on its `<p>`.
 
 **MUST NOT:** use `hidden` for this. Several components already use `hidden` as their own JS-reveal mechanism (`CopyPage` ships hidden and `setup.ts` reveals it), so a switch riding the same attribute fights them.
 

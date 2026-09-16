@@ -42,6 +42,7 @@ import { comparePages, orderGroupNames } from "@utils/navOrder";
 declare const window: CloudCannonEditorWindow;
 
 const DOCS_SITE = { dataset: "docsSite", path: "src/data/docsSite.json" };
+const ANNOUNCEMENT = { dataset: "announcementBar", path: "src/data/announcementBar.json" };
 
 const text = (value: unknown) => String(value ?? "").trim();
 
@@ -341,6 +342,22 @@ async function connectDataFiles(api: CloudCannonJavaScriptV1API) {
     );
   } else {
     console.warn(`[siteChrome] ${DOCS_SITE.path} is not editable here.`);
+  }
+
+  const announcement = await resolveDataSource(api, ANNOUNCEMENT);
+
+  if (announcement) {
+    subscribe(
+      announcement.emitters,
+      framed(async () => {
+        const data = asRecord(await announcement.file.data.get());
+
+        // The bar's own text is an editable region; only the switch needs this.
+        setToggled(".announcement-bar-text", on(data.enabled));
+      })
+    );
+  } else {
+    console.warn(`[siteChrome] ${ANNOUNCEMENT.path} is not editable here.`);
   }
 }
 

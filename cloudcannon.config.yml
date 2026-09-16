@@ -821,6 +821,8 @@ data_config:
     path: src/data/breadcrumbs.json
   footer:
     path: src/data/footer.json
+  announcementBar:
+    path: src/data/announcementBar.json
 timezone: Etc/UTC
 _structures_from_glob:
   - /.cloudcannon/structures/*.cloudcannon.structures.yml

@@ -71,7 +71,10 @@ const baselineTheme = configuredTheme === "dark" ? "dark" : "light";
   >
     Skip to content
   </a>
-  <AnnouncementBar {...announcementBarData} />
+  <AnnouncementBar
+    {...announcementBarData}
+    editableSource="@data[announcementBar]"
+  />
   <DocsTopbar
     markLetter={docsSite.markLetter}
     wordmark={docsSite.wordmark}
