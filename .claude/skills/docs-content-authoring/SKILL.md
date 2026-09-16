@@ -128,9 +128,10 @@ Reach for `{'…'}` when the sample contains double quotes, so the JSON inside s
 
 ## Changelog releases
 
-A release is **not** written into `changelog.mdx`. Each one is its own file in
-`src/content/changelog/`, and `<Changelog />` on the page renders the whole
-collection, newest `date` first:
+This collection is the project's **only** changelog — there is no root
+`CHANGELOG.md`. A release is not written into `changelog.mdx` either: each one is
+its own file in `src/content/changelog/`, and `<Changelog />` on the page renders
+the whole collection, newest `date` first:
 
 ```yaml
 # src/content/changelog/2.5.0.md
@@ -152,6 +153,12 @@ an anchor on the changelog page.
 
 `<Changelog limit={3} />` renders only the most recent three, for a release-notes
 teaser on another page.
+
+**MUST NOT:** add a file for work that has not been released, or keep a running
+"unreleased" entry. Everything in the collection is published on `/changelog/`,
+so a placeholder version shows readers a release that does not exist. Describe
+day-to-day changes in the commit message and the pull request; write the file
+when the version is actually cut. Full rule: [`.agents/rules/changelog.md`](../../rules/changelog.md).
 
 ## Choosing a code component
 

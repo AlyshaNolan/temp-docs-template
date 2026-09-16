@@ -34,12 +34,12 @@ create-component, screenshot-to-component, migrate-existing-site, editable-regio
 - **Component-key derivation is shared**: `renderBlock.astro`, `live-editing.js`, and `scripts/cms/lint.mjs` all import `src/components/utils/componentKey.mjs`. Change the derivation only there — a divergence makes components vanish from the visual editor.
 - **Interactive components** must work in the CloudCannon editor, where inline `<script>`s don't run — put setup logic in an importable module and register it in `editor-live-sync.js` (see `content-selector/setup.ts`).
 - **Editable regions**: inline editing is opt-in via `data-editable` / `data-prop` attributes and the `useDefaultEditableBinding` prop — see the editable-regions skill before touching these.
-- **Comments**: default to none. Add one only when a reader would otherwise make a wrong edit — a constraint, a silent failure mode, a coupling. Never to describe what code does, explain a design choice, or mark a change you just made (that belongs in the conversation or `CHANGELOG.md`). One line, two at most; no section banners. Full rule imported below.
+- **Comments**: default to none. Add one only when a reader would otherwise make a wrong edit — a constraint, a silent failure mode, a coupling. Never to describe what code does, explain a design choice, or mark a change you just made (that belongs in the conversation or the commit message). One line, two at most; no section banners. Full rule imported below.
 - **The sidebar is derived, not configured**: a page's `group` + `order` frontmatter places it (`src/utils/docsNav.ts`); `src/data/docsSite.json` only orders the groups. A page with no `group` builds and is searchable but has no sidebar entry — that is deliberate, not a bug.
 - **Two collections, one route**: `src/pages/[...slug].astro` serves both `pages` (page-builder) and `docs` (Markdown), mounted at the site root. A slug claimed by both is a build error naming the two files.
 - **Code samples never use a Markdown fence.** CloudCannon's editor drops a fence's `title=`/`{n}` meta, redraws it with its own chrome, and mis-parses a fence nested in a fence badly enough to turn the rest of the file into plain text — so `code_block` is off in every rich-text surface and content uses `CodeBlock`/`CodeTabs`/`CodeAnnotations` (`src/components/utils/highlight.ts`). The fence pipeline still exists for Markdown outside `src/content/`; if you touch it, it must keep using `CODE_THEME` from `src/utils/codeTheme.mjs` and the same `.code-surface` chrome.
 - Fonts change in `site-fonts.mjs` only. Header/footer/SEO data lives in `src/data/*.json`.
-- Update `CHANGELOG.md` (Keep a Changelog format) with user-facing changes — full rule imported below.
+- **There is no `CHANGELOG.md`.** The site publishes its own changelog: one file per release in `src/content/changelog/`, and nothing is written there until a release is cut — full rule imported below.
 
 ## Current state
 

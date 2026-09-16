@@ -36,7 +36,7 @@ After editing `package.json`, run `npm run deps:sync` — never plain `npm insta
 
 ## Changelog
 
-User-facing changes (features, fixes, behavior changes) get an entry in the `[Unreleased]` section of `CHANGELOG.md`, [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format. Append to an existing `### Added`/`### Changed`/etc. heading — never duplicate one. Skip internal-only refactors. Full rule: [`.agents/rules/changelog.md`](.agents/rules/changelog.md).
+There is no `CHANGELOG.md`. The site publishes its own changelog from `src/content/changelog/`, one file per release, and nothing is written there until a release is cut — describe your change in the commit message and the pull request instead. Full rule: [`.agents/rules/changelog.md`](.agents/rules/changelog.md).
 
 ## Skills layout
 

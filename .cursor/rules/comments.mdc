@@ -10,7 +10,7 @@ alwaysApply: true
 
 **Why:** this repo is read by agents with limited context. A comment that restates its own line costs tokens and teaches the next reader to skim past the comments that matter — the ones recording a constraint that took an incident to learn.
 
-**Not a reason to comment:** you just wrote or changed the line. Explaining what a rule does, why an alignment was chosen, or what a change fixes belongs in the conversation, the commit message, or `CHANGELOG.md` — not in the file. Describing what code does is never a reason; the code does that.
+**Not a reason to comment:** you just wrote or changed the line. Explaining what a rule does, why an alignment was chosen, or what a change fixes belongs in the conversation or the commit message — not in the file. Describing what code does is never a reason; the code does that.
 
 ## Write a comment when
 
@@ -25,7 +25,7 @@ alwaysApply: true
 ## MUST NOT
 
 - **Restate the line below.** `// Loop through the items` above a `.map()`.
-- **Narrate the edit.** "Now also handles X", "Refactored from Y", "Updated to use Z". The diff and `CHANGELOG.md` record that; the file records what is true now.
+- **Narrate the edit.** "Now also handles X", "Refactored from Y", "Updated to use Z". The diff and the commit message record that; the file records what is true now.
 - **Write section banners.** `// ---- Helpers ----`. Use structure, not decoration.
 - **Explain a well-named thing.** If a comment is needed to explain what a name means, fix the name.
 - **Leave commented-out code.** Git has it.

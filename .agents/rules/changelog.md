@@ -1,22 +1,47 @@
 ---
-description: Keep the changelog up to date when making changes
-globs: CHANGELOG.md
+description: Record releases as files in the changelog collection
+globs: src/content/changelog/*.md
 alwaysApply: true
 ---
 
 # Changelog
 
-When making functional changes to the project (bug fixes, new features, enhancements, breaking changes), add an entry to the `[Unreleased]` section of `CHANGELOG.md`.
+**There is no `CHANGELOG.md`.** This is a documentation site and it publishes its
+own changelog: one file per release in `src/content/changelog/`, rendered newest
+first by `<Changelog />` on `/changelog/`. Shipping a release is adding a file.
 
-Use the [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format with these categories:
+**Do not keep a running list of unreleased changes.** Day-to-day work is recorded
+in the commit message and the pull request body. Nothing goes in the collection
+until someone cuts a release, so the published changelog never shows a version
+that does not exist.
 
-- **Added** — new features
-- **Changed** — changes to existing functionality
-- **Deprecated** — soon-to-be removed features
-- **Removed** — removed features
-- **Fixed** — bug fixes
-- **Security** — vulnerability fixes
+## Cutting a release
 
-**Never create duplicate category headers.** Before adding an entry, read the existing `[Unreleased]` section and append to the matching `###` heading that already exists. Only create a new `###` heading if one doesn't exist yet for that category.
+Add `src/content/changelog/<version>.md`, named for the version:
 
-Skip changelog entries for refactors, code style changes, or other internal-only changes with no user-facing impact.
+```yaml
+---
+version: 2.5.0
+date: 2026-09-16
+summary: >-
+  Optional. One or two sentences on what the release is about, or an upgrade
+  note. Sits between the version heading and the list.
+changes:
+  - tag: Added
+    text: One line per change, written for a reader of the site.
+  - tag: Fixed
+    text: What now works that did not before.
+---
+```
+
+`version` and `date` are required; `date` sorts the page, so it must be real.
+`summary` is optional. Each `changes` entry is one line — the reasoning belongs
+in the commit, not here.
+
+Use these tags: **Added**, **Changed**, **Deprecated**, **Removed**, **Fixed**,
+**Security**. An entry tagged `breaking` also raises a callout on the reference
+page it affects.
+
+Leave internal-only work — refactors, code style, test changes — out entirely.
+
+Full authoring guide: [`docs-content-authoring`](../skills/docs-content-authoring/SKILL.md).
