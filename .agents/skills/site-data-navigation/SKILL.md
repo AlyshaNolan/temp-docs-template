@@ -135,7 +135,9 @@ So anything **stored in one file** is a plain region, not JavaScript:
 | `docsSite.homeLabel` | The sidebar's lead link                                                         |
 | `docsSite.navGroups` | Group order and collapsed state                                                 |
 
-**MUST:** keep the two ordering rules in `src/utils/navOrder.ts`. `docsNav.ts` and the live patcher both import them, so the canvas and the rebuild agree on where a page lands.
+**MUST:** derive the nav through `buildDocsNav` in `src/utils/docsNavModel.ts`. It is the whole shape — nesting, group inheritance, ordering — with no idea how the pages were loaded. `docsNav.ts` feeds it from `getCollection("docs")` at build time; `siteChrome.ts` feeds it from `CloudCannon.collection("documentation")` in the editor, where the answer includes edits that have not been built yet. A second copy puts a page in one place on canvas and another after the rebuild.
+
+**MUST:** re-derive from the **collection**, not from `currentFile()`. An edit to page A's `group` has to survive navigating to page B — and B is served exactly as it was built, with A's edit nowhere in it. Reading only the open file makes every cross-page change vanish on navigation.
 
 **MUST NOT:** re-derive group _membership_ or page nesting client-side. Both need every doc's frontmatter, not the open file's — reimplementing `getDocsNav()` against the API gives the sidebar a second ordering that nothing keeps in sync.
 
@@ -144,6 +146,10 @@ So anything **stored in one file** is a plain region, not JavaScript:
 ## Switches
 
 A boolean has no region type — `text`, `image`, `array`, `array-item`, `component` and `source` are the whole list — but the JavaScript API shows and hides them fine. The catch is build-time gating: `{showCopyPage && <CopyPage/>}` leaves the editor **no element to reveal** when the switch goes back on.
+
+**MUST:** read a page switch as **on when absent**. `file.data.get()` returns raw frontmatter, not the Zod-parsed entry the build sees, and `content.config.ts` defaults `showToc` / `showFeedback` / `showCopyPage` / `showPager` to `true`. Only one shipped page writes them out, so treating absent as "off" hides the control on nearly every page. Site switches in `docsSite.json` are the opposite — absent is off, matching the `.astro` destructure defaults the build uses.
+
+**MUST:** wait for a handle before applying the switch it feeds. An unread handle and a switched-off control are indistinguishable, so a control gated by both a page and a site switch must not be written until both have answered.
 
 **MUST:** render an editor-switchable control always, and mark it `data-toggle-hidden` when off (`src/styles/base/_html-elements.css` hides it with `display: none !important`). Never gate it out of the markup. `siteChrome.ts` then flips the attribute live. This covers `showCopyPage`, `showFeedback`, `showPager`, `showToc`, `docsSite.search` / `themeToggle` / `copyPage.enabled` / `feedback.enabled`, and `announcementBar.enabled`.
 

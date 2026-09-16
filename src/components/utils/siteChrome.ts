@@ -34,10 +34,11 @@
 import type {
   CloudCannonEditorWindow,
   CloudCannonJavaScriptV1API,
+  CloudCannonJavaScriptV1APICollection,
 } from "@cloudcannon/javascript-api";
 import { asRecord, framed, resolveDataSource } from "@component-utils/editorData";
 import { onPageLoad } from "@component-utils/onPageLoad";
-import { comparePages, orderGroupNames } from "@utils/navOrder";
+import { buildDocsNav, type DocsNav, type DocsNavPage } from "@utils/docsNavModel";
 
 declare const window: CloudCannonEditorWindow;
 
@@ -48,13 +49,6 @@ const text = (value: unknown) => String(value ?? "").trim();
 
 function docTrail(): HTMLElement | null {
   return document.querySelector<HTMLElement>(".doc-breadcrumbs");
-}
-
-/** The crumb is an editable region; the sidebar link is derived and is not. */
-function setPageTitle(title: string) {
-  const link = sidebar()?.querySelector<HTMLElement>('li[data-href] > a[aria-current="page"]');
-
-  if (title && link) link.textContent = title;
 }
 
 /**
@@ -97,29 +91,10 @@ function setGroupCrumb(name: string) {
 }
 
 const sidebar = () => document.querySelector<HTMLElement>(".docs-sidebar");
+const sidebarInner = () => sidebar()?.querySelector<HTMLElement>(".docs-sidebar-inner") ?? null;
 
-function currentItem(): HTMLElement | null {
-  return (
-    sidebar()?.querySelector<HTMLElement>('li[data-href] > a[aria-current="page"]')
-      ?.parentElement ?? null
-  );
-}
-
-const itemTitle = (item: Element) => item.querySelector(":scope > a")?.textContent?.trim() ?? "";
-const itemOrder = (item: HTMLElement) => Number(item.dataset.order ?? 0);
-
-const asOrdered = (item: HTMLElement) => ({ order: itemOrder(item), title: itemTitle(item) });
-
-function placeByOrder(list: HTMLElement, item: HTMLElement) {
-  const siblings = [...list.querySelectorAll<HTMLElement>(":scope > li[data-href]")].filter(
-    (sibling) => sibling !== item
-  );
-
-  const after = siblings.find((sibling) => comparePages(asOrdered(sibling), asOrdered(item)) > 0);
-
-  if (after) after.before(item);
-  else list.append(item);
-}
+const itemFor = (href: string) =>
+  sidebar()?.querySelector<HTMLElement>(`li[data-href="${CSS.escape(href)}"]`) ?? null;
 
 function groupElements(): HTMLElement[] {
   return [...(sidebar()?.querySelectorAll<HTMLElement>(".docs-sidebar-group") ?? [])];
@@ -131,10 +106,10 @@ const groupNamed = (name: string) =>
 const groupList = (group: HTMLElement) =>
   group.querySelector<HTMLElement>(":scope > .docs-sidebar-list");
 
-/** A group with no pages is not rendered, so moving into one means building it. */
+/** A group with no pages is not rendered, so a page moving into one builds it. */
 function createGroup(name: string): HTMLElement | null {
   const template = groupElements()[0];
-  const inner = sidebar()?.querySelector<HTMLElement>(".docs-sidebar-inner");
+  const inner = sidebarInner();
 
   if (!template || !inner) return null;
 
@@ -155,16 +130,8 @@ function createGroup(name: string): HTMLElement | null {
   return group;
 }
 
-const isNested = (item: HTMLElement) =>
-  item.parentElement?.classList.contains("docs-sidebar-children") === true;
-
-/** A group the build rendered only because this page was in it. */
-function pruneGroup(group: HTMLElement | null | undefined) {
-  if (group && !groupList(group)?.querySelector(":scope > li[data-href]")) group.remove();
-}
-
-/** A page with no `group` has no sidebar entry at all, so gaining one builds it. */
-function createItem(title: string, order: number): HTMLElement | null {
+/** A page with no `group` has no sidebar entry, so gaining one builds it. */
+function createItem(page: DocsNavPage): HTMLElement | null {
   const template = sidebar()?.querySelector<HTMLElement>("li[data-href]");
 
   if (!template) return null;
@@ -173,62 +140,101 @@ function createItem(title: string, order: number): HTMLElement | null {
   const link = item.querySelector<HTMLAnchorElement>(":scope > a");
 
   item.querySelector(":scope > .docs-sidebar-children")?.remove();
-  item.dataset.href = location.pathname;
-  item.dataset.order = String(order);
 
   if (!link) return null;
 
-  link.setAttribute("href", location.pathname);
-  link.setAttribute("aria-current", "page");
-  link.textContent = title;
+  link.removeAttribute("aria-current");
+  link.setAttribute("href", page.href);
 
   return item;
 }
 
-/**
- * Move the open page between sidebar groups, and keep the group crumb with it.
- * Clearing the group drops the page out of the nav, which is what the build
- * does with a page that has none.
- */
-function setPageGroup(name: string, title: string, order: number) {
-  const existing = currentItem();
+/** The nested list a page's children live in, created on first use. */
+function childList(item: HTMLElement): HTMLElement | null {
+  const existing = item.querySelector<HTMLElement>(":scope > .docs-sidebar-children");
 
-  // A nested page inherits its parent's group, so its own frontmatter is inert.
-  if (existing && isNested(existing)) return;
+  if (existing) return existing;
 
-  setGroupCrumb(name);
+  const template = sidebar()?.querySelector<HTMLElement>(".docs-sidebar-children");
+  const list = template
+    ? (template.cloneNode(false) as HTMLElement)
+    : Object.assign(document.createElement("ul"), {
+        className: "docs-sidebar-list docs-sidebar-children",
+      });
 
-  const from = existing?.closest<HTMLElement>(".docs-sidebar-group") ?? null;
+  list.replaceChildren();
+  item.append(list);
 
-  if (!name) {
-    existing?.remove();
-    pruneGroup(from);
-
-    return;
-  }
-
-  if (from && from.dataset.group === name) return;
-
-  const item = existing ?? createItem(title, order);
-  const target = groupNamed(name) ?? createGroup(name);
-  const list = target && groupList(target);
-
-  if (!item || !list) return;
-
-  placeByOrder(list, item);
-  (target as HTMLDetailsElement).open = true;
-
-  if (from !== target) pruneGroup(from);
+  return list;
 }
 
-function setPageOrder(order: number) {
-  const item = currentItem();
-  const list = item?.parentElement;
+/**
+ * Reconcile one list of pages into one `<ul>`, in order, and recurse.
+ * `seen` collects every href the nav still contains; anything left over in the
+ * sidebar afterwards belongs to a page that moved or lost its group.
+ */
+function syncList(list: HTMLElement, pages: DocsNavPage[], seen: Set<string>) {
+  for (const page of pages) {
+    const item = itemFor(page.href) ?? createItem(page);
 
-  if (!item || !list) return;
+    if (!item) continue;
 
-  item.dataset.order = String(order);
-  placeByOrder(list, item);
+    seen.add(page.href);
+    item.dataset.href = page.href;
+    item.dataset.order = String(page.order);
+
+    const link = item.querySelector<HTMLElement>(":scope > a");
+
+    if (link && link.textContent !== page.title) link.textContent = page.title;
+
+    // `append` moves the node, so ordering falls out of walking `pages` in order.
+    list.append(item);
+
+    if (page.children.length > 0) {
+      const nested = childList(item);
+
+      if (nested) syncList(nested, page.children, seen);
+    } else {
+      item.querySelector(":scope > .docs-sidebar-children")?.remove();
+    }
+  }
+}
+
+/**
+ * Rebuild the sidebar from the nav derived across every doc, not just the open
+ * one. A page whose `group` changed keeps its new place after navigating away,
+ * which reading only `currentFile()` could never do — the next page is served
+ * as it was built, with the edit nowhere in it.
+ */
+function syncSidebar(nav: DocsNav) {
+  const inner = sidebarInner();
+
+  if (!inner) return;
+
+  const seen = new Set<string>();
+
+  for (const group of nav.groups) {
+    const element = groupNamed(group.name) ?? createGroup(group.name);
+    const list = element && groupList(element);
+
+    if (!element || !list) continue;
+
+    inner.append(element);
+    syncList(list, group.pages, seen);
+  }
+
+  for (const item of sidebar()?.querySelectorAll<HTMLElement>("li[data-href]") ?? []) {
+    if (!seen.has(item.dataset.href ?? "")) item.remove();
+  }
+
+  for (const group of groupElements()) {
+    if (!groupList(group)?.querySelector("li[data-href]")) group.remove();
+  }
+}
+
+/** The trail's group crumb, for whichever page is open. */
+function syncCrumbs(nav: DocsNav) {
+  setGroupCrumb(nav.byHref.get(location.pathname)?.group ?? "");
 }
 
 function setLeadLabel(label: string) {
@@ -243,23 +249,10 @@ function setLeadLabel(label: string) {
  */
 const collapsedState = new Map<string, boolean>();
 
+/** Collapsed state only — `syncSidebar` already placed the groups in order. */
 function setGroups(navGroups: Record<string, unknown>[]) {
-  const inner = sidebar()?.querySelector<HTMLElement>(".docs-sidebar-inner");
-
-  if (!inner) return;
-
-  const configured = navGroups.map((group) => text(group.name)).filter(Boolean);
-  const present = groupElements()
-    .map((group) => group.dataset.group ?? "")
-    .filter(Boolean);
-
-  for (const name of orderGroupNames(configured, present)) {
-    const group = groupNamed(name);
-
-    if (!group) continue;
-
-    inner.append(group);
-
+  for (const group of groupElements()) {
+    const name = group.dataset.group ?? "";
     const collapsed = navGroups.find((entry) => text(entry.name) === name)?.collapsed === true;
 
     group.classList.toggle("is-collapsible", collapsed);
@@ -284,10 +277,19 @@ let generation = 0;
  * site switch has to be recomputed when either fires, so neither pass can act
  * on its own half alone.
  */
-let pageData: Record<string, unknown> = {};
-let siteData: Record<string, unknown> = {};
+let pageData: Record<string, unknown> | undefined;
+let siteData: Record<string, unknown> | undefined;
 
-const on = (value: unknown) => value !== false && value !== undefined;
+/**
+ * A page switch. `data.get()` returns raw frontmatter, not the Zod-parsed entry
+ * the build sees, so an omitted key arrives as `undefined` — and the content
+ * schema defaults all four of these to `true`. Reading absent as "off" hides
+ * the control on every page that never wrote the key out, which is most of them.
+ */
+const pageOn = (value: unknown) => value !== false;
+
+/** A site switch. Absent is off here: that is the `.astro` destructure default. */
+const siteOn = (value: unknown) => Boolean(value);
 
 function setToggled(selector: string, visible: boolean) {
   document.querySelectorAll<HTMLElement>(selector).forEach((element) => {
@@ -295,17 +297,36 @@ function setToggled(selector: string, visible: boolean) {
   });
 }
 
+/**
+ * Each control waits for the handles it depends on. Applying a switch from a
+ * source that has not answered yet would hide it for a frame on every load,
+ * because an unread handle and a switched-off control look identical here.
+ */
 function applyToggles() {
-  const copyPage = asRecord(siteData.copyPage);
-  const feedback = asRecord(siteData.feedback);
-  const showToc = on(pageData.showToc);
+  if (siteData) {
+    setToggled(".search", siteOn(siteData.search));
+    setToggled(".theme-toggle", siteOn(siteData.themeToggle));
+  }
 
-  setToggled(".copy-page", on(pageData.showCopyPage) && on(copyPage.enabled));
-  setToggled(".page-feedback", on(pageData.showFeedback) && on(feedback.enabled));
-  setToggled(".docs-pager", on(pageData.showPager));
-  setToggled(".docs-toc-rail > .toc", showToc);
-  setToggled(".search", on(siteData.search));
-  setToggled(".theme-toggle", on(siteData.themeToggle));
+  if (pageData) {
+    setToggled(".docs-pager", pageOn(pageData.showPager));
+    setToggled(".docs-toc-rail > .toc", pageOn(pageData.showToc));
+  }
+
+  if (pageData && siteData) {
+    setToggled(
+      ".copy-page",
+      pageOn(pageData.showCopyPage) && siteOn(asRecord(siteData.copyPage).enabled)
+    );
+    setToggled(
+      ".page-feedback",
+      pageOn(pageData.showFeedback) && siteOn(asRecord(siteData.feedback).enabled)
+    );
+  }
+
+  if (!pageData) return;
+
+  const showToc = pageOn(pageData.showToc);
 
   // The rail keeps its grid column while it holds a hidden table of contents.
   const shell = document.querySelector<HTMLElement>(".docs-shell");
@@ -338,6 +359,7 @@ async function connectDataFiles(api: CloudCannonJavaScriptV1API) {
         setLeadLabel(text(data.homeLabel));
         setGroups(navGroups);
         applyToggles();
+        void resyncNav();
       })
     );
   } else {
@@ -353,12 +375,90 @@ async function connectDataFiles(api: CloudCannonJavaScriptV1API) {
         const data = asRecord(await announcement.file.data.get());
 
         // The bar's own text is an editable region; only the switch needs this.
-        setToggled(".announcement-bar-text", on(data.enabled));
+        setToggled(".announcement-bar-text", siteOn(data.enabled));
       })
     );
   } else {
     console.warn(`[siteChrome] ${ANNOUNCEMENT.path} is not editable here.`);
   }
+}
+
+const DOCS_COLLECTION = "documentation";
+const DOCS_BASE = "src/content/docs/";
+
+/** `src/content/docs/theming/token-reference.mdx` -> `theming/token-reference`. */
+function entryId(path: string): string | undefined {
+  const rest = path.replace(/^\//, "");
+
+  if (!rest.startsWith(DOCS_BASE)) return undefined;
+
+  return rest.slice(DOCS_BASE.length).replace(/\.mdx?$/, "");
+}
+
+let docsCollection: CloudCannonJavaScriptV1APICollection | undefined;
+
+/**
+ * Re-derive the whole sidebar from every doc CloudCannon knows about, including
+ * edits that have not been built yet, and reconcile the DOM to it.
+ */
+async function resyncNav() {
+  if (!docsCollection) return;
+
+  let files;
+
+  try {
+    files = await docsCollection.items();
+  } catch {
+    return;
+  }
+
+  const entries = [];
+
+  for (const file of files) {
+    const id = entryId(file.path);
+
+    if (!id) continue;
+
+    const data = asRecord(await file.data.get());
+
+    entries.push({
+      id,
+      title: text(data.title) || id,
+      group: text(data.group) || undefined,
+      order: typeof data.order === "number" ? data.order : 0,
+    });
+  }
+
+  if (entries.length === 0) return;
+
+  const nav = buildDocsNav(entries, {
+    navGroups: (Array.isArray(siteData?.navGroups) ? siteData.navGroups : []) as {
+      name: string;
+      collapsed?: boolean;
+    }[],
+    homeLabel: text(siteData?.homeLabel),
+  });
+
+  syncSidebar(nav);
+  syncCrumbs(nav);
+  setGroups(Array.isArray(siteData?.navGroups) ? siteData.navGroups.map(asRecord) : []);
+}
+
+function connectCollection(api: CloudCannonJavaScriptV1API) {
+  if (docsCollection) return;
+
+  try {
+    docsCollection = api.collection(DOCS_COLLECTION);
+  } catch {
+    console.warn(`[siteChrome] collection "${DOCS_COLLECTION}" is not readable here.`);
+
+    return;
+  }
+
+  docsCollection.addEventListener(
+    "change",
+    framed(() => void resyncNav())
+  );
 }
 
 let currentFileHandle: unknown;
@@ -376,15 +476,12 @@ function connectCurrentFile(api: CloudCannonJavaScriptV1API) {
 
     const data = asRecord(await file.data.get());
 
-    const title = text(data.title);
-    const order = typeof data.order === "number" ? data.order : 0;
-
     pageData = data;
 
     applyToggles();
-    setPageTitle(title);
-    setPageGroup(text(data.group), title, order);
-    setPageOrder(order);
+    // The open page's own frontmatter reaches the sidebar through the
+    // collection resync, which sees it and every other doc at once.
+    void resyncNav();
   });
 
   file.addEventListener("change", repaint);
@@ -403,7 +500,10 @@ function start() {
     connectDataFiles(api);
   }
 
+  connectCollection(api);
+
   connectCurrentFile(api);
+  void resyncNav();
 }
 
 export function setupSiteChrome() {
