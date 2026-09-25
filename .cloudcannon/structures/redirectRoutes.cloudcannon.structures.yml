@@ -1,6 +1,6 @@
 # Editor-managed redirects, used by the `redirects` data file's `routes` input.
 #
-# Coupled to `src/pages/_cloudcannon/routing.json.ts`, which merges these ahead
+# Coupled to `scripts/cms/routing.mjs`, which merges these ahead
 # of the rules in `.cloudcannon/routing.json` at build time. A redirect added
 # here goes live on the next build, not on save.
 redirectRoutes:
@@ -12,7 +12,7 @@ redirectRoutes:
       value:
         from: /old-path/
         to: /new-path/
-        status: 301
+        status: "301"
       preview:
         text:
           - key: from
@@ -47,9 +47,9 @@ redirectRoutes:
               subtext:
                 - key: description
             values:
-              - id: 301
+              - id: "301"
                 name: Permanent
                 description: The page has moved for good. Search engines pass its ranking to the new URL.
-              - id: 302
+              - id: "302"
                 name: Temporary
                 description: The move will be reversed. Search engines keep the old URL indexed.

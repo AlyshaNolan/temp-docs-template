@@ -4,7 +4,7 @@
     {
       "from": "/docs/installation/",
       "to": "/installation/",
-      "status": 301
+      "status": "301"
     }
   ]
 }
