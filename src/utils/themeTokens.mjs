@@ -11,7 +11,8 @@
  * 2. They are set on `<html>` and inherit, which is what lets a section pinning
  *    its own `data-theme` pick them up. Never scope them to a selector.
  * 3. A picked colour produces its whole family here, not in CSS, so the editor
- *    only ever chooses one swatch per role.
+ *    only ever chooses one swatch per role. Radius is the exception: one base,
+ *    scaled by `styles/variables/_radius.css`.
  *
  * Dependency-free ESM: it runs in Astro frontmatter at build time and in the
  * editor bundle at runtime, and the two must agree.
@@ -104,6 +105,12 @@ export function themeCustomProperties(theme = {}) {
       properties[`--brand-${scheme}-muted`] = toHex(mix(brand, ground, 0.85));
       properties[`--brand-${scheme}-subtle`] = toHex(mix(brand, ground, 0.62));
     }
+  }
+
+  const radius = Number(theme.radius);
+
+  if (theme.radius !== "" && theme.radius != null && Number.isFinite(radius) && radius >= 0) {
+    properties["--radius-base"] = `${radius}px`;
   }
 
   return properties;

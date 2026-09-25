@@ -39,19 +39,21 @@ on the site follows.
 ## The theme file
 
 `src/data/theme.json` holds the decisions an editor is allowed to make without touching CSS:
-the default colour scheme, two accent colours and two brand colours. `BaseLayout` turns them into custom
+the default colour scheme, two accent colours, two brand colours and a corner radius. `BaseLayout` turns them into custom
 properties on `<html>`, and the theme files read those as optional overrides.
 
 <CodeBlock
   language="json"
   filename="src/data/theme.json"
-  code={'{\n  "themeSelector": true,\n  "defaultTheme": "dark",\n  "theme": {\n    "accentLight": "#0f766e",\n    "accentDark": "#5eead4",\n    "brandLight": "#08090b",\n    "brandDark": "#ffffff"\n  }\n}'}
+  code={'{\n  "themeSelector": true,\n  "defaultTheme": "dark",\n  "theme": {\n    "accentLight": "#0f766e",\n    "accentDark": "#5eead4",\n    "brandLight": "#08090b",\n    "brandDark": "#ffffff",\n    "radius": 10\n  }\n}'}
 />
 
 Each colour is one swatch, not a set. `src/utils/themeTokens.mjs` derives the rest of the
 family from it — the hover state, the tinted surface, the border, and the legible text colour
 to sit on top, chosen by relative luminance so a pale accent gets ink and a deep one gets
-paper.
+paper. `radius` drives the whole `--radius-*` scale from a single base — every rounded corner
+on the site, including sections and cards with **Rounded** switched on. `--radius-full` stays
+out of it, so pills and avatars are round at every setting.
 
 <ParamList
   params={[
@@ -65,6 +67,12 @@ paper.
       "type": "hex colour",
       "description": "Primary button and brand fill. Shipped near-black on light and white on dark, so an accent change never floods the page with one hue."
     },
+    {
+      "name": "radius",
+      "type": "0–24",
+      "defaultValue": "10",
+      "description": "Corner rounding in pixels, driving the whole scale. 0 is square."
+    }
   ]}
 />
 

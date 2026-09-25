@@ -62,12 +62,17 @@ Font **families** (`--font-body`, `--font-headings`) are not in `_fonts.css` —
 
 ## The editable theme (`src/data/theme.json`)
 
-Four values are exposed to an editor rather than living only in CSS:
+Five values are exposed to an editor rather than living only in CSS:
 
-| Key                          | Type       | Drives                                        | Shipped      |
-| ---------------------------- | ---------- | --------------------------------------------- | ------------ |
-| `accentLight` / `accentDark` | hex colour | the whole `--color-accent*` family, per theme | teal 700/300 |
-| `brandLight` / `brandDark`   | hex colour | the whole `--color-brand*` family, per theme  | ink / paper  |
+| Key                          | Type       | Drives                                                      | Shipped      |
+| ---------------------------- | ---------- | ----------------------------------------------------------- | ------------ |
+| `accentLight` / `accentDark` | hex colour | the whole `--color-accent*` family, per theme               | teal 700/300 |
+| `brandLight` / `brandDark`   | hex colour | the whole `--color-brand*` family, per theme                | ink / paper  |
+| `radius`                     | 0–24       | `--radius-base`, and so every `--radius-*` step but `-full` | `10`         |
+
+Every `--radius-*` step in `variables/_radius.css` is a multiple of `--radius-base`. A new step
+must be too, or it silently ignores the theme. Component-level `rounded` switches pick a token;
+they never set a size, so the theme stays the one place corner size is decided.
 
 `defaultTheme` sits beside them at the top level — see [The default colour scheme](#the-default-colour-scheme).
 

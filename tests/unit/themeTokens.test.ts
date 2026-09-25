@@ -48,4 +48,13 @@ describe("themeCustomProperties", () => {
     expect(themeCustomProperties({})).toEqual({});
     expect(themeCustomProperties({ accentLight: "not a colour" })).toEqual({});
   });
+
+  it("sets the radius base from a non-negative number only", () => {
+    expect(themeCustomProperties({ radius: 0 })["--radius-base"]).toBe("0px");
+    expect(themeCustomProperties({ radius: 16 })["--radius-base"]).toBe("16px");
+
+    for (const radius of ["", null, -4, "round"]) {
+      expect(themeCustomProperties({ radius })).toEqual({});
+    }
+  });
 });

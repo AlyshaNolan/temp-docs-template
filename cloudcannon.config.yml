@@ -429,6 +429,16 @@ collections_config:
           required: false
         comment: Primary button and brand fill in dark mode.
         cascade: true
+      radius:
+        type: range
+        options:
+          min: 0
+          max: 24
+          step: 1
+          required: false
+        comment: Corner rounding in pixels, driving every radius on the site. 0 is square,
+          10 is the shipped look. Pills and avatars stay round at every setting.
+        cascade: true
     disable_add: true
     disable_add_folder: true
     disable_file_actions: false
