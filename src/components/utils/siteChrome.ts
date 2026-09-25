@@ -310,7 +310,7 @@ function applyToggles() {
 
   if (pageData) {
     setToggled(".docs-pager", pageOn(pageData.showPager));
-    setToggled(".docs-toc-rail > .toc", pageOn(pageData.showToc));
+    setToggled(".docs-toc-rail > .toc", pageOn(pageData.showTableOfContents));
   }
 
   if (pageData && siteData) {
@@ -326,13 +326,13 @@ function applyToggles() {
 
   if (!pageData) return;
 
-  const showToc = pageOn(pageData.showToc);
+  const showTableOfContents = pageOn(pageData.showTableOfContents);
 
   // The rail keeps its grid column while it holds a hidden table of contents.
   const shell = document.querySelector<HTMLElement>(".docs-shell");
   const rail = document.querySelector(".docs-toc-rail > .toc");
 
-  if (shell && rail) shell.classList.toggle("is-wide", !showToc);
+  if (shell && rail) shell.classList.toggle("is-wide", !showTableOfContents);
 }
 
 function subscribe(

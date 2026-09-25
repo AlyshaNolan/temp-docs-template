@@ -26,7 +26,7 @@ const docSchema = z.object({
   keywords: z.array(z.string()).optional(),
   image: z.string().optional(),
   noindex: z.boolean().optional(),
-  showToc: z.boolean().default(true),
+  showTableOfContents: z.boolean().default(true),
   showFeedback: z.boolean().default(true),
   showCopyPage: z.boolean().default(true),
   showPager: z.boolean().default(true),

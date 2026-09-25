@@ -153,9 +153,9 @@ collections_config:
         type: number
         comment: Position within the group. Lower numbers come first.
         cascade: true
-      showToc:
+      showTableOfContents:
         type: switch
-        comment: Show the "On this page" list built from the page's headings.
+        comment: Show the "On this page" list built from the page's headings. Only appears when the body has at least one H2 or H3 heading.
         cascade: true
       showFeedback:
         type: switch

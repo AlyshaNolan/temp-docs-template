@@ -10,15 +10,15 @@ order: 1
 Only `title` is required. `group` and `order` place the page in the sidebar; omit `group` and
 the page still builds and is searchable — it just doesn't appear in the nav.
 
-| Key            | Type    | Default | Effect                                             |
-| -------------- | ------- | ------- | -------------------------------------------------- |
-| `title`        | string  | —       | Page heading, browser title, search result         |
-| `description`  | string  | —       | The lede under the title, and the meta description |
-| `group`        | string  | —       | Sidebar group. No group means no sidebar entry     |
-| `order`        | number  | `0`     | Position within the group                          |
-| `showToc`      | boolean | `true`  | On-this-page rail                                  |
-| `showFeedback` | boolean | `true`  | The helpful vote at the foot of the page           |
-| `showPager`    | boolean | `true`  | Previous/next links                                |
+| Key                   | Type    | Default | Effect                                             |
+| --------------------- | ------- | ------- | -------------------------------------------------- |
+| `title`               | string  | —       | Page heading, browser title, search result         |
+| `description`         | string  | —       | The lede under the title, and the meta description |
+| `group`               | string  | —       | Sidebar group. No group means no sidebar entry     |
+| `order`               | number  | `0`     | Position within the group                          |
+| `showTableOfContents` | boolean | `true`  | On-this-page rail                                  |
+| `showFeedback`        | boolean | `true`  | The helpful vote at the foot of the page           |
+| `showPager`           | boolean | `true`  | Previous/next links                                |
 
 The "Updated" date beside each page's title is not frontmatter — it is the file's last
 commit, read when the site builds. Edit a page and the date follows.

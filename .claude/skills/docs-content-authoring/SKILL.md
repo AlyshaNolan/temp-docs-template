@@ -44,18 +44,18 @@ they are — so `docsNav.ts` builds two and no more.
 
 Validated by `docSchema` in `src/content.config.ts`; an unknown key is a build error.
 
-| Key            | Type     | Default | Effect                                                                      |
-| -------------- | -------- | ------- | --------------------------------------------------------------------------- |
-| `title`        | string   | —       | Required. Page heading, browser title, sidebar label, search result.        |
-| `description`  | string   | —       | The lede under the title, and the meta description.                         |
-| `group`        | string   | —       | Sidebar group. **No group means no sidebar entry** — the page still builds. |
-| `order`        | number   | `0`     | Position within the group. Ties break alphabetically by title.              |
-| `keywords`     | string[] | —       | Meta keywords.                                                              |
-| `image`        | string   | —       | Social share image.                                                         |
-| `noindex`      | boolean  | `false` | Keeps the page out of search engines.                                       |
-| `showToc`      | boolean  | `true`  | The on-this-page rail, built from the page's `h2`/`h3`.                     |
-| `showFeedback` | boolean  | `true`  | The helpful vote at the foot of the page.                                   |
-| `showPager`    | boolean  | `true`  | Previous/next links across the sidebar's reading order.                     |
+| Key                   | Type     | Default | Effect                                                                      |
+| --------------------- | -------- | ------- | --------------------------------------------------------------------------- |
+| `title`               | string   | —       | Required. Page heading, browser title, sidebar label, search result.        |
+| `description`         | string   | —       | The lede under the title, and the meta description.                         |
+| `group`               | string   | —       | Sidebar group. **No group means no sidebar entry** — the page still builds. |
+| `order`               | number   | `0`     | Position within the group. Ties break alphabetically by title.              |
+| `keywords`            | string[] | —       | Meta keywords.                                                              |
+| `image`               | string   | —       | Social share image.                                                         |
+| `noindex`             | boolean  | `false` | Keeps the page out of search engines.                                       |
+| `showTableOfContents` | boolean  | `true`  | The on-this-page rail, built from the page's `h2`/`h3`.                     |
+| `showFeedback`        | boolean  | `true`  | The helpful vote at the foot of the page.                                   |
+| `showPager`           | boolean  | `true`  | Previous/next links across the sidebar's reading order.                     |
 
 `group` must match a `navGroups` entry in `src/data/docsSite.json` to be ordered deliberately; an unlisted group is appended rather than dropped.
 

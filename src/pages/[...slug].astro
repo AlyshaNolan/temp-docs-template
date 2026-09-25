@@ -66,7 +66,7 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2 || heading.
 // Rendered whenever the page has headings to list, then hidden if the switch is
 // off — a build-time gate would leave the editor nothing to reveal.
 const hasToc = tocHeadings.length > 0;
-const showToc = Boolean(doc?.data.showToc) && hasToc;
+const showTableOfContents = Boolean(doc?.data.showTableOfContents) && hasToc;
 
 const href = docHref(entry.id);
 const { prev, next } = findPager(nav, href);
@@ -94,14 +94,14 @@ const showFeedback = Boolean(doc?.data.showFeedback && docsSite.feedback?.enable
   keywords={entry.data.keywords}
   image={entry.data.image}
   noindex={entry.data.noindex}
-  wide={!doc || !showToc}
+  wide={!doc || !showTableOfContents}
 >
   {
     hasToc && (
       <Toc
         slot="toc"
         headings={tocHeadings}
-        data-toggle-hidden={showToc ? undefined : ""}
+        data-toggle-hidden={showTableOfContents ? undefined : ""}
       />
     )
   }
