@@ -58,7 +58,7 @@ const imageAltProp = imageAltDataProp ?? (imageEditable ? "imageAlt" : undefined
     )
   }
   <div
-    class="card-grid-body"
+    class="card-grid-body flow"
     {...arrayDataAttributes}
   >
     <slot>
@@ -154,7 +154,6 @@ const imageAltProp = imageAltDataProp ?? (imageEditable ? "imageAlt" : undefined
         display: flex;
         flex: 1;
         flex-direction: column;
-        gap: var(--spacing-sm);
         padding: var(--spacing-lg);
 
         > * {
