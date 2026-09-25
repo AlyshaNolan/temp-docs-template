@@ -1,7 +1,7 @@
 {
   "siteName": "Docsmith",
   "url": "https://example.com",
-  "description": "A complete Astro documentation template: search, API reference, diagrams, media and a print layout. You write Markdown; the template handles the rest.",
+  "description": "A complete Astro documentation template for CloudCannon's Visual Editor: search, API reference, diagrams, media and a print layout.",
   "logoSource": "",
   "titleFormat": "{title} | Docsmith",
   "twitterSite": ""
