@@ -22,7 +22,7 @@ showCopy:
 # Inlined rather than shared: a second `_inputs_from_glob` entry on a structure
 # value never reached the editor, leaving this field as free text.
 spaceBefore:
-  comment: Space above this block. Default follows the block's type; a Spacer replaces the gap entirely.
+  comment: Space above this block. Default follows the block's type; a Spacer replaces the gap entirely. Has no effect on the first block in a container.
   type: select
   options:
     values:
