@@ -53,7 +53,7 @@ const hasImage = Boolean(imageSource);
     distributionMode={hasImage ? "fixed-flexible" : "flexible-fixed"}
     fixedWidth="400"
     alignmentVertical="center"
-    reverse={reverse}
+    reverse={hasImage && reverse}
     minSplitWidth={640}
   >
     <Fragment slot="first">

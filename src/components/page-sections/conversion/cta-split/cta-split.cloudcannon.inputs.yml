@@ -26,7 +26,7 @@ subtext:
     numberedlist: false
 imageSource:
   type: image
-  comment: Image displayed alongside the CTA content.
+  comment: Image displayed alongside the CTA content. Leave empty to show the buttons alongside the content instead.
   options:
     paths:
       uploads: src/assets/images
@@ -44,7 +44,7 @@ buttonSections:
     structures: _structures.buttonSections
 reverse:
   type: switch
-  comment: Reverse the order so buttons appear before the copy.
+  comment: Place the image before the content. Only applies when an image is set — without one, this does nothing.
 
 # --- section wrapper inputs (CustomSection) ---
 # Configures the CustomSection wrapper, not this section's own content. Inline
