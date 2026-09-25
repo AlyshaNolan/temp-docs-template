@@ -93,13 +93,7 @@ const {
                 size="sm"
                 class="feature-list-item-icon"
               />
-              <span
-                class="feature-list-item-title"
-                data-editable="text"
-                data-prop="title"
-              >
-                {item.title}
-              </span>
+              <span class="feature-list-item-title">{item.title}</span>
               {item.description && (
                 <>
                   <span
@@ -108,13 +102,7 @@ const {
                   >
                     {" — "}
                   </span>
-                  <span
-                    class="feature-list-item-description"
-                    data-editable="text"
-                    data-prop="description"
-                  >
-                    {item.description}
-                  </span>
+                  <span class="feature-list-item-description">{item.description}</span>
                 </>
               )}
             </li>
