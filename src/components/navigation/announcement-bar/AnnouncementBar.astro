@@ -9,9 +9,6 @@ const {
   class: className,
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
   _component,
-  // `Docs.astro` spreads the whole data file; without this the CMS key lands on
-  // the element as an invalid HTML attribute.
-  _schema,
   ...htmlAttributes
 } = Astro.props;
 

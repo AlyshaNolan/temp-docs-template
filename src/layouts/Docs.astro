@@ -15,8 +15,9 @@ import CodeSurfaces from "@core-elements/code-block/CodeSurfaces.astro";
 import HeadingLinks from "@components/navigation/heading-links/HeadingLinks.astro";
 import ThemeToggleScript from "@components/navigation/theme-toggle/ThemeToggleScript.astro";
 import announcementBarData from "@data/announcementBar.json";
-import docsSite from "@data/docsSite.json";
 import footerData from "@data/footer.json";
+import header from "@data/header.json";
+import themeData from "@data/theme.json";
 import Layout from "@layouts/BaseLayout.astro";
 import type { DocsNav } from "@utils/docsNav";
 
@@ -48,7 +49,7 @@ const hasToc = Astro.slots.has("toc");
 
 // `system` has no baseline of its own, so the markup ships light and the
 // pre-paint script flips it if the reader's OS asks for dark.
-const configuredTheme = docsSite.defaultTheme ?? "system";
+const configuredTheme = themeData.defaultTheme ?? "system";
 const baselineTheme = configuredTheme === "dark" ? "dark" : "light";
 ---
 
@@ -76,16 +77,16 @@ const baselineTheme = configuredTheme === "dark" ? "dark" : "light";
     editableSource="@data[announcementBar]"
   />
   <DocsTopbar
-    markLetter={docsSite.markLetter}
-    wordmark={docsSite.wordmark}
-    logoSource={docsSite.logoSource}
-    logoAlternateSource={docsSite.logoAlternateSource}
-    logoAlt={docsSite.logoAlt}
-    version={docsSite.version}
-    themeToggle={docsSite.themeToggle}
-    search={docsSite.search}
-    searchPlaceholder={docsSite.searchPlaceholder}
-    topbarLinks={docsSite.topbarLinks}
+    markLetter={header.markLetter}
+    wordmark={header.wordmark}
+    logoSource={header.logoSource}
+    logoAlternateSource={header.logoAlternateSource}
+    logoAlt={header.logoAlt}
+    version={header.version}
+    themeToggle={header.themeToggle}
+    search={header.search}
+    searchPlaceholder={header.searchPlaceholder}
+    topbarLinks={header.topbarLinks}
     pathname={pathname}
   />
 

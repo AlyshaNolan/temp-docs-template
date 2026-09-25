@@ -253,21 +253,31 @@ if (removePages) {
 }
 
 if (resetBranding) {
-  const site = readJson("src/data/docsSite.json");
+  const header = readJson("src/data/header.json");
 
-  site.markLetter = siteName.trim().charAt(0).toUpperCase();
-  site.wordmark = siteName;
-  site.logoSource = "";
-  site.logoAlternateSource = "";
-  site.logoAlt = siteName;
-  site.version = "";
-  site.repositoryUrl = "";
-  site.topbarLinks = [];
+  header.markLetter = siteName.trim().charAt(0).toUpperCase();
+  header.wordmark = siteName;
+  header.logoSource = "";
+  header.logoAlternateSource = "";
+  header.logoAlt = siteName;
+  header.version = "";
+  header.topbarLinks = [];
+  writeJson("src/data/header.json", header);
+  record("src/data/header.json  branding cleared");
+
+  const sidebar = readJson("src/data/sidebar.json");
+
   // Groups are matched to page frontmatter by name, so an inherited list would
   // point at groups the new site's pages don't use.
-  site.navGroups = [{ name: "Getting started", collapsed: false }];
-  writeJson("src/data/docsSite.json", site);
-  record("src/data/docsSite.json  branding cleared, nav groups reduced to one");
+  sidebar.navGroups = [{ name: "Getting started", collapsed: false }];
+  writeJson("src/data/sidebar.json", sidebar);
+  record("src/data/sidebar.json  nav groups reduced to one");
+
+  const pageTools = readJson("src/data/pageTools.json");
+
+  pageTools.repositoryUrl = "";
+  writeJson("src/data/pageTools.json", pageTools);
+  record("src/data/pageTools.json  repository URL cleared");
 
   const footer = readJson("src/data/footer.json");
 

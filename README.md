@@ -6,7 +6,7 @@ source code to modify, extend, or delete.
 
 You write Markdown; the template handles the grouped sidebar, client-side search, the
 on-this-page rail, code tabs, diagrams, a print layout, and a 404 that searches. It ships dark
-by default — `defaultTheme` in `src/data/docsSite.json` takes `dark`, `light` or `system`.
+by default — `defaultTheme` in `src/data/theme.json` takes `dark`, `light` or `system`.
 
 ![The documentation starter's overview page](docs/images/homepage.png)
 
@@ -80,7 +80,7 @@ export default {
 
 **The sidebar is derived, not configured.** `group` and `order` place a page; a page with no
 `group` still builds and is searchable, it just has no sidebar entry.
-`src/data/docsSite.json` only orders the groups — and an editor changes it in CloudCannon, not
+`src/data/sidebar.json` only orders the groups — and an editor changes it in CloudCannon, not
 in a pull request.
 
 ## Why This Starter
@@ -163,7 +163,7 @@ Rebranding is a token change, not a redesign:
 
 - **Colors, spacing, radius, shadows, type scale** — `src/styles/variables/`
 - **Light and dark semantics** — `src/styles/themes/_light.css` and `_dark.css`
-- **Which one a first-time reader sees** — `defaultTheme` in `src/data/docsSite.json`
+- **Which one a first-time reader sees** — `defaultTheme` in `src/data/theme.json`
 - **Fonts** — `site-fonts.mjs`, the single source of truth
 - **Header, footer, SEO defaults** — `src/data/*.json`
 

@@ -1,20 +1,40 @@
 ---
 title: Configuration
-description: Site-wide settings live in one data file, editable in CloudCannon without touching code.
+description: Site-wide settings live in a few small data files, editable in CloudCannon without touching code.
 group: Customizing
 order: 1
 ---
 
-## The config file
+## The config files
 
-`src/data/docsSite.json` controls the header, the sidebar grouping, the edit link and the
-feedback block. It is a CloudCannon data file, so an editor changes it in the app rather than
-in a pull request.
+Each part of the site chrome has its own file in `src/data/`. They are CloudCannon data files,
+so an editor changes them in the app rather than in a pull request.
 
-<CodeBlock
-  language="json"
-  filename="src/data/docsSite.json"
-  code={'{\n  "markLetter": "D",\n  "wordmark": "Docsmith",\n  "version": "v2.4",\n  "repositoryUrl": "https://github.com/acme/docs",\n  "search": true,\n  "themeToggle": true,\n  "navGroups": [\n    { "name": "Getting started", "collapsed": false },\n    { "name": "Reference", "collapsed": true }\n  ],\n  "feedback": { "enabled": true, "action": "/" }\n}'}
+| File             | Controls                                                             |
+| ---------------- | -------------------------------------------------------------------- |
+| `header.json`    | Brand, version badge, top links, search and the theme toggle         |
+| `sidebar.json`   | The sidebar's lead link and group order                              |
+| `pageTools.json` | The "Edit this page" link, the Copy page menu and the feedback block |
+| `theme.json`     | The default colour scheme, accent and brand colours                  |
+
+<CodeTabs
+  tabs={[
+    {
+      "label": "header.json",
+      "language": "json",
+      "code": "{\n  \"markLetter\": \"D\",\n  \"wordmark\": \"Docsmith\",\n  \"version\": \"v2.4\",\n  \"search\": true,\n  \"themeToggle\": true\n}"
+    },
+    {
+      "label": "sidebar.json",
+      "language": "json",
+      "code": "{\n  \"homeLabel\": \"Overview\",\n  \"navGroups\": [\n    { \"name\": \"Getting started\", \"collapsed\": false },\n    { \"name\": \"Reference\", \"collapsed\": true }\n  ]\n}"
+    },
+    {
+      "label": "pageTools.json",
+      "language": "json",
+      "code": "{\n  \"repositoryUrl\": \"https://github.com/acme/docs\",\n  \"feedback\": { \"enabled\": true, \"action\": \"/\" }\n}"
+    }
+  ]}
 />
 
 <ParamList
@@ -59,7 +79,7 @@ the reader is on a page inside it.
 ## Versions
 
 The header badge is a label, not a switcher: it says which version of the product these docs
-describe. Change it in `docsSite.json` when you cut a release.
+describe. Change it in `header.json` when you cut a release.
 
 <Alert
   variant="warning"
@@ -70,5 +90,5 @@ describe. Change it in `docsSite.json` when you cut a release.
 ## Environment
 
 Anything secret — a feedback endpoint, analytics keys — belongs in the environment at build
-time rather than in `docsSite.json`, which is public. See the
+time rather than in `src/data/`, which is public. See the
 [Config API](/config-api/) for every key and its default.

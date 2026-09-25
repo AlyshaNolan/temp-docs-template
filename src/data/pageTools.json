@@ -1,0 +1,14 @@
+{
+  "repositoryUrl": "https://github.com/AlyshaNolan/temp-docs-template/tree/main",
+  "editPageLabel": "Edit this page",
+  "copyPage": {
+    "enabled": true,
+    "label": "Copy page"
+  },
+  "feedback": {
+    "enabled": true,
+    "prompt": "Was this page helpful?",
+    "action": "/",
+    "successMessage": "Thanks — that's logged against this page."
+  }
+}

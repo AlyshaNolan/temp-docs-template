@@ -1,11 +1,11 @@
 ---
 title: Config API
-description: Every key accepted by src/data/docsSite.json, its type, default and effect.
+description: Every key accepted by the site chrome data files in src/data/, its type, default and effect.
 group: Reference
 order: 1
 ---
 
-## site
+## header.json
 
 <ParamList
   params={[
@@ -31,14 +31,31 @@ order: 1
       "description": "Badge beside the brand. Empty hides it."
     },
     {
-      "name": "repositoryUrl",
+      "name": "topbarLinks",
+      "type": "{ name, path }[]",
+      "description": "Links in the header, to the right of the brand. Hidden below 640px."
+    },
+    {
+      "name": "search",
+      "type": "boolean",
+      "defaultValue": "true",
+      "description": "Shows the search control and binds ⌘K."
+    },
+    {
+      "name": "searchPlaceholder",
       "type": "string",
-      "description": "The site's source repository. `src/utils/repository.ts` derives the per-page \"Edit this page\" link from it; a `/tree/<branch>` suffix names the branch edit links target, defaulting to `main`. Empty hides the link."
+      "description": "Placeholder inside the overlay's input."
+    },
+    {
+      "name": "themeToggle",
+      "type": "boolean",
+      "defaultValue": "true",
+      "description": "Shows the light/dark control in the header. The scheme is still resolved without it."
     }
   ]}
 />
 
-## nav
+## sidebar.json
 
 <ParamList
   params={[
@@ -52,56 +69,19 @@ order: 1
       "name": "navGroups",
       "type": "{ name, collapsed }[]",
       "description": "Sidebar group order. A group used in frontmatter but absent here is appended alphabetically."
-    },
-    {
-      "name": "topbarLinks",
-      "type": "{ name, path }[]",
-      "description": "Links in the header, to the right of the brand. Hidden below 640px."
     }
   ]}
 />
 
-## theme
+## pageTools.json
 
 <ParamList
   params={[
     {
-      "name": "defaultTheme",
-      "type": "\"dark\" | \"light\" | \"system\"",
-      "defaultValue": "\"dark\"",
-      "description": "The colour scheme before a reader chooses one. `system` follows their operating system; the other two don't. See [Theming](/theming/#dark-mode)."
-    },
-    {
-      "name": "themeToggle",
-      "type": "boolean",
-      "defaultValue": "true",
-      "description": "Shows the light/dark control in the header. The scheme is still resolved without it."
-    }
-  ]}
-/>
-
-## search
-
-<ParamList
-  params={[
-    {
-      "name": "search",
-      "type": "boolean",
-      "defaultValue": "true",
-      "description": "Shows the search control and binds ⌘K."
-    },
-    {
-      "name": "searchPlaceholder",
+      "name": "repositoryUrl",
       "type": "string",
-      "description": "Placeholder inside the overlay's input."
-    }
-  ]}
-/>
-
-## feedback
-
-<ParamList
-  params={[
+      "description": "The site's source repository. `src/utils/repository.ts` derives the per-page \"Edit this page\" link from it; a `/tree/<branch>` suffix names the branch edit links target, defaulting to `main`. Empty hides the link."
+    },
     {
       "name": "feedback.enabled",
       "type": "boolean",
@@ -118,14 +98,7 @@ order: 1
       "name": "feedback.successMessage",
       "type": "string",
       "description": "Shown once a reader has voted."
-    }
-  ]}
-/>
-
-## copyPage
-
-<ParamList
-  params={[
+    },
     {
       "name": "copyPage.enabled",
       "type": "boolean",
@@ -141,9 +114,24 @@ order: 1
   ]}
 />
 
+## theme.json
+
+The accent and brand colours live here too — see [Theming](/theming/).
+
+<ParamList
+  params={[
+    {
+      "name": "defaultTheme",
+      "type": "\"dark\" | \"light\" | \"system\"",
+      "defaultValue": "\"dark\"",
+      "description": "The colour scheme before a reader chooses one. `system` follows their operating system; the other two don't. See [Theming](/theming/#dark-mode)."
+    }
+  ]}
+/>
+
 ## Reading config in a component
 
-`docsSite.json` is a plain JSON import, so any component can read it directly — there is no
+Each file in `src/data/` is a plain JSON import, so any component can read it directly — there is no
 config loader to learn.
 
 <CodeTabs
@@ -151,12 +139,12 @@ config loader to learn.
     {
       "label": "Astro",
       "language": "astro",
-      "code": "---\nimport docsSite from \"@data/docsSite.json\";\n---\n\n<p>{docsSite.wordmark} {docsSite.version}</p>"
+      "code": "---\nimport header from \"@data/header.json\";\n---\n\n<p>{header.wordmark} {header.version}</p>"
     },
     {
       "label": "Node",
       "language": "js",
-      "code": "import docsSite from \"./src/data/docsSite.json\" with { type: \"json\" };\n\nconsole.log(docsSite.navGroups.map((group) => group.name));"
+      "code": "import sidebar from \"./src/data/sidebar.json\" with { type: \"json\" };\n\nconsole.log(sidebar.navGroups.map((group) => group.name));"
     }
   ]}
 />
@@ -166,5 +154,5 @@ config loader to learn.
 <Alert
   variant="warning"
   title="Removed in 3.0"
-  text="`mainNav.json` is replaced by `docsSite.json`, which carries the header, the sidebar grouping and the edit link in one file. The old file is no longer read."
+  text="`mainNav.json` is replaced by `header.json` and `sidebar.json`, with the edit link in `pageTools.json`. The old file is no longer read."
 />

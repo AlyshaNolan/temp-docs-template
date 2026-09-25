@@ -29,7 +29,7 @@ export function comparePages(a: OrderedPage, b: OrderedPage): number {
 }
 
 /**
- * Group render order: the groups named in `docsSite.json`, in that order, then
+ * Group render order: the groups named in `sidebar.json`, in that order, then
  * any group named only in page frontmatter, alphabetically. Groups with no
  * pages drop out.
  *

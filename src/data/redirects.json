@@ -1,5 +1,4 @@
 {
-  "_schema": "redirects",
   "routes": [
     {
       "from": "/docs/installation/",

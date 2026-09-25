@@ -28,7 +28,7 @@ Work top to bottom. Each phase's deliverable is an input to the next — do not 
 | 3   | Map sections to existing components | [page-content-authoring](../page-content-authoring/SKILL.md) catalog                                 | A source-section → `_component` mapping, with gaps flagged           |
 | 4   | Build the gap components            | [screenshot-to-component](../screenshot-to-component/SKILL.md)                                       | New page-section directories for every flagged gap                   |
 | 5   | Recreate pages                      | [page-content-authoring](../page-content-authoring/SKILL.md)                                         | `.md` files in `src/content/pages/` with full `pageSections`         |
-| 6   | Header / footer / SEO data          | [site-data-navigation](../site-data-navigation/SKILL.md)                                             | `docsSite.json`, `footer.json`, `seo.json` updated                   |
+| 6   | Header / footer / SEO data          | [site-data-navigation](../site-data-navigation/SKILL.md)                                             | `header.json`, `sidebar.json`, `footer.json`, `seo.json` updated     |
 | 7   | Documentation pages                 | [docs-content-authoring](../docs-content-authoring/SKILL.md)                                         | `.mdx` files in `src/content/docs/`                                  |
 | 8   | Verify in CloudCannon               | [editable-regions](../editable-regions/SKILL.md), [debug-cloudcannon](../debug-cloudcannon/SKILL.md) | Every section renders and is editable                                |
 
@@ -116,7 +116,7 @@ Content rules specific to migration:
 
 ## Phase 6: Nav / footer / SEO data
 
-Follow [site-data-navigation](../site-data-navigation/SKILL.md) to populate `src/data/docsSite.json`, `src/data/footer.json`, and `src/data/seo.json` from the phase-1 nav/footer capture, and update `site` in `astro.config.mjs` to the production URL. A logo image (light + dark variant) goes in `src/assets/images/` and is referenced from `docsSite.json` via `logoSource` / `logoAlternateSource`; leave those empty to keep the text wordmark.
+Follow [site-data-navigation](../site-data-navigation/SKILL.md) to populate `src/data/header.json`, `src/data/sidebar.json`, `src/data/pageTools.json`, `src/data/footer.json`, and `src/data/seo.json` from the phase-1 nav/footer capture, and update `site` in `astro.config.mjs` to the production URL. A logo image (light + dark variant) goes in `src/assets/images/` and is referenced from `header.json` via `logoSource` / `logoAlternateSource`; leave those empty to keep the text wordmark.
 
 **Done-check:** header and footer render the migrated nav/logo/socials on every page; `seo.json`'s title/description show correctly in a page's `<title>`.
 

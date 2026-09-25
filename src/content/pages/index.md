@@ -144,23 +144,23 @@ pageSections:
             text: Notes sit under the block rather than in comments, so the snippet stays copy-paste clean.
             size: sm
           - _component: building-blocks/core-elements/code-annotations
-            filename: src/data/docsSite.json
+            filename: src/data/header.json
             language: json
             highlight: ''
             showCopy: true
             code: |-
               {
                 "search": true,
-                "defaultTheme": "dark",
-                "navGroups": [
-                  { "name": "Getting started", "collapsed": false }
+                "themeToggle": true,
+                "topbarLinks": [
+                  { "name": "GitHub", "path": "https://github.com/acme/docs" }
                 ]
               }
             notes:
               - line: 2
                 text: Builds the search index at compile time and ships it with the site — no search service, no API key.
               - line: 4
-                text: Orders the sidebar groups. A page joins one by naming it in its own frontmatter.
+                text: Links beside the brand. Add, remove and reorder them on the page in CloudCannon's Visual Editor.
       - title: Diagrams
         subtext: ''
         iconName: ''

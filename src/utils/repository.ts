@@ -1,14 +1,14 @@
-import docsSite from "@data/docsSite.json";
+import pageTools from "@data/pageTools.json";
 
 /**
  * The per-page "Edit this page" link, derived from `repositoryUrl` in
- * `src/data/docsSite.json` — the one place a fork edits.
+ * `src/data/pageTools.json` — the one place a fork edits.
  *
  * The field holds whatever URL an editor pasted, which is usually a browse URL
  * (`…/tree/main`). That suffix names the branch edit links target; the rest of
  * the URL is the repository root.
  */
-const configured = String(docsSite.repositoryUrl ?? "").replace(/\/+$/, "");
+const configured = String(pageTools.repositoryUrl ?? "").replace(/\/+$/, "");
 const repositoryRoot = configured.replace(/\/tree\/[^/]+$/, "");
 const branch = /\/tree\/([^/]+)$/.exec(configured)?.[1] ?? "main";
 

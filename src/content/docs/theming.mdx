@@ -39,13 +39,13 @@ on the site follows.
 ## The theme file
 
 `src/data/theme.json` holds the decisions an editor is allowed to make without touching CSS:
-two accent colours and two brand colours. `BaseLayout` turns them into custom
+the default colour scheme, two accent colours and two brand colours. `BaseLayout` turns them into custom
 properties on `<html>`, and the theme files read those as optional overrides.
 
 <CodeBlock
   language="json"
   filename="src/data/theme.json"
-  code={'{\n  "themeSelector": true,\n  "theme": {\n    "accentLight": "#0f766e",\n    "accentDark": "#5eead4",\n    "brandLight": "#08090b",\n    "brandDark": "#ffffff"\n  }\n}'}
+  code={'{\n  "themeSelector": true,\n  "defaultTheme": "dark",\n  "theme": {\n    "accentLight": "#0f766e",\n    "accentDark": "#5eead4",\n    "brandLight": "#08090b",\n    "brandDark": "#ffffff"\n  }\n}'}
 />
 
 Each colour is one swatch, not a set. `src/utils/themeTokens.mjs` derives the rest of the
@@ -141,7 +141,7 @@ Three things decide it, in order:
       "name": "defaultTheme",
       "type": "\"dark\" | \"light\" | \"system\"",
       "defaultValue": "\"dark\"",
-      "description": "The site's own default, set in `src/data/docsSite.json`. This template ships dark."
+      "description": "The site's own default, set in `src/data/theme.json`. This template ships dark."
     },
     {
       "name": "The operating system",

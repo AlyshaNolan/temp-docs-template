@@ -1,4 +1,4 @@
-# Sidebar group order, used by the `docsSite` data file's `navGroups` input.
+# Sidebar group order, used by the `sidebar` data file's `navGroups` input.
 #
 # Coupled to page frontmatter: `name` must match a page's `group` exactly, or
 # the group is treated as a new one and appended. Nothing enforces the match.

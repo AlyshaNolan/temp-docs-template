@@ -12,7 +12,7 @@ import PageFeedback from "@components/navigation/page-feedback/PageFeedback.astr
 import Toc from "@components/navigation/toc/Toc.astro";
 import MainComponent from "@components/utils/MainComponent.astro";
 import { mdxComponents } from "@components/utils/mdxComponents";
-import docsSite from "@data/docsSite.json";
+import pageTools from "@data/pageTools.json";
 import Docs from "@layouts/Docs.astro";
 import { markdownHref } from "@utils/docsMarkdown";
 import { docHref, findCrumbs, findPager, getDocsNav } from "@utils/docsNav";
@@ -83,8 +83,8 @@ const updated = updatedDate
 const editUrl = doc ? editPageUrl(doc.filePath) : "";
 // Opt-out, not opt-in: a page missing the frontmatter default (a content
 // entry parsed before the field existed) must still get the control.
-const showCopyPage = Boolean(doc && doc.data.showCopyPage !== false && docsSite.copyPage.enabled);
-const showFeedback = Boolean(doc?.data.showFeedback && docsSite.feedback?.enabled);
+const showCopyPage = Boolean(doc && doc.data.showCopyPage !== false && pageTools.copyPage.enabled);
+const showFeedback = Boolean(doc?.data.showFeedback && pageTools.feedback?.enabled);
 ---
 
 <Docs
@@ -128,7 +128,7 @@ const showFeedback = Boolean(doc?.data.showFeedback && docsSite.feedback?.enable
             {doc.data.title}
           </h1>
           <CopyPage
-            label={docsSite.copyPage.label}
+            label={pageTools.copyPage.label}
             markdownHref={markdownHref(href)}
             data-toggle-hidden={showCopyPage ? undefined : ""}
           />
@@ -145,7 +145,7 @@ const showFeedback = Boolean(doc?.data.showFeedback && docsSite.feedback?.enable
                 ·
               </span>
             )}
-            {editUrl && <a href={editUrl}>{docsSite.editPageLabel || "Edit this page"}</a>}
+            {editUrl && <a href={editUrl}>{pageTools.editPageLabel || "Edit this page"}</a>}
           </p>
         )}
 
@@ -175,9 +175,9 @@ const showFeedback = Boolean(doc?.data.showFeedback && docsSite.feedback?.enable
           data-pagefind-ignore
         >
           <PageFeedback
-            prompt={docsSite.feedback.prompt}
-            action={docsSite.feedback.action}
-            successMessage={docsSite.feedback.successMessage}
+            prompt={pageTools.feedback.prompt}
+            action={pageTools.feedback.action}
+            successMessage={pageTools.feedback.successMessage}
             page={href}
             data-toggle-hidden={showFeedback ? undefined : ""}
           />

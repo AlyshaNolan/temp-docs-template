@@ -2,11 +2,11 @@
 /**
  * The fixed documentation header: drawer trigger, brand + version badge,
  * optional top-level links, search, theme toggle. Site chrome fed by
- * `src/data/docsSite.json` — no CloudCannon YAML, wired by hand in `Docs.astro`.
+ * `src/data/header.json` — no CloudCannon YAML, wired by hand in `Docs.astro`.
  *
- * The editable regions bind to `@data[docsSite]`, not the current file, so the
+ * The editable regions bind to `@data[header]`, not the current file, so the
  * header is edited on canvas from whatever page is open. The prefix needs
- * `data_config.docsSite` in `cloudcannon.config.yml`; `@file[<path>]` resolves
+ * `data_config.header` in `cloudcannon.config.yml`; `@file[<path>]` resolves
  * through `CloudCannon.file()` instead and does not answer to these paths.
  */
 import { DOCS_NAV_TOGGLE_ID } from "@components/navigation/docs-sidebar/navToggle";
@@ -69,7 +69,7 @@ const {
               class="docs-topbar-mark"
               data-editable="text"
               data-type="span"
-              data-prop="@data[docsSite].markLetter"
+              data-prop="@data[header].markLetter"
             >
               {markLetter}
             </span>
@@ -79,7 +79,7 @@ const {
               class="docs-topbar-wordmark"
               data-editable="text"
               data-type="span"
-              data-prop="@data[docsSite].wordmark"
+              data-prop="@data[header].wordmark"
             >
               {wordmark}
             </span>
@@ -93,7 +93,7 @@ const {
           class="docs-topbar-version"
           data-editable="text"
           data-type="span"
-          data-prop="@data[docsSite].version"
+          data-prop="@data[header].version"
         >
           {version}
         </span>
@@ -108,7 +108,7 @@ const {
           class="docs-topbar-links"
           aria-label="Site"
           data-editable="array"
-          data-prop="@data[docsSite].topbarLinks"
+          data-prop="@data[header].topbarLinks"
         >
           {topbarLinks.map((link: TopbarLink) => (
             <a

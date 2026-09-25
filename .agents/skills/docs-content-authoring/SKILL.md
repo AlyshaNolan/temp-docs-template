@@ -57,7 +57,7 @@ Validated by `docSchema` in `src/content.config.ts`; an unknown key is a build e
 | `showFeedback`        | boolean  | `true`  | The helpful vote at the foot of the page.                                   |
 | `showPager`           | boolean  | `true`  | Previous/next links across the sidebar's reading order.                     |
 
-`group` must match a `navGroups` entry in `src/data/docsSite.json` to be ordered deliberately; an unlisted group is appended rather than dropped.
+`group` must match a `navGroups` entry in `src/data/sidebar.json` to be ordered deliberately; an unlisted group is appended rather than dropped.
 
 There is no `updated` key. The date in the meta line is the file's last commit, read at build time by `src/utils/gitDates.mjs`, so an edit dates itself.
 

@@ -6,7 +6,7 @@
  * across files, so the topbar brand and links, the footer, and the Home and
  * current crumbs are plain regions on their own components. What is left here
  * is what `getDocsNav()` *derives* by joining the whole `docs` collection with
- * `docsSite.json` — where a page sits in the sidebar, and the group crumb. No
+ * `sidebar.json` — where a page sits in the sidebar, and the group crumb. No
  * single path holds those, so there is nothing for a region to bind to and the
  * JavaScript API is the only route: subscribe, re-read, patch the DOM.
  *
@@ -42,7 +42,9 @@ import { buildDocsNav, type DocsNav, type DocsNavPage } from "@utils/docsNavMode
 
 declare const window: CloudCannonEditorWindow;
 
-const DOCS_SITE = { dataset: "docsSite", path: "src/data/docsSite.json" };
+const HEADER = { dataset: "header", path: "src/data/header.json" };
+const SIDEBAR = { dataset: "sidebar", path: "src/data/sidebar.json" };
+const PAGE_TOOLS = { dataset: "pageTools", path: "src/data/pageTools.json" };
 const ANNOUNCEMENT = { dataset: "announcementBar", path: "src/data/announcementBar.json" };
 
 const text = (value: unknown) => String(value ?? "").trim();
@@ -278,7 +280,9 @@ let generation = 0;
  * on its own half alone.
  */
 let pageData: Record<string, unknown> | undefined;
-let siteData: Record<string, unknown> | undefined;
+let headerData: Record<string, unknown> | undefined;
+let sidebarData: Record<string, unknown> | undefined;
+let pageToolsData: Record<string, unknown> | undefined;
 
 /**
  * A page switch. `data.get()` returns raw frontmatter, not the Zod-parsed entry
@@ -303,9 +307,9 @@ function setToggled(selector: string, visible: boolean) {
  * because an unread handle and a switched-off control look identical here.
  */
 function applyToggles() {
-  if (siteData) {
-    setToggled(".search", siteOn(siteData.search));
-    setToggled(".theme-toggle", siteOn(siteData.themeToggle));
+  if (headerData) {
+    setToggled(".search", siteOn(headerData.search));
+    setToggled(".theme-toggle", siteOn(headerData.themeToggle));
   }
 
   if (pageData) {
@@ -313,14 +317,14 @@ function applyToggles() {
     setToggled(".docs-toc-rail > .toc", pageOn(pageData.showTableOfContents));
   }
 
-  if (pageData && siteData) {
+  if (pageData && pageToolsData) {
     setToggled(
       ".copy-page",
-      pageOn(pageData.showCopyPage) && siteOn(asRecord(siteData.copyPage).enabled)
+      pageOn(pageData.showCopyPage) && siteOn(asRecord(pageToolsData.copyPage).enabled)
     );
     setToggled(
       ".page-feedback",
-      pageOn(pageData.showFeedback) && siteOn(asRecord(siteData.feedback).enabled)
+      pageOn(pageData.showFeedback) && siteOn(asRecord(pageToolsData.feedback).enabled)
     );
   }
 
@@ -345,25 +349,52 @@ function subscribe(
 }
 
 async function connectDataFiles(api: CloudCannonJavaScriptV1API) {
-  const docsSite = await resolveDataSource(api, DOCS_SITE);
+  const header = await resolveDataSource(api, HEADER);
 
-  if (docsSite) {
+  if (header) {
     subscribe(
-      docsSite.emitters,
+      header.emitters,
       framed(async () => {
-        const data = asRecord(await docsSite.file.data.get());
+        headerData = asRecord(await header.file.data.get());
+        applyToggles();
+      })
+    );
+  } else {
+    console.warn(`[siteChrome] ${HEADER.path} is not editable here.`);
+  }
+
+  const sidebarSource = await resolveDataSource(api, SIDEBAR);
+
+  if (sidebarSource) {
+    subscribe(
+      sidebarSource.emitters,
+      framed(async () => {
+        const data = asRecord(await sidebarSource.file.data.get());
         const navGroups = Array.isArray(data.navGroups) ? data.navGroups.map(asRecord) : [];
 
-        siteData = data;
+        sidebarData = data;
 
         setLeadLabel(text(data.homeLabel));
         setGroups(navGroups);
-        applyToggles();
         void resyncNav();
       })
     );
   } else {
-    console.warn(`[siteChrome] ${DOCS_SITE.path} is not editable here.`);
+    console.warn(`[siteChrome] ${SIDEBAR.path} is not editable here.`);
+  }
+
+  const pageTools = await resolveDataSource(api, PAGE_TOOLS);
+
+  if (pageTools) {
+    subscribe(
+      pageTools.emitters,
+      framed(async () => {
+        pageToolsData = asRecord(await pageTools.file.data.get());
+        applyToggles();
+      })
+    );
+  } else {
+    console.warn(`[siteChrome] ${PAGE_TOOLS.path} is not editable here.`);
   }
 
   const announcement = await resolveDataSource(api, ANNOUNCEMENT);
@@ -432,16 +463,16 @@ async function resyncNav() {
   if (entries.length === 0) return;
 
   const nav = buildDocsNav(entries, {
-    navGroups: (Array.isArray(siteData?.navGroups) ? siteData.navGroups : []) as {
+    navGroups: (Array.isArray(sidebarData?.navGroups) ? sidebarData.navGroups : []) as {
       name: string;
       collapsed?: boolean;
     }[],
-    homeLabel: text(siteData?.homeLabel),
+    homeLabel: text(sidebarData?.homeLabel),
   });
 
   syncSidebar(nav);
   syncCrumbs(nav);
-  setGroups(Array.isArray(siteData?.navGroups) ? siteData.navGroups.map(asRecord) : []);
+  setGroups(Array.isArray(sidebarData?.navGroups) ? sidebarData.navGroups.map(asRecord) : []);
 }
 
 function connectCollection(api: CloudCannonJavaScriptV1API) {

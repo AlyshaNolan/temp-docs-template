@@ -47,14 +47,14 @@ only form that keeps its indentation.
 <CodeBlock
   language="mdx"
   filename="sample.mdx"
-  code={'<CodeBlock\n  language="json"\n  filename="src/data/docsSite.json"\n  highlight="3"\n  code={…}\n/>'}
+  code={'<CodeBlock\n  language="json"\n  filename="src/data/theme.json"\n  highlight="3"\n  code={…}\n/>'}
 />
 
 <CodeBlock
   language="json"
-  filename="src/data/docsSite.json"
+  filename="src/data/theme.json"
   highlight="3"
-  code={'{\n  "wordmark": "Acme",\n  "defaultTheme": "dark"\n}'}
+  code={'{\n  "themeSelector": true,\n  "defaultTheme": "dark"\n}'}
 />
 
 ## Diffs
@@ -65,12 +65,12 @@ so it keeps its own language colours instead of going flat the way a `diff` fenc
 does, and the copy button hands back something that runs.
 
 <CodeDiff
-  filename="src/data/docsSite.json"
+  filename="src/data/theme.json"
   language="json"
   removed="3"
   added="4"
   highlight="6"
-  code={'{\n  "wordmark": "Acme",\n  "defaultTheme": "light",\n  "defaultTheme": "dark",\n  "navGroups": [\n    { "name": "Guides", "collapsed": false }\n  ]\n}'}
+  code={'{\n  "themeSelector": true,\n  "defaultTheme": "light",\n  "defaultTheme": "dark",\n  "theme": {\n    "accentLight": "#0f766e"\n  }\n}'}
 />
 
 Line numbers count the sample's own lines, so they need a look after an edit that
@@ -120,7 +120,7 @@ Notes sit under the block rather than in comments, so the snippet stays copy-pas
 Each note names the line it marks.
 
 <CodeAnnotations
-  filename="src/data/docsSite.json"
+  filename="src/data/header.json"
   language="json"
   notes={[
     {
@@ -129,10 +129,10 @@ Each note names the line it marks.
     },
     {
       "line": 4,
-      "text": "Orders the sidebar groups. A page joins one by naming it in its own frontmatter."
+      "text": "Links beside the brand. Add, remove and reorder them on the page in CloudCannon's Visual Editor."
     }
   ]}
-  code={'{\n  "search": true,\n  "defaultTheme": "dark",\n  "navGroups": [\n    { "name": "Getting started", "collapsed": false }\n  ]\n}'}
+  code={'{\n  "search": true,\n  "themeToggle": true,\n  "topbarLinks": [\n    { "name": "GitHub", "path": "https://github.com/acme/docs" }\n  ]\n}'}
 />
 
 ## Tables

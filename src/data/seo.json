@@ -1,5 +1,4 @@
 {
-  "_schema": "seo",
   "name": "Docsmith",
   "url": "https://example.com",
   "description": "A complete Astro documentation template: search, API reference, diagrams, media and a print layout. You write Markdown; the template handles the rest.",

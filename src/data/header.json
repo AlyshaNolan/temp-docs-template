@@ -1,0 +1,17 @@
+{
+  "markLetter": "D",
+  "wordmark": "Docsmith",
+  "logoSource": "",
+  "logoAlternateSource": "",
+  "logoAlt": "Docsmith",
+  "version": "v2.4",
+  "themeToggle": true,
+  "search": true,
+  "searchPlaceholder": "Search documentation…",
+  "topbarLinks": [
+    {
+      "name": "GitHub",
+      "path": "https://github.com/AlyshaNolan/temp-docs-template"
+    }
+  ]
+}

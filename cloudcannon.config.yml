@@ -117,7 +117,7 @@ collections_config:
         options:
           allow_create: false
           allow_empty: true
-          values: data.docsSite.navGroups
+          values: data.sidebar.navGroups
           value_key: name
           preview:
             text:
@@ -141,8 +141,8 @@ collections_config:
             directly.
 
 
-            The groups you can pick from come from `navGroups` in [Data → Docs
-            Site](cloudcannon:collections/data/docsSite.json). Add one there to
+            The groups you can pick from come from `navGroups` in [Data →
+            Sidebar](cloudcannon:collections/data/sidebar.json). Add one there to
             make it selectable here.
 
 
@@ -164,7 +164,7 @@ collections_config:
       showCopyPage:
         type: switch
         comment: Show the "Copy page" menu beside the title. Turn the whole feature off
-          in [Data → Docs Site](cloudcannon:collections/data/docsSite.json).
+          in [Data → Page Tools](cloudcannon:collections/data/pageTools.json).
         cascade: true
       showPager:
         type: switch
@@ -379,6 +379,21 @@ collections_config:
           It is editor-only either way — a site visitor never sees it — so turning it off
           just means the theme is edited from this file instead.
         cascade: true
+      defaultTheme:
+        type: select
+        options:
+          allow_empty: true
+          values:
+            - id: dark
+              name: Dark
+            - id: light
+              name: Light
+            - id: system
+              name: System
+          required: false
+        comment: The colour scheme before a reader chooses one. "System" follows their
+          operating system; "Dark" and "Light" don't.
+        cascade: true
       accentLight:
         type: color
         options:
@@ -417,285 +432,6 @@ collections_config:
     disable_add: false
     disable_add_folder: false
     disable_file_actions: false
-    schemas:
-      docsSite:
-        path: .cloudcannon/schemas/docsSite.json
-        reorder_inputs: true
-        hide_extra_inputs: false
-        remove_empty_inputs: false
-        remove_extra_inputs: false
-        name: Docs Site
-        preview:
-          text:
-            - Docs Site
-        _inputs:
-          markLetter:
-            type: text
-            comment: One character shown in an accent tile beside the name. Ignored when a
-              logo image is set.
-            cascade: true
-          wordmark:
-            type: text
-            comment: The site name shown in the header.
-            cascade: true
-          logoSource:
-            comment: Optional logo image, replacing the tile and the name.
-            cascade: true
-          logoAlternateSource:
-            comment: Logo shown in dark mode.
-            cascade: true
-          logoAlt:
-            type: text
-            comment: Alt text for the logo image.
-            cascade: true
-          version:
-            type: text
-            comment: Badge beside the name, e.g. "v2.4". Leave empty to hide it.
-            cascade: true
-          themeToggle:
-            type: switch
-            comment: Show the light/dark toggle in the header. The site still resolves a
-              colour scheme without it.
-            cascade: true
-          defaultTheme:
-            type: select
-            options:
-              allow_empty: true
-              values:
-                - id: dark
-                  name: Dark
-                - id: light
-                  name: Light
-                - id: system
-                  name: System
-              required: false
-            comment: The colour scheme before a reader chooses one. "System" follows their
-              operating system; "Dark" and "Light" don't.
-            cascade: true
-          search:
-            type: switch
-            comment: Show the search control and bind the ⌘K shortcut.
-            cascade: true
-          searchPlaceholder:
-            type: text
-            comment: Placeholder text inside the search overlay.
-            cascade: true
-          homeLabel:
-            type: text
-            comment: Label for the standalone link above the first sidebar group.
-            cascade: true
-          repositoryUrl:
-            type: url
-            comment: The site's source repository. Leave empty to hide every link built
-              from it.
-            context:
-              title: What this URL controls
-              icon: account_tree
-              content: >-
-                Three things are built from this one value: the repository link
-                in the header, the "Use this template" button, and the "Edit
-                this page" link at the foot of every documentation page.
-
-
-                Plain repository URL — `https://github.com/you/your-docs` — and
-                edit links target the `main` branch.
-
-
-                Add a `/tree/<branch>` suffix —
-                `https://github.com/you/your-docs/tree/develop` — to point edit
-                links at a different branch.
-
-
-                Leave it empty and all three disappear. Nothing else changes.
-            cascade: true
-          editPageLabel:
-            type: text
-            comment: Text of the edit link.
-            cascade: true
-          topbarLinks:
-            type: array
-            options:
-              structures: _structures.linkItems
-              disable_add: false
-              disable_remove: false
-              disable_reorder: false
-              required: false
-            comment: Links in the header, right of the site name.
-            cascade: true
-          navGroups:
-            type: array
-            options:
-              structures: _structures.docsNavGroups
-              disable_add: false
-              disable_remove: false
-              disable_reorder: false
-              required: false
-            comment: Sidebar group order. A group used by a page but missing here is added
-              at the end rather than dropped.
-            cascade: true
-          copyPage:
-            type: object
-            comment: The "Copy page" menu beside each documentation page's title.
-            cascade: true
-          feedback:
-            type: object
-            comment: The "Was this page helpful?" block.
-            cascade: true
-      announcementBar:
-        path: .cloudcannon/schemas/announcementBar.json
-        reorder_inputs: true
-        hide_extra_inputs: false
-        remove_empty_inputs: false
-        remove_extra_inputs: false
-        name: Announcement Bar
-        preview:
-          text:
-            - Announcement Bar
-        _inputs:
-          enabled:
-            type: switch
-            comment: Show the announcement bar at the top of every page.
-            cascade: true
-          text:
-            type: markdown
-            options:
-              allow_resize: true
-              allow_custom_markup: false
-              remove_custom_markup: false
-              initial_height: 320
-              blockquote: true
-              bold: true
-              bulletedlist: true
-              code: false
-              copyformatting: false
-              embed: false
-              expandable: false
-              horizontalrule: false
-              image: true
-              image_size_attributes: false
-              indent: false
-              italic: true
-              link: true
-              numberedlist: true
-              outdent: false
-              redo: false
-              removeformat: true
-              resize_style: contain
-              snippet: true
-              strike: false
-              subscript: false
-              superscript: false
-              table: false
-              underline: false
-              undo: false
-              required: false
-            comment: The announcement message. Add a Markdown link for an optional call to
-              action.
-            cascade: true
-      breadcrumbs:
-        path: .cloudcannon/schemas/breadcrumbs.json
-        reorder_inputs: true
-        hide_extra_inputs: false
-        remove_empty_inputs: false
-        remove_extra_inputs: false
-        name: Breadcrumbs
-        preview:
-          text:
-            - Breadcrumbs
-        _inputs:
-          homeLabel:
-            comment: Label for the leading crumb that links to the site root.
-            cascade: true
-      redirects:
-        path: .cloudcannon/schemas/redirects.json
-        reorder_inputs: true
-        hide_extra_inputs: false
-        remove_empty_inputs: false
-        remove_extra_inputs: false
-        name: Redirects
-        icon: alt_route
-        preview:
-          text:
-            - Redirects
-          icon: alt_route
-        _inputs:
-          routes:
-            type: array
-            options:
-              structures: _structures.redirectRoutes
-              disable_add: false
-              disable_remove: false
-              disable_reorder: false
-              required: false
-            comment: Old URLs and where they should go now.
-            context:
-              title: When to add a redirect
-              icon: alt_route
-              content: >-
-                Renaming or moving a documentation page changes its URL. Every
-                link anyone has already shared — bookmarks, chat messages, other
-                sites — keeps pointing at the old one, which now shows the 404
-                page.
-
-
-                Adding the old path here sends those readers to the new page
-                instead.
-
-
-                Rules are matched top to bottom and the first match wins, so put
-                the most specific ones first.
-
-
-                Redirects go live on the next build, not the moment you save.
-            cascade: true
-      seo:
-        path: .cloudcannon/schemas/seo.json
-        reorder_inputs: true
-        hide_extra_inputs: false
-        remove_empty_inputs: false
-        remove_extra_inputs: false
-        name: SEO Settings
-        preview:
-          text:
-            - SEO
-        _inputs:
-          name:
-            comment: Site name used in structured data and as the fallback brand name in SEO
-              metadata.
-            cascade: true
-          url:
-            comment: Production site URL used for canonical links and structured data.
-            cascade: true
-          description:
-            type: textarea
-            comment: Default meta description used when a page does not provide its own.
-            cascade: true
-          logoSource:
-            comment: Default image used for social sharing metadata when a page does not
-              provide its own.
-            cascade: true
-          titleFormat:
-            comment: Browser title template.
-            context:
-              title: Writing the template
-              icon: title
-              content: >-
-                `{title}` is replaced with the page's own title. Everything else
-                is kept literally.
-
-
-                `{title} — Docsmith` renders as "Installation — Docsmith" on the
-                installation page.
-
-
-                Drop `{title}` entirely and every page in the site shares one
-                browser title, which search engines and browser tabs both handle
-                badly.
-            cascade: true
-          twitterSite:
-            comment: Optional X (Twitter) handle for the site, including the @, used in
-              social share cards.
-            cascade: true
 commit_templates:
   - label: Describe the change
     template_string: |-
@@ -817,14 +553,243 @@ data_config:
     path: .cloudcannon/data/icons.yml
   autocomplete_tokens:
     path: .cloudcannon/data/autocomplete-tokens.yml
-  docsSite:
-    path: src/data/docsSite.json
+  header:
+    path: src/data/header.json
+  sidebar:
+    path: src/data/sidebar.json
+  pageTools:
+    path: src/data/pageTools.json
   breadcrumbs:
     path: src/data/breadcrumbs.json
   footer:
     path: src/data/footer.json
   announcementBar:
     path: src/data/announcementBar.json
+file_config:
+  - glob: src/data/header.json
+    _inputs:
+      markLetter:
+        type: text
+        comment: One character shown in an accent tile beside the name. Ignored when a
+          logo image is set.
+        cascade: true
+      wordmark:
+        type: text
+        comment: The site name shown in the header.
+        cascade: true
+      logoSource:
+        comment: Optional logo image, replacing the tile and the name.
+        cascade: true
+      logoAlternateSource:
+        comment: Logo shown in dark mode.
+        cascade: true
+      logoAlt:
+        type: text
+        comment: Alt text for the logo image.
+        cascade: true
+      version:
+        type: text
+        comment: Badge beside the name, e.g. "v2.4". Leave empty to hide it.
+        cascade: true
+      themeToggle:
+        type: switch
+        comment: Show the light/dark toggle in the header. The site still resolves a
+          colour scheme without it.
+        cascade: true
+      search:
+        type: switch
+        comment: Show the search control and bind the ⌘K shortcut.
+        cascade: true
+      searchPlaceholder:
+        type: text
+        comment: Placeholder text inside the search overlay.
+        cascade: true
+      topbarLinks:
+        type: array
+        options:
+          structures: _structures.linkItems
+          disable_add: false
+          disable_remove: false
+          disable_reorder: false
+          required: false
+        comment: Links in the header, right of the site name.
+        cascade: true
+  - glob: src/data/sidebar.json
+    _inputs:
+      homeLabel:
+        type: text
+        comment: Label for the standalone link above the first sidebar group.
+        cascade: true
+      navGroups:
+        type: array
+        options:
+          structures: _structures.docsNavGroups
+          disable_add: false
+          disable_remove: false
+          disable_reorder: false
+          required: false
+        comment: Sidebar group order. A group used by a page but missing here is added
+          at the end rather than dropped.
+        cascade: true
+  - glob: src/data/pageTools.json
+    _inputs:
+      repositoryUrl:
+        type: url
+        comment: The site's source repository. Leave empty to hide the "Edit this page"
+          link.
+        context:
+          title: What this URL controls
+          icon: account_tree
+          content: >-
+            The "Edit this page" link at the foot of every documentation
+            page is built from this one value.
+
+
+            Plain repository URL — `https://github.com/you/your-docs` — and
+            edit links target the `main` branch.
+
+
+            Add a `/tree/<branch>` suffix —
+            `https://github.com/you/your-docs/tree/develop` — to point edit
+            links at a different branch.
+
+
+            Leave it empty and the link disappears. Nothing else changes.
+        cascade: true
+      editPageLabel:
+        type: text
+        comment: Text of the edit link.
+        cascade: true
+      copyPage:
+        type: object
+        comment: The "Copy page" menu beside each documentation page's title.
+        cascade: true
+      feedback:
+        type: object
+        comment: The "Was this page helpful?" block.
+        cascade: true
+  - glob: src/data/announcementBar.json
+    _inputs:
+      enabled:
+        type: switch
+        comment: Show the announcement bar at the top of every page.
+        cascade: true
+      text:
+        type: markdown
+        options:
+          allow_resize: true
+          allow_custom_markup: false
+          remove_custom_markup: false
+          initial_height: 320
+          blockquote: true
+          bold: true
+          bulletedlist: true
+          code: false
+          copyformatting: false
+          embed: false
+          expandable: false
+          horizontalrule: false
+          image: true
+          image_size_attributes: false
+          indent: false
+          italic: true
+          link: true
+          numberedlist: true
+          outdent: false
+          redo: false
+          removeformat: true
+          resize_style: contain
+          snippet: true
+          strike: false
+          subscript: false
+          superscript: false
+          table: false
+          underline: false
+          undo: false
+          required: false
+        comment: The announcement message. Add a Markdown link for an optional call to
+          action.
+        cascade: true
+  - glob: src/data/breadcrumbs.json
+    _inputs:
+      homeLabel:
+        comment: Label for the leading crumb that links to the site root.
+        cascade: true
+  - glob: src/data/redirects.json
+    _inputs:
+      $:
+        type: object
+        options:
+          preview:
+            icon: alt_route
+      routes:
+        type: array
+        options:
+          structures: _structures.redirectRoutes
+          disable_add: false
+          disable_remove: false
+          disable_reorder: false
+          required: false
+        comment: Old URLs and where they should go now.
+        context:
+          title: When to add a redirect
+          icon: alt_route
+          content: >-
+            Renaming or moving a documentation page changes its URL. Every
+            link anyone has already shared — bookmarks, chat messages, other
+            sites — keeps pointing at the old one, which now shows the 404
+            page.
+
+
+            Adding the old path here sends those readers to the new page
+            instead.
+
+
+            Rules are matched top to bottom and the first match wins, so put
+            the most specific ones first.
+
+
+            Redirects go live on the next build, not the moment you save.
+        cascade: true
+  - glob: src/data/seo.json
+    _inputs:
+      name:
+        comment: Site name used in structured data and as the fallback brand name in SEO
+          metadata.
+        cascade: true
+      url:
+        comment: Production site URL used for canonical links and structured data.
+        cascade: true
+      description:
+        type: textarea
+        comment: Default meta description used when a page does not provide its own.
+        cascade: true
+      logoSource:
+        comment: Default image used for social sharing metadata when a page does not
+          provide its own.
+        cascade: true
+      titleFormat:
+        comment: Browser title template.
+        context:
+          title: Writing the template
+          icon: title
+          content: >-
+            `{title}` is replaced with the page's own title. Everything else
+            is kept literally.
+
+
+            `{title} — Docsmith` renders as "Installation — Docsmith" on the
+            installation page.
+
+
+            Drop `{title}` entirely and every page in the site shares one
+            browser title, which search engines and browser tabs both handle
+            badly.
+        cascade: true
+      twitterSite:
+        comment: Optional X (Twitter) handle for the site, including the @, used in
+          social share cards.
+        cascade: true
 timezone: Etc/UTC
 _structures_from_glob:
   - /.cloudcannon/structures/*.cloudcannon.structures.yml

@@ -69,6 +69,8 @@ Four values are exposed to an editor rather than living only in CSS:
 | `accentLight` / `accentDark` | hex colour | the whole `--color-accent*` family, per theme | teal 700/300 |
 | `brandLight` / `brandDark`   | hex colour | the whole `--color-brand*` family, per theme  | ink / paper  |
 
+`defaultTheme` sits beside them at the top level — see [The default colour scheme](#the-default-colour-scheme).
+
 **The mechanism is inheritance, not specificity.** `BaseLayout.astro` calls
 `themeStyleAttribute()` from `src/utils/themeTokens.mjs` and puts the result in `style` on
 `<html>`; the theme files read each one as `var(--accent-light, var(--teal-700))`. Because
@@ -186,7 +188,7 @@ These are **not** tokenized yet. When a task needs one, flag the gap rather than
 
 ## The default colour scheme
 
-`defaultTheme` in `src/data/docsSite.json` (`dark` | `light` | `system`) decides what a
+`defaultTheme` in `src/data/theme.json` (`dark` | `light` | `system`) decides what a
 first-time reader sees. The starter ships `dark`. Resolution order, in
 `navigation/theme-toggle/ThemeToggleScript.astro`:
 

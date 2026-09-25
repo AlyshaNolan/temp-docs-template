@@ -1,13 +1,13 @@
 ---
 name: site-data-navigation
-description: Use when editing the site header, sidebar grouping, footer, or SEO defaults — docsSite.json, footer.json, seo.json, announcementBar.json, breadcrumbs.json under src/data/ — or figuring out how those files reach the topbar, sidebar, footer and meta tags.
+description: Use when editing the site header, sidebar grouping, page tools, footer, or SEO defaults — header.json, sidebar.json, pageTools.json, footer.json, seo.json, announcementBar.json, breadcrumbs.json under src/data/ — or figuring out how those files reach the topbar, sidebar, footer and meta tags.
 ---
 
 # Site data & navigation
 
 Five JSON files under `src/data/` drive every page's chrome. They are plain data imported by layouts — not content collections — and CloudCannon edits them through its "Data" collection.
 
-The one thing that is **not** in a data file is the documentation sidebar's contents: those come from page frontmatter. `docsSite.json` only orders the groups.
+The one thing that is **not** in a data file is the documentation sidebar's contents: those come from page frontmatter. `sidebar.json` only orders the groups.
 
 ## When to use
 
@@ -28,19 +28,21 @@ The one thing that is **not** in a data file is the documentation sidebar's cont
 
 ## Data files overview
 
-| File                            | Controls                                                                                        | Read by                                                                                            |
-| ------------------------------- | ----------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| `src/data/docsSite.json`        | Brand, version badge, search, theme toggle, top links, sidebar group order, edit link, feedback | `src/layouts/Docs.astro` → `DocsTopbar.astro`; `src/utils/docsNav.ts`; `src/pages/[...slug].astro` |
-| `src/data/footer.json`          | Footer legal text, links, socials                                                               | `src/layouts/Docs.astro` → `Footer.astro`                                                          |
-| `src/data/seo.json`             | Site name/URL/description, default OG image, title template                                     | `src/layouts/BaseLayout.astro` → `SeoHead.astro` + `StructuredData.astro`                          |
-| `src/data/announcementBar.json` | The dismissible bar above the header                                                            | `src/layouts/Docs.astro` → `AnnouncementBar.astro`                                                 |
-| `src/data/breadcrumbs.json`     | Label for the leading crumb                                                                     | `Breadcrumbs.astro`                                                                                |
+| File                            | Controls                                                    | Read by                                                                   |
+| ------------------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `src/data/header.json`          | Brand, version badge, search, theme toggle, top links       | `src/layouts/Docs.astro` → `DocsTopbar.astro`                             |
+| `src/data/sidebar.json`         | The sidebar's lead link, group order and collapsed state    | `src/utils/docsNav.ts`                                                    |
+| `src/data/pageTools.json`       | Edit link, Copy page menu, feedback block                   | `src/pages/[...slug].astro`; `src/utils/repository.ts`                    |
+| `src/data/footer.json`          | Footer legal text, links, socials                           | `src/layouts/Docs.astro` → `Footer.astro`                                 |
+| `src/data/seo.json`             | Site name/URL/description, default OG image, title template | `src/layouts/BaseLayout.astro` → `SeoHead.astro` + `StructuredData.astro` |
+| `src/data/announcementBar.json` | The dismissible bar above the header                        | `src/layouts/Docs.astro` → `AnnouncementBar.astro`                        |
+| `src/data/breadcrumbs.json`     | Label for the leading crumb                                 | `Breadcrumbs.astro`                                                       |
 
 Editing the JSON file is what changes the rendered output — there is no other place these values come from.
 
 ---
 
-## The header (`docsSite.json`)
+## The header (`header.json`)
 
 ```json
 {
@@ -49,20 +51,17 @@ Editing the JSON file is what changes the rendered output — there is no other 
   "logoSource": "",
   "version": "v2.4",
   "themeToggle": true,
-  "defaultTheme": "dark",
   "search": true,
-  "topbarLinks": [{ "name": "GitHub", "path": "https://github.com/CloudCannon/docsmith" }],
-  "navGroups": [{ "name": "Getting started", "collapsed": false }],
-  "feedback": { "enabled": true, "action": "/" }
+  "topbarLinks": [{ "name": "GitHub", "path": "https://github.com/CloudCannon/docsmith" }]
 }
 ```
 
 - **Brand.** `markLetter` + `wordmark` render an accent tile beside a word — no image asset to maintain, and it themes automatically. Set `logoSource` (plus `logoAlternateSource` for dark mode) to use an image instead; it replaces both.
 - **`version`** is a label, not a switcher. It says which release these docs describe. Empty hides the badge.
 - **`topbarLinks`** are flat — no dropdowns. They are hidden below 640px, so nothing essential should live only there.
-- **`defaultTheme`** is `dark`, `light` or `system`. It is the scheme before a reader chooses one; `system` is the only value that consults the operating system. A reader's stored choice always wins. Hiding `themeToggle` doesn't change the resolution, only the control.
+- **`defaultTheme`** lives in `theme.json`, not here. It is `dark`, `light` or `system`. It is the scheme before a reader chooses one; `system` is the only value that consults the operating system. A reader's stored choice always wins. Hiding `themeToggle` doesn't change the resolution, only the control.
 
-## Sidebar order (`navGroups`)
+## Sidebar order (`sidebar.json`)
 
 The sidebar's _contents_ are derived in `src/utils/docsNav.ts` from each page's `group` and `order` frontmatter. `navGroups` only decides the order the groups appear in, and whether a group renders collapsed.
 
@@ -70,7 +69,7 @@ The sidebar's _contents_ are derived in `src/utils/docsNav.ts` from each page's 
 
 A page with no `group` still builds and is searchable; it just has no sidebar entry.
 
-## The "Edit this page" link
+## The "Edit this page" link (`pageTools.json`)
 
 `repositoryUrl` is the only URL to set. `src/utils/repository.ts` builds the link as `<repo>/edit/<branch>/<the page's file path>`, taking the branch from a `/tree/<branch>` suffix and defaulting to `main`:
 
@@ -78,7 +77,7 @@ A page with no `group` still builds and is searchable; it just has no sidebar en
 "repositoryUrl": "https://github.com/acme/docs/tree/main"
 ```
 
-Empty hides the link — and the "Use this template" and repository links with it. `editPageLabel` sets the link's text.
+Empty hides the link. `editPageLabel` sets the link's text.
 
 The date beside it is the page file's last commit, read at build time by `src/utils/gitDates.mjs`. There is no frontmatter field for it. A shallow clone has no per-file history, so the date is omitted rather than wrong.
 
@@ -99,7 +98,7 @@ Set `name`, `url` (must match `site` in `astro.config.mjs`), `description`, `tit
 ## CloudCannon editing
 
 - The `data` collection globs `src/data/**/*.json`, `disable_url: true`, `_enabled_editors: [data]`, grouped under "Data".
-- `docsSite.json`, `announcementBar.json`, `breadcrumbs.json` and `seo.json` each have a schema in `.cloudcannon/schemas/`, matched by their `_schema` key, and per-field `comment:` text from `collections_config.data.schemas.<name>._inputs`.
+- Data files have no schema — each is a singleton, so there is nothing to create from a template. Per-file inputs and `comment:` text live under the root `file_config`, one `glob:` entry per file. Keep them there rather than in the collection's `_inputs`: keys like `homeLabel` mean different things in `sidebar.json` and `breadcrumbs.json`, and a collection-level input applies to every file.
 - Array fields get their shape from **global structures matched by field name**, loaded by the root `_structures_from_glob`. `topbarLinks` and `footer.links` use `linkItems`, `socials` uses `socialItems` (both in `footerItems.cloudcannon.structures.yml`), and `navGroups` uses `docsNavGroups.cloudcannon.structures.yml`.
 - Renaming a field in a data file means renaming it in the matching structure file too, or the editor shows the raw key.
 
@@ -109,31 +108,31 @@ An editable region can bind **across files**: a `data-prop` beginning `@file[pat
 
 **MUST:** use `@data[<key>]` for a `src/data` file, and declare the key under `data_config`. `@file[<path>]` goes through `CloudCannon.file()`, which does not answer to these paths — every region bound that way renders an error card instead.
 
-A dataset resolves through `items()`, typed `File[] | File`. On the **array** branch the next path segment is consumed as an index, so `@data[docsSite].wordmark` would look up `wordmark` on an array and error. In practice a single-file `data_config` entry resolves to one `File` and the plain path is right — but that is the shape to check first if a whole file's worth of regions errors at once.
+A dataset resolves through `items()`, typed `File[] | File`. On the **array** branch the next path segment is consumed as an index, so `@data[header].wordmark` would look up `wordmark` on an array and error. In practice a single-file `data_config` entry resolves to one `File` and the plain path is right — but that is the shape to check first if a whole file's worth of regions errors at once.
 
 So anything **stored in one file** is a plain region, not JavaScript:
 
-| Chrome                         | Binding                                                                                 |
-| ------------------------------ | --------------------------------------------------------------------------------------- |
-| Topbar mark, wordmark, version | `@data[docsSite].markLetter` / `.wordmark` / `.version`                                 |
-| Topbar links (the main nav)    | `@data[docsSite].topbarLinks` — an `array` region, so add/remove/reorder work on canvas |
-| Footer text, links, socials    | `@data[footer].footerText` / `.links` / `.socials`                                      |
-| The Home crumb                 | `@data[breadcrumbs].homeLabel`                                                          |
-| The current crumb              | `title` on the open page — editing it renames the page                                  |
+| Chrome                         | Binding                                                                               |
+| ------------------------------ | ------------------------------------------------------------------------------------- |
+| Topbar mark, wordmark, version | `@data[header].markLetter` / `.wordmark` / `.version`                                 |
+| Topbar links (the main nav)    | `@data[header].topbarLinks` — an `array` region, so add/remove/reorder work on canvas |
+| Footer text, links, socials    | `@data[footer].footerText` / `.links` / `.socials`                                    |
+| The Home crumb                 | `@data[breadcrumbs].homeLabel`                                                        |
+| The current crumb              | `title` on the open page — editing it renames the page                                |
 
 **MUST:** pass the source in as a prop for a component that is _both_ site chrome and a page-builder block. `Footer.astro` and `AnnouncementBar.astro` take `editableSource`, which `Docs.astro` sets to `@data[footer]` / `@data[announcementBar]`; placed in a page builder the prop is absent and the bindings fall back to the page's own frontmatter. Hardcoding either one breaks the other use.
 
 ## What regions still cannot reach
 
-`getDocsNav()` _derives_ the sidebar tree and the crumb trail by joining the whole `docs` collection with `docsSite.json`. No single path holds "where this page sits", so there is nothing to bind. `src/components/utils/siteChrome.ts` patches those through the JavaScript API instead, registered in `editor-live-sync.js`:
+`getDocsNav()` _derives_ the sidebar tree and the crumb trail by joining the whole `docs` collection with `sidebar.json`. No single path holds "where this page sits", so there is nothing to bind. `src/components/utils/siteChrome.ts` patches those through the JavaScript API instead, registered in `editor-live-sync.js`:
 
-| Edit                 | What moves                                                                      |
-| -------------------- | ------------------------------------------------------------------------------- |
-| A page's `group`     | Its sidebar entry between groups (creating or pruning one), and the group crumb |
-| A page's `order`     | Its position among its siblings                                                 |
-| A page's `title`     | Its sidebar link (the crumb is a region)                                        |
-| `docsSite.homeLabel` | The sidebar's lead link                                                         |
-| `docsSite.navGroups` | Group order and collapsed state                                                 |
+| Edit                | What moves                                                                      |
+| ------------------- | ------------------------------------------------------------------------------- |
+| A page's `group`    | Its sidebar entry between groups (creating or pruning one), and the group crumb |
+| A page's `order`    | Its position among its siblings                                                 |
+| A page's `title`    | Its sidebar link (the crumb is a region)                                        |
+| `sidebar.homeLabel` | The sidebar's lead link                                                         |
+| `sidebar.navGroups` | Group order and collapsed state                                                 |
 
 **MUST:** derive the nav through `buildDocsNav` in `src/utils/docsNavModel.ts`. It is the whole shape — nesting, group inheritance, ordering — with no idea how the pages were loaded. `docsNav.ts` feeds it from `getCollection("docs")` at build time; `siteChrome.ts` feeds it from `CloudCannon.collection("documentation")` in the editor, where the answer includes edits that have not been built yet. A second copy puts a page in one place on canvas and another after the rebuild.
 
@@ -147,11 +146,11 @@ So anything **stored in one file** is a plain region, not JavaScript:
 
 A boolean has no region type — `text`, `image`, `array`, `array-item`, `component` and `source` are the whole list — but the JavaScript API shows and hides them fine. The catch is build-time gating: `{showCopyPage && <CopyPage/>}` leaves the editor **no element to reveal** when the switch goes back on.
 
-**MUST:** read a page switch as **on when absent**. `file.data.get()` returns raw frontmatter, not the Zod-parsed entry the build sees, and `content.config.ts` defaults `showTableOfContents` / `showFeedback` / `showCopyPage` / `showPager` to `true`. Only one shipped page writes them out, so treating absent as "off" hides the control on nearly every page. Site switches in `docsSite.json` are the opposite — absent is off, matching the `.astro` destructure defaults the build uses.
+**MUST:** read a page switch as **on when absent**. `file.data.get()` returns raw frontmatter, not the Zod-parsed entry the build sees, and `content.config.ts` defaults `showTableOfContents` / `showFeedback` / `showCopyPage` / `showPager` to `true`. Only one shipped page writes them out, so treating absent as "off" hides the control on nearly every page. Site switches in `header.json` and `pageTools.json` are the opposite — absent is off, matching the `.astro` destructure defaults the build uses.
 
 **MUST:** wait for a handle before applying the switch it feeds. An unread handle and a switched-off control are indistinguishable, so a control gated by both a page and a site switch must not be written until both have answered.
 
-**MUST:** render an editor-switchable control always, and mark it `data-toggle-hidden` when off (`src/styles/base/_html-elements.css` hides it with `display: none !important`). Never gate it out of the markup. `siteChrome.ts` then flips the attribute live. This covers `showCopyPage`, `showFeedback`, `showPager`, `showTableOfContents`, `docsSite.search` / `themeToggle` / `copyPage.enabled` / `feedback.enabled`, and `announcementBar.enabled`.
+**MUST:** render an editor-switchable control always, and mark it `data-toggle-hidden` when off (`src/styles/base/_html-elements.css` hides it with `display: none !important`). Never gate it out of the markup. `siteChrome.ts` then flips the attribute live. This covers `showCopyPage`, `showFeedback`, `showPager`, `showTableOfContents`, `header.search` / `themeToggle`, `pageTools.copyPage.enabled` / `feedback.enabled`, and `announcementBar.enabled`.
 
 **MUST NOT:** put `data-toggle-hidden` on the root of a component that has CloudCannon YAML. It is prop-driven, and `lint:roots` fails it — CloudCannon's re-render keeps a region root and swaps its contents, so the attribute goes stale. Put it on a direct child and hoist it back with `:has()`, the way `AnnouncementBar.astro` hides the whole bar from a marker on its `<p>`.
 
@@ -163,7 +162,7 @@ The sidebar markup carries `data-group`, `data-href` and `data-order` purely so 
 
 ## Verify your work
 
-- `npm run check` — exit 0, no drift. `lint:schema` validates the data schemas against CloudCannon's own.
+- `npm run check` — exit 0, no drift. `lint:schema` validates `file_config` against CloudCannon's own schema.
 - `npm run dev`: confirm the header, sidebar order and footer reflect the change.
 - If you edited `seo.json`, view source and confirm `<title>`, `og:*` and the `application/ld+json` script.
 - In CloudCannon, open Data → Docs Site and confirm every field renders with a label. An unlabeled raw JSON field usually means a structure file's key no longer matches the data field name.

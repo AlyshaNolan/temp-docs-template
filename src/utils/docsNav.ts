@@ -4,7 +4,7 @@
  * is decided. The Visual Editor feeds that same model from CloudCannon's API,
  * so the derivation lives in one place and cannot drift.
  */
-import docsSite from "@data/docsSite.json";
+import sidebar from "@data/sidebar.json";
 import { buildDocsNav, type DocsNav } from "@utils/docsNavModel";
 import { getCollection } from "astro:content";
 
@@ -29,6 +29,6 @@ export async function getDocsNav(): Promise<DocsNav> {
       group: entry.data.group,
       order: entry.data.order,
     })),
-    { navGroups: docsSite.navGroups, homeLabel: docsSite.homeLabel }
+    { navGroups: sidebar.navGroups, homeLabel: sidebar.homeLabel }
   );
 }

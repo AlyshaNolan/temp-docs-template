@@ -84,24 +84,28 @@ if (typeof seo?.logoSource === "string" && seo.logoSource.includes(STARTER_LOGO)
   branding.push({ file: "src/data/seo.json", detail: "logoSource is the starter logo" });
 }
 
-const docsSite = readJson("src/data/docsSite.json");
+const header = readJson("src/data/header.json");
 
-if (docsSite?.wordmark === STARTER_NAME) {
+if (header?.wordmark === STARTER_NAME) {
   branding.push({
-    file: "src/data/docsSite.json",
+    file: "src/data/header.json",
     detail: `wordmark is still "${STARTER_NAME}"`,
   });
 }
-for (const key of ["repositoryUrl"]) {
-  if (typeof docsSite?.[key] === "string" && docsSite[key].includes(STARTER_REPO)) {
-    branding.push({
-      file: "src/data/docsSite.json",
-      detail: `${key} still points at the template's own repository`,
-    });
-  }
+
+const pageTools = readJson("src/data/pageTools.json");
+
+if (
+  typeof pageTools?.repositoryUrl === "string" &&
+  pageTools.repositoryUrl.includes(STARTER_REPO)
+) {
+  branding.push({
+    file: "src/data/pageTools.json",
+    detail: "repositoryUrl still points at the template's own repository",
+  });
 }
 
-for (const file of ["src/data/docsSite.json", "src/data/footer.json"]) {
+for (const file of ["src/data/header.json", "src/data/footer.json"]) {
   const data = readJson(file);
 
   if (!data) continue;
