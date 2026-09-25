@@ -429,8 +429,8 @@ collections_config:
           required: false
         comment: Primary button and brand fill in dark mode.
         cascade: true
-    disable_add: false
-    disable_add_folder: false
+    disable_add: true
+    disable_add_folder: true
     disable_file_actions: false
 commit_templates:
   - label: Describe the change
@@ -753,7 +753,7 @@ file_config:
         cascade: true
   - glob: src/data/seo.json
     _inputs:
-      name:
+      siteName:
         comment: Site name used in structured data and as the fallback brand name in SEO
           metadata.
         cascade: true

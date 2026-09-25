@@ -10,7 +10,7 @@ interface ArticleStructuredData {
 
 export interface Props {
   site: {
-    name: string;
+    siteName: string;
     url: string;
     logoSource: string;
     description: string;
@@ -55,7 +55,7 @@ const graph: Record<string, any>[] = [
   {
     "@type": "Organization",
     "@id": organizationId,
-    name: site.name,
+    name: site.siteName,
     url: siteHref,
     description: site.description,
     logo: {
@@ -69,7 +69,7 @@ const graph: Record<string, any>[] = [
   {
     "@type": "WebSite",
     "@id": websiteId,
-    name: site.name,
+    name: site.siteName,
     url: siteHref,
     description: site.description,
     publisher: { "@id": organizationId },
@@ -78,7 +78,7 @@ const graph: Record<string, any>[] = [
     "@type": "WebPage",
     "@id": pageUrl,
     url: pageUrl,
-    name: heading || title || site.name,
+    name: heading || title || site.siteName,
     description: pageDescription,
     isPartOf: { "@id": websiteId },
     ...(pageImageUrl ? { primaryImageOfPage: { "@type": "ImageObject", url: pageImageUrl } } : {}),

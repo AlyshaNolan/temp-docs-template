@@ -71,8 +71,8 @@ if (seo?.url === PLACEHOLDER_URL) {
     why: "Organization and WebSite structured data advertise the wrong domain",
   });
 }
-if (seo?.name === STARTER_NAME) {
-  branding.push({ file: "src/data/seo.json", detail: `name is still "${STARTER_NAME}"` });
+if (seo?.siteName === STARTER_NAME) {
+  branding.push({ file: "src/data/seo.json", detail: `siteName is still "${STARTER_NAME}"` });
 }
 if (typeof seo?.titleFormat === "string" && seo.titleFormat.includes(STARTER_NAME)) {
   branding.push({

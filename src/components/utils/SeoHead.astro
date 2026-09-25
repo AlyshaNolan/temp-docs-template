@@ -2,7 +2,7 @@
 import { resolveOpenGraphImage } from "@component-utils/image";
 
 interface SiteSeoData {
-  name: string;
+  siteName: string;
   url: string;
   logoSource: string;
   description: string;
@@ -49,7 +49,7 @@ const share = shareSource ? await resolveOpenGraphImage(shareSource) : undefined
 const canonicalUrl = canonical || Astro.url.href;
 const siteUrl = Astro.site || new URL(site.url);
 const pageImageUrl = share ? new URL(share.src, siteUrl).href : undefined;
-const pageImageAlt = imageAlt || (image ? title : site.name);
+const pageImageAlt = imageAlt || (image ? title : site.siteName);
 const keywordContent = keywords?.filter(Boolean).join(", ");
 const articleAuthors = Array.isArray(article?.author)
   ? article.author.filter(Boolean)
@@ -91,7 +91,7 @@ const twitterSite = site.twitterSite?.trim();
 />
 <meta
   property="og:site_name"
-  content={site.name}
+  content={site.siteName}
 />
 {
   pageDescription ? (

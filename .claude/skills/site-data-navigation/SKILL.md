@@ -91,7 +91,7 @@ The date beside it is the page file's last commit, read at build time by `src/ut
 
 ## SEO (`seo.json`)
 
-Set `name`, `url` (must match `site` in `astro.config.mjs`), `description`, `titleFormat` (include `{title}`). `npm run check:placeholders` warns while these hold the template's values.
+Set `siteName`, `url` (must match `site` in `astro.config.mjs`), `description`, `titleFormat` (include `{title}`). `npm run check:placeholders` warns while these hold the template's values.
 
 ---
 

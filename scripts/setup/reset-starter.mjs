@@ -228,7 +228,7 @@ if (nextConfig !== config) {
 // SEO defaults.
 const seo = readJson("src/data/seo.json");
 
-seo.name = siteName;
+seo.siteName = siteName;
 seo.url = siteUrl;
 seo.titleFormat = `{title} | ${siteName}`;
 if (resetBranding) {
@@ -236,7 +236,9 @@ if (resetBranding) {
   seo.logoSource = "";
 }
 writeJson("src/data/seo.json", seo);
-record(`src/data/seo.json  name, url, titleFormat${resetBranding ? ", description, logo" : ""}`);
+record(
+  `src/data/seo.json  siteName, url, titleFormat${resetBranding ? ", description, logo" : ""}`
+);
 
 // Demo content.
 if (removeDocs) {
@@ -312,7 +314,7 @@ if (dryRun) {
 } else {
   console.log("  Next:");
   if (resetBranding)
-    console.log("    • Add your logo — src/data/mainNav.json, footer.json, seo.json");
+    console.log("    • Add your logo — src/data/header.json, footer.json, seo.json");
   console.log("    • Write your description — src/data/seo.json");
   console.log("    • Set your colours and fonts — src/styles/themes/, site-fonts.mjs");
   console.log("    • npm run dev\n");
