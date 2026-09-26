@@ -394,6 +394,22 @@ const arrayDataAttributes =
       }
     }
 
+    /* CloudCannon draws its region outline inset on the section, where the
+       positioned background layers paint over it; this repaints it on top. */
+    .custom-section[data-editable] {
+      position: relative;
+
+      &::after {
+        content: "";
+        inset: 0;
+        outline: inherit;
+        outline-offset: inherit;
+        pointer-events: none;
+        position: absolute;
+        z-index: var(--layer-2);
+      }
+    }
+
     /* Everything on the inverse band has to flip with it — text and controls
        both, or a primary button ends up the same colour as the band it sits on.
        Scoped to the section's own content so a nested section with its own
