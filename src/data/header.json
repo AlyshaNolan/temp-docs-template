@@ -4,7 +4,7 @@
   "logoSource": "",
   "logoAlternateSource": "",
   "logoAlt": "Docsmith",
-  "version": "v2.4",
+  "showVersionNumber": true,
   "themeToggle": true,
   "search": true,
   "searchPlaceholder": "Search documentation…",

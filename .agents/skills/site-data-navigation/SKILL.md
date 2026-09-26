@@ -49,7 +49,7 @@ Editing the JSON file is what changes the rendered output — there is no other 
   "markLetter": "D",
   "wordmark": "Docsmith",
   "logoSource": "",
-  "version": "v2.4",
+  "showVersionNumber": true,
   "themeToggle": true,
   "search": true,
   "topbarLinks": [{ "name": "GitHub", "path": "https://github.com/CloudCannon/docsmith" }]
@@ -57,7 +57,7 @@ Editing the JSON file is what changes the rendered output — there is no other 
 ```
 
 - **Brand.** `markLetter` + `wordmark` render an accent tile beside a word — no image asset to maintain, and it themes automatically. Set `logoSource` (plus `logoAlternateSource` for dark mode) to use an image instead; it replaces both.
-- **`version`** is a label, not a switcher. It says which release these docs describe. Empty hides the badge.
+- **The version badge** is a label, not a switcher. Its text is the newest entry in `src/content/changelog/` (by `date`, via `getReleases()` in `src/utils/releases.ts`), not a value in `header.json`. `showVersionNumber: false` hides it, and so does an empty changelog.
 - **`topbarLinks`** are flat — no dropdowns. They are hidden below 640px, so nothing essential should live only there.
 - **`defaultTheme`** lives in `theme.json`, not here. It is `dark`, `light` or `system`. It is the scheme before a reader chooses one; `system` is the only value that consults the operating system. A reader's stored choice always wins. Hiding `themeToggle` doesn't change the resolution, only the control.
 
@@ -112,13 +112,13 @@ A dataset resolves through `items()`, typed `File[] | File`. On the **array** br
 
 So anything **stored in one file** is a plain region, not JavaScript:
 
-| Chrome                         | Binding                                                                               |
-| ------------------------------ | ------------------------------------------------------------------------------------- |
-| Topbar mark, wordmark, version | `@data[header].markLetter` / `.wordmark` / `.version`                                 |
-| Topbar links (the main nav)    | `@data[header].topbarLinks` — an `array` region, so add/remove/reorder work on canvas |
-| Footer text, links, socials    | `@data[footer].footerText` / `.links` / `.socials`                                    |
-| The Home crumb                 | `@data[breadcrumbs].homeLabel`                                                        |
-| The current crumb              | `title` on the open page — editing it renames the page                                |
+| Chrome                      | Binding                                                                               |
+| --------------------------- | ------------------------------------------------------------------------------------- |
+| Topbar mark, wordmark       | `@data[header].markLetter` / `.wordmark`                                              |
+| Topbar links (the main nav) | `@data[header].topbarLinks` — an `array` region, so add/remove/reorder work on canvas |
+| Footer text, links, socials | `@data[footer].footerText` / `.links` / `.socials`                                    |
+| The Home crumb              | `@data[breadcrumbs].homeLabel`                                                        |
+| The current crumb           | `title` on the open page — editing it renames the page                                |
 
 **MUST:** pass the source in as a prop for a component that is _both_ site chrome and a page-builder block. `Footer.astro` and `AnnouncementBar.astro` take `editableSource`, which `Docs.astro` sets to `@data[footer]` / `@data[announcementBar]`; placed in a page builder the prop is absent and the bindings fall back to the page's own frontmatter. Hardcoding either one breaks the other use.
 

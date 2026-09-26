@@ -597,9 +597,10 @@ file_config:
         type: text
         comment: Alt text for the logo image.
         cascade: true
-      version:
-        type: text
-        comment: Badge beside the name, e.g. "v2.4". Leave empty to hide it.
+      showVersionNumber:
+        type: switch
+        comment: Show the latest changelog version as a badge beside the name. Automatically
+          does not show when there are no changelog entries.
         cascade: true
       themeToggle:
         type: switch

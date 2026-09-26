@@ -9,7 +9,7 @@
 import { renderMarkdown } from "@component-utils/markdown";
 import { slugifyLabel } from "@component-utils/slugify";
 import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
-import { getCollection } from "astro:content";
+import { getReleases } from "@utils/releases";
 
 const {
   limit = 0,
@@ -19,12 +19,7 @@ const {
   ...htmlAttributes
 } = Astro.props;
 
-const collection = await getCollection("changelog");
-const sorted = collection.sort(
-  (a, b) =>
-    b.data.date.getTime() - a.data.date.getTime() ||
-    b.data.version.localeCompare(a.data.version, undefined, { numeric: true })
-);
+const sorted = await getReleases();
 const releases = limit > 0 ? sorted.slice(0, limit) : sorted;
 
 const releaseDate = (date: Date) =>

@@ -20,6 +20,7 @@ import header from "@data/header.json";
 import themeData from "@data/theme.json";
 import Layout from "@layouts/BaseLayout.astro";
 import type { DocsNav } from "@utils/docsNav";
+import { getReleases } from "@utils/releases";
 
 type Props = {
   nav: DocsNav;
@@ -46,6 +47,7 @@ const {
 
 const pathname = Astro.url.pathname;
 const hasToc = Astro.slots.has("toc");
+const [latestRelease] = await getReleases();
 
 // `system` has no baseline of its own, so the markup ships light and the
 // pre-paint script flips it if the reader's OS asks for dark.
@@ -82,7 +84,8 @@ const baselineTheme = configuredTheme === "dark" ? "dark" : "light";
     logoSource={header.logoSource}
     logoAlternateSource={header.logoAlternateSource}
     logoAlt={header.logoAlt}
-    version={header.version}
+    version={latestRelease ? `v${latestRelease.data.version}` : ""}
+    showVersionNumber={header.showVersionNumber}
     themeToggle={header.themeToggle}
     search={header.search}
     searchPlaceholder={header.searchPlaceholder}

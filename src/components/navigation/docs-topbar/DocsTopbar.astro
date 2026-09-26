@@ -24,6 +24,7 @@ const {
   logoAlternateSource = "",
   logoAlt = "",
   version = "",
+  showVersionNumber = false,
   themeToggle = false,
   search = false,
   searchPlaceholder,
@@ -91,9 +92,7 @@ const {
       version && (
         <span
           class="docs-topbar-version"
-          data-editable="text"
-          data-type="span"
-          data-prop="@data[header].version"
+          data-toggle-hidden={showVersionNumber ? undefined : ""}
         >
           {version}
         </span>

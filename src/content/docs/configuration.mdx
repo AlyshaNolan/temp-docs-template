@@ -22,7 +22,7 @@ so an editor changes them in the app rather than in a pull request.
     {
       "label": "header.json",
       "language": "json",
-      "code": "{\n  \"markLetter\": \"D\",\n  \"wordmark\": \"Docsmith\",\n  \"version\": \"v2.4\",\n  \"search\": true,\n  \"themeToggle\": true\n}"
+      "code": "{\n  \"markLetter\": \"D\",\n  \"wordmark\": \"Docsmith\",\n  \"showVersionNumber\": true,\n  \"search\": true,\n  \"themeToggle\": true\n}"
     },
     {
       "label": "sidebar.json",
@@ -45,9 +45,9 @@ so an editor changes them in the app rather than in a pull request.
       "description": "Brand name in the header. Pair it with `markLetter` for the square mark, or set `logoSource` to use an image instead."
     },
     {
-      "name": "version",
-      "type": "string",
-      "description": "Badge beside the wordmark. Leave it empty to hide the badge."
+      "name": "showVersionNumber",
+      "type": "boolean",
+      "description": "Show the latest changelog version as a badge beside the wordmark. Hidden when the changelog has no releases."
     },
     {
       "name": "repositoryUrl",
@@ -79,7 +79,8 @@ the reader is on a page inside it.
 ## Versions
 
 The header badge is a label, not a switcher: it says which version of the product these docs
-describe. Change it in `header.json` when you cut a release.
+describe. It reads the newest release in the [changelog](/changelog/), so cutting a release
+updates it — turn it off with `showVersionNumber` in `header.json`.
 
 <Alert
   variant="warning"

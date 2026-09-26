@@ -26,9 +26,9 @@ order: 1
       "description": "Path to an SVG or PNG, replacing the mark and wordmark. Pair with `logoAlternateSource` to swap per colour mode."
     },
     {
-      "name": "version",
-      "type": "string",
-      "description": "Badge beside the brand. Empty hides it."
+      "name": "showVersionNumber",
+      "type": "boolean",
+      "description": "Badge beside the brand showing the latest changelog version. Hidden when off or when the changelog has no releases."
     },
     {
       "name": "topbarLinks",
@@ -139,7 +139,7 @@ config loader to learn.
     {
       "label": "Astro",
       "language": "astro",
-      "code": "---\nimport header from \"@data/header.json\";\n---\n\n<p>{header.wordmark} {header.version}</p>"
+      "code": "---\nimport header from \"@data/header.json\";\n---\n\n<p>{header.wordmark}</p>"
     },
     {
       "label": "Node",

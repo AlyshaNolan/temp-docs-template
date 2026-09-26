@@ -262,7 +262,6 @@ if (resetBranding) {
   header.logoSource = "";
   header.logoAlternateSource = "";
   header.logoAlt = siteName;
-  header.version = "";
   header.topbarLinks = [];
   writeJson("src/data/header.json", header);
   record("src/data/header.json  branding cleared");

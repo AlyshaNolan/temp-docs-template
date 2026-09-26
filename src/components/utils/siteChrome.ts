@@ -310,6 +310,7 @@ function applyToggles() {
   if (headerData) {
     setToggled(".search", siteOn(headerData.search));
     setToggled(".theme-toggle", siteOn(headerData.themeToggle));
+    setToggled(".docs-topbar-version", siteOn(headerData.showVersionNumber));
   }
 
   if (pageData) {
