@@ -3,7 +3,7 @@ icon: terminal
 description: A single copyable shell command, sized to sit beside a button.
 value:
   _component: building-blocks/core-elements/command-line
-  command: npm create docsmith@latest
+  command: npm create stratus@latest
   prompt: $
   showCopy: true
   spaceBefore: default

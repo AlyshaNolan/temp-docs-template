@@ -52,7 +52,7 @@ Editing the JSON file is what changes the rendered output — there is no other 
   "showVersionNumber": true,
   "themeToggle": true,
   "search": true,
-  "topbarLinks": [{ "name": "GitHub", "path": "https://github.com/CloudCannon/docsmith" }]
+  "topbarLinks": [{ "name": "GitHub", "path": "https://github.com/CloudCannon/stratus" }]
 }
 ```
 

@@ -1,7 +1,7 @@
 /**
  * Strip the demo content and make a fresh clone your own site.
  *
- * The starter ships a working demo — the Docsmith documentation set, its
+ * The starter ships a working demo — the Stratus documentation set, its
  * branding, and an overview page that sells the template itself. That content
  * is deliberate: it is what makes a clone look like a real site on first
  * `npm run dev`, and every feature is demonstrated by a page that uses it. But

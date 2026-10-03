@@ -12,7 +12,7 @@ value:
     - line: 2
       text: Builds the index at compile time and ships it with the site.
   highlight: ""
-  filename: docsmith.config.js
+  filename: stratus.config.js
   showCopy: true
   spaceBefore: default
 preview:

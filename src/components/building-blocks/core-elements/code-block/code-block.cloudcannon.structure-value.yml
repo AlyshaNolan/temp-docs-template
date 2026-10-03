@@ -9,7 +9,7 @@ value:
       search: { provider: 'local' },
     }
   highlight: ""
-  filename: docsmith.config.js
+  filename: stratus.config.js
   showCopy: true
   spaceBefore: default
 preview:

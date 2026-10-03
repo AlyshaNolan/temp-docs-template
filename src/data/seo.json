@@ -1,10 +1,10 @@
 {
-  "siteName": "Docsmith",
+  "siteName": "Stratus",
   "url": "https://example.com",
   "description": "A complete Astro documentation template for CloudCannon's Visual Editor: search, API reference, diagrams, media and a print layout.",
   "logoSource": "",
   "faviconSource": "/favicon.svg",
   "faviconIcoSource": "/favicon.ico",
-  "titleFormat": "{title} | Docsmith",
+  "titleFormat": "{title} | Stratus",
   "twitterSite": ""
 }

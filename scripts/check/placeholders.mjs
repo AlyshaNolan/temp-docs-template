@@ -26,7 +26,7 @@ const root = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const strict = process.argv.includes("--strict");
 
 const PLACEHOLDER_URL = "https://example.com";
-const STARTER_NAME = "Docsmith";
+const STARTER_NAME = "Stratus";
 const STARTER_LOGOS = [
   "/src/assets/images/logo/logo-light.svg",
   "/src/assets/images/logo/logo-dark.svg",

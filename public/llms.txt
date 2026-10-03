@@ -1,4 +1,4 @@
-# Docsmith
+# Stratus
 
 > A complete Astro documentation template: grouped sidebar, built-in search, reference pages, diagrams, media and a print layout. Copied from GitHub, built for CloudCannon. You write Markdown; the template handles the rest.
 

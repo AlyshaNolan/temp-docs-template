@@ -805,7 +805,7 @@ file_config:
             is kept literally.
 
 
-            `{title} — Docsmith` renders as "Installation — Docsmith" on the
+            `{title} — Stratus` renders as "Installation — Stratus" on the
             installation page.
 
 

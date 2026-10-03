@@ -6,11 +6,11 @@ value:
   tabs:
     - label: npm
       language: bash
-      code: npm install docsmith
+      code: npm install stratus
       highlight: ""
     - label: pnpm
       language: bash
-      code: pnpm add docsmith
+      code: pnpm add stratus
       highlight: ""
   filename: ""
   showCopy: true

@@ -15,7 +15,7 @@ value:
   added: "3"
   removed: "2"
   highlight: "5"
-  filename: docsmith.config.js
+  filename: stratus.config.js
   showCopy: true
   spaceBefore: default
 preview:
