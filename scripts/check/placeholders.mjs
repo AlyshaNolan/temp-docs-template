@@ -27,7 +27,10 @@ const strict = process.argv.includes("--strict");
 
 const PLACEHOLDER_URL = "https://example.com";
 const STARTER_NAME = "Docsmith";
-const STARTER_LOGO = "acs-logo";
+const STARTER_LOGOS = [
+  "/src/assets/images/logo/logo-light.svg",
+  "/src/assets/images/logo/logo-dark.svg",
+];
 const STARTER_REPO = "AlyshaNolan/temp-docs-template";
 
 function read(relativePath) {
@@ -80,17 +83,8 @@ if (typeof seo?.titleFormat === "string" && seo.titleFormat.includes(STARTER_NAM
     detail: `titleFormat still appends "${STARTER_NAME}" to every page title`,
   });
 }
-if (typeof seo?.logoSource === "string" && seo.logoSource.includes(STARTER_LOGO)) {
+if (typeof seo?.logoSource === "string" && STARTER_LOGOS.includes(seo.logoSource)) {
   branding.push({ file: "src/data/seo.json", detail: "logoSource is the starter logo" });
-}
-
-const header = readJson("src/data/header.json");
-
-if (header?.wordmark === STARTER_NAME) {
-  branding.push({
-    file: "src/data/header.json",
-    detail: `wordmark is still "${STARTER_NAME}"`,
-  });
 }
 
 const pageTools = readJson("src/data/pageTools.json");
@@ -110,7 +104,7 @@ for (const file of ["src/data/header.json", "src/data/footer.json"]) {
 
   if (!data) continue;
   const logos = [data.logoSource, data.logoAlternateSource].filter(
-    (value) => typeof value === "string" && value.includes(STARTER_LOGO)
+    (value) => typeof value === "string" && STARTER_LOGOS.includes(value)
   );
 
   if (logos.length) {

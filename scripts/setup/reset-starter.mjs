@@ -257,8 +257,6 @@ if (removePages) {
 if (resetBranding) {
   const header = readJson("src/data/header.json");
 
-  header.markLetter = siteName.trim().charAt(0).toUpperCase();
-  header.wordmark = siteName;
   header.logoSource = "";
   header.logoAlternateSource = "";
   header.logoAlt = siteName;

@@ -18,8 +18,6 @@ import Image from "@core-elements/image/Image.astro";
 type TopbarLink = { name: string; path: string };
 
 const {
-  markLetter = "",
-  wordmark = "",
   logoSource = "",
   logoAlternateSource = "",
   logoAlt = "",
@@ -54,40 +52,14 @@ const {
     href="/"
     class="docs-topbar-brand"
   >
-    {
-      logoSource ? (
-        <Image
-          source={logoSource}
-          alternateSource={logoAlternateSource}
-          alt={logoAlt || wordmark}
-          class="docs-topbar-logo"
-          useDefaultEditableBinding={false}
-        />
-      ) : (
-        <>
-          {markLetter && (
-            <span
-              class="docs-topbar-mark"
-              data-editable="text"
-              data-type="span"
-              data-prop="@data[header].markLetter"
-            >
-              {markLetter}
-            </span>
-          )}
-          {wordmark && (
-            <span
-              class="docs-topbar-wordmark"
-              data-editable="text"
-              data-type="span"
-              data-prop="@data[header].wordmark"
-            >
-              {wordmark}
-            </span>
-          )}
-        </>
-      )
-    }
+    <Image
+      source={logoSource}
+      alternateSource={logoAlternateSource}
+      alt={logoAlt}
+      class="docs-topbar-logo"
+      priority
+      useDefaultEditableBinding={false}
+    />
     {
       version && (
         <span
@@ -177,31 +149,39 @@ const {
       text-decoration: none;
     }
 
-    .docs-topbar-mark {
-      align-items: center;
-      background-color: var(--color-accent);
-      border-radius: var(--radius-xs);
-      color: var(--color-accent-on);
-      display: flex;
-      font-size: var(--font-size-sm);
-      font-weight: var(--font-weight-bold);
-      height: 1.5rem;
-      justify-content: center;
-      letter-spacing: var(--letter-spacing-tight);
-      width: 1.5rem;
+    .docs-topbar .docs-topbar-logo {
+      --docs-topbar-logo-height: 1.75rem;
+
+      > .image-inner picture {
+        width: auto;
+      }
+
+      > .image-inner img {
+        height: var(--docs-topbar-logo-height);
+        width: auto;
+      }
     }
 
-    .docs-topbar-wordmark {
-      font-size: var(--font-size-md);
-      font-weight: var(--font-weight-bold);
-      letter-spacing: var(--letter-spacing-tight);
+    /* Image swaps its alternate on "toggled away from the site default", but
+       these props are named light/dark, so key the swap off the live scheme. */
+    html[data-theme="light"] .docs-topbar .docs-topbar-logo {
+      .image-primary {
+        display: block;
+      }
+
+      .image-alternate {
+        display: none;
+      }
     }
 
-    .docs-topbar-logo img,
-    .docs-topbar-logo svg {
-      display: block;
-      height: 1.5rem;
-      width: auto;
+    html[data-theme="dark"] .docs-topbar .docs-topbar-logo:has(.image-alternate) {
+      .image-primary {
+        display: none;
+      }
+
+      .image-alternate {
+        display: block;
+      }
     }
 
     .docs-topbar-version {

@@ -12,7 +12,7 @@ so an editor changes them in the app rather than in a pull request.
 
 | File             | Controls                                                             |
 | ---------------- | -------------------------------------------------------------------- |
-| `header.json`    | Brand, version badge, top links, search and the theme toggle         |
+| `header.json`    | Logo, version badge, top links, search and the theme toggle          |
 | `sidebar.json`   | The sidebar's lead link and group order                              |
 | `pageTools.json` | The "Edit this page" link, the Copy page menu and the feedback block |
 | `theme.json`     | The default colour scheme, accent and brand colours                  |
@@ -22,7 +22,7 @@ so an editor changes them in the app rather than in a pull request.
     {
       "label": "header.json",
       "language": "json",
-      "code": "{\n  \"markLetter\": \"D\",\n  \"wordmark\": \"Docsmith\",\n  \"showVersionNumber\": true,\n  \"search\": true,\n  \"themeToggle\": true\n}"
+      "code": "{\n  \"logoSource\": \"/src/assets/images/logo/logo-light.svg\",\n  \"logoAlternateSource\": \"/src/assets/images/logo/logo-dark.svg\",\n  \"logoAlt\": \"Stratus\",\n  \"showVersionNumber\": true,\n  \"search\": true,\n  \"themeToggle\": true\n}"
     },
     {
       "label": "sidebar.json",
@@ -40,14 +40,14 @@ so an editor changes them in the app rather than in a pull request.
 <ParamList
   params={[
     {
-      "name": "wordmark",
+      "name": "logoSource",
       "type": "string",
-      "description": "Brand name in the header. Pair it with `markLetter` for the square mark, or set `logoSource` to use an image instead."
+      "description": "The header logo. Set `logoAlternateSource` as well to show a different logo in dark mode."
     },
     {
       "name": "showVersionNumber",
       "type": "boolean",
-      "description": "Show the latest changelog version as a badge beside the wordmark. Hidden when the changelog has no releases."
+      "description": "Show the latest changelog version as a badge beside the logo. Hidden when the changelog has no releases."
     },
     {
       "name": "repositoryUrl",

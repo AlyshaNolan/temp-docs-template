@@ -10,20 +10,20 @@ order: 1
 <ParamList
   params={[
     {
-      "name": "wordmark",
-      "type": "string",
-      "required": true,
-      "description": "Shown in the header, page titles and OG metadata."
-    },
-    {
-      "name": "markLetter",
-      "type": "string",
-      "description": "One character rendered in an accent tile beside the wordmark. Ignored when `logoSource` is set."
-    },
-    {
       "name": "logoSource",
       "type": "string",
-      "description": "Path to an SVG or PNG, replacing the mark and wordmark. Pair with `logoAlternateSource` to swap per colour mode."
+      "required": true,
+      "description": "Path to the header logo, an SVG or PNG. Used in both colour modes unless `logoAlternateSource` is set."
+    },
+    {
+      "name": "logoAlternateSource",
+      "type": "string",
+      "description": "Path to the logo shown in dark mode."
+    },
+    {
+      "name": "logoAlt",
+      "type": "string",
+      "description": "Alt text for the logo, usually the site name."
     },
     {
       "name": "showVersionNumber",

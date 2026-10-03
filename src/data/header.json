@@ -1,9 +1,7 @@
 {
-  "markLetter": "D",
-  "wordmark": "Docsmith",
-  "logoSource": "",
-  "logoAlternateSource": "",
-  "logoAlt": "Docsmith",
+  "logoSource": "/src/assets/images/logo/logo-light.svg",
+  "logoAlternateSource": "/src/assets/images/logo/logo-dark.svg",
+  "logoAlt": "Stratus",
   "showVersionNumber": true,
   "themeToggle": true,
   "search": true,

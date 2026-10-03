@@ -116,7 +116,7 @@ Content rules specific to migration:
 
 ## Phase 6: Nav / footer / SEO data
 
-Follow [site-data-navigation](../site-data-navigation/SKILL.md) to populate `src/data/header.json`, `src/data/sidebar.json`, `src/data/pageTools.json`, `src/data/footer.json`, and `src/data/seo.json` from the phase-1 nav/footer capture, and update `site` in `astro.config.mjs` to the production URL. A logo image (light + dark variant) goes in `src/assets/images/` and is referenced from `header.json` via `logoSource` / `logoAlternateSource`; leave those empty to keep the text wordmark.
+Follow [site-data-navigation](../site-data-navigation/SKILL.md) to populate `src/data/header.json`, `src/data/sidebar.json`, `src/data/pageTools.json`, `src/data/footer.json`, and `src/data/seo.json` from the phase-1 nav/footer capture, and update `site` in `astro.config.mjs` to the production URL. Add the logo (light + dark variant) as new files in `src/assets/images/logo/` — not over the starter's, which `check:placeholders` flags by path — referenced from `header.json` via `logoSource` / `logoAlternateSource`; the favicons go in `public/` and are referenced from `seo.json` via `faviconSource` / `faviconIcoSource`.
 
 **Done-check:** header and footer render the migrated nav/logo/socials on every page; `seo.json`'s title/description show correctly in a page's `<title>`.
 

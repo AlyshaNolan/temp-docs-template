@@ -46,11 +46,24 @@ const themeStyle = themeStyleAttribute(themeData.theme);
       name="viewport"
       content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     />
-    <link
-      rel="icon"
-      type="image/svg+xml"
-      href="/favicon.svg"
-    />
+    {
+      seoData.faviconIcoSource && (
+        <link
+          rel="icon"
+          href={seoData.faviconIcoSource}
+          sizes="32x32"
+        />
+      )
+    }
+    {
+      seoData.faviconSource && (
+        <link
+          rel="icon"
+          type="image/svg+xml"
+          href={seoData.faviconSource}
+        />
+      )
+    }
     <meta
       name="generator"
       content={Astro.generator}

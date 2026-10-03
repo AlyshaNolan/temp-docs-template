@@ -578,28 +578,22 @@ data_config:
 file_config:
   - glob: src/data/header.json
     _inputs:
-      markLetter:
-        type: text
-        comment: One character shown in an accent tile beside the name. Ignored when a
-          logo image is set.
-        cascade: true
-      wordmark:
-        type: text
-        comment: The site name shown in the header.
-        cascade: true
       logoSource:
-        comment: Optional logo image, replacing the tile and the name.
+        label: Logo (light mode)
+        comment: The header logo. Also used in dark mode when no dark logo is set.
         cascade: true
       logoAlternateSource:
-        comment: Logo shown in dark mode.
+        label: Logo (dark mode)
+        comment: Header logo shown in dark mode.
         cascade: true
       logoAlt:
         type: text
-        comment: Alt text for the logo image.
+        label: Logo alt text
+        comment: Usually the site name.
         cascade: true
       showVersionNumber:
         type: switch
-        comment: Show the latest changelog version as a badge beside the name. Automatically
+        comment: Show the latest changelog version as a badge beside the logo. Automatically
           does not show when there are no changelog entries.
         cascade: true
       themeToggle:
@@ -778,6 +772,28 @@ file_config:
       logoSource:
         comment: Default image used for social sharing metadata when a page does not
           provide its own.
+        cascade: true
+      faviconSource:
+        type: file
+        label: Favicon (SVG)
+        comment: The browser tab icon. Square, ideally 64×64 or larger.
+        options:
+          accepts_mime_types:
+            - image/svg+xml
+          paths:
+            uploads: public
+            static: public
+        cascade: true
+      faviconIcoSource:
+        type: file
+        label: Favicon (ICO)
+        comment: Fallback tab icon for browsers without SVG favicon support. 32×32.
+        options:
+          accepts_mime_types:
+            - image/x-icon
+          paths:
+            uploads: public
+            static: public
         cascade: true
       titleFormat:
         comment: Browser title template.

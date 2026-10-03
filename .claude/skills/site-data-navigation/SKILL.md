@@ -46,9 +46,9 @@ Editing the JSON file is what changes the rendered output — there is no other 
 
 ```json
 {
-  "markLetter": "D",
-  "wordmark": "Docsmith",
-  "logoSource": "",
+  "logoSource": "/src/assets/images/logo/logo-light.svg",
+  "logoAlternateSource": "/src/assets/images/logo/logo-dark.svg",
+  "logoAlt": "Stratus",
   "showVersionNumber": true,
   "themeToggle": true,
   "search": true,
@@ -56,7 +56,7 @@ Editing the JSON file is what changes the rendered output — there is no other 
 }
 ```
 
-- **Brand.** `markLetter` + `wordmark` render an accent tile beside a word — no image asset to maintain, and it themes automatically. Set `logoSource` (plus `logoAlternateSource` for dark mode) to use an image instead; it replaces both.
+- **Logo.** `logoSource` is the header logo; `logoAlternateSource` swaps it in dark mode, and `logoAlt` is its alt text. The files live in `src/assets/images/logo/`. There is no text fallback — an empty `logoSource` renders no brand. The favicons are set in `seo.json` (below); `siteicon.png` in the repo root is the CloudCannon Site Icon.
 - **The version badge** is a label, not a switcher. Its text is the newest entry in `src/content/changelog/` (by `date`, via `getReleases()` in `src/utils/releases.ts`), not a value in `header.json`. `showVersionNumber: false` hides it, and so does an empty changelog.
 - **`topbarLinks`** are flat — no dropdowns. They are hidden below 640px, so nothing essential should live only there.
 - **`defaultTheme`** lives in `theme.json`, not here. It is `dark`, `light` or `system`. It is the scheme before a reader chooses one; `system` is the only value that consults the operating system. A reader's stored choice always wins. Hiding `themeToggle` doesn't change the resolution, only the control.
@@ -91,7 +91,7 @@ The date beside it is the page file's last commit, read at build time by `src/ut
 
 ## SEO (`seo.json`)
 
-Set `siteName`, `url` (must match `site` in `astro.config.mjs`), `description`, `titleFormat` (include `{title}`). `npm run check:placeholders` warns while these hold the template's values.
+Set `siteName`, `url` (must match `site` in `astro.config.mjs`), `description`, `titleFormat` (include `{title}`), and the favicons: `faviconSource` (SVG) and `faviconIcoSource` (ICO), paths under `public/` written from the site root (`/favicon.svg`). Their CloudCannon inputs upload into `public/`; an empty value drops that `<link>`. `npm run check:placeholders` warns while these hold the template's values.
 
 ---
 
@@ -108,13 +108,12 @@ An editable region can bind **across files**: a `data-prop` beginning `@file[pat
 
 **MUST:** use `@data[<key>]` for a `src/data` file, and declare the key under `data_config`. `@file[<path>]` goes through `CloudCannon.file()`, which does not answer to these paths — every region bound that way renders an error card instead.
 
-A dataset resolves through `items()`, typed `File[] | File`. On the **array** branch the next path segment is consumed as an index, so `@data[header].wordmark` would look up `wordmark` on an array and error. In practice a single-file `data_config` entry resolves to one `File` and the plain path is right — but that is the shape to check first if a whole file's worth of regions errors at once.
+A dataset resolves through `items()`, typed `File[] | File`. On the **array** branch the next path segment is consumed as an index, so `@data[header].searchPlaceholder` would look up `searchPlaceholder` on an array and error. In practice a single-file `data_config` entry resolves to one `File` and the plain path is right — but that is the shape to check first if a whole file's worth of regions errors at once.
 
 So anything **stored in one file** is a plain region, not JavaScript:
 
 | Chrome                      | Binding                                                                               |
 | --------------------------- | ------------------------------------------------------------------------------------- |
-| Topbar mark, wordmark       | `@data[header].markLetter` / `.wordmark`                                              |
 | Topbar links (the main nav) | `@data[header].topbarLinks` — an `array` region, so add/remove/reorder work on canvas |
 | Footer text, links, socials | `@data[footer].footerText` / `.links` / `.socials`                                    |
 | The Home crumb              | `@data[breadcrumbs].homeLabel`                                                        |
@@ -158,7 +157,7 @@ A boolean has no region type — `text`, `image`, `array`, `array-item`, `compon
 
 A control gated by both a page switch and a site switch is the AND of the two, so both handles feed one pass in `applyToggles()`. Anything whose layout depends on a control being present — the table of contents holds a grid column — needs the dependent rule keyed off the same attribute (`.docs-toc-rail:has(> .toc:not([data-toggle-hidden]))`), not off `:empty`.
 
-The sidebar markup carries `data-group`, `data-href` and `data-order` purely so the patcher can find and place things; a page with a `logoSource` skips the brand text regions, which need a real re-render to swap.
+The sidebar markup carries `data-group`, `data-href` and `data-order` purely so the patcher can find and place things.
 
 ## Verify your work
 
