@@ -28,6 +28,3 @@ accordion:
         optional: true
   _inputs_from_glob:
     - /src/components/building-blocks/wrappers/accordion/accordion.cloudcannon.inputs.yml
-  _structures_from_glob:
-    - /.cloudcannon/structures/accordionItems.cloudcannon.structures.yml
-    - /.cloudcannon/structures/accordionSections.cloudcannon.structures.yml

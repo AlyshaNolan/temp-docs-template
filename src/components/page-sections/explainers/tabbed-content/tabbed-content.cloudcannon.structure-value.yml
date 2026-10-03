@@ -124,8 +124,6 @@ _structures:
             type: array
             options:
               structures: _structures.contentSelectorSections
-        _structures_from_glob:
-          - /.cloudcannon/structures/contentSelectorSections.cloudcannon.structures.yml
 groups:
   - heading: Content
     inputs:

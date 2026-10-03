@@ -24,5 +24,3 @@ definition-list:
         remove_empty: true
   _inputs_from_glob:
     - /src/components/building-blocks/core-elements/definition-list/definition-list.cloudcannon.inputs.yml
-  _structures_from_glob:
-    - /.cloudcannon/structures/definitionListItems.cloudcannon.structures.yml

@@ -141,6 +141,8 @@ A named `_structures:` block belongs in `.cloudcannon/structures/*.cloudcannon.s
 
 **A component with an MDX snippet has two scopes, not one.** `structure-value.yml` and `snippets.yml` each load the same `inputs.yml`, but a `_structures:` block declared inside one of them is invisible to the other — so an `options.structures: _structures.x` that resolves in the page builder renders as a free-text field in the Content Editor, with no error anywhere. Put any structure both scopes need in `.cloudcannon/structures/`. `npm run lint:cms` fails on an unresolvable reference.
 
+**Never re-import a `.cloudcannon/structures/` file with a nested `_structures_from_glob`.** The root glob already makes every name there global, in both scopes. A second import makes CloudCannon report a cyclic import on every structure value the file reaches, even when there is no actual loop.
+
 **Never in a `*.cloudcannon.inputs.yml`.** That file is loaded via `_inputs_from_glob` and read as a map of input-name → input-config, so an `_structures:` key there parses as an input literally named `_structures` — `lint:schema` rejects it. Worse, every such file lands in one shared namespace, so two components declaring the same structure name silently collide and load order picks the winner.
 
 ### `options.structures` takes a string or an object — never an array

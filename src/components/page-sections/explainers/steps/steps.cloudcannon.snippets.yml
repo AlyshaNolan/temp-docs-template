@@ -42,6 +42,3 @@ steps:
         remove_empty: true
   _inputs_from_glob:
     - /src/components/page-sections/explainers/steps/steps.cloudcannon.inputs.yml
-  _structures_from_glob:
-    - /.cloudcannon/structures/explainerStepsItems.cloudcannon.structures.yml
-    - /.cloudcannon/structures/stepsItemSections.cloudcannon.structures.yml

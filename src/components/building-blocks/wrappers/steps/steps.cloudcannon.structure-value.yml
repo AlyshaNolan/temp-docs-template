@@ -99,5 +99,3 @@ _structures:
             comment: Building blocks for this step — typically a heading and a short description.
             options:
               structures: _structures.stepsItemSections
-        _structures_from_glob:
-          - /.cloudcannon/structures/stepsItemSections.cloudcannon.structures.yml

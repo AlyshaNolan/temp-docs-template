@@ -38,6 +38,3 @@ faqSection:
         remove_empty: true
   _inputs_from_glob:
     - /src/components/page-sections/explainers/faq-section/faq-section.cloudcannon.inputs.yml
-  _structures_from_glob:
-    - /.cloudcannon/structures/faqItems.cloudcannon.structures.yml
-    - /.cloudcannon/structures/accordionSections.cloudcannon.structures.yml

@@ -31,5 +31,3 @@ accordionItems:
           comment: Building blocks shown when the panel is open — typically a text block.
           options:
             structures: _structures.accordionSections
-      _structures_from_glob:
-        - /.cloudcannon/structures/accordionSections.cloudcannon.structures.yml
