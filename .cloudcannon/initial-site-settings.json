@@ -6,13 +6,13 @@
     "build_command": "npm run build",
     "output_path": "dist",
     "preserved_paths": "node_modules,.astro",
-    "preserveOutput": true,
-    "includeGit": true,
     "environment_variables": [],
     "manually_configure_urls": true,
+    "preserveOutput": true,
+    "includeGit": true,
     "hugoVersion": "0.128.1",
     "rubyVersion": "2.7.3",
-    "nodeVersion": "file",
+    "nodeVersion": "24",
     "denoVersion": "1.40.2"
   }
 }
