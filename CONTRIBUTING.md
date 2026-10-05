@@ -28,7 +28,7 @@ Run `npm run check` before claiming any work done. It chains:
 - `docs:catalog:check` — fails if the component tables in the page-content-authoring skill are stale.
 - `lint:cms` — validates the CloudCannon layer against the components: prop drift, orphaned/missing YAML, `_component` resolution.
 - `lint:roots` / `lint:nesting` / `lint:schema` — editor-root attributes, the picker's nesting policy, and the official CloudCannon JSON Schemas.
-- `lint:links` — every internal link in the built site resolves.
+- `lint:links` — every internal link in the built site resolves; warns (without failing) on orphan pages no other page links to.
 
 ## Dependencies: never bare `npm install`
 

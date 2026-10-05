@@ -7,6 +7,10 @@
  * the page still builds, the link still looks like a link. This walks `dist/`
  * (building it first when it is missing or stale) and fails on any local href
  * with no corresponding file.
+ *
+ * It also warns, without failing, on orphan pages: no other page links to
+ * them. Sidebar links are in every page's HTML, so in practice this flags a
+ * page with no `group` that nothing links to — reachable only through search.
  */
 import { execSync } from "node:child_process";
 import { existsSync, readFileSync, statSync } from "node:fs";
@@ -67,8 +71,13 @@ if (reason) {
  */
 const HARNESS = "preview-renders/";
 
+// Entry points a reader arrives at directly, never by following a link.
+const PAGES_WITHOUT_INBOUND_LINKS = ["/", "/404/"];
+
 const pages = (await glob("**/*.html", { cwd: dist })).filter((page) => !page.startsWith(HARNESS));
 const known = new Set();
+const pageUrl = (page) => `/${page.replace(/index\.html$/, "").replace(/\.html$/, "/")}`;
+const linkedPages = new Set(PAGES_WITHOUT_INBOUND_LINKS);
 
 for (const page of pages) {
   const url = `/${page.replace(/index\.html$/, "").replace(/\.html$/, "")}`;
@@ -93,10 +102,20 @@ for (const page of pages) {
     const path = href.split(/[?#]/)[0];
 
     if (!path || path === "/") continue;
+
+    const target = path.endsWith("/") ? path : `${path}/`;
+
+    if (target !== pageUrl(page)) linkedPages.add(target);
     if (known.has(path) || known.has(`${path}/`)) continue;
 
     failures.push({ from, href });
   }
+}
+
+const orphans = pages.map(pageUrl).filter((url) => !linkedPages.has(url));
+
+for (const url of orphans) {
+  console.warn(`WARN   ${url} is an orphan — no other page links to it`);
 }
 
 if (failures.length) {
@@ -107,4 +126,6 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log(`ok     every internal link resolves — ${pages.length} page(s) checked.`);
+const orphanNote = orphans.length ? ` ${orphans.length} orphan page(s), see warnings above.` : "";
+
+console.log(`ok     every internal link resolves — ${pages.length} page(s) checked.${orphanNote}`);

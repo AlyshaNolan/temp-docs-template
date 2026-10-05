@@ -148,4 +148,6 @@ Markdown tables get a bordered panel and horizontal scroll on narrow screens.
 ## Cross-links
 
 Link by URL — `[Configuration](/configuration/)`. `npm run lint:links` fails the build on an
-internal link that points at no page, so a renamed page can't quietly rot.
+internal link that points at no page, so a renamed page can't quietly rot. It also warns about
+orphan pages — a page with no sidebar `group` that no other page links to, which readers can only
+find through search.

@@ -94,7 +94,7 @@ These are load-bearing decisions, not accidents. Fix problems around them with t
 
 ## Checks
 
-`npm run check` = ESLint (js/yaml) + Stylelint + Prettier + `astro check` (types) + `previews:check` (thumbnail coverage) + `docs:catalog:check` (agent catalog drift) + `agents:check` (generated `.claude/skills/` + `.cursor/rules/` drift) + `icons:check` + `lint:cms` (prop/YAML drift, `_component` resolution) + `lint:roots` + `lint:nesting` + `lint:schema` (official CloudCannon schemas) + `lint:links` (dead internal links) + `check:placeholders`.
+`npm run check` = ESLint (js/yaml) + Stylelint + Prettier + `astro check` (types) + `previews:check` (thumbnail coverage) + `docs:catalog:check` (agent catalog drift) + `agents:check` (generated `.claude/skills/` + `.cursor/rules/` drift) + `icons:check` + `lint:cms` (prop/YAML drift, `_component` resolution) + `lint:roots` + `lint:nesting` + `lint:schema` (official CloudCannon schemas) + `lint:links` (dead internal links; warns on orphan pages) + `check:placeholders`.
 
 Test suites: `test:render` (every structure default builds), `test:unit` (Vitest over `src/components/utils/` and the shell's layering invariant), `test:smoke` (17 headless-Chrome interaction tests — drawer, theme toggle, ⌘K search and its sub-results, code tabs and copy, diagram render, helpful vote, on-this-page scroll-spy, plus the components driven through `/preview-renders/`) and `test:flow-margins`. Smoke tests need `COMPONENT_PREVIEWS=true npm run build` first.
 

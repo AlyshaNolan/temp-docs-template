@@ -82,7 +82,8 @@ in `optionalDependencies` alongside the equivalent `sharp` and `rollup` packages
   `src/data/pageTools.json` its `repositoryUrl`. `npm run check:placeholders` lists what is still unset.
 - Edit `public/llms.txt` so it lists _your_ pages, not the template's.
 - `npm run lint:links` — a page renamed late in the project leaves dead links behind, and
-  nothing else notices.
+  nothing else notices. Read its orphan warnings too: a page nothing links to is only
+  reachable through search.
 
 `npm run build` emits only the site. The `/preview-renders/<component key>/` routes the smoke
 tests drive components through are added by `COMPONENT_PREVIEWS=true`, and are never part of a

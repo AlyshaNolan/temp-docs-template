@@ -65,7 +65,7 @@ There is no `updated` key. The date in the meta line is the file's last commit, 
 
 Headings, lists, tables, blockquotes, links and inline code all work and are styled by `src/styles/base/_prose.css`. That file owns the page rhythm, and it is three numbers: **8px** under a heading, **24px** around a block (callout, code, diagram, table, figure, parameter list), **44px** before the next heading. Nothing in content should need to adjust it — if a page looks wrong, the rule is wrong. Use `h2` for sections and `h3` beneath — those are what the on-this-page rail lists, and each gets a copyable `#` anchor on hover.
 
-Link internally by URL: `[Configuration](/configuration/)`. `npm run lint:links` fails the build on an internal link that resolves to no page, so a renamed page can't quietly rot.
+Link internally by URL: `[Configuration](/configuration/)`. `npm run lint:links` fails the build on an internal link that resolves to no page, so a renamed page can't quietly rot. It also warns on an orphan page — one no other page links to, which for a page with no `group` means only search reaches it.
 
 ### No code fences
 
