@@ -20,12 +20,14 @@ import { existsSync, readFileSync, readdirSync, rmSync, writeFileSync } from "no
 import { createInterface } from "node:readline/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import * as prettier from "prettier";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const dryRun = process.argv.includes("--dry-run");
 const rl = createInterface({ input: process.stdin, output: process.stdout });
 
 const changes = [];
+const written = new Set();
 
 function abs(relativePath) {
   return join(root, relativePath);
@@ -36,7 +38,21 @@ function record(message) {
 }
 
 function writeText(relativePath, contents) {
-  if (!dryRun) writeFileSync(abs(relativePath), contents);
+  if (dryRun) return;
+  writeFileSync(abs(relativePath), contents);
+  written.add(relativePath);
+}
+
+// The templates can't match .prettierrc by hand (e.g. `*.md` wants single
+// quotes, but yaml() emits double), so a fresh reset would fail `npm run check`.
+async function formatWritten() {
+  for (const relativePath of written) {
+    const file = abs(relativePath);
+    const options = await prettier.resolveConfig(file);
+    const source = readFileSync(file, "utf8");
+
+    writeFileSync(file, await prettier.format(source, { ...options, filepath: file }));
+  }
 }
 
 function readJson(relativePath) {
@@ -301,6 +317,7 @@ if (resetBranding) {
 }
 
 rl.close();
+await formatWritten();
 
 console.log("");
 for (const change of changes) console.log(`  ✔ ${change}`);
