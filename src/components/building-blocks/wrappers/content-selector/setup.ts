@@ -73,9 +73,28 @@ function handleTabKeydown(event: Event): void {
   input.dispatchEvent(new Event("change", { bubbles: true }));
 }
 
+let isolatedGroupCount = 0;
+
+// Panels written as MDX children can't receive the selector's group name, so
+// every such selector on a page shares the default one — and one radio group.
+function isolateRadioGroup(contentSelector: HTMLElement): void {
+  const inputs = Array.from(
+    contentSelector.querySelectorAll<HTMLInputElement>(".content-selector-input")
+  );
+  const name = inputs[0]?.name;
+
+  if (!name || document.getElementsByName(name).length <= inputs.length) return;
+
+  contentSelector.dataset.radioGroup ??= `${name}-${++isolatedGroupCount}`;
+  inputs.forEach((input) => {
+    input.name = contentSelector.dataset.radioGroup as string;
+  });
+}
+
 export function setupContentSelector(contentSelector: HTMLElement): void {
-  // The aria sync runs every time — a re-render can replace the panels while
-  // the listeners below are still bound to the surviving root.
+  // These run every time — a re-render can replace the panels while the
+  // listeners below are still bound to the surviving root.
+  isolateRadioGroup(contentSelector);
   syncContentSelectorAriaState(contentSelector);
 
   if (contentSelector.dataset.contentSelectorInitialized === "true") return;

@@ -79,26 +79,27 @@ Code goes in a `CodeBlock`, never a Markdown fence. The fence pipeline still exi
 
 These are available in any `.mdx` page with no import, and each has a CloudCannon snippet so an editor can insert it from the Content Editor's `+` menu. The component name is the key in `src/components/utils/mdxComponents.ts` — renaming a component's file renames the tag.
 
-| Tag               | For                                                                   | Key props                                                           |
-| ----------------- | --------------------------------------------------------------------- | ------------------------------------------------------------------- |
-| `Alert`           | A callout: note, tip, warning, danger                                 | `variant`, `title`, `text` (markdown)                               |
-| `CodeBlock`       | A code sample from a prop rather than a fence                         | `code`, `language`, `filename`, `highlight`                         |
-| `CodeTabs`        | One sample in several languages, choice remembered site-wide          | `tabs[]` of `{ label, language, code, highlight }`, `filename`      |
-| `CodeAnnotations` | Code with numbered notes underneath                                   | `code`, `language`, `filename`, `notes[]` of `{ line, text }`       |
-| `CodeDiff`        | A sample with changed lines marked, still highlighted in its language | `code`, `language`, `filename`, `added`, `removed`, `highlight`     |
-| `FileTree`        | A directory tree drawn from an indented list of paths                 | `paths`, `title`, `added`, `removed`, `highlight`                   |
-| `ParamList`       | API reference entries where descriptions run long                     | `params[]` of `{ name, type, required, defaultValue, description }` |
-| `DefinitionList`  | Glossaries and field terminology                                      | `items[]` of `{ title, text }`, `layout` (`stacked`/`grid`)         |
-| `Diagram`         | A Mermaid diagram                                                     | `definition`, `caption`                                             |
-| `Figure`          | A captioned screenshot with a dark variant and click-to-zoom          | `source`, `alternateSource`, `alt`, `caption`, `zoom`               |
-| `Changelog`       | Every release in the changelog collection, newest first               | `limit`                                                             |
-| `Accordion`       | Optional depth in a disclosure                                        | `items[]` of `{ title, contentSections[] }`                         |
-| `Form`            | Any form. Posts to the site by default, which CloudCannon captures    | `action`, `formBlocks[]`                                            |
-| `Video`           | A local file or an embed id                                           | `source`, `title`                                                   |
-| `Embed`           | Raw HTML in a fixed aspect ratio — a sandbox, a map, another service  | children (the HTML), `aspectRatio`                                  |
-| `Badge`           | A status pill: Beta, Deprecated, a version marker                     | `text`, `variant`, `iconName`, `showDot`, `link`                    |
-| `Steps`           | A numbered walkthrough                                                | `items[]` of `{ contentSections[] }`, `orientation`, `heading`      |
-| `FaqSection`      | Questions and answers in an accordion                                 | `items[]` of `{ title, contentSections[] }`, `heading`              |
+| Tag               | For                                                                   | Key props                                                                |
+| ----------------- | --------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| `Alert`           | A callout: note, tip, warning, danger                                 | `variant`, `title`, `text` (markdown)                                    |
+| `CodeBlock`       | A code sample from a prop rather than a fence                         | `code`, `language`, `filename`, `highlight`                              |
+| `CodeTabs`        | One sample in several languages, choice remembered site-wide          | `tabs[]` of `{ label, language, code, highlight }`, `filename`           |
+| `CodeAnnotations` | Code with numbered notes underneath                                   | `code`, `language`, `filename`, `notes[]` of `{ line, text }`            |
+| `CodeDiff`        | A sample with changed lines marked, still highlighted in its language | `code`, `language`, `filename`, `added`, `removed`, `highlight`          |
+| `FileTree`        | A directory tree drawn from an indented list of paths                 | `paths`, `title`, `added`, `removed`, `highlight`                        |
+| `ParamList`       | API reference entries where descriptions run long                     | `params[]` of `{ name, type, required, defaultValue, description }`      |
+| `DefinitionList`  | Glossaries and field terminology                                      | `items[]` of `{ title, text }`, `layout` (`stacked`/`grid`)              |
+| `Diagram`         | A Mermaid diagram                                                     | `definition`, `caption`                                                  |
+| `Figure`          | A captioned screenshot with a dark variant and click-to-zoom          | `source`, `alternateSource`, `alt`, `caption`, `zoom`                    |
+| `Changelog`       | Every release in the changelog collection, newest first               | `limit`                                                                  |
+| `Accordion`       | Optional depth in a disclosure                                        | `items[]` of `{ title, contentSections[] }`                              |
+| `ContentSelector` | Tabs whose panels hold prose and other components                     | `<ContentSelectorPanel title>` children, `navigationPosition`, `variant` |
+| `Form`            | Any form. Posts to the site by default, which CloudCannon captures    | `action`, `formBlocks[]`                                                 |
+| `Video`           | A local file or an embed id                                           | `source`, `title`                                                        |
+| `Embed`           | Raw HTML in a fixed aspect ratio — a sandbox, a map, another service  | children (the HTML), `aspectRatio`                                       |
+| `Badge`           | A status pill: Beta, Deprecated, a version marker                     | `text`, `variant`, `iconName`, `showDot`, `link`                         |
+| `Steps`           | A numbered walkthrough                                                | `items[]` of `{ contentSections[] }`, `orientation`, `heading`           |
+| `FaqSection`      | Questions and answers in an accordion                                 | `items[]` of `{ title, contentSections[] }`, `heading`                   |
 
 `Steps` and `FaqSection` are page sections, so they carry section chrome: in a page body set `maxContentWidth`, `paddingHorizontal` and `paddingVertical` to `none`, write the section's heading as a Markdown `##` (which the on-this-page rail reads) and pass `heading=""` so it isn't printed twice. `/introduction/` and `/installation/` do this.
 

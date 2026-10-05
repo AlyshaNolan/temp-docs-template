@@ -57,11 +57,11 @@ pageSections:
         sublabel: on the pages this site ships
       - number: 23
         prefix: ''
-        suffix: ' KB'
+        suffix: 'KB'
         label: search index
         sublabel: built with the site, served from your own origin
-      - number: 33
-        prefix: ''
+      - number: 30
+        prefix: '~'
         suffix: s
         label: cold build on CloudCannon
         sublabel: from clone to live preview

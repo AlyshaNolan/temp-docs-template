@@ -40,6 +40,44 @@ keyboard accessible and prints expanded.
   text="Collapsed text is invisible to browser find (⌘F) and to some third-party crawlers. Use disclosures for optional depth and long output — never for the sentence the reader came for."
 />
 
+## Tabs with mixed content
+
+When each choice needs more than one code sample, such as an explanation, a callout or a
+second command, use tabs whose panels hold any content, including other components.
+
+<ContentSelector navigationPosition="top" variant="panel">
+
+<ContentSelectorPanel title="npm">
+
+Install the package, then add it to your project's config.
+
+<CodeBlock
+  language="bash"
+  filename="terminal"
+  code={"npm install @stratus/sdk"}
+/>
+
+</ContentSelectorPanel>
+
+<ContentSelectorPanel title="Yarn">
+
+Yarn Classic and Yarn Berry use the same command.
+
+<CodeBlock
+  language="bash"
+  filename="terminal"
+  code={"yarn add @stratus/sdk"}
+/>
+
+<Alert
+  variant="tip"
+  text="With Plug'n'Play enabled, run `yarn dlx @yarnpkg/sdks` once so your editor resolves the types."
+/>
+
+</ContentSelectorPanel>
+
+</ContentSelector>
+
 ## Definition lists
 
 For glossaries and field-by-field terminology, where a table would be three columns of

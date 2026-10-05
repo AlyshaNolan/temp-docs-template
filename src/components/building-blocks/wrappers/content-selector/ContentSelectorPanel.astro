@@ -24,10 +24,11 @@ const {
 
 // The index, not the title, is what makes this unique: two tabs sharing a
 // heading would otherwise share an `id`, and `<label for>` would point every
-// tab at the first radio — clicking any of them opens panel one.
+// tab at the first radio — clicking any of them opens panel one. Panels written
+// as MDX children get no index, and two selectors on a page can share a title.
 const uniqueId =
   index === undefined
-    ? `${groupName}-${title ? slugifyLabel(title) : crypto.randomUUID()}`
+    ? `${groupName}-${title ? `${slugifyLabel(title)}-` : ""}${crypto.randomUUID()}`
     : `${groupName}-${index}`;
 const tabId = `tab-${uniqueId}`;
 const panelId = `panel-${uniqueId}`;
@@ -211,6 +212,12 @@ const subtextDataAttributes = effectiveSubtextProp
       animation: fade-in var(--animation-slow) var(--ease-in-out) forwards;
       container-type: inline-size;
       display: none;
+    }
+
+    /* MDX children arrive as bare `<p>`/`<ul>` with no Text wrapper to strip
+       their default margins, so `.flow` alone would stack on top of them. */
+    .content-selector-panel-content > :not(.stackable) {
+      margin-block: 0;
     }
   }
 </style>

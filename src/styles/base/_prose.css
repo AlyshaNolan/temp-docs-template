@@ -116,10 +116,10 @@
       }
     }
 
-    /* A step's card heading is a label inside a section, not a place in the
-       document — the section's own heading above it is the linkable one. */
-    .step-content :is(h2, h3)[id] {
-      cursor: auto;
+    /* A step's card heading or a tab's label is a label inside a section, not a
+       place in the document — the section's own heading above it is linkable. */
+    :is(.step-content, .content-selector-tab) :is(h2, h3)[id] {
+      cursor: inherit;
 
       &::after {
         content: none;
