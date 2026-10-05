@@ -16,7 +16,7 @@
  * Deletes files. Guarded on a clean git tree so `git checkout .` is always an undo.
  */
 import { execFileSync } from "node:child_process";
-import { existsSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync, rmdirSync, rmSync, writeFileSync } from "node:fs";
 import { createInterface } from "node:readline/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -70,6 +70,18 @@ function remove(relativePath, recursive = false) {
 /** YAML double-quoted scalar. JSON's string escaping is a valid subset. */
 function yaml(value) {
   return JSON.stringify(value);
+}
+
+function removeEmptyDirs(relativePath) {
+  if (dryRun) return;
+  const dirs = readdirSync(abs(relativePath), { recursive: true, withFileTypes: true })
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => join(entry.parentPath, entry.name))
+    .sort((a, b) => b.length - a.length);
+
+  for (const dir of dirs) {
+    if (readdirSync(dir).length === 0) rmdirSync(dir);
+  }
 }
 
 function isGitClean() {
@@ -222,7 +234,9 @@ while (!siteUrl) {
 }
 
 const docFiles = existsSync(abs("src/content/docs"))
-  ? readdirSync(abs("src/content/docs")).filter((file) => file.endsWith(".mdx"))
+  ? readdirSync(abs("src/content/docs"), { recursive: true })
+      .filter((file) => file.endsWith(".mdx"))
+      .sort()
   : [];
 
 const removeDocs = docFiles.length
@@ -259,6 +273,7 @@ record(
 // Demo content.
 if (removeDocs) {
   for (const file of docFiles) remove(`src/content/docs/${file}`);
+  removeEmptyDirs("src/content/docs");
   writeText("src/content/docs/introduction.mdx", firstDoc(siteName));
   record(
     `removed ${docFiles.length} demo page${docFiles.length === 1 ? "" : "s"}, wrote a blank Introduction`
