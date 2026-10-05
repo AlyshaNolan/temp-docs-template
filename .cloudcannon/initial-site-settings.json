@@ -8,11 +8,11 @@
     "preserved_paths": "node_modules,.astro",
     "environment_variables": [],
     "manually_configure_urls": true,
-    "preserveOutput": true,
-    "includeGit": true,
-    "hugoVersion": "0.128.1",
-    "rubyVersion": "2.7.3",
-    "nodeVersion": "24",
-    "denoVersion": "1.40.2"
+    "preserve_output": true,
+    "include_git": true,
+    "hugo_version": "0.128.1",
+    "ruby_version": "2.7.3",
+    "node_version": "24",
+    "deno_version": "1.40.2"
   }
 }

@@ -1,8 +1,8 @@
 import { glob } from "astro/loaders";
 import { defineCollection } from "astro:content";
-import { z } from "zod";
+import { z } from "astro/zod";
 
-const contentBlockSchema = z.object({ _component: z.string() }).passthrough();
+const contentBlockSchema = z.looseObject({ _component: z.string() });
 
 const pageSchema = z.object({
   title: z.string(),
