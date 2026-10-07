@@ -1,7 +1,6 @@
 type TableRow = { cells?: unknown[] | null } | null | undefined;
 
-/** Normalize editor-authored table data to a rectangle — missing cells become
- *  "" so a short row renders empty `<td>`s instead of collapsing the grid. */
+/** Pads short rows with "" so they render empty `<td>`s instead of collapsing the grid. */
 export function columnCount(headerCells: unknown[] = [], rows: TableRow[] = []): number {
   return Math.max(
     headerCells?.length ?? 0,

@@ -1,8 +1,4 @@
 ---
-/**
- * Previous/next links across the sidebar's reading order. Site chrome fed by
- * `findPager()` — no CloudCannon YAML.
- */
 import type { DocsNavPage } from "@utils/docsNav";
 
 const {
@@ -77,7 +73,6 @@ if (!prev && !next) return;
         transform: translateY(-2px);
       }
 
-      /* A lone "next" belongs on the right, where a reader looks for it. */
       &.is-next {
         grid-column: 2;
         text-align: end;

@@ -1,8 +1,4 @@
 @layer base {
-  /**
-   * A print layout, not a squeezed screen layout. On-call engineers print
-   * runbooks; a page that is followed under pressure has to work on paper.
-   */
   @media print {
     @page {
       margin: 18mm 16mm 20mm;
@@ -47,7 +43,6 @@
       padding: 0;
     }
 
-    /* A paper copy stays followable only if the URL is on the page. */
     .prose a[href^="http"]::after {
       color: var(--color-text-faint);
       content: " (" attr(href) ")";
@@ -70,9 +65,7 @@
       break-inside: avoid;
     }
 
-    /* Paper has no disclosure triangle, so nothing may stay collapsed. The
-       UA hides a closed disclosure through `::details-content`, not `display`,
-       so both rules are needed. */
+    /* The UA hides a closed disclosure via `::details-content`, so both rules are needed. */
     details::details-content {
       content-visibility: visible;
     }
@@ -83,13 +76,10 @@
   }
 }
 
-/* Deliberately outside `@layer base`: the theme files in `src/styles/themes/`
-   are unlayered, and an unlayered declaration beats any layered one whatever
-   its specificity — inside a layer these overrides silently lose and code
-   blocks print dark. */
+/* Must stay unlayered: the unlayered theme files would beat any layered rule,
+   silently printing code blocks dark. */
 @media print {
-  /* Syntax colours are per-token inline styles from Shiki, so ink-on-white on
-     paper needs `!important`. Print is the one place that earns it. */
+  /* Shiki's per-token inline styles need `!important`. */
   .prose pre code,
   .prose pre code span,
   .code-surface pre code,
@@ -97,8 +87,6 @@
     color: var(--color-code-text) !important;
   }
 
-  /* Forced light, and dropped to plain black on white — a themed page costs
-     a cartridge of toner and reads worse. */
   :root,
   [data-theme] {
     --color-accent: #000;

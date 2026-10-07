@@ -1,11 +1,7 @@
 /**
- * Copy-to-clipboard for code samples. Registered in `editor-live-sync.js` as
- * well as the components' inline scripts, because inline scripts don't run in
- * the CloudCannon editor.
- *
- * Two shapes to cover: `CodeBlockSurface` renders a header with the button
- * already in it, and a Markdown fence is a bare `<pre>` that gets one injected
- * — copying needs JS either way, so a fence with JS off shows no dead control.
+ * Also registered in `editor-live-sync.js`: inline scripts don't run in the
+ * CloudCannon editor. `CodeBlockSurface` renders its button; a bare Markdown
+ * fence `<pre>` gets one injected here.
  */
 const RESET_MS = 1600;
 

@@ -15,8 +15,7 @@ const {
 
 const parsedTarget = Number(number);
 const target = Number.isFinite(parsedTarget) ? parsedTarget : 0;
-// 20% of the target, except 0 — that would start at 0 and never move, so
-// count down from a small integer instead.
+// A target of 0 would start at 0 and never move, so it counts down instead.
 const startNumber = target === 0 ? 20 : Math.floor(target * 0.2);
 const duration = 500;
 

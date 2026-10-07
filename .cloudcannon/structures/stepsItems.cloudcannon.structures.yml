@@ -1,11 +1,6 @@
-# Steps for the `steps` page section's `items` array input. (The `steps`
-# building block has its own, narrower rows — see stepsItems.)
-#
-# Shared here rather than inline in the structure value: the component's MDX
-# snippet points at the same `_structures.explainerStepsItems`, and a structure
-# declared inside a structure value is invisible to it — the array renders as
-# free text.
-explainerStepsItems:
+# Shared by the Steps block and the Steps Section, and their snippets. Keep it here:
+# a structure declared inside a structure value is invisible to a snippet (free text).
+stepsItems:
   values:
     - label: Step
       icon: format_list_numbered
@@ -26,12 +21,13 @@ explainerStepsItems:
           - Step
         subtext:
           - key: contentSections.1.text
+          - Add one or more content blocks
         image:
           - key: image
       _inputs:
         image:
           type: image
-          comment: Optional product or process photo. Every step shares the section's image aspect ratio.
+          comment: Optional featured photo. Every step shares the parent's image aspect ratio.
           options:
             paths:
               static: ""

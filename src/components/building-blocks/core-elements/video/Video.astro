@@ -10,8 +10,6 @@ const {
   source,
   thumbnail,
   background = false,
-  // Background videos are decorative, so they default to an autoplaying
-  // loop; passing autoplay/loop explicitly still wins.
   autoplay = background,
   loop = background,
   // The media elements are the roots, so data-space-before rides them: live
@@ -36,10 +34,8 @@ if (type === "local-source" && source) {
   localVideoSources = await discoverVideoSources(source);
 }
 
-// YouTube requires loop=1 to be paired with playlist=<videoId>. Autoplaying
-// YouTube renders a plain lazy iframe instead of the lite-youtube facade: the
-// facade's autoload path pins autoplay=0 in the embed URL and YouTube honours
-// the first occurrence of a duplicated param, so autoplay can never win.
+// YouTube needs loop=1 paired with playlist=<videoId>. Autoplay skips the
+// lite-youtube facade: it pins autoplay=0 first, and YouTube honors the first.
 const youtubeParams =
   [
     ...(autoplay ? ["autoplay=1", "mute=1", "playsinline=1"] : []),

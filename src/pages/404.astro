@@ -7,9 +7,7 @@ import { getDocsNav } from "@utils/docsNav";
 const canonical = new URL("/404.html", Astro.site ?? seoData.url).href;
 const nav = await getDocsNav();
 
-// The most-read links a reader is likely to have been heading for. Hand-picked
-// rather than derived — the first four pages in the sidebar are rarely the
-// four people land on from a stale link.
+// Hand-picked; a renamed page silently drops out of this list.
 const popular = ["/installation/", "/configuration/", "/config-api/", "/media-and-components/"];
 const popularPages = nav.reading.filter((page) => popular.includes(page.href));
 ---

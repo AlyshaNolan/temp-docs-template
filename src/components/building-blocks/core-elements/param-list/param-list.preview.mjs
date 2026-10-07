@@ -12,8 +12,6 @@ import {
 
 const B = band(760);
 
-// Three rows, each an accent-coloured name followed by a quiet type chip and a
-// line of prose — a reference entry, not a table row.
 const row = (y, nameW, typeW, textW, last) => [
   bar(B.left + 32, y, nameW, "label", { fill: accent }),
   box(B.left + 32 + nameW + 16, y + 1, typeW, 14, { r: 7, fill: panel }),

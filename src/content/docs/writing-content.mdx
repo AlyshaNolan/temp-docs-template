@@ -5,20 +5,31 @@ group: Authoring
 order: 1
 ---
 
+## The file
+
+A documentation page is an `.mdx` file under `src/content/docs/`, and its path is its URL:
+`src/content/docs/webhooks.mdx` is `/webhooks/`. Only `.mdx` files are loaded — a `.md` file
+there is silently ignored, with no build error. MDX is Markdown plus components, so everything
+you know about Markdown still applies.
+
 ## Frontmatter
 
 Only `title` is required. `group` and `order` place the page in the sidebar; omit `group` and
 the page still builds and is searchable — it just doesn't appear in the nav.
 
-| Key                   | Type    | Default | Effect                                             |
-| --------------------- | ------- | ------- | -------------------------------------------------- |
-| `title`               | string  | —       | Page heading, browser title, search result         |
-| `description`         | string  | —       | The lede under the title, and the meta description |
-| `group`               | string  | —       | Sidebar group. No group means no sidebar entry     |
-| `order`               | number  | `0`     | Position within the group                          |
-| `showTableOfContents` | boolean | `true`  | On-this-page rail                                  |
-| `showFeedback`        | boolean | `true`  | The helpful vote at the foot of the page           |
-| `showPager`           | boolean | `true`  | Previous/next links                                |
+| Key                   | Type     | Default | Effect                                               |
+| --------------------- | -------- | ------- | ---------------------------------------------------- |
+| `title`               | string   | —       | Page heading, browser title, search result           |
+| `description`         | string   | —       | The lede under the title, and the meta description   |
+| `group`               | string   | —       | Sidebar group. No group means no sidebar entry       |
+| `order`               | number   | `0`     | Position within the group                            |
+| `keywords`            | string[] | —       | Meta keywords                                        |
+| `image`               | string   | —       | Social share image                                   |
+| `noindex`             | boolean  | `false` | Keeps the page out of search engines and site search |
+| `showTableOfContents` | boolean  | `true`  | On-this-page rail                                    |
+| `showFeedback`        | boolean  | `true`  | The helpful vote at the foot of the page             |
+| `showCopyPage`        | boolean  | `true`  | The [Copy page](/copy-page/) menu beside the title   |
+| `showPager`           | boolean  | `true`  | Previous/next links                                  |
 
 The "Updated" date beside each page's title is not frontmatter — it is the file's last
 commit, read when the site builds. Edit a page and the date follows.
@@ -61,7 +72,7 @@ only form that keeps its indentation.
 
 `CodeDiff` names its changed lines in `added`, `removed` and `highlight`, the same
 `"2"` or `"1,4-6"` form every code component uses. The code stays the literal sample,
-so it keeps its own language colours instead of going flat the way a `diff` fence
+so it keeps its own language colors instead of going flat the way a `diff` fence
 does, and the copy button hands back something that runs.
 
 <CodeDiff
@@ -147,7 +158,7 @@ Markdown tables get a bordered panel and horizontal scroll on narrow screens.
 
 ## Cross-links
 
-Link by URL — `[Configuration](/configuration/)`. `npm run lint:links` fails the build on an
-internal link that points at no page, so a renamed page can't quietly rot. It also warns about
+Link by URL — `[Configuration](/configuration/)`. `npm run lint:links` fails `npm run check` on
+an internal link that points at no page, so a renamed page can't quietly rot. It also warns about
 orphan pages — a page with no sidebar `group` that no other page links to, which readers can only
 find through search.

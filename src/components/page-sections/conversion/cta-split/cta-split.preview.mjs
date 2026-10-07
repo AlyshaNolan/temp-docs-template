@@ -11,7 +11,6 @@ import {
 
 const B = band(960);
 
-// Copy left with the button pair beneath, photo right.
 export default preview({
   width: B.w,
   draw: [

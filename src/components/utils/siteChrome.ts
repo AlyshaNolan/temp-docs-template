@@ -1,34 +1,10 @@
 /**
- * Live-updates the parts of the docs navigation that no editable region can
- * bind to, in the CloudCannon Visual Editor.
- *
- * Regions own everything stored in one file: an `@data[key].path` prop binds
- * across files, so the topbar brand and links, the footer, and the Home and
- * current crumbs are plain regions on their own components. What is left here
- * is what `getDocsNav()` *derives* by joining the whole `docs` collection with
- * `sidebar.json` — where a page sits in the sidebar, and the group crumb. No
- * single path holds those, so there is nothing for a region to bind to and the
- * JavaScript API is the only route: subscribe, re-read, patch the DOM.
- *
- * What is deliberately NOT re-derived here: group *membership*, page nesting,
- * and the pager. All three need every doc's frontmatter, not the open file's.
- * Reimplementing `getDocsNav()` against the API would give the sidebar a second
- * ordering that nothing keeps in sync with the build. Only the open page moves,
- * and only between groups the build already rendered — plus one it did not,
- * which is cloned from a sibling.
- *
- * Booleans have no region type at all, so the editor switches are patched here
- * too. Each control they gate is always rendered and carries
- * `data-toggle-hidden` when off: gating at build time leaves the editor no
- * element to reveal when the switch goes back on. A control's visibility is the
- * AND of a page switch and a site switch, so both handles feed one pass.
- *
- * Group names are not a region for the same reason. `navGroups` sets order and
- * collapsed state only; membership comes from each page's `group` frontmatter,
- * so renaming an entry there orphans the old name into `getDocsNav()`'s
- * alphabetical tail. A text region on the label would write the rename and show
- * it taking, which the rebuild then undoes. The reorder below reproduces the
- * tail instead.
+ * Live-patches the docs chrome no editable region can bind to: sidebar placement
+ * and the group crumb (derived across every doc via the shared `buildDocsNav` —
+ * never reimplement it here) and the boolean switches. A switched control is
+ * always rendered and hidden with `data-toggle-hidden`; gating it at build time
+ * leaves the editor nothing to reveal. Group labels must not become a text region:
+ * membership comes from each page's `group`, so the rebuild undoes a rename.
  */
 
 import type {
@@ -53,10 +29,7 @@ function docTrail(): HTMLElement | null {
   return document.querySelector<HTMLElement>(".doc-breadcrumbs");
 }
 
-/**
- * The group crumb is the only url-less crumb that is not the current page — a
- * parent-page crumb always renders as a link.
- */
+/** The group crumb is the only url-less crumb that is not the current page. */
 function setGroupCrumb(name: string) {
   const trail = docTrail();
 
@@ -151,7 +124,6 @@ function createItem(page: DocsNavPage): HTMLElement | null {
   return item;
 }
 
-/** The nested list a page's children live in, created on first use. */
 function childList(item: HTMLElement): HTMLElement | null {
   const existing = item.querySelector<HTMLElement>(":scope > .docs-sidebar-children");
 
@@ -170,11 +142,7 @@ function childList(item: HTMLElement): HTMLElement | null {
   return list;
 }
 
-/**
- * Reconcile one list of pages into one `<ul>`, in order, and recurse.
- * `seen` collects every href the nav still contains; anything left over in the
- * sidebar afterwards belongs to a page that moved or lost its group.
- */
+/** `seen` collects every href still in the nav; the caller removes the rest. */
 function syncList(list: HTMLElement, pages: DocsNavPage[], seen: Set<string>) {
   for (const page of pages) {
     const item = itemFor(page.href) ?? createItem(page);
@@ -189,7 +157,6 @@ function syncList(list: HTMLElement, pages: DocsNavPage[], seen: Set<string>) {
 
     if (link && link.textContent !== page.title) link.textContent = page.title;
 
-    // `append` moves the node, so ordering falls out of walking `pages` in order.
     list.append(item);
 
     if (page.children.length > 0) {
@@ -203,10 +170,8 @@ function syncList(list: HTMLElement, pages: DocsNavPage[], seen: Set<string>) {
 }
 
 /**
- * Rebuild the sidebar from the nav derived across every doc, not just the open
- * one. A page whose `group` changed keeps its new place after navigating away,
- * which reading only `currentFile()` could never do — the next page is served
- * as it was built, with the edit nowhere in it.
+ * Derive from every doc, not `currentFile()`: other pages are served as built,
+ * so a page whose `group` changed would snap back on navigation.
  */
 function syncSidebar(nav: DocsNav) {
   const inner = sidebarInner();
@@ -234,7 +199,6 @@ function syncSidebar(nav: DocsNav) {
   }
 }
 
-/** The trail's group crumb, for whichever page is open. */
 function syncCrumbs(nav: DocsNav) {
   setGroupCrumb(nav.byHref.get(location.pathname)?.group ?? "");
 }
@@ -245,10 +209,7 @@ function setLeadLabel(label: string) {
   if (lead) lead.textContent = label || "Overview";
 }
 
-/**
- * Last-applied collapsed state per group. Re-asserting `open` on every read
- * would snap shut a group the editor had just expanded by hand.
- */
+/** Re-asserting `open` on every read would snap shut a group expanded by hand. */
 const collapsedState = new Map<string, boolean>();
 
 /** Collapsed state only — `syncSidebar` already placed the groups in order. */
@@ -267,28 +228,18 @@ function setGroups(navGroups: Record<string, unknown>[]) {
   }
 }
 
-/**
- * Bumped on every page load. A client-side navigation swaps in freshly built
- * DOM and a new current file; listeners still bound to the old one check this
- * and no-op rather than writing the previous page's title into the new chrome.
- */
+/** Listeners bound to a previous page's file check this and no-op after navigation. */
 let generation = 0;
 
-/**
- * Last value seen from each handle. A control gated by both a page switch and a
- * site switch has to be recomputed when either fires, so neither pass can act
- * on its own half alone.
- */
+/** A control gated by both a page and a site switch recomputes when either fires. */
 let pageData: Record<string, unknown> | undefined;
 let headerData: Record<string, unknown> | undefined;
 let sidebarData: Record<string, unknown> | undefined;
 let pageToolsData: Record<string, unknown> | undefined;
 
 /**
- * A page switch. `data.get()` returns raw frontmatter, not the Zod-parsed entry
- * the build sees, so an omitted key arrives as `undefined` — and the content
- * schema defaults all four of these to `true`. Reading absent as "off" hides
- * the control on every page that never wrote the key out, which is most of them.
+ * `data.get()` returns raw frontmatter, so an omitted key is `undefined` — and
+ * the schema defaults these to `true`, so absent must read as on.
  */
 const pageOn = (value: unknown) => value !== false;
 
@@ -301,11 +252,7 @@ function setToggled(selector: string, visible: boolean) {
   });
 }
 
-/**
- * Each control waits for the handles it depends on. Applying a switch from a
- * source that has not answered yet would hide it for a frame on every load,
- * because an unread handle and a switched-off control look identical here.
- */
+/** Each control waits for its handles: an unread one looks switched off and flashes it hidden. */
 function applyToggles() {
   if (headerData) {
     setToggled(".search", siteOn(headerData.search));
@@ -429,10 +376,6 @@ function entryId(path: string): string | undefined {
 
 let docsCollection: CloudCannonJavaScriptV1APICollection | undefined;
 
-/**
- * Re-derive the whole sidebar from every doc CloudCannon knows about, including
- * edits that have not been built yet, and reconcile the DOM to it.
- */
 async function resyncNav() {
   if (!docsCollection) return;
 
@@ -511,8 +454,7 @@ function connectCurrentFile(api: CloudCannonJavaScriptV1API) {
     pageData = data;
 
     applyToggles();
-    // The open page's own frontmatter reaches the sidebar through the
-    // collection resync, which sees it and every other doc at once.
+    // The open page reaches the sidebar only through the collection resync.
     void resyncNav();
   });
 

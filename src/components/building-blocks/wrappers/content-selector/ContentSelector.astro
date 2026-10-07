@@ -21,9 +21,8 @@ if (!htmlAttributes.id && label) {
   htmlAttributes.id = slugifyLabel(label);
 }
 
-// A radio group's name must be unique per selector on the page. Unlabelled
-// selectors fall back to their first tab's title — two on one page opening on
-// the same title would share a group — and slot-only ones to a generated id.
+// The radio group name must be unique per selector on the page. Without an id it falls
+// back to the first tab's title (two opening on the same title share a group), then a random id.
 const firstTitle = (items as ContentSelectorItem[])?.[0]?.title;
 const groupKey =
   htmlAttributes.id || (firstTitle && slugifyLabel(firstTitle)) || crypto.randomUUID();
@@ -91,18 +90,13 @@ if (!_component && !hasItems && !hasSlotContent) return;
       --content-selector-border-width: 1px;
       container: content-selector / inline-size;
 
-      /* The panel variant frames the whole thing and shrinks the tabs to a
-         strip of labels — a demo panel, rather than a section of the page. Only
-         meaningful with the tabs on top, so it is scoped to `nav-top`. */
       > .content-selector-shell.variant-panel.nav-top > .content-selector-items {
         border: var(--border-width-sm) solid var(--color-border);
         border-radius: var(--radius-lg);
         overflow: hidden;
 
-        /* The full-width rule the strip already draws becomes the strip itself:
-           it stretches to the tab row's height and carries its own bottom
-           border. Tinting the container instead would show through the panel,
-           whose grid box does not span the tracks the tabs create. */
+        /* Tint the strip, not the container: the panel's grid box doesn't span
+           the tab tracks, so a container tint would show through it. */
         &::before {
           align-self: stretch;
           background: var(--color-bg-surface);
@@ -140,9 +134,8 @@ if (!_component && !hasItems && !hasSlotContent) return;
 
       > .content-selector-shell > .content-selector-items {
         border: 0 solid var(--color-bg-muted);
-        /* The nav-top panel escapes a zero-width grid item at `100cqi`, so that
-           has to measure this element's content box — the section around it is
-           wider by this border. */
+        /* The nav-top panel's `100cqi` must measure this content box — the
+           section around it is wider by this border. */
         container: content-selector-items / inline-size;
         width: 100%;
 
@@ -163,12 +156,9 @@ if (!_component && !hasItems && !hasSlotContent) return;
         column-gap: var(--spacing-em-lg);
         display: grid;
         grid-template-columns: minmax(min-content, max-content) minmax(0, 1fr);
-        /* One row per tab, plus a filler row that absorbs the panel's extra
-             height so a tall panel doesn't stretch the tab rows. The count is
-             static because this element is the array region root: a value
-             derived from the item count would go stale the moment the editor
-             adds one. Empty `auto` rows collapse to zero, so overshooting is
-             free; past the 12th tab a tab falls back to auto placement. */
+        /* Static count: this is the array region root, so one derived from the
+             item count goes stale when the editor adds a tab. Tabs past the
+             12th fall back to auto placement. */
         grid-template-rows: repeat(12, auto) 1fr;
 
         .content-selector-tab {
@@ -182,10 +172,8 @@ if (!_component && !hasItems && !hasSlotContent) return;
           }
         }
 
-        /* Items all overlay the same area, so a tab's row has to come from
-             its position in the DOM. Read off `:nth-of-type` rather than a
-             prop, so a reorder or a single-item re-render can't leave a stale
-             index behind. */
+        /* `:nth-of-type`, not a prop: a reorder or single-item re-render would
+             leave a stale index. */
         .content-selector-item:nth-of-type(1) > .content-selector-tab {
           grid-row: 1;
         }
@@ -244,23 +232,16 @@ if (!_component && !hasItems && !hasSlotContent) return;
 
       > .content-selector-shell.nav-top > .content-selector-items {
         display: grid;
-        /* An explicit track list rather than `grid-auto-flow: column`: the
-             panel spans `1 / -1` so that it starts at the container's inline
-             edge, and `-1` only resolves against explicit tracks. Same static
-             count as nav-start, and empty `max-content` columns collapse.
-             The trailing `1fr` is not decorative: each item overlays tracks
-             `1 / -1`, and that box is the array-item region CloudCannon
-             outlines — without a filler track the outline stops at the last
-             tab rather than spanning the panel below it. */
+        /* Explicit tracks, not `grid-auto-flow: column`: the panel's `1 / -1`
+             only resolves against explicit tracks. The trailing `1fr` keeps
+             CloudCannon's item outline spanning the panel, not just the tabs. */
         grid-template-columns: repeat(12, minmax(max-content, auto)) 1fr;
         grid-template-rows: auto auto;
         overflow-x: auto;
         scroll-snap-type: x proximity;
 
-        /* Content-sized tabs no longer tile the full width, so the strip's
-             baseline rule comes from here. `width: 100cqi` with the matching
-             negative margin draws the full width while contributing nothing to
-             track sizing, which would otherwise re-stretch the tabs. */
+        /* `100cqi` with the matching negative margin draws full width without
+             feeding track sizing, which would re-stretch the tabs. */
         &::before {
           align-self: end;
           background: var(--color-bg-muted);
@@ -338,12 +319,8 @@ if (!_component && !hasItems && !hasSlotContent) return;
           background: var(--color-border-strong);
         }
 
-        /*
-           * Keep the panel out of grid column sizing by giving it width: 0
-           * and letting its inner content (which has width: 100cqi and
-           * position: sticky) render over the full visible container width.
-           * This lets the tabs row size to its labels and scroll naturally.
-           */
+        /* width: 0 keeps the panel out of column sizing; its `100cqi` sticky
+           content still spans the container. */
         .content-selector-panel {
           container-type: normal;
           grid-column: 1 / -1;

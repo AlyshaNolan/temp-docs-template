@@ -1,14 +1,6 @@
 /**
- * Shared setup logic for modal popovers (`.modal-popover`, rendered by
- * `ModalShell.astro`).
- *
- * Used by:
- * - `Modal.astro`'s inline `<script>` on the live site
- * - `navigation/search`'s setup module (its popover is a ModalShell)
- * - `editor-live-sync.js` in the CloudCannon editor, because CC's
- *   editable-regions renderer uses `renderToStaticMarkup` and does
- *   not execute inline scripts, so we need to initialize modals
- *   from the live-sync script in that context.
+ * Used by `Modal.astro`'s inline script, `navigation/search`'s setup, and
+ * `editor-live-sync.js` (the editor doesn't run inline scripts).
  */
 import { getFocusableElements, trapFocus } from "@component-utils/focusTrap";
 
@@ -47,11 +39,8 @@ export function setupModalShell(popover: HTMLElement): void {
     updateModalScrollLock();
 
     if (newState === "open") {
-      // Captured before focus moves inside: several controls can target one
-      // modal, and focus has to return to the one that was actually used —
-      // `findTrigger` only ever reports the first. Anything else that had
-      // focus is not an invoker (Search opens on Ctrl+K with focus on the
-      // body), so fall back to the declared trigger.
+      // Captured before focus moves: `findTrigger` only reports the first of
+      // several invokers, and a Ctrl+K open has no invoker at all.
       const active = document.activeElement;
       const invoker =
         active instanceof HTMLElement && popover.id && !popover.contains(active)

@@ -42,7 +42,7 @@ To make a file's Markdown body editable (documentation pages), wrap the rendered
 
 ## Page-level array region (layout only)
 
-`src/layouts/Page.astro` renders `<MainComponent sections={sections} />`, and `MainComponent.astro` carries the one region that makes a page's sections editable:
+`src/pages/[...slug].astro` renders `<MainComponent sections={page.data.pageSections} />`, and `MainComponent.astro` carries the one region that makes a page's sections editable:
 
 ```astro
 <div data-editable="array" data-prop="pageSections" data-component-key="_component">

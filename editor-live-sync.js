@@ -1,14 +1,5 @@
-/**
- * Syncs DOM changes in the CloudCannon editor to component runtime state.
- *
- * CloudCannon's editable-regions uses React's `renderToStaticMarkup` to render
- * Astro components, which strips inline `<script>` tags. Components whose
- * behaviour lives in a client `<script>` (the modal focus trap, masonry spans,
- * Video's lite-youtube / lite-vimeo custom elements) never initialise in the
- * editor, so we initialise them here instead.
- *
- * Logs editor mutations to the console in dev; silent in production.
- */
+// The editor's re-render strips inline `<script>`s, so every component whose
+// behavior lives in one must have its setup registered here as well.
 
 import {
   setupAllContentSelectors,
@@ -72,7 +63,7 @@ function initNewComponents(root) {
     .forEach((el) => newModals.push(el));
 
   for (const el of newModals) {
-    log("initialising new modal", el);
+    log("initializing new modal", el);
     setupModalShell(el);
   }
 
@@ -87,7 +78,7 @@ function initNewComponents(root) {
     .forEach((el) => newSearch.push(el));
 
   for (const el of newSearch) {
-    log("initialising new search", el);
+    log("initializing new search", el);
     setupSearch(el);
   }
 
@@ -100,7 +91,7 @@ function initNewComponents(root) {
   root.querySelectorAll(".toc:not([data-toc-initialized])").forEach((el) => newTocs.push(el));
 
   for (const el of newTocs) {
-    log("initialising new toc", el);
+    log("initializing new toc", el);
     setupToc(el);
   }
 
@@ -112,7 +103,7 @@ function initNewComponents(root) {
     root.querySelectorAll(`.${selector}:not([${flag}])`).forEach((el) => found.push(el));
 
     for (const el of found) {
-      log(`initialising new ${label}`, el);
+      log(`initializing new ${label}`, el);
       setup(el);
     }
   };
@@ -136,7 +127,7 @@ function initNewComponents(root) {
     .forEach((el) => newMasonry.push(el));
 
   for (const el of newMasonry) {
-    log("initialising new masonry", el);
+    log("initializing new masonry", el);
     setupMasonry(el);
   }
 
@@ -151,7 +142,7 @@ function initNewComponents(root) {
     .forEach((el) => newForms.push(el));
 
   for (const el of newForms) {
-    log("initialising new form", el);
+    log("initializing new form", el);
     setupForm(el);
   }
 
@@ -164,7 +155,7 @@ function initNewComponents(root) {
   root.querySelectorAll(".content-selector-items").forEach((el) => newContentSelectors.push(el));
 
   for (const el of newContentSelectors) {
-    log("initialising new content selector", el);
+    log("initializing new content selector", el);
     setupContentSelector(el);
   }
 

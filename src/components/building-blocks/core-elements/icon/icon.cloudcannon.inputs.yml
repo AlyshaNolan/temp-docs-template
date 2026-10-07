@@ -28,6 +28,7 @@ size:
       - id: 3xl
         name: 3xl Large
 color:
+  label: Color
   type: select
   comment: The color of the icon.
   options:

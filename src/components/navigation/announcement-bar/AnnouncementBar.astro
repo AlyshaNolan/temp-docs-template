@@ -19,10 +19,8 @@ const message = typeof text === "string" ? text.trim() : "";
 if (!message) return;
 
 /**
- * `editableSource` prefixes the region path. `Docs.astro` passes
- * `@data[announcementBar]` because the site bar reads that file, not the open
- * page; placed in a page builder the prop is absent and the binding falls back
- * to the page's own frontmatter. Hardcoding either one breaks the other use.
+ * `editableSource` is `@data[announcementBar]` from `Docs.astro` and absent in a page
+ * builder, where the binding falls back to page frontmatter. Hardcoding either breaks the other.
  */
 const textProp = editableSource ? `${editableSource}.text` : "text";
 ---
@@ -55,12 +53,8 @@ const textProp = editableSource ? `${editableSource}.text` : "text";
 </aside>
 
 <script is:inline data-astro-rerun>
-  // is:inline so the dismissed check runs synchronously during parsing,
-  // before the bar can paint, and data-astro-rerun so the ClientRouter
-  // re-executes it when a client-side navigation swaps in a fresh bar.
-  // CloudCannon's editor strips inline scripts, which is the behaviour we
-  // want there: editors always see the bar, and the close button is inert
-  // instead of hiding the thing they're editing.
+  // is:inline so the dismissed check runs before paint; data-astro-rerun re-runs it
+  // after navigation. Don't port it to the editor: editors must always see the bar.
   (function () {
     var bar = document.querySelector(".announcement-bar:not([data-announcement-initialized])");
 
@@ -71,8 +65,7 @@ const textProp = editableSource ? `${editableSource}.text` : "text";
     var text = bar.querySelector(".announcement-bar-text");
     var message = (text && text.getAttribute("data-announcement")) || "";
 
-    // Dismissal stores the message itself, so publishing a different
-    // announcement makes the bar reappear for everyone.
+    // Keyed by the message, so a new announcement reappears for everyone.
     if (localStorage.getItem(KEY) === message) {
       bar.remove();
 
@@ -92,16 +85,11 @@ const textProp = editableSource ? `${editableSource}.text` : "text";
 
 <style is:global>
   @layer page-sections {
-    /* The switch rides a child, never the root: CloudCannon's re-render keeps a
-       region root and swaps its contents, so a prop-driven root attribute goes
-       stale (`npm run lint:roots`). Hoisted back to the whole bar here. */
+    /* The switch rides a child, never the root (`npm run lint:roots`). */
     .announcement-bar:has(> .announcement-bar-text[data-toggle-hidden]) {
       display: none;
     }
 
-    /* The accent tint, not the brand fill: this sits above the header on every
-       page, so it has to read as an aside a reader can dismiss rather than the
-       loudest thing on screen. The accent-coloured link is what carries it. */
     .announcement-bar {
       align-items: center;
       background-color: var(--color-accent-surface);

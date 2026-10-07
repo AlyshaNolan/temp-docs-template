@@ -35,8 +35,6 @@ if (!_component && !hasValidSrc) {
   return;
 }
 
-// Decorative images are explicitly hidden from assistive technology with an
-// empty alt (the standard mechanism — no aria-hidden needed on <img alt="">).
 const normalizedAlt = decorative ? "" : alt || "";
 const isEditable =
   useDefaultEditableBinding || customDataPropSrc != null || customDataPropAlt != null;
@@ -48,9 +46,8 @@ const dataAttributes = isEditable
     }
   : {};
 
-// "none" is the aspect-ratio select's explicit "no fixed ratio" value — treat
-// it like unset (src/components/utils/image.ts already does) so it doesn't
-// emit inert `ratio ratio-none` classes.
+// "none" means no fixed ratio — treat it as unset, as utils/image.ts does,
+// or it emits inert `ratio ratio-none` classes.
 const effectiveAspectRatio = aspectRatio && aspectRatio !== "none" ? aspectRatio : null;
 
 const positionClass = `position-${positionVertical}-${positionHorizontal}`;
@@ -156,9 +153,8 @@ if (hasAlternate) {
       display: block;
       overflow: hidden;
 
-      /* A background image fills its section rather than joining the flow, so
-         it takes no space before it — `stackable` stays on the root because
-         `_flow.css` selects that class directly and `:has()` can't hoist it. */
+      /* `stackable` stays on the root: `_flow.css` selects that class directly,
+         so `:has()` can't hoist it. */
       &:has(> .image-inner.background) {
         --space-before: var(--space-before-none);
 

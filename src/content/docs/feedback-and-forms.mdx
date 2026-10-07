@@ -17,9 +17,9 @@ Turn it off per page with `showFeedback: false` in frontmatter, or site-wide in
 ## Where the vote goes
 
 The default `action` posts to the site itself, which
-[CloudCannon Forms](https://cloudcannon.com/documentation/articles/introduction-to-forms/)
-captures with no extra setup — submissions appear in the CloudCannon dashboard and you can
-have them emailed. Nothing to deploy.
+[CloudCannon Forms](https://cloudcannon.com/documentation/host/forms/) captures once the site
+is connected to an Inbox — see [Setting up CloudCannon Forms](#setting-up-cloudcannon-forms)
+below. Until then, a vote on a CloudCannon-hosted site has nowhere to go.
 
 To send it somewhere else, change one field:
 
@@ -79,11 +79,83 @@ The payload is the same in every case — three fields, posted as `multipart/for
   text="The upgraded submit uses `fetch`, so an endpoint on another domain must send `Access-Control-Allow-Origin`. Without it the vote is silently dropped — deliberately: a reader who clicked Yes should never be shown an error."
 />
 
+## Setting up CloudCannon Forms
+
+CloudCannon Forms only works for sites hosted on CloudCannon. It takes two steps, both in the
+CloudCannon app, and no code.
+
+<Steps
+  orientation="horizontal"
+  items={[
+    {
+      "contentSections": [
+        {
+          "_component": "building-blocks/core-elements/heading",
+          "text": "Create an Inbox",
+          "level": "h3",
+          "size": "xs"
+        },
+        {
+          "_component": "building-blocks/core-elements/text",
+          "text": "In your **Organization** settings, open **Hosting › Forms** and click **Add Inbox**. Give it a name and a key — note the key — and optionally add a CAPTCHA provider. An Inbox belongs to the organization, so several sites can share one.",
+          "size": "md"
+        }
+      ]
+    },
+    {
+      "contentSections": [
+        {
+          "_component": "building-blocks/core-elements/heading",
+          "text": "Link it to this site",
+          "level": "h3",
+          "size": "xs"
+        },
+        {
+          "_component": "building-blocks/core-elements/text",
+          "text": "In the **site's** settings, open **Hosting › Forms**, choose the Inbox under **Link Inbox**, and click **Link Inbox**. Submissions from any form on the site now land in it.",
+          "size": "md"
+        }
+      ]
+    },
+    {
+      "contentSections": [
+        {
+          "_component": "building-blocks/core-elements/heading",
+          "text": "Decide where submissions go next",
+          "level": "h3",
+          "size": "xs"
+        },
+        {
+          "_component": "building-blocks/core-elements/text",
+          "text": "Read them in the Inbox, or forward them by email or to Slack, Zapier, Make or IFTTT from the Inbox's settings.",
+          "size": "md"
+        }
+      ]
+    }
+  ]}
+/>
+
+A form with no `inbox_key` field goes to the site's default Inbox, which is how the helpful
+vote works without any change. To send a particular form to a different Inbox, add a hidden
+field named `inbox_key` whose value is that Inbox's key. CloudCannon's guides cover the details:
+[creating an Inbox](https://cloudcannon.com/documentation/developer-articles/creating-an-inbox-to-receive-your-forms/)
+and [connecting a site to one](https://cloudcannon.com/documentation/articles/connecting-your-site-to-an-inbox/).
+
+To filter spam, set the form's `honeypotName` to `_gotcha`. That adds a field people never
+see; CloudCannon discards any submission where a bot filled it in. For more protection, add
+a CAPTCHA provider in the Inbox's settings.
+
+<Alert
+  variant="note"
+  title="Inboxes have a monthly limit"
+  text="Each Inbox accepts 2,250 submissions a month. A busy docs site with the helpful vote on every page can reach that — give the vote its own Inbox so it can't crowd out a contact form."
+/>
+
 ## Any other form
 
 Forms are built from the same blocks as the rest of the site, and can be dropped into a
 documentation page. The default `action` is again the site itself, so a CloudCannon-hosted
-site collects submissions with no backend.
+site with a linked Inbox collects submissions with no backend.
 
 <Form
   action="./"

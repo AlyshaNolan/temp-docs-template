@@ -1,6 +1,6 @@
 alignmentHorizontal:
   type: select
-  comment: Centre for a marketing hero, start for a documentation landing page.
+  comment: Center for a marketing hero, start for a documentation landing page.
   options:
     values:
       - id: center
@@ -15,7 +15,7 @@ eyebrowShowDot:
   comment: Show an accent dot before the label.
 heading:
   type: markdown
-  comment: Main heading for the hero. Select a word and pick Highlight from the Styles menu to paint it in the accent colour.
+  comment: Main heading for the hero. Select a word and pick Highlight from the Styles menu to paint it in the accent color.
   options:
     format:
     blockquote: false
@@ -64,8 +64,6 @@ buttonSections:
     structures: _structures.buttonSections
 
 # --- section wrapper inputs (CustomSection) ---
-# Configures the CustomSection wrapper, not this section's own content. Inline
-# per component so a project can trim the size/padding lists in place.
 # `new:component` slices from this marker down — keep the marker line verbatim.
 sectionLabel:
   type: text
@@ -140,6 +138,7 @@ paddingVertical:
       - id: 6xl
         name: 6xl
 colorScheme:
+  label: Color scheme
   type: select
   comment: Color scheme theme for the section wrapper.
   options:
@@ -155,6 +154,7 @@ lockColorScheme:
   label: Lock color scheme
   comment: Keep this section on the color scheme above when a visitor toggles the site theme. Only has an effect when Color Scheme is Light or Dark.
 backgroundColor:
+  label: Background color
   type: select
   comment: Solid background color token behind the section content.
   options:

@@ -1,14 +1,6 @@
 /**
- * Strip the demo content and make a fresh clone your own site.
- *
- * The starter ships a working demo — the Stratus documentation set, its
- * branding, and an overview page that sells the template itself. That content
- * is deliberate: it is what makes a clone look like a real site on first
- * `npm run dev`, and every feature is demonstrated by a page that uses it. But
- * each of those files is something a new project has to find and rewrite, and
- * the two URL placeholders (astro.config.mjs `site`, seo.json `url`) break
- * canonicals, the sitemap and JSON-LD silently if missed. See
- * scripts/check/placeholders.mjs.
+ * Strip the demo content and make a fresh clone your own site. Must set every
+ * value scripts/check/placeholders.mjs looks for.
  *
  *   npm run reset:starter               interactive
  *   npm run reset:starter -- --dry-run  print the plan, write nothing
@@ -93,16 +85,12 @@ function isGitClean() {
 
     return status.trim() === "";
   } catch {
-    return true; // not a git repo — nothing to protect
+    return true;
   }
 }
 
-/**
- * Pull one line at a time. `rl.question()` drops input when stdin is a pipe —
- * readline drains the pipe and emits every line before the next question()
- * registers a listener. The async iterator pauses between reads, so piped input
- * (and `--dry-run` in a test) behaves the same as a person typing.
- */
+// Not `rl.question()`: it drops piped stdin lines that arrive before the next
+// question registers a listener. The async iterator pauses between reads.
 const lines = rl[Symbol.asyncIterator]();
 
 async function prompt(text) {
@@ -117,7 +105,7 @@ async function prompt(text) {
 }
 
 function bail() {
-  console.log("\n  Cancelled — nothing was written.\n");
+  console.log("\n  Canceled — nothing was written.\n");
   rl.close();
   process.exit(1);
 }
@@ -203,7 +191,7 @@ pageSections:
 `;
 }
 
-console.log("\n  Reset the documentation starter\n");
+console.log("\n  Reset the Stratus template\n");
 if (dryRun) console.log("  Dry run — nothing will be written.\n");
 
 if (!dryRun && !isGitClean()) {
@@ -242,10 +230,16 @@ const docFiles = existsSync(abs("src/content/docs"))
 const removeDocs = docFiles.length
   ? await confirm(`Remove the demo documentation pages (${docFiles.length})?`)
   : false;
+const releaseFiles = existsSync(abs("src/content/changelog"))
+  ? readdirSync(abs("src/content/changelog")).filter((file) => file.endsWith(".md"))
+  : [];
+
+const removeReleases = releaseFiles.length
+  ? await confirm(`Remove the template's changelog releases (${releaseFiles.length})?`)
+  : false;
 const removePages = await confirm("Reset the overview page?");
 const resetBranding = await confirm("Reset header/footer/SEO branding?");
 
-// astro.config.mjs: the placeholder that breaks every absolute URL.
 const configPath = "astro.config.mjs";
 const config = readFileSync(abs(configPath), "utf8");
 const nextConfig = config.replace(/site: "https:\/\/example\.com",.*$/m, `site: ${yaml(siteUrl)},`);
@@ -255,7 +249,6 @@ if (nextConfig !== config) {
   record(`${configPath}   site → ${siteUrl}`);
 }
 
-// SEO defaults.
 const seo = readJson("src/data/seo.json");
 
 seo.siteName = siteName;
@@ -264,19 +257,36 @@ seo.titleFormat = `{title} | ${siteName}`;
 if (resetBranding) {
   seo.description = `Welcome to ${siteName}.`;
   seo.logoSource = "";
+  seo.faviconSource = "";
+  seo.faviconIcoSource = "";
 }
 writeJson("src/data/seo.json", seo);
 record(
-  `src/data/seo.json  siteName, url, titleFormat${resetBranding ? ", description, logo" : ""}`
+  `src/data/seo.json  siteName, url, titleFormat${resetBranding ? ", description, logo, favicons" : ""}`
 );
 
-// Demo content.
+if (resetBranding) {
+  const brandFiles = ["public/favicon.svg", "public/favicon.ico", "siteicon.png"].filter((file) =>
+    existsSync(abs(file))
+  );
+
+  for (const file of brandFiles) remove(file);
+  if (brandFiles.length) record(`removed the template's icons: ${brandFiles.join(", ")}`);
+}
+
 if (removeDocs) {
   for (const file of docFiles) remove(`src/content/docs/${file}`);
   removeEmptyDirs("src/content/docs");
   writeText("src/content/docs/introduction.mdx", firstDoc(siteName));
   record(
     `removed ${docFiles.length} demo page${docFiles.length === 1 ? "" : "s"}, wrote a blank Introduction`
+  );
+}
+
+if (removeReleases) {
+  for (const file of releaseFiles) remove(`src/content/changelog/${file}`);
+  record(
+    `removed ${releaseFiles.length} template release${releaseFiles.length === 1 ? "" : "s"} from src/content/changelog/`
   );
 }
 
@@ -297,8 +307,7 @@ if (resetBranding) {
 
   const sidebar = readJson("src/data/sidebar.json");
 
-  // Groups are matched to page frontmatter by name, so an inherited list would
-  // point at groups the new site's pages don't use.
+  // Groups match page frontmatter by name; the demo's would point at unused groups.
   sidebar.navGroups = [{ name: "Getting started", collapsed: false }];
   writeJson("src/data/sidebar.json", sidebar);
   record("src/data/sidebar.json  nav groups reduced to one");
@@ -343,8 +352,8 @@ if (dryRun) {
 } else {
   console.log("  Next:");
   if (resetBranding)
-    console.log("    • Add your logo — src/data/header.json, footer.json, seo.json");
+    console.log("    • Add your logo, favicons and CloudCannon site icon (siteicon.png)");
   console.log("    • Write your description — src/data/seo.json");
-  console.log("    • Set your colours and fonts — src/styles/themes/, site-fonts.mjs");
+  console.log("    • Set your colors and fonts — src/styles/themes/, site-fonts.mjs");
   console.log("    • npm run dev\n");
 }

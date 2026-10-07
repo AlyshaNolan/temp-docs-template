@@ -1,10 +1,4 @@
-/**
- * The Markdown twin of every documentation page, at `/<slug>.md`.
- *
- * It backs the "Copy page" menu and stands on its own as the machine-readable
- * copy of the docs. A page at the site root is skipped: its slug is empty, so
- * the route would emit a file called `.md`.
- */
+// A root page is skipped: its empty slug would emit a file called `.md`.
 import { docsMarkdown } from "@utils/docsMarkdown";
 import { docHref } from "@utils/docsNav";
 import type { APIRoute } from "astro";
@@ -32,8 +26,6 @@ export const GET: APIRoute = ({ props, site }) => {
     url,
   });
 
-  // `text/plain` so a browser shows the file rather than downloading it. Only
-  // the dev server honours this — a static host serves the built `.md` under
-  // whatever type it maps the extension to.
+  // Only the dev server honors this; a static host picks its own type for `.md`.
   return new Response(markdown, { headers: { "content-type": "text/plain; charset=utf-8" } });
 };

@@ -2,8 +2,6 @@ import { preview, band, bar, pill, glyph } from "../../../../../scripts/previews
 
 const B = band(760);
 
-// Everything centred: eyebrow, a display heading spanning most of the band, two
-// copy lines, one button.
 export default preview({
   width: B.w,
   draw: [

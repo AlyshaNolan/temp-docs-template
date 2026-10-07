@@ -1,12 +1,5 @@
 ---
-/**
- * A captioned screenshot, optionally click-to-zoom.
- *
- * Zoom is the Popover API rather than a script, so it works in the CloudCannon
- * editor (where inline scripts don't run) and with JavaScript disabled. Pass
- * `alternateSource` for a dark-mode variant — a screenshot of a light UI on a
- * dark page is the most common reason docs images look broken.
- */
+// Zoom is the Popover API, not a script, so it works in the CloudCannon editor and without JS.
 import { isNonEmptyString } from "@component-utils/isNonEmptyString";
 import { slugifyLabel } from "@component-utils/slugify";
 import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";

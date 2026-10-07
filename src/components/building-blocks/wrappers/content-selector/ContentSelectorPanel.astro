@@ -22,10 +22,8 @@ const {
   ...htmlAttributes
 } = Astro.props;
 
-// The index, not the title, is what makes this unique: two tabs sharing a
-// heading would otherwise share an `id`, and `<label for>` would point every
-// tab at the first radio — clicking any of them opens panel one. Panels written
-// as MDX children get no index, and two selectors on a page can share a title.
+// The index makes this unique: a shared title would point every `<label for>`
+// at the first radio. MDX-child panels get no index.
 const uniqueId =
   index === undefined
     ? `${groupName}-${title ? `${slugifyLabel(title)}-` : ""}${crypto.randomUUID()}`
@@ -127,13 +125,10 @@ const subtextDataAttributes = effectiveSubtextProp
 <style is:global>
   @layer components {
     /*
-     * Each item overlays the WHOLE items grid and re-exposes the parent's
-     * tracks with `subgrid`, so its tab and its panel land in different grid
-     * areas while the item itself stays one real box. It has to be a box: this
-     * is the array-item region root, and `display: contents` leaves the editor
-     * nothing to select or drag. Overlapping boxes would swallow each other's
-     * clicks, hence pointer-events passing through to the children.
-     * The tab's own row/column comes from `:nth-of-type` in ContentSelector.
+     * Each item overlays the whole grid via `subgrid` and must stay a real box:
+     * it is the array-item region root, and `display: contents` leaves the
+     * editor nothing to select. pointer-events passes clicks through the overlap;
+     * the tab's row/column comes from `:nth-of-type` in ContentSelector.
      */
     .content-selector-item {
       display: grid;

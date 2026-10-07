@@ -70,7 +70,7 @@ describe("formFieldParts", () => {
     expect(controlAttributes.autocomplete).toBe("off");
   });
 
-  it("names an unlabelled field by its placeholder, then its name", () => {
+  it("names an unlabeled field by its placeholder, then its name", () => {
     expect(
       formFieldParts({ prefix: "input", name: "email", placeholder: "Your email" })
         .controlAttributes["aria-label"]
@@ -80,7 +80,7 @@ describe("formFieldParts", () => {
     );
   });
 
-  it("leaves a labelled field without an aria-label", () => {
+  it("leaves a labeled field without an aria-label", () => {
     const { controlAttributes } = formFieldParts({
       prefix: "input",
       name: "email",

@@ -1,12 +1,4 @@
 ---
-/**
- * The documentation shell: topbar, sidebar, article column, on-this-page rail.
- *
- * Every route that renders inside the docs chrome goes through here — the
- * overview page and each `docs` collection entry — so the sidebar, drawer and
- * footer are defined once. Page-specific furniture (breadcrumbs, meta line,
- * pager, feedback) is composed by the caller into the default slot.
- */
 import AnnouncementBar from "@components/navigation/announcement-bar/AnnouncementBar.astro";
 import DocsSidebar from "@components/navigation/docs-sidebar/DocsSidebar.astro";
 import DocsTopbar from "@components/navigation/docs-topbar/DocsTopbar.astro";
@@ -30,7 +22,6 @@ type Props = {
   image?: string;
   canonical?: string;
   noindex?: boolean;
-  /** Wide layout drops the on-this-page rail — used by the overview page. */
   wide?: boolean;
 };
 
@@ -104,7 +95,7 @@ const baselineTheme = configuredTheme === "dark" ? "dark" : "light";
     <main
       id="main-content"
       class="docs-main"
-      data-pagefind-body
+      data-pagefind-body={noindex ? undefined : ""}
       tabindex="-1"
     >
       <slot />
@@ -122,21 +113,17 @@ const baselineTheme = configuredTheme === "dark" ? "dark" : "light";
 <style is:global>
   @layer page-sections {
     :root {
-      /* Every sticky offset in the shell measures from this one number. */
       --docs-topbar-height: 3.5rem;
-      /* `Footer.astro`'s rendered height, rounded up. The sticky rails cap
-         their height against it so neither can be pushed under the footer at
-         the end of a page; a taller footer makes the sidebar smoke test fail. */
+      /* `Footer.astro`'s rendered height, rounded up: a taller footer fails the
+         sidebar smoke test. */
       --docs-footer-height: 5.5rem;
       --docs-shell-gap: var(--spacing-2xl);
       --docs-sidebar-width: 16rem;
       --docs-toc-width: 13.5rem;
     }
 
-    /* Three breakpoints, one rule each. The on-this-page rail is a column only
-       when there is room for it; below that it becomes the disclosure above the
-       article, which is why it is placed before `.docs-main` in the DOM. The
-       `Toc` component switches presentation at the same 1280px line. */
+    /* The rail sits before `.docs-main` in the DOM so it can be the disclosure
+       above the article; `Toc` switches presentation at the same 1280px. */
     .docs-shell {
       display: grid;
       gap: 0 var(--docs-shell-gap);
@@ -153,14 +140,12 @@ const baselineTheme = configuredTheme === "dark" ? "dark" : "light";
       min-width: 0;
       padding-block: var(--spacing-xl) var(--spacing-5xl);
 
-      /* Focused only via the skip link, so the ring would be noise. */
       &:focus {
         outline: none;
       }
     }
 
-    /* Off-screen rather than `display: none`, which would take it out of the
-       tab order and defeat the point. */
+    /* Not `display: none`, which would take it out of the tab order. */
     .skip-link {
       background-color: var(--color-bg-brand);
       border-radius: var(--radius-md);
@@ -199,9 +184,7 @@ const baselineTheme = configuredTheme === "dark" ? "dark" : "light";
         grid-template-columns: var(--docs-sidebar-width) minmax(0, 1fr);
       }
 
-      /* Same geometry as the sidebar (`DocsSidebar.astro`): claim the footer's
-         top margin to stay pinned across it, and cap the height so the pinned
-         box stops above the footer rather than being pushed under the topbar. */
+      /* Same geometry as `DocsSidebar.astro`; change the two together. */
       .docs-toc-rail {
         margin-block-end: calc(-1 * var(--spacing-3xl));
       }
@@ -217,8 +200,7 @@ const baselineTheme = configuredTheme === "dark" ? "dark" : "light";
     }
 
     @media (width < 1280px) {
-      /* The rail always holds the table of contents, hidden or not, so an
-         `:empty` test would keep this padding on a page that switched it off. */
+      /* Not `:empty`: the rail always holds the table of contents, even hidden. */
       .docs-toc-rail:has(> .toc:not([data-toggle-hidden])) {
         padding-top: var(--spacing-xl);
       }

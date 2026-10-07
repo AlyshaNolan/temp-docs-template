@@ -39,6 +39,11 @@ A static host decides whether a `.md` file opens in the browser or downloads. Th
 serves it as plain text; if your host downloads it instead, map the extension to `text/plain`
 there.
 
+[`/llms.txt`](/llms.txt) indexes the twins: the site name and description, then every sidebar
+page in sidebar order, each linking to its `.md` file. It is generated from the docs collection
+by `src/pages/llms.txt.ts`, so a new page is listed as soon as it has a `group`, and a page with
+`noindex: true` is left out.
+
 ## Turning it on and off
 
 Site-wide, in `src/data/pageTools.json`:

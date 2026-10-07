@@ -1,6 +1,2 @@
-/**
- * The one Shiki theme. Imported by `astro.config.mjs` (Markdown fences) and by
- * `src/components/utils/highlight.ts` (code held in component props) — two
- * snippets on one page must not render in different palettes.
- */
+// Shared by `astro.config.mjs` and `highlight.ts`: both code paths must use this theme.
 export const CODE_THEME = "github-dark-default";

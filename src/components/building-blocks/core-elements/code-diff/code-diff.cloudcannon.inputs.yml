@@ -1,6 +1,6 @@
 language:
   type: select
-  comment: Language for syntax highlighting — the sample keeps its own colours rather than going flat like a `diff` fence. An unlisted language renders as plain text rather than failing the build.
+  comment: Language for syntax highlighting — the sample keeps its own colors rather than going flat like a `diff` fence. An unlisted language renders as plain text rather than failing the build.
   options:
     values:
       - id: astro

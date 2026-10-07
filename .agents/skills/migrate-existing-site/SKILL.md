@@ -1,6 +1,6 @@
 ---
 name: migrate-existing-site
-description: Use when converting an existing website's pages, content, branding, and structure into this Astro + CloudCannon component starter — an end-to-end, multi-phase migration.
+description: Use when converting an existing website's pages, content, branding, and structure into Stratus, this Astro + CloudCannon documentation template — an end-to-end, multi-phase migration.
 ---
 
 # Migrate an existing site
@@ -69,7 +69,7 @@ For each inventoried section, match it to an existing page section before consid
 | ------------------------------------ | ------------------------------------------------------------------------------------- |
 | Centered heading + subtext + buttons | `page-sections/heroes/hero-center`                                                    |
 | A row of headline numbers            | `page-sections/explainers/stats`                                                      |
-| An ordered walkthrough               | `page-sections/explainers/steps`                                                      |
+| An ordered walkthrough               | `page-sections/explainers/steps-section`                                              |
 | Grid of cards linking elsewhere      | `page-sections/collections/card-collection`                                           |
 | Text + image + buttons               | `page-sections/conversion/cta-split`                                                  |
 | Accordion of Q&A                     | `page-sections/explainers/faq-section`                                                |
@@ -110,7 +110,7 @@ Content rules specific to migration:
 | Images           | Point at `/src/assets/images/placeholder.jpg` until phase-1 images are downloaded and placed (see Assets below); alt text is written once, from the source image, and does not need revisiting                                                               |
 | Visual treatment | Translate the source section's background into `colorScheme` + `backgroundColor`: light bg → `inherit` / `base`; light-gray bg → `inherit` / `surface`; dark bg with light text → `dark` / `surface`; brand-colored bg → `inherit` / `accent` or `highlight` |
 
-**Page order:** build the overview first (most sections, sets the pattern for the rest), then any other landing pages, then the documentation pages last (most labour-intensive — phase 7).
+**Page order:** build the overview first (most sections, sets the pattern for the rest), then any other landing pages, then the documentation pages last (most labor-intensive — phase 7).
 
 **Done-check:** `npm run dev` renders every recreated page with no console "Component not found" warnings and no placeholder text left over from a page that's supposed to be finished.
 

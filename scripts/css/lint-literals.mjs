@@ -3,19 +3,9 @@
  *
  *   node scripts/css/lint-literals.mjs
  *
- * Nothing breaks when a literal slips in — it just quietly leaves one value
- * outside the theming API, so re-skinning a brand misses it. The token layer
- * is only worth having if every consumer goes through it.
- *
- * A declaration whose property is itself a custom property is never flagged:
- * naming a value (`--step-marker-size: 1.75rem`) is the sanctioned way to keep a
- * component-specific number that no global token should own.
- *
- * The CSS is parsed, not pattern-matched. A text scan reports `1px solid` in a
- * comment, `"#fff"` in a `content` string, and the `#000` of a `mask-image`
- * split over several lines, while missing a duration in a multi-line
- * `transition` — all four were real when this was a regex. PostCSS is already
- * in the tree as stylelint's engine; this adds no build-time PostCSS.
+ * A custom-property declaration (`--step-marker-size: 1.75rem`) is never flagged.
+ * Parsed with PostCSS, not regex: a text scan hits comments, strings and `url()`s
+ * and misses multi-line declarations.
  */
 import { readFileSync } from "node:fs";
 import { glob } from "glob";
@@ -50,7 +40,6 @@ function ms(word) {
   return match ? Number(match[1]) * (match[2] === "s" ? 1000 : 1) : null;
 }
 
-/** Top-level comma-separated groups of a value, each as its own node list. */
 function commaGroups(parsed) {
   const groups = [[]];
 
@@ -105,9 +94,7 @@ function checkDeclaration(decl, report) {
 
   if (!TIMED.test(decl.prop)) return;
 
-  // Per comma group, so `visibility 0s linear var(--animation-normal)` — an
-  // instant change used to delay a property, not a motion decision — is judged
-  // on its own duration rather than the whole shorthand's.
+  // Per comma group, so an instant `visibility 0s linear …` is judged on its own.
   for (const group of commaGroups(parsed)) {
     const words = group.filter((node) => node.type === "word").map((node) => node.value);
     const times = words.map(ms).filter((value) => value !== null);
@@ -122,12 +109,8 @@ function checkDeclaration(decl, report) {
   }
 }
 
-/**
- * Index of the `>` that closes the tag opened at `open`, skipping `{…}`
- * expressions and strings. `<style is:inline set:html={`…`}>` carries both, and
- * its template literal contains `>` — a `<style[^>]*>` match ends inside it and
- * hands PostCSS a fragment of the component template.
- */
+// Skips `{…}` and strings: `<style set:html={`…`}>` can contain a `>`, so a
+// `<style[^>]*>` match would end inside it.
 function findTagEnd(source, open) {
   let depth = 0;
   let quote = null;
@@ -149,7 +132,6 @@ function findTagEnd(source, open) {
   return -1;
 }
 
-/** `{ css, line }` blocks: an `.astro` file's `<style>` bodies, or the whole file. */
 function styleBlocks(file, source) {
   if (!file.endsWith(".astro")) return [{ css: source, line: 1 }];
 

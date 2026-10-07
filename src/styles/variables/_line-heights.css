@@ -1,8 +1,4 @@
 :where(:root) {
-  /* Line height (unitless ratio). `none` collapses the line box for icon-only /
-     inline-SVG buttons; the heading ramp tightens as heading sizes grow.
-     `relaxed` is the long-read body measure — prose is set on it, not on
-     `normal`, which is for interface text. */
   --line-height-none: 0;
   --line-height-tight: 1.1;
   --line-height-normal: 1.5;

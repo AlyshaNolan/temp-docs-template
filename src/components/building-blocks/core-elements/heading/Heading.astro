@@ -22,9 +22,7 @@ const {
   ...htmlAttributes
 } = Astro.props;
 
-// h2/h3 without an id cannot be cited as `#section`. Prefer `text`; most page
-// sections pass the title as the default slot instead. h1 (heroes, posts) is left
-// alone. Duplicate titles on the same page get a numeric suffix.
+// Only h2/h3 get an anchor id; duplicate titles on a page get a numeric suffix.
 function plainTextFromHtml(html: string): string {
   return html
     .replace(/<[^>]+>/g, " ")
@@ -44,10 +42,8 @@ const usedHeadingIds: Set<string> = Astro.locals
   ? (Astro.locals.headingIds ??= new Set())
   : new Set();
 
-// Rendered once, for two jobs: the anchor id, and deciding whether there is
-// anything to render at all. `Astro.slots.has()` is true for a slot holding an
-// empty string — which is what a page section passes when its optional heading
-// is blank — so it can't answer the second question.
+// `Astro.slots.has()` is true for a slot holding an empty string (a blank
+// optional heading), so emptiness is decided on the rendered text instead.
 const slotHtml = Astro.slots.has("default") ? await Astro.slots.render("default") : "";
 const hasSlotContent = slotHtml.trim().length > 0;
 
@@ -87,9 +83,7 @@ const Tag = level;
 
 const hasText = isNonEmptyString(text);
 
-// An empty heading is not just dead space: it leaves a hole in the document
-// outline, and as a flow sibling it stops the next block being a first child,
-// which hands that block a top margin it should not have.
+// An empty heading would stop the next flow block being a first child, giving it a stray top margin.
 if (!_component && !hasText && !hasSlotContent) return;
 ---
 
@@ -151,18 +145,13 @@ if (!_component && !hasText && !hasSlotContent) return;
 
       margin-block: 0;
 
-      /* Tracking is re-stated with every size below: the `<h*>` sets it in `em`
-         of its own base size, which inherits as an absolute px value — so a
-         smaller inner size would keep the big heading's tracking and collapse
-         its words. */
+      /* Tracking is re-stated with every size: the `<h*>`'s `em` value inherits as
+         absolute px, so a smaller inner size would keep the big tracking. */
       > .heading-inner {
         display: block;
 
-        /* CloudCannon only offers a Styles menu on a `block` text region, and
-           that region's editor wraps the value in a `<p>` the base layer then
-           styles as body copy. Editor-only markup — `renderMarkdownInline`
-           never emits it. A `<p>` inside the inline span leaves the region with
-           no box, so its editor outline disappears — hence display: block. */
+        /* Editor-only: a `block` text region wraps the value in a `<p>`, which
+           leaves an inline span with no box and no editor outline. */
         .heading-text[data-type="block"] {
           display: block;
         }

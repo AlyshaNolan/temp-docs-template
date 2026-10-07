@@ -1,13 +1,5 @@
-/**
- * The Markdown behind "Copy page": what `/<slug>.md` serves and what the menu
- * puts on the clipboard.
- *
- * It is the page's own MDX source with a title header prepended, not a
- * rendering of it — component tags such as `<Alert … />` survive verbatim.
- * That keeps the two in step: a transform would have to know every component,
- * and the one it didn't know would silently ship a shorter page than the
- * reader sees.
- */
+// The page's own MDX source, not a rendering: a transform would have to know every
+// component, and one it missed would silently ship a shorter page.
 const MODULE_LINE = /^\s*(?:import|export)\s/;
 
 /** The `.md` twin of a docs page href: `/guides/setup/` → `/guides/setup.md`. */
@@ -37,7 +29,6 @@ export type DocsMarkdownInput = {
   url?: string;
 };
 
-/** A standalone Markdown document for one docs page. */
 export function docsMarkdown({ title, description, body = "", url }: DocsMarkdownInput): string {
   const parts = [`# ${title}`];
 

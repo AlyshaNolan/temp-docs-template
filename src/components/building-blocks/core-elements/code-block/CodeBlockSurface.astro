@@ -1,12 +1,8 @@
 ---
 /**
- * The chrome every code sample shares: bordered dark panel, a header bar, and
- * the copy button. `CodeBlock`, `CodeTabs`, `CodeAnnotations`, `CodeDiff` and
- * `FileTree` all render through this, so a change to the code surface lands in
- * one place — and it owns the `.code-*` styles they rely on.
- *
- * The copy button reads `.innerText` of `[data-code-source]`, so only the code
- * itself must carry that attribute — never the header or a notes footer.
+ * Shared by `CodeBlock`, `CodeTabs`, `CodeAnnotations`, `CodeDiff` and `FileTree`,
+ * and owns the `.code-*` styles they rely on. Copy reads `.innerText` of
+ * `[data-code-source]`, so only the code carries it — never a header or footer.
  */
 const { showCopy = true, class: className, ...htmlAttributes } = Astro.props;
 const hasHeader = Astro.slots.has("header");
@@ -40,7 +36,6 @@ const hasHeader = Astro.slots.has("header");
 <style is:global>
   @layer components {
     .code-surface {
-      /* Gutter the diff +/- signs sit in. */
       --code-diff-gutter: 1.25rem;
 
       background-color: var(--color-code-bg);
@@ -107,11 +102,8 @@ const hasHeader = Astro.slots.has("header");
       }
     }
 
-    /* `.code-pre` is what our highlighter adds; `.astro-code` is what Astro
-       puts on a Markdown fence. A fence is its own panel (see
-       `base/_prose.css`), but the code inside must look identical. */
-    /* A `<pre>` carries a UA margin; inside a surface it has to go, but a fence
-       in prose keeps the margins `base/_prose.css` gives it. */
+    /* `.astro-code` is a Markdown fence and must look identical to `.code-pre`.
+       A fence in prose keeps the margins `base/_prose.css` gives it. */
     .code-surface .code-pre {
       margin: 0;
     }
@@ -126,12 +118,9 @@ const hasHeader = Astro.slots.has("header");
       padding: 0;
       tab-size: 2;
 
-      /* Grid, not block: Shiki separates its `.line` spans with real newline
-         text nodes, and grid drops whitespace-only anonymous items — under
-         `display: block` each newline renders as a second, empty line.
-         The block padding sits here rather than on the `<pre>`: a fence's
-         header is a `::before` *inside* the pre, so padding there would push
-         the header down off the panel's top edge. */
+      /* Grid, not block: Shiki's newline text nodes between `.line` spans render
+         as empty lines under `display: block`. Padding stays off the `<pre>`,
+         where it would push a fence's `::before` header off the panel's top. */
       code {
         display: grid;
         font-family: var(--font-mono);
@@ -150,10 +139,7 @@ const hasHeader = Astro.slots.has("header");
       }
     }
 
-    /* Diff markers (`CodeDiff`, `FileTree`). The +/- signs are `::before`
-       content, not text, so the copy button — which reads `.innerText` — hands
-       back source without them. The gutter only appears on a surface that has
-       markers, so an unmarked block keeps its flush left edge. */
+    /* The +/- signs must stay `::before` content so copy (`.innerText`) omits them. */
     .code-surface:has(.line[data-diff]) .line {
       padding-inline-start: calc(var(--spacing-md) + var(--code-diff-gutter));
       position: relative;

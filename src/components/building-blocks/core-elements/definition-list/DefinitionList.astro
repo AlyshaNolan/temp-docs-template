@@ -53,9 +53,6 @@ if (!_component && !hasItems && !hasSlotContent) return;
 <style is:global>
   @layer components {
     .definition-list {
-      /* Stacked is the glossary shape: term, then its definition indented under
-         it. The grid layout is for spec rows, where terms are short and the
-         reader scans a column. */
       > dl.layout-stacked {
         display: block;
         margin: 0;

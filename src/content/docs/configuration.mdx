@@ -10,12 +10,19 @@ order: 1
 Each part of the site chrome has its own file in `src/data/`. They are CloudCannon data files,
 so an editor changes them in the app rather than in a pull request.
 
-| File             | Controls                                                             |
-| ---------------- | -------------------------------------------------------------------- |
-| `header.json`    | Logo, version badge, top links, search and the theme toggle          |
-| `sidebar.json`   | The sidebar's lead link and group order                              |
-| `pageTools.json` | The "Edit this page" link, the Copy page menu and the feedback block |
-| `theme.json`     | The default colour scheme, accent and brand colours                  |
+| File                   | Controls                                                             |
+| ---------------------- | -------------------------------------------------------------------- |
+| `header.json`          | Logo, version badge, top links, search and the theme toggle          |
+| `sidebar.json`         | The sidebar's lead link and group order                              |
+| `pageTools.json`       | The "Edit this page" link, the Copy page menu and the feedback block |
+| `theme.json`           | The default color scheme, accent and brand colors                    |
+| `seo.json`             | Site name, production URL, title format, favicons and share image    |
+| `footer.json`          | Footer links, social icons and small print                           |
+| `announcementBar.json` | The dismissible message at the top of every page                     |
+| `breadcrumbs.json`     | The label of the first breadcrumb                                    |
+| `redirects.json`       | Old URLs and where they go now (CloudCannon hosting only)            |
+
+Every key in every file is listed in the [Config API](/config-api/).
 
 <CodeTabs
   tabs={[
@@ -90,6 +97,5 @@ updates it — turn it off with `showVersionNumber` in `header.json`.
 
 ## Environment
 
-Anything secret — a feedback endpoint, analytics keys — belongs in the environment at build
-time rather than in `src/data/`, which is public. See the
-[Config API](/config-api/) for every key and its default.
+Anything secret — analytics keys etc — belongs in the environment at build
+time rather than in `src/data/`, which is public.

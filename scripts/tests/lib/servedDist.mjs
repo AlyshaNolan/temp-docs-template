@@ -1,11 +1,4 @@
-/**
- * Shared helpers for the browser-based test scripts (smoke, a11y).
- *
- * Mirrors scripts/previews/screenshot.mjs: the built site in dist/ is served on
- * an ephemeral 127.0.0.1 port by a tiny static file server, and pages are
- * driven with playwright-core against a system Chrome — or Playwright's own
- * Chromium as a fallback (that is what CI installs).
- */
+/** Serve dist/ and launch headless Chrome for browser tests; mirrors scripts/previews/screenshot.mjs. */
 import { existsSync, readFileSync, statSync } from "node:fs";
 import { createServer } from "node:http";
 import { extname, join, sep } from "node:path";
@@ -31,10 +24,7 @@ const MIME = {
   ".webm": "video/webm",
 };
 
-/**
- * Serve `distDir` on an ephemeral port. Returns `{ server, baseUrl }`;
- * callers must `server.close()` when done.
- */
+/** Callers must `server.close()` when done. */
 export async function serveDist(distDir) {
   const server = createServer((req, res) => {
     try {
@@ -71,12 +61,7 @@ export async function serveDist(distDir) {
   return { server, baseUrl: `http://127.0.0.1:${port}` };
 }
 
-/**
- * Launch headless Chrome the same way scripts/previews/screenshot.mjs does:
- * CHROME_PATH override first, then system Chrome, then Edge, then
- * Playwright's own Chromium (installed in CI via
- * `npx playwright-core install --with-deps chromium`).
- */
+/** CHROME_PATH, then system Chrome, Edge, then Playwright's Chromium (what CI installs). */
 export async function launchBrowser() {
   const attempts = process.env.CHROME_PATH
     ? [{ executablePath: process.env.CHROME_PATH }]

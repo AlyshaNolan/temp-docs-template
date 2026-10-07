@@ -1,22 +1,11 @@
 /**
- * Report starter placeholders that survive into a real site.
- *
- * These fail silently, which is why they need a check. `site` in astro.config.mjs
- * is the base for every absolute URL Astro generates — canonicals, the sitemap
- * and the JSON-LD `@id` graph. Left at example.com the build succeeds,
- * the pages look right, and every one of those URLs points at a domain the site
- * doesn't own. Nothing in `astro check`, the linters or the tests notices.
- *
- * The branding items are lower stakes but the same class of problem: ship them
- * and the site serves CloudCannon's logo and title as its own.
+ * Report starter placeholders that survive into a real site. A placeholder `site`
+ * URL silently points every canonical, sitemap entry and JSON-LD `@id` elsewhere.
  *
  *   node scripts/check/placeholders.mjs            warn, exit 0
  *   node scripts/check/placeholders.mjs --strict   exit 1 if anything is unset
  *
- * Warn is the default so this repo — which legitimately holds the placeholders,
- * since the demo site builds from them — keeps a green CI. A site built from the
- * starter should switch it to --strict, or just run `npm run reset:starter`,
- * which sets every value below.
+ * Warn is the default because this repo legitimately holds the placeholders.
  */
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -85,6 +74,15 @@ if (typeof seo?.titleFormat === "string" && seo.titleFormat.includes(STARTER_NAM
 }
 if (typeof seo?.logoSource === "string" && STARTER_LOGOS.includes(seo.logoSource)) {
   branding.push({ file: "src/data/seo.json", detail: "logoSource is the starter logo" });
+}
+
+const announcement = readJson("src/data/announcementBar.json");
+
+if (announcement?.enabled && announcement.text?.includes(STARTER_NAME)) {
+  branding.push({
+    file: "src/data/announcementBar.json",
+    detail: `the announcement still mentions "${STARTER_NAME}"`,
+  });
 }
 
 const pageTools = readJson("src/data/pageTools.json");

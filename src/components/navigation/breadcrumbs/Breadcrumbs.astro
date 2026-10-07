@@ -3,14 +3,7 @@ import { breadcrumbListJsonLd } from "@components/utils/breadcrumbTrail";
 import Icon from "@core-elements/icon/Icon.astro";
 import breadcrumbsData from "@data/breadcrumbs.json";
 
-/**
- * `items` is the trail after the leading Home crumb, in order. The last item is
- * the current page; items with a `url` render as links, the rest as text.
- *
- * `currentProp` binds the last crumb to a prop on the page being edited — the
- * crumb is a copy of the page title, so editing it renames the page. The rest
- * of the trail is derived by joining files and has no single path to bind to.
- */
+// `items` excludes the Home crumb. `currentProp` binds the last crumb: editing it renames the page.
 const { items = [], currentProp, class: className, ...htmlAttributes } = Astro.props;
 
 const homeLabel = String(breadcrumbsData.homeLabel ?? "").trim() || "Home";
@@ -139,7 +132,6 @@ const structuredData = breadcrumbListJsonLd(items, {
       text-underline-offset: 0.15em;
     }
 
-    /* Long post titles clamp so the trail stays on one line. */
     .breadcrumbs .breadcrumbs-current {
       color: var(--color-text-strong);
       overflow: hidden;
@@ -162,7 +154,6 @@ const structuredData = breadcrumbListJsonLd(items, {
       text-underline-offset: 0.15em;
     }
 
-    /* On small screens the trail collapses to a back-link to the parent. */
     @media (max-width: 639px) {
       .breadcrumbs .breadcrumbs-trail {
         display: none;

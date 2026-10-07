@@ -2,8 +2,7 @@ import { preview, band, bar, lines, media } from "../../../../../scripts/preview
 
 const B = band(1120);
 
-// A full-bleed band with left-aligned copy and nothing else — the empty right
-// half is the point: this is the section you drop arbitrary blocks into.
+// The empty right half is the point: arbitrary blocks drop in there.
 export default preview({
   width: B.w,
   draw: [

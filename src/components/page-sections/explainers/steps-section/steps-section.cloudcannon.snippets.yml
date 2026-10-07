@@ -1,22 +1,18 @@
-# `component_name` resolves through the filename-keyed map in
-# `src/components/utils/mdxComponents.ts`, where `wrappers/steps/Steps.astro`
-# shares this file's basename — the page section wins by path order. Renaming
-# either file changes which one `<Steps>` means in MDX.
-steps:
+stepsSection:
   template: mdx_component
   inline: false
   preview:
     text:
-      - Steps
+      - Steps Section
     subtext:
       - key: heading
-    image: public/component-previews/page-sections/explainers/steps.svg
+    image: public/component-previews/page-sections/explainers/steps-section.svg
     icon: format_list_numbered
     gallery:
-      image: public/component-previews/page-sections/explainers/steps.svg
+      image: public/component-previews/page-sections/explainers/steps-section.svg
       fit: cover
   definitions:
-    component_name: Steps
+    component_name: StepsSection
     named_args:
       - editor_key: eyebrow
         type: string
@@ -41,4 +37,4 @@ steps:
         optional: true
         remove_empty: true
   _inputs_from_glob:
-    - /src/components/page-sections/explainers/steps/steps.cloudcannon.inputs.yml
+    - /src/components/page-sections/explainers/steps-section/steps-section.cloudcannon.inputs.yml

@@ -29,8 +29,8 @@ Two content collections mount at the site root: `docs` (Markdown articles, one f
 
 Two paths produce a code block, and they must look identical:
 
-- **Markdown fences** go through Astro's own Shiki pass, configured in `astro.config.mjs`. Astro handles `title=`; `fenceMetaTransformer` (`src/utils/markdown.mjs`) reads `{1,3-5}` line ranges. A fence is a bare `<pre>`, so `base/_prose.css` grows its panel and filename bar, and `code-block/setup.ts` injects the copy button.
-- **Component props** (`CodeBlock`, `CodeTabs`, `CodeAnnotations`) go through `src/components/utils/highlight.ts` — one cached Shiki highlighter per build — and render inside `CodeBlockSurface.astro`, which owns the shared `.code-surface` chrome.
+- **Component props** (`CodeBlock`, `CodeTabs`, `CodeAnnotations`) are what all content uses. They go through `src/components/utils/highlight.ts` — one cached Shiki highlighter per build — and render inside `CodeBlockSurface.astro`, which owns the shared `.code-surface` chrome.
+- **Markdown fences** are unused in `src/content/` (CloudCannon's editor can't round-trip their meta, so `code_block` is off in every rich-text input), but the pipeline remains for Markdown elsewhere. They go through Astro's own Shiki pass, configured in `astro.config.mjs`. Astro handles `title=`; `fenceMetaTransformer` (`src/utils/markdown.mjs`) reads `{1,3-5}` line ranges. A fence is a bare `<pre>`, so `base/_prose.css` grows its panel and filename bar, and `code-block/setup.ts` injects the copy button.
 
 Both import `CODE_THEME` from `src/utils/codeTheme.mjs`. That indirection is the point: two snippets on one page rendering in different palettes reads as two different components.
 
@@ -46,9 +46,9 @@ Two co-operating systems:
 
 ### Structured editing (page builder / data panels)
 
-- `cloudcannon.config.yml` (root) defines collections — `docs` (content + visual editors), `pages` (visual), `data` — and pulls structures from `.cloudcannon/structures/*.yml`.
+- `cloudcannon.config.yml` (root) defines collections — `documentation` (`src/content/docs`, content + visual editors), `landing_pages` (`src/content/pages`, visual), `changelog` and `data` — and pulls structures from `.cloudcannon/structures/*.yml`.
 - Each `.cloudcannon/structures/*.yml` aggregates per-component files by glob, e.g. `pageSections` ← `/src/components/page-sections/**/*.cloudcannon.structure-value.yml`.
-- Form fields are scoped to their own picker by the same mechanism: `formBlocks` ← `/src/components/building-blocks/forms/**/*.cloudcannon.structure-value.yml`, consumed only by the `formBlocks` array inputs on `form` and `cta-form`. They cannot appear in the page-sections picker (that glob matches `page-sections/**` only). Two components are deliberately excluded from the picker — `form` itself (no nested forms) and `segments` — see the comment in `.cloudcannon/structures/formBlocks.cloudcannon.structures.yml`.
+- Form fields are scoped to their own picker by the same mechanism: `formBlocks` ← `/src/components/building-blocks/forms/**/*.cloudcannon.structure-value.yml`, consumed only by the `formBlocks` array input on `form`. They cannot appear in the page-sections picker (that glob matches `page-sections/**` only). Two components are deliberately excluded from the picker — `form` itself (no nested forms) and `segments` — see the comment in `.cloudcannon/structures/formBlocks.cloudcannon.structures.yml`.
 - Per component (sibling files, same directory as the `.astro`):
   - `<name>.cloudcannon.inputs.yml` — editor field definitions (`_inputs` syntax).
   - `<name>.cloudcannon.structure-value.yml` — label/icon/description, default `value` (including `_component`), previews, and `_inputs_from_glob` pointing back at the inputs file.
@@ -58,7 +58,7 @@ Two co-operating systems:
 
 - `@cloudcannon/editable-regions` is wired in `astro.config.mjs`; `live-editing.js` registers every component with the editor using its own `import.meta.glob("./src/components/**/*.astro")`. The kebab-case key derivation is shared with `renderBlock.astro` and `scripts/cms/lint.mjs` via `src/components/utils/componentKey.mjs` — one source of truth, so the registries can't drift.
 - Components opt into inline editing via data attributes: `data-editable="text" data-prop="heading"` (single field), `data-editable="array" data-prop="contentSections"` on a container + `data-editable="array-item"` on children (managed by renderBlock), `data-editable="component"` for whole-component bindings. The `useDefaultEditableBinding` prop toggles a component's default binding; `renderBlock` passes it down.
-- `editor-live-sync.js` handles presentation-only re-initialization inside the CloudCannon editor (Embla carousels, bento-box grid spans) because the editor's renderer doesn't execute inline scripts — component setup logic that must also run in the editor lives in importable modules (see `carousel/setup.ts` for the pattern).
+- `editor-live-sync.js` re-initializes interactive components inside the CloudCannon editor (content selector, modal, form validation, video embeds, search, code tabs and copy buttons, diagrams, masonry spans, and the rest) because the editor's renderer doesn't execute inline scripts — component setup logic that must also run in the editor lives in importable modules (see `content-selector/setup.ts` for the pattern).
 
 ## Theming
 
@@ -66,13 +66,13 @@ Two co-operating systems:
 - **Layers**: `@layer reset, base, components, page-sections, utils, overrides` — declared in `BaseLayout.astro` before any component CSS. Component styles go in `@layer components`.
 - **Dark mode**: inline script (`ThemeToggleScript.astro`) sets `data-theme` on `<html>` pre-paint (no FOUC); sections can pin a scheme via `data-theme` + `data-theme-lock`.
 - **Fonts**: `site-fonts.mjs` (root) is the single source of truth — feeds Astro's fonts config in `astro.config.mjs` and the `<Font>` preloads in `src/layouts/SiteFonts.astro`. Provider is `fontProviders.fontsource()` (self-hosted via the installed `@fontsource/*` packages).
-- **Reduced motion**: `src/styles/base/_animations.css` globally disables animations/transitions (including `::backdrop` / `::details-content`); JS-driven motion (Embla autoplay/auto-scroll) checks `prefers-reduced-motion` in `carousel/setup.ts`.
+- **Reduced motion**: `src/styles/base/_animations.css` globally disables animations/transitions (including `::backdrop` / `::details-content`); JS-driven motion (video autoplay) checks `prefers-reduced-motion` in `video/setup.ts`, since the CSS reset can't reach a `play()` call.
 
 ## Flow spacing
 
 - **Documentation prose** is `src/styles/base/_prose.css`, which is bottom-margins only: adjacent margins collapse, so a heading's larger top margin wins over the previous block's bottom margin and a section break is one gap rather than the sum of two. The flow system below governs page-builder blocks, not prose.
 - Space **between sibling blocks** is the flow system (`src/styles/utils/_flow.css`): a `.flow` parent margins each child by the child's `--space-before`, first children sit flush, and a Spacer _replaces_ the adjacent gap (its size is the whole gap). Every stackable building block declares a type default in its component CSS (heading loose, text tight, collection wrappers loose); the four role tokens live in `variables/_spacing.css` (`--space-before-{none,tight,default,loose}`) — retune those four lines to retune all page rhythm. Blocks carry no root margins of their own.
-- The per-block `spaceBefore` prop rides as `data-space-before` on a **direct child** of the block's root, hoisted to the root by `_flow.css`'s `:has()` rules. Never on the root: CloudCannon's editable-regions re-render keeps the region's root element, so a prop-driven attribute there goes stale in the Visual Editor (the same constraint behind `editor-live-sync.js`'s bento-box span sync). Roots with no child to carry it (Video's media elements, Pagination, Card Grid's grid mode) keep root placement as a documented fallback.
+- The per-block `spaceBefore` prop rides as `data-space-before` on a **direct child** of the block's root, hoisted to the root by `_flow.css`'s `:has()` rules. Never on the root: CloudCannon's editable-regions re-render keeps the region's root element, so a prop-driven attribute there goes stale in the Visual Editor (the same constraint behind `editor-live-sync.js`'s masonry span sync). Video is the one exception: its media element is the root and has no child to carry the attribute, so it keeps root placement and a live `spaceBefore` edit needs a reload.
 
 ## Component harness (`/preview-renders`)
 
@@ -94,8 +94,6 @@ These are load-bearing decisions, not accidents. Fix problems around them with t
 
 ## Checks
 
-`npm run check` = ESLint (js/yaml) + Stylelint + Prettier + `astro check` (types) + `previews:check` (thumbnail coverage) + `docs:catalog:check` (agent catalog drift) + `agents:check` (generated `.claude/skills/` + `.cursor/rules/` drift) + `icons:check` + `lint:cms` (prop/YAML drift, `_component` resolution) + `lint:roots` + `lint:nesting` + `lint:schema` (official CloudCannon schemas) + `lint:links` (dead internal links; warns on orphan pages) + `check:placeholders`.
+`npm run check` is the gate CI runs; the `check` script in `package.json` is the list of what it chains, and the `test:*` scripts beside it are the test suites. Smoke tests need `COMPONENT_PREVIEWS=true npm run build` first, because they drive components through the `/preview-renders/` routes.
 
-Test suites: `test:render` (every structure default builds), `test:unit` (Vitest over `src/components/utils/` and the shell's layering invariant), `test:smoke` (17 headless-Chrome interaction tests — drawer, theme toggle, ⌘K search and its sub-results, code tabs and copy, diagram render, helpful vote, on-this-page scroll-spy, plus the components driven through `/preview-renders/`) and `test:flow-margins`. Smoke tests need `COMPONENT_PREVIEWS=true npm run build` first.
-
-CI (`.github/workflows/test.yml`) runs lockfile verification + `npm run check` + unit tests, plus a "Smoke tests" browser job. The lockfile must be regenerated with `npm run deps:sync` (not plain `npm install`) — macOS installs strip the Linux-only optional deps (sharp, rollup binaries) that CI needs.
+CI is `.github/workflows/test.yml`. The lockfile must be regenerated with `npm run deps:sync`, not plain `npm install` — a macOS install strips the Linux-only optional dependencies (sharp, rollup binaries) that CI needs.

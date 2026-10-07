@@ -7,10 +7,7 @@ import {
   resolveShareImage,
 } from "../../src/components/utils/image";
 
-// image.ts eagerly globs /src/assets/images/**/* and imports `astro:assets`
-// (stubbed via vitest.config.ts). These tests only exercise the pure,
-// non-local-asset code paths: remote/public sources never touch the asset
-// registry or Astro's image service.
+// Only remote/public sources: local assets need Astro's image service, which is stubbed.
 
 describe("resolveImageSource", () => {
   it("returns non-/src/ sources unchanged", () => {
@@ -55,8 +52,7 @@ describe("heightForWidth", () => {
   });
 });
 
-// `prepareImageData` only passes a max width for optimized local assets, which
-// need Astro's image pipeline — so the capping branch is exercised directly.
+// Capping only applies to optimized local assets, so it is tested directly.
 describe("getResponsiveWidths", () => {
   const PRESETS = [640, 1280, 2560];
 

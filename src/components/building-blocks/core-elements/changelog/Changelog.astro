@@ -1,11 +1,5 @@
 ---
-/**
- * The release history, read from the `changelog` collection — one file per
- * release, newest first. Releases are content, not props, so nothing here is
- * inline-editable: a new release is a new collection entry.
- *
- * Each version heading is a real `h2` so it anchors like any other section.
- */
+// Releases are `changelog` collection entries, not props, so nothing here is inline-editable.
 import { renderMarkdown } from "@component-utils/markdown";
 import { slugifyLabel } from "@component-utils/slugify";
 import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";

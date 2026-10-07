@@ -32,7 +32,7 @@ items:
   label: Steps
   comment: The steps, in order.
   options:
-    structures: _structures.explainerStepsItems
+    structures: _structures.stepsItems
 orientation:
   type: select
   comment: Columns with a connector on each marker, or a vertical sequence. Columns fall back to the vertical layout on small screens.
@@ -57,8 +57,6 @@ imageAspectRatio:
         name: Widescreen (16:9)
 
 # --- section wrapper inputs (CustomSection) ---
-# Configures the CustomSection wrapper, not this section's own content. Inline
-# per component so a project can trim the size/padding lists in place.
 # `new:component` slices from this marker down — keep the marker line verbatim.
 sectionLabel:
   type: text
@@ -133,6 +131,7 @@ paddingVertical:
       - id: 6xl
         name: 6xl
 colorScheme:
+  label: Color scheme
   type: select
   comment: Color scheme theme for the section wrapper.
   options:
@@ -148,6 +147,7 @@ lockColorScheme:
   label: Lock color scheme
   comment: Keep this section on the color scheme above when a visitor toggles the site theme. Only has an effect when Color Scheme is Light or Dark.
 backgroundColor:
+  label: Background color
   type: select
   comment: Solid background color token behind the section content.
   options:

@@ -64,17 +64,17 @@ Font **families** (`--font-body`, `--font-headings`) are not in `_fonts.css` —
 
 Five values are exposed to an editor rather than living only in CSS:
 
-| Key                          | Type       | Drives                                                      | Shipped      |
-| ---------------------------- | ---------- | ----------------------------------------------------------- | ------------ |
-| `accentLight` / `accentDark` | hex colour | the whole `--color-accent*` family, per theme               | teal 700/300 |
-| `brandLight` / `brandDark`   | hex colour | the whole `--color-brand*` family, per theme                | ink / paper  |
-| `radius`                     | 0–24       | `--radius-base`, and so every `--radius-*` step but `-full` | `10`         |
+| Key                          | Type      | Drives                                                      | Shipped      |
+| ---------------------------- | --------- | ----------------------------------------------------------- | ------------ |
+| `accentLight` / `accentDark` | hex color | the whole `--color-accent*` family, per theme               | teal 700/300 |
+| `brandLight` / `brandDark`   | hex color | the whole `--color-brand*` family, per theme                | ink / paper  |
+| `radius`                     | 0–24      | `--radius-base`, and so every `--radius-*` step but `-full` | `10`         |
 
 Every `--radius-*` step in `variables/_radius.css` is a multiple of `--radius-base`. A new step
 must be too, or it silently ignores the theme. Component-level `rounded` switches pick a token;
 they never set a size, so the theme stays the one place corner size is decided.
 
-`defaultTheme` sits beside them at the top level — see [The default colour scheme](#the-default-colour-scheme).
+`defaultTheme` sits beside them at the top level — see [The default color scheme](#the-default-color-scheme).
 
 **The mechanism is inheritance, not specificity.** `BaseLayout.astro` calls
 `themeStyleAttribute()` from `src/utils/themeTokens.mjs` and puts the result in `style` on
@@ -107,7 +107,7 @@ and revealed only by `editor-live-sync.js` (which loads solely inside CloudCanno
 `setup.ts` is the starter's worked example of the Visual Editor JavaScript API —
 `useVersion("v1")`, `api.dataset("theme")`, `file.data.edit({ slug, position })` to open
 CloudCannon's own inputs panel, and `dataset.addEventListener("change", …)` to repaint. The
-handler only calls `style.setProperty()` on `<html>`, which is what makes a dragged colour
+handler only calls `style.setProperty()` on `<html>`, which is what makes a dragged color
 picker track live.
 
 **MUST:** subscribe to `api.dataset("theme")`, not `api.file("src/data/theme.json")`.
@@ -115,7 +115,7 @@ picker track live.
 panel is open; the file handle settles up later. Subscribed to the file, the preview repaints on
 navigation but not while the picker is dragged — which looks like the feature half-working rather
 than like a bug. `@cloudcannon/editable-regions` resolves every `@data[key]` binding the same way
-(`nodes/editable.ts`). The dataset exists only because `data_config.theme` is declared in
+(`node_modules/@cloudcannon/editable-regions/nodes/editable.ts`). The dataset exists only because `data_config.theme` is declared in
 `cloudcannon.config.yml`; deleting that entry silently kills live preview.
 
 `setup.ts` also polls while a panel is open, and retires that poll the first time a real `change`
@@ -124,10 +124,10 @@ invisible and being a broken feature.
 
 ## The `@layer` architecture
 
-Cascade layers are declared once as an inline `<style>` in `src/layouts/BaseLayout.astro` (and mirrored in the docs' `LibraryLayout.astro`) so the order is fixed before any component style loads:
+Cascade layers are declared as an inline `<style>` in `src/layouts/BaseLayout.astro` (and mirrored in `src/pages/preview-renders/[...slug].astro` — keep the two in sync) so the order is fixed before any component style loads:
 
 ```css
-@layer reset, base, components, page-sections, utils, overrides;
+@layer reset, base, pagefind, components, page-sections, utils, overrides;
 ```
 
 Earlier layers lose to later ones regardless of selector specificity. Components declare their styles into a layer with `<style is:global>` + `@layer …`:
@@ -191,7 +191,7 @@ These are **not** tokenized yet. When a task needs one, flag the gap rather than
 - Run `npm run dev`, then toggle the site theme and load a section with `colorScheme: dark`. Confirm the change reads correctly in **both** light and dark, and that a `lockColorScheme` section stays put when you toggle.
 - Component previews need no rebuild. They are hand-authored `*.preview.mjs` recipes with their own palette, independent of the site's theme tokens — changing `--radius-*` or colors does not affect them. The preview palette is nine `--pv-*` roles declared in `scripts/previews/kit.mjs` (light values inlined as `var()` fallbacks, dark values injected into each SVG as a `@media (prefers-color-scheme: dark)` block). To re-skin every preview at once, edit `LIGHT`/`DARK` there and run `npm run previews:build`.
 
-## The default colour scheme
+## The default color scheme
 
 `defaultTheme` in `src/data/theme.json` (`dark` | `light` | `system`) decides what a
 first-time reader sees. The starter ships `dark`. Resolution order, in

@@ -128,9 +128,8 @@ const {
         margin: 0;
         padding: 0;
 
-        /* An exact track count, container-queried: `columns` is a count, and an
-           auto-fit track list quietly adds one of its own as soon as the
-           container is wide enough for another. */
+        /* Exact track count: auto-fit would quietly add a column once the
+           container is wide enough. */
         @container (width >= 640px) {
           grid-template-columns: repeat(var(--feature-list-columns, 3), minmax(0, 1fr));
         }
@@ -152,9 +151,6 @@ const {
         gap: var(--spacing-lg) var(--spacing-2xl);
       }
 
-      /* One flowing line per entry — label, dash, detail — rather than a stack.
-         Two lines per entry reads as nine cards and doubles the block's height;
-         this is a list to scan, not a feature grid. */
       .feature-list-item {
         font-size: var(--font-size-sm);
         line-height: var(--line-height-normal);

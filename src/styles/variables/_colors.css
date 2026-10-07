@@ -1,9 +1,7 @@
 :where(:root) {
   --white: #fff;
 
-  /* Neutrals carry a slight blue cast, which is what keeps large areas of text
-     and rule lines from reading as muddy against the teal accent. `--black`
-     is deliberately #08090b, not #000 — the deepest ink in the palette. */
+  /* `--black` is #08090b, not #000; `src/utils/themeTokens.mjs` mirrors it. */
   --gray-50: #f6f7f9;
   --gray-100: #eceff3;
   --gray-200: #e2e6eb;
@@ -116,9 +114,7 @@
   --cyan-800: #155e75;
   --cyan-900: #164e63;
 
-  /* Chrome that sits on a photograph or video. Fixed, not themed: the media
-     underneath does not change when the visitor flips the site theme, so
-     these must not follow --color-text / --color-overlay, which do. */
+  /* Chrome on media: fixed, not themed, because the media doesn't flip with the theme. */
   --color-media-scrim: #0c0c0c;
   --color-text-on-media: var(--white);
   --color-text-on-media-muted: color-mix(in srgb, var(--white) 80%, transparent);

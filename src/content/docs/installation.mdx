@@ -8,7 +8,7 @@ order: 2
 ## Prerequisites
 
 - Node 22.12 or newer
-- Any package manager — npm, pnpm or yarn
+- npm. The committed lockfile is npm's, so pnpm and yarn aren't supported
 - A GitHub account. There is no installer and no npm package: the template is a repository you
   copy and then own.
 
@@ -35,15 +35,15 @@ repository, name your copy, then clone it and install:
 
 ### From CloudCannon
 
-Use the **Deploy to CloudCannon** button on the template's listing. CloudCannon forks the
-repository for you, runs the first build, and opens the site with visual editing already
+Use the **Deploy to CloudCannon** button at the top of the repository's README. CloudCannon
+copies the repository for you, runs the first build, and opens the site with visual editing already
 wired up — every component on this site carries the CloudCannon configuration that makes it
 editable on the page.
 
 <Alert
   variant="warning"
   title="CloudCannon is a paid product"
-  text="Building and hosting a site on CloudCannon requires a paid plan. The template itself is MIT licensed and builds anywhere — see “Do I have to use CloudCannon?” below."
+  text="Building and hosting a site on CloudCannon requires a paid plan — see [CloudCannon pricing](https://cloudcannon.com/pricing/). The template itself is MIT licensed and builds anywhere — see “Do I have to use CloudCannon?” below."
 />
 
 ## Run the dev server
@@ -62,7 +62,13 @@ editable on the page.
 
 ## Add your first page
 
-Create a Markdown file anywhere under `src/content/docs/`. The path becomes the URL.
+Create an `.mdx` file anywhere under `src/content/docs/`. The path becomes the URL.
+
+<Alert
+  variant="warning"
+  title="The extension must be .mdx"
+  text="Only `.mdx` files are loaded. A `.md` file in `src/content/docs/` is skipped without an error, so the page simply never appears. MDX is Markdown plus components — write it exactly as you would Markdown."
+/>
 
 <CodeBlock
   language="mdx"
@@ -74,8 +80,8 @@ Create a Markdown file anywhere under `src/content/docs/`. The path becomes the 
 
 `npm run build` emits a static `dist/` — search index included — that any static host will
 serve. No server runtime, no database. CloudCannon runs the same command; so does Netlify,
-Vercel or a GitHub Actions job that pushes to Pages. See [Configuration](/configuration/) for
-the settings a deploy usually needs.
+Vercel or a GitHub Actions job that pushes to Pages. [Going live](/going-live/) walks through
+hosting it and replacing the template's placeholders.
 
 ## Common questions
 
@@ -97,17 +103,17 @@ the settings a deploy usually needs.
       "contentSections": [
         {
           "_component": "building-blocks/core-elements/text",
-          "text": "No. This is a plain Astro site — `npm run build` emits a static `dist/` whatever you edit it with. The template was built for CloudCannon, and the YAML beside each component is what makes the site editable on the page for non-technical teammates; ignore it and nothing breaks. Using CloudCannon does require a paid plan.",
+          "text": "No. This is a plain Astro site — `npm run build` emits a static `dist/` whatever you edit it with. The template was built for CloudCannon, and the YAML beside each component is what makes the site editable on the page for non-technical teammates; ignore it and nothing breaks. Using CloudCannon does require a [paid plan](https://cloudcannon.com/pricing/).",
           "size": "md"
         }
       ]
     },
     {
-      "title": "Where do the colours and fonts live?",
+      "title": "Where do the colors and fonts live?",
       "contentSections": [
         {
           "_component": "building-blocks/core-elements/text",
-          "text": "Colours, spacing, radius and shadows are design tokens under `src/styles/` — see [Theming](/theming/) and the [token reference](/theming/token-reference/). Fonts are the one exception: they change in `site-fonts.mjs` only, so the preload tags and the CSS can't disagree.",
+          "text": "Colors, spacing, radius and shadows are design tokens under `src/styles/` — see [Theming](/theming/) and the [token reference](/theming/token-reference/). Fonts are the one exception: they change in `site-fonts.mjs` only, so the preload tags and the CSS can't disagree.",
           "size": "md"
         }
       ]
@@ -117,7 +123,7 @@ the settings a deploy usually needs.
       "contentSections": [
         {
           "_component": "building-blocks/core-elements/text",
-          "text": "Run `npm run reset:starter`. It clears the wordmark, the SEO name and title format, the example domain, the repository URL and the template's own edit-page URL — the placeholders `npm run check` warns about until you do.",
+          "text": "Run `npm run reset:starter`. It clears the logo, favicons and topbar links, sets the SEO name and title format and your production domain, removes the template's changelog releases, and empties the repository URL, footer links and announcement bar — the placeholders `npm run check` warns about until you do.",
           "size": "md"
         }
       ]

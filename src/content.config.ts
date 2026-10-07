@@ -14,10 +14,7 @@ const pageSchema = z.object({
   pageSections: z.array(contentBlockSchema),
 });
 
-// A documentation page. `group` and `order` place it in the sidebar; both are
-// optional, and a page with neither still builds and is searchable — it just
-// doesn't appear in the nav. See `src/utils/docsNav.ts`. There is no `updated`
-// field: the meta line's date is the file's last commit (`src/utils/gitDates.mjs`).
+// No `updated` field: the meta line's date is the file's last commit (`gitDates.mjs`).
 const docSchema = z.object({
   title: z.string(),
   description: z.string().optional(),
@@ -32,8 +29,7 @@ const docSchema = z.object({
   showPager: z.boolean().default(true),
 });
 
-// One release per file. Nothing routes this collection — it has no URL of its
-// own; the `changelog` component reads it into the changelog page.
+// No route of its own; the `changelog` component reads it.
 const changelogSchema = z.object({
   version: z.string(),
   date: z.coerce.date(),

@@ -83,13 +83,13 @@ The picker is driven by `.cloudcannon/structures/*Sections.cloudcannon.structure
 
 **Symptom:** the content selector (or any JS-driven component) responds on the live site but is frozen in the Visual Editor.
 
-**Why:** the editor renders Astro components through React's `renderToStaticMarkup`, which strips inline `<script>` tags — so `ContentSelector.astro`'s inline setup never runs in the editor. Interactive setup must live in an importable module that `editor-live-sync.js` imports and re-initialises on DOM mutations (the pattern in `content-selector/setup.ts`).
+**Why:** the editor renders Astro components through React's `renderToStaticMarkup`, which strips inline `<script>` tags — so `ContentSelector.astro`'s inline setup never runs in the editor. Interactive setup must live in an importable module that `editor-live-sync.js` imports and re-initializes on DOM mutations (the pattern in `content-selector/setup.ts`).
 
 | Likely cause                                                     | Fix                                                                                                                                                                                                        |
 | ---------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Setup logic lives only in the component's inline `<script>`      | Extract it to a `setup.ts` module; import + wire it in `editor-live-sync.js`. See [component-templates](../create-component/component-templates.md#interactive-components-js-that-must-run-in-the-editor). |
 | Module exists but isn't registered in `editor-live-sync.js`      | Add its `setup`/`destroy`/`setupAll` imports and a mutation branch there. The editor never runs the inline script for you.                                                                                 |
-| Config read at init time changed but Embla wasn't re-initialised | `editor-live-sync.js` must observe the driving attribute and `destroy` + re-init. Add the attribute to the watched list.                                                                                   |
+| Config read at init time changed but Embla wasn't re-initialized | `editor-live-sync.js` must observe the driving attribute and `destroy` + re-init. Add the attribute to the watched list.                                                                                   |
 | `window.inEditorMode` false / scripts not loaded                 | `BaseLayout.astro` imports `live-editing` + `editor-live-sync` only when `window.inEditorMode` is set. Confirm you're in the editor.                                                                       |
 
 ## Editable binding dead
@@ -124,7 +124,7 @@ Failures it reports, and what they mean:
 | `options.structures — unexpected type array`       | An inline structure's array must sit under `values:`, or be a `_structures.<name>` reference. As an array it is ignored entirely and the editor offers no structures.                                                                                                                      |
 | `$._structures — must have required property type` | An `_structures:` block in a `*.cloudcannon.inputs.yml`, which is read as input-name → config. Move it to `.cloudcannon/structures/`.                                                                                                                                                      |
 
-**A clean `lint:schema` is not proof the editor is happy.** Deprecated-but-valid keys pass (e.g. `preview.view` on a snippet), and so do keys CloudCannon accepts then ignores. For anything behavioural, load the component in the editor.
+**A clean `lint:schema` is not proof the editor is happy.** Deprecated-but-valid keys pass (e.g. `preview.view` on a snippet), and so do keys CloudCannon accepts then ignores. For anything behavioral, load the component in the editor.
 
 The invalid-key list, the quote-numeric-values rule, select-vs-text field config, and `_editables` mapping are all in [references/config-invalid-keys.md](../references/config-invalid-keys.md). Structure-value rules (field completeness, previews, null handling, icon vocabularies, where `_structures` may live) are in [references/structures.md](../references/structures.md).
 
@@ -147,7 +147,7 @@ Snippets are collected by `cloudcannon.config.yml`'s `_snippets_from_glob: /**/*
 | --------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
 | No `*.cloudcannon.snippets.yml` for the component   | Add one. Format and `named_args` are in [docs-content-authoring](../docs-content-authoring/SKILL.md). |
 | File name or location doesn't match the glob        | Must end `.cloudcannon.snippets.yml` and live anywhere the glob reaches.                              |
-| `definitions.component_name` doesn't match the file | It must equal the PascalCase `.astro` filename exactly (e.g. `CtaForm` for `CtaForm.astro`).          |
+| `definitions.component_name` doesn't match the file | It must equal the PascalCase `.astro` filename exactly (e.g. `CodeBlock` for `CodeBlock.astro`).      |
 
 ## Verify your work
 

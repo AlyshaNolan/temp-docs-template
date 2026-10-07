@@ -1,14 +1,5 @@
 ---
-/**
- * "Copy page" — a dropdown handing the page somewhere else: as Markdown, as a
- * ready-made prompt, as a link, as the raw `.md` file, or onto paper.
- *
- * Docs chrome like `page-feedback`: no CloudCannon YAML, placed by
- * `src/pages/[...slug].astro` and switched on in `src/data/pageTools.json`.
- * It ships `hidden` and is revealed by `setup.ts` — every item needs the
- * clipboard or a fetch, so with JS off the reader sees nothing rather than a
- * dead control. The Markdown itself stays reachable at `markdownHref`.
- */
+// Ships `hidden` and `setup.ts` reveals it: every item needs JS, so no-JS readers see nothing.
 import Icon from "@core-elements/icon/Icon.astro";
 
 const { label = "Copy page", markdownHref, class: className, ...htmlAttributes } = Astro.props;
@@ -182,8 +173,7 @@ const copyItems = [
       }
     }
 
-    /* One trigger, three labels, stacked in one grid cell: the button is as
-       wide as its longest state, so copying can't resize it under the cursor. */
+    /* Labels share one grid cell so the button can't resize under the cursor. */
     .copy-page-labels {
       display: grid;
 
@@ -226,8 +216,7 @@ const copyItems = [
       z-index: var(--layer-3);
     }
 
-    /* No global `[hidden]` reset in this project, so the `display` above wins
-       over the attribute and the menu would sit permanently open. */
+    /* No global `[hidden]` reset: the `display` above would otherwise keep it open. */
     .copy-page-menu[hidden] {
       display: none;
     }

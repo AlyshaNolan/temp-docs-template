@@ -7,7 +7,7 @@ order: 2
 
 ## Tokens
 
-Colour, spacing, radius, type and motion are CSS custom properties in three tiers: primitives
+Color, spacing, radius, type and motion are CSS custom properties in three tiers: primitives
 in `src/styles/variables/`, semantic tokens in `src/styles/themes/`, and component-local
 properties on a component's own root. Components consume the semantic tier only, so a
 rebrand is a token change rather than a component change.
@@ -26,8 +26,8 @@ rebrand is a token change rather than a component change.
 
 ## The accent
 
-The accent is the interactive colour — links, active sidebar item, focus rings, the marker on
-an annotated line, the brand tile in the header. It is deliberately not the button colour:
+The accent is the interactive color — links, active sidebar item, focus rings, the marker on
+an annotated line, the brand tile in the header. It is deliberately not the button color:
 primary buttons stay ink on paper, so changing the accent never turns the page into a wall of
 one hue.
 
@@ -39,7 +39,7 @@ on the site follows.
 ## The theme file
 
 `src/data/theme.json` holds the decisions an editor is allowed to make without touching CSS:
-the default colour scheme, two accent colours, two brand colours and a corner radius. `BaseLayout` turns them into custom
+the default color scheme, two accent colors, two brand colors and a corner radius. `BaseLayout` turns them into custom
 properties on `<html>`, and the theme files read those as optional overrides.
 
 <CodeBlock
@@ -48,8 +48,8 @@ properties on `<html>`, and the theme files read those as optional overrides.
   code={'{\n  "themeSelector": true,\n  "defaultTheme": "dark",\n  "theme": {\n    "accentLight": "#0f766e",\n    "accentDark": "#5eead4",\n    "brandLight": "#08090b",\n    "brandDark": "#ffffff",\n    "radius": 10\n  }\n}'}
 />
 
-Each colour is one swatch, not a set. `src/utils/themeTokens.mjs` derives the rest of the
-family from it — the hover state, the tinted surface, the border, and the legible text colour
+Each color is one swatch, not a set. `src/utils/themeTokens.mjs` derives the rest of the
+family from it — the hover state, the tinted surface, the border, and the legible text color
 to sit on top, chosen by relative luminance so a pale accent gets ink and a deep one gets
 paper. `radius` drives the whole `--radius-*` scale from a single base — every rounded corner
 on the site, including sections and cards with **Rounded** switched on. `--radius-full` stays
@@ -59,12 +59,12 @@ out of it, so pills and avatars are round at every setting.
   params={[
     {
       "name": "accentLight / accentDark",
-      "type": "hex colour",
-      "description": "The interactive colour — links, active sidebar item, focus rings, the brand tile. Use a paler step for dark: a fully saturated accent vibrates against near-black."
+      "type": "hex color",
+      "description": "The interactive color — links, active sidebar item, focus rings, the brand tile. Use a paler step for dark: a fully saturated accent vibrates against near-black."
     },
     {
       "name": "brandLight / brandDark",
-      "type": "hex colour",
+      "type": "hex color",
       "description": "Primary button and brand fill. Shipped near-black on light and white on dark, so an accent change never floods the page with one hue."
     },
     {
@@ -84,10 +84,10 @@ computed-value time and fails silently.
 ### Editing it in CloudCannon
 
 In the Visual Editor a swatch button sits in the bottom corner of the preview. It opens
-`theme.json` in a data panel, and the page repaints as you drag the colour picker — no save, no
-reload. Set `themeSelector` to `false` to hide the button and edit the colours from the data
+`theme.json` in a data panel, and the page repaints as you drag the color picker — no save, no
+reload. Set `themeSelector` to `false` to hide the button and edit the colors from the data
 file instead — the preview drops it the moment you untick the switch, with no save and no
-rebuild, because `setup.ts` reads that key from the same live handle as the colours. It never
+rebuild, because `setup.ts` reads that key from the same live handle as the colors. It never
 renders for a site visitor either way.
 
 That button is the starter's worked example of the [CloudCannon Visual Editor JavaScript
@@ -169,4 +169,4 @@ Hiding the toggle (`themeToggle: false`) doesn't change any of this — the sche
 resolved, the reader just can't change it.
 
 Code blocks stay dark in both themes on purpose: a sample that inverts with the page re-reads
-as a different snippet, and syntax colours are tuned for one ground.
+as a different snippet, and syntax colors are tuned for one ground.

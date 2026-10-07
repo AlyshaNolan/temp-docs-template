@@ -78,6 +78,12 @@ Yarn Classic and Yarn Berry use the same command.
 
 </ContentSelector>
 
+<Alert
+  variant="note"
+  title="Sample content"
+  text="The `@stratus/sdk` package and the Yarn tab are here to show the component. Stratus itself installs with npm only."
+/>
+
 ## Definition lists
 
 For glossaries and field-by-field terminology, where a table would be three columns of
@@ -131,18 +137,39 @@ image can be clicked to zoom.
 <Alert
   variant="tip"
   title="Light and dark variants"
-  text="Pass `alternateSource` and the template swaps it with the colour mode — no flash, no duplicated Markdown. Screenshots of your own UI stop looking broken in dark mode."
+  text="Pass `alternateSource` and the template swaps it with the color mode — no flash, no duplicated Markdown. Screenshots of your own UI stop looking broken in dark mode."
 />
 
 ## Video
 
-Local files or an embed id. Videos are lazy-loaded, never autoplay with sound, and want a
-caption track for anything instructional.
+Local files or a YouTube or Vimeo embed. Videos are lazy-loaded, never autoplay with sound,
+and want a caption track for anything instructional.
+
+### From YouTube or Vimeo
+
+An embed takes the video's ID, not its URL — the part after `v=` on YouTube, or the number on
+Vimeo.
+
+<Video type="youtube" videoId="fxWuYi5jPkA" title="Build your editing experience locally with the CloudCannon dev server" />
 
 <CodeBlock
   language="mdx"
   filename="video.mdx"
-  code={'<Video\n  source="https://www.youtube.com/watch?v=..."\n  title="Setting up your first webhook endpoint"\n/>'}
+  code={'<Video\n  type="youtube"\n  videoId="fxWuYi5jPkA"\n  title="Build your editing experience locally with the CloudCannon dev server"\n/>'}
+/>
+
+### From a file
+
+Put the file under `public/videos/` and pass its path from `public/`. Upload a `.webm` with the
+same name beside the `.mp4` and both are offered to the browser, which plays the first it
+supports.
+
+<Video type="local-source" source="/videos/glass.mp4" title="Glass" />
+
+<CodeBlock
+  language="mdx"
+  filename="video.mdx"
+  code={'<Video\n  type="local-source"\n  source="/videos/glass.mp4"\n  title="Glass"\n/>'}
 />
 
 ## Status badges
@@ -162,7 +189,7 @@ how a deprecation notice points at its replacement.
 <Alert
   variant="tip"
   title="Dot instead of an icon"
-  text="`showDot` swaps the leading icon for a small status-coloured dot. It reads as a state rather than a category, which suits Stable / Beta / Deprecated better than an icon does."
+  text="`showDot` swaps the leading icon for a small status-colored dot. It reads as a state rather than a category, which suits Stable / Beta / Deprecated better than an icon does."
 />
 
 ## Third-party embeds

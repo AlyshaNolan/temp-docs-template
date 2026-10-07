@@ -1,13 +1,5 @@
 ---
-/**
- * "On this page" table of contents — chrome, not a page-builder block (no
- * CloudCannon YAML, never referenced by `_component`). Fed the `headings`
- * array from Astro's `render()` by the docs page route.
- *
- * Renders both presentations and lets CSS pick one: a sticky rail beside the
- * article from 1280px up, and a collapsed `<details>` disclosure above it below
- * that (not sticky — a pinned bar eats too much of a small viewport).
- */
+// Renders both a rail and a `<details>` disclosure; CSS picks one at 1280px.
 type TocHeading = { depth: number; slug: string; text: string };
 
 const { headings = [], class: className, ...htmlAttributes } = Astro.props;
@@ -110,8 +102,6 @@ if (items.length === 0) return;
             color: var(--color-text);
           }
 
-          /* Active = position and weight, not color, so it survives a brand
-             swap and dark theme. */
           &[aria-current="true"] {
             border-inline-start-color: var(--color-accent);
             color: var(--color-text-strong);
@@ -163,8 +153,7 @@ if (items.length === 0) return;
         }
       }
 
-      /* 1280px is where `Docs.astro` gives the rail its own column — below it
-         the same headings are the disclosure above the article. */
+      /* Must match the rail column breakpoint in `Docs.astro`. */
       @media (width >= 1280px) {
         .toc-sidebar {
           display: block;

@@ -57,8 +57,7 @@ const { class: className, ...htmlAttributes } = Astro.props;
     root.toggleAttribute("data-theme-toggled", isToggled);
   }
 
-  /** Mirrors `ThemeToggleScript`: stored choice, then the configured default,
-   *  and the system preference only when that default is `system`. */
+  /** Must mirror the precedence in `ThemeToggleScript`. */
   function getPreferredTheme(): string {
     const configured = document.documentElement.getAttribute("data-default-mode") || "system";
     const system = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
@@ -97,7 +96,6 @@ const { class: className, ...htmlAttributes } = Astro.props;
       });
     });
 
-    // Following the system only makes sense when the site defers to it.
     matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
       const configured = document.documentElement.getAttribute("data-default-mode");
 

@@ -22,8 +22,7 @@ describe("normalizeIconSvg", () => {
   it("carries root paint attributes through so outline icons stay outlines", () => {
     const { attributes } = normalizeIconSvg(HEROICON, "chevron-down");
 
-    // Dropping these would leave the path with SVG's defaults — fill black,
-    // no stroke — turning the icon into a solid silhouette.
+    // Without these, SVG defaults turn the icon into a solid black silhouette.
     expect(attributes.fill).toBe("none");
     expect(attributes.stroke).toBe("currentColor");
     expect(attributes["stroke-width"]).toBe("1.5");

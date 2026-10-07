@@ -1,21 +1,8 @@
 /**
- * Prop-driven attributes on component roots.
- *
- * CloudCannon's editable-regions re-render keeps a region's root element and
- * swaps only its contents, so an attribute on the root whose value comes from a
- * prop goes stale in the Visual Editor until a full reload. The rule and the
- * fix (put it on a direct child, hoist with `:has()` where CSS needs it) are in
- * `.agents/skills/editable-regions/SKILL.md`; `editor-live-sync.js` records why.
- *
- * This flags `class`/`class:list`/`style`/`data-*`/`aria-*`/`role` on the first
- * element of a component template when the value references a destructured
- * prop. Region wiring (`data-editable` and friends), `aria-*`, and the
- * exceptions listed in ALLOWED below are skipped.
- *
- * Only components CloudCannon can make a region root are checked — those with
- * CloudCannon YAML, i.e. a placeable block, an array item, or a form field.
- * Everything else is composed inside one of those and re-rendered with it, so
- * its attributes are never left behind.
+ * Flag prop-driven attributes on the root of any component CloudCannon can make a
+ * region root. The re-render keeps the root and swaps its contents, so such an
+ * attribute goes stale; see `.agents/skills/editable-regions/SKILL.md`. Region
+ * wiring, `aria-*` and ALLOWED are skipped.
  *
  *   node scripts/cms/lint-roots.mjs
  */
@@ -25,7 +12,7 @@ import { glob } from "glob";
 
 const root = join(dirname(new URL(import.meta.url).pathname), "..", "..");
 
-// Region wiring has to sit on the root — CloudCannon binds to it there.
+// CloudCannon binds region wiring on the root.
 const REGION_ATTRS = new Set([
   "data-editable",
   "data-prop",
@@ -35,24 +22,17 @@ const REGION_ATTRS = new Set([
 ]);
 
 const ALLOWED = [
-  // `id` from `label`/`sectionLabel` is a documented exception: it is an anchor
-  // target, and a stale anchor id is harmless until the next reload.
+  // A stale anchor id is harmless until the next reload.
   { attr: "id" },
   // `_flow.css` documents the roots with no child to carry the attribute.
   { attr: "data-space-before", components: ["Video", "Pagination"] },
-  // Synced up from an inner node by editor-live-sync.js.
 ];
 
-/**
- * An accessible name or ARIA state has to sit on the element that carries the
- * role, so it can't move to a child. A stale one affects the editor's own
- * preview only — nothing renders or scripts off it — so these are exempt.
- */
+// ARIA must sit on the element with the role; a stale value only affects the editor preview.
 const ALLOWED_ARIA = /^aria-/;
 
 const WATCHED = /^(class|class:list|style|role|data-|aria-)/;
 
-/** The tag name plus raw attribute text of the first element in the template. */
 function firstElement(source) {
   const fence = source.indexOf("\n---", 3);
   const body = source.startsWith("---") && fence !== -1 ? source.slice(fence + 4) : source;
@@ -65,7 +45,6 @@ function firstElement(source) {
 
     const next = body[open + 1];
 
-    // Comments, closing tags, doctype: not an element open.
     if (next === "!" || next === "/") {
       index = open + 1;
       continue;
@@ -75,7 +54,6 @@ function firstElement(source) {
       continue;
     }
 
-    // Scan to the matching `>`, skipping over `{...}` expressions and strings.
     let depth = 0;
     let quote = null;
 
@@ -103,7 +81,6 @@ function firstElement(source) {
   return null;
 }
 
-/** Split an attribute list into `{ name, value }`, keeping `{...}` intact. */
 function parseAttrs(text) {
   const attrs = [];
   let i = 0;
@@ -179,19 +156,14 @@ function parseAttrs(text) {
   return attrs;
 }
 
-/**
- * Local names in scope for the template that could carry a prop's value: the
- * destructure's own bindings (after any rename) plus every frontmatter
- * `const`/`let`, since those are usually derived from props.
- */
+/** Destructure bindings (after rename) plus every frontmatter `const`/`let`. */
 function propDerivedNames(source) {
   const names = new Set();
   const marker = source.indexOf("= Astro.props");
 
   if (marker !== -1) {
     const close = source.lastIndexOf("}", marker);
-    // Walk back to the matching brace: a `= {}` default would otherwise be
-    // mistaken for the destructure's own opening brace.
+    // A `= {}` default would otherwise be mistaken for the opening brace.
     let depth = 0;
     let open = -1;
 
@@ -236,11 +208,7 @@ function propDerivedNames(source) {
   return [...names];
 }
 
-/**
- * Drop string content from an expression so a class name can't be mistaken for
- * a prop of the same word (`class:list={["text", …]}` does not read `text`).
- * Template literals keep their `${…}` interpolations.
- */
+/** So `class:list={["text", …]}` isn't read as using a `text` prop. Keeps `${…}`. */
 function stripStrings(text) {
   return text
     .replace(/`(?:[^`\\]|\\.)*`/g, (literal) =>
@@ -250,7 +218,6 @@ function stripStrings(text) {
     .replace(/'(?:[^'\\]|\\.)*'/g, " ");
 }
 
-/** Split on top-level commas, ignoring nested brackets and strings. */
 function splitTopLevel(text) {
   const out = [];
   let depth = 0;
@@ -277,7 +244,6 @@ function splitTopLevel(text) {
   return out;
 }
 
-/** Index of the first top-level occurrence of `needle`, or -1. */
 function firstTopLevel(text, needle) {
   let depth = 0;
   let quote = null;
@@ -308,8 +274,7 @@ const kebabOf = (file) =>
     .replace(/([a-z0-9])([A-Z])/g, "$1-$2")
     .toLowerCase();
 
-// Item components have no YAML of their own — the parent names them in a
-// `data-id`, and CloudCannon renders them into the array-item region root.
+// Item components have no YAML; a parent names them in a `data-id`.
 const itemComponents = new Set();
 
 for (const file of files) {
@@ -320,7 +285,6 @@ for (const file of files) {
   }
 }
 
-/** Whether CloudCannon can render this component as a region root. */
 function isRegionRoot(file) {
   const dir = join(root, dirname(file));
   const kebab = kebabOf(file);

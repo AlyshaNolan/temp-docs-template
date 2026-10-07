@@ -7,7 +7,7 @@ description: Use when wiring inline visual editing on a component so CloudCannon
 
 Editable regions connect an on-canvas element to the frontmatter prop that produced it, so an editor clicking it updates the right data. In this starter you almost never write raw `data-editable="…"` — you pass higher-level props on the **building block** and it emits the raw attribute for you.
 
-This skill owns the starter's editable-binding attribute tables (per `.agents/skills/STYLE.md`). For the underlying CloudCannon API — region lifecycle, the JS API, quirks — see [../references/editable-regions-api.md](../references/editable-regions-api.md). Read the raw attributes there to understand behaviour; write the building-block props documented here in practice.
+This skill owns the starter's editable-binding attribute tables (per `.agents/skills/STYLE.md`). For the underlying CloudCannon API — region lifecycle, the JS API, quirks — see [../references/editable-regions-api.md](../references/editable-regions-api.md). Read the raw attributes there to understand behavior; write the building-block props documented here in practice.
 
 ## When to use
 

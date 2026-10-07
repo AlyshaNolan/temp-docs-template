@@ -7,7 +7,6 @@ const __dirname = resolve(fileURLToPath(new URL(".", import.meta.url)));
 
 const read = (path: string) => readFileSync(resolve(__dirname, "../..", path), "utf8");
 
-/** The numeric value behind a `--layer-N` token, from the token file itself. */
 function layerValue(token: string): number {
   const layers = read("src/styles/variables/_layers.css");
   const match = layers.match(new RegExp(`${token}:\\s*(\\d+)`));
@@ -17,7 +16,6 @@ function layerValue(token: string): number {
   return Number(match![1]);
 }
 
-/** The `--layer-*` token the first `z-index` after `selector` assigns. */
 function zIndexToken(source: string, selector: string): string {
   const block = source.slice(source.indexOf(selector));
   const match = block.match(/z-index:\s*var\((--layer-\d)\)/);
@@ -28,9 +26,7 @@ function zIndexToken(source: string, selector: string): string {
 }
 
 describe("documentation shell layering", () => {
-  // The mobile drawer is a full-height overlay: it covers the header, and the
-  // scrim covers everything else. Getting the order wrong is invisible on
-  // desktop and shows up on a phone as a drawer sliding under the header.
+  // A wrong order is invisible on desktop; on a phone the drawer slides under the header.
   it("stacks the drawer above its scrim, and the scrim above the topbar", () => {
     const topbar = read("src/components/navigation/docs-topbar/DocsTopbar.astro");
     const sidebar = read("src/components/navigation/docs-sidebar/DocsSidebar.astro");

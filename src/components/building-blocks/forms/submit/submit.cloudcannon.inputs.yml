@@ -39,6 +39,7 @@ iconName:
       image:
         - template: src/icons/{id}.svg
 iconColor:
+  label: Icon color
   type: select
   comment: The color of the icon.
   hidden: "!iconName"

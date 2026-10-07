@@ -12,8 +12,7 @@ import {
 
 const B = band(760);
 
-// A bordered image with a caption line beneath it, and the zoom affordance at
-// the caption's right end — a plain Image has neither.
+// The caption and zoom affordance are the tell against Image.
 export default preview({
   width: B.w,
   draw: [

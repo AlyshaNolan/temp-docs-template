@@ -1,9 +1,5 @@
 ---
-/**
- * Wraps a Markdown table in its own scroll container. Registered as the `table`
- * element in `mdxComponents`, because a table cannot be both the scroller and
- * the table — `overflow-x` needs `display: block`, which breaks table layout.
- */
+// The table can't scroll itself: `overflow-x` needs `display: block`, which breaks table layout.
 const props = Astro.props;
 ---
 

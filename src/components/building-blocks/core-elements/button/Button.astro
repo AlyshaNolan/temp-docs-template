@@ -162,9 +162,8 @@ if (!_component && !hasText && !hasSlotContent && !hasIcon) return;
           outline-offset: 2px;
         }
 
-        /* An icon-only button has no text to grow its hit area, so it carries
-           the `tap-target` utility (see styles/_utils.css) — the overlay needs
-           this positioning context. */
+        /* Positioning context for the `tap-target` overlay an icon-only button
+           carries (styles/_utils.css). */
         &.icon-only {
           padding: var(--spacing-em-xs);
           position: relative;

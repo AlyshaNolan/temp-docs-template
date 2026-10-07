@@ -1,15 +1,9 @@
 /**
- * Regenerate the component tables in the page-content-authoring skill, and the
- * component counts in the README.
+ * Regenerate the component tables in the page-content-authoring skill and the
+ * README component counts from each component's own YAML. Never hand-edit them.
  *
  *   npm run docs:catalog          rewrite the generated blocks
  *   npm run docs:catalog:check    fail if they are stale
- *
- * The catalog is what an agent reads to pick a component, so it has to match
- * the library exactly — a hand-maintained list silently rots the moment anyone
- * renames a prop. Rows come from each component's own files: label and
- * description from `structure-value.yml`, prop order from the `value:` block,
- * and select vocabularies from `inputs.yml`.
  */
 import { readFileSync, writeFileSync } from "node:fs";
 import { basename, dirname, join } from "node:path";
@@ -70,7 +64,7 @@ function loadComponents() {
       inputs =
         yaml.load(readFileSync(join(root, dir, `${slug}.cloudcannon.inputs.yml`), "utf8")) ?? {};
     } catch {
-      /* Inputs are optional: a component whose props all take the default UI. */
+      /* Inputs are optional. */
     }
 
     return [{ key, slug, dir, structure, inputs }];

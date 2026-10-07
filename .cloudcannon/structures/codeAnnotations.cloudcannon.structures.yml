@@ -1,7 +1,4 @@
-# Numbered notes, used by the `code-annotations` component's `notes` array
-# input.
-#
-# Must live here, not in the component's inputs.yml — `_structures` is not a
+# Used by `code-annotations` `notes`; must live here — `_structures` is not a
 # valid key in an `_inputs_from_glob` file.
 codeAnnotations:
   values:

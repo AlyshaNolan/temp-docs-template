@@ -1,7 +1,5 @@
-# Sidebar group order, used by the `sidebar` data file's `navGroups` input.
-#
-# Coupled to page frontmatter: `name` must match a page's `group` exactly, or
-# the group is treated as a new one and appended. Nothing enforces the match.
+# `name` must match a page's `group` frontmatter exactly, or that group is
+# treated as new and appended. Nothing enforces the match.
 docsNavGroups:
   values:
     - label: Group

@@ -1,16 +1,7 @@
 import { execFileSync } from "node:child_process";
 
-/**
- * Last commit date per repository-relative file path, for the "Updated" line on
- * documentation pages.
- *
- * Reads the whole history for `src/content` in one `git log`, newest first, so
- * the first date a path appears under is its last modification.
- *
- * Silent failure mode: a shallow clone or an export with no `.git` yields no
- * dates at all, and callers show no "Updated" line rather than stamping every
- * page with the build date. Fetch full history in CI if the line matters.
- */
+// A shallow clone or a checkout with no `.git` silently yields no dates, so no page
+// shows "Updated". Fetch full history in CI if the line matters.
 const CONTENT_DIR = "src/content";
 
 let dates = null;
@@ -30,8 +21,7 @@ function load() {
   let log = "";
 
   try {
-    // git reports paths from the repository root; `entry.filePath` is relative
-    // to the Astro project, which is a subdirectory in a monorepo.
+    // git paths are repo-root relative; `entry.filePath` is project relative (a monorepo differs).
     prefix = run(["rev-parse", "--show-prefix"]).trim();
     log = run([
       "-c",
@@ -64,7 +54,6 @@ function load() {
   return map;
 }
 
-/** The file's last commit date, or null when git cannot answer. */
 export function gitLastModified(filePath) {
   dates ??= load();
 

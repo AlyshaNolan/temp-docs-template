@@ -3,11 +3,8 @@
  *
  *   node scripts/css/lint-vars.mjs [--list]
  *
- * An unresolved `var()` is invalid at computed-value time, so the property
- * silently inherits — no error in review, the build, or usually the page.
- *
- * Unused tokens are deliberately not flagged: the token layer is the starter's
- * public theming API, so a token no brand happens to use is not a bug.
+ * An unresolved `var()` silently inherits. Unused tokens are not flagged: the
+ * token layer is a public theming API.
  */
 import { readFileSync } from "node:fs";
 import { glob } from "glob";

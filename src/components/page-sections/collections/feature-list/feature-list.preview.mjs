@@ -2,9 +2,7 @@ import { preview, band, bar, subject } from "../../../../../scripts/previews/kit
 
 const B = band(960);
 
-// Nine one-line entries on a 3x3 grid, each a short subject-coloured name run
-// on into a lighter detail bar. Running text rather than stacked pairs is the
-// tell against `stats`, whose figures are display-sized and stand alone.
+// Running text, not stacked pairs, is the tell against `stats`.
 const ENTRIES = [
   [
     [78, 150],

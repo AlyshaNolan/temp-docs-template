@@ -71,19 +71,9 @@ const getLocalImageAsset = (source: string) => {
   return imageKey ? imageFiles[imageKey] : null;
 };
 
-/**
- * How much larger than the biggest surviving step the native width has to be
- * before it earns its own variant. Within this margin the extra transform
- * buys a few percent of linear detail and isn't worth the bytes or build time.
- */
 const NATIVE_WIDTH_TOLERANCE = 1.1;
 
-/**
- * Pair a requested width with the source's native height so Picture/img
- * keep the photo's own ratio. Callers often pass only `width` as a srcset
- * cap (Card Grid and Gallery Grid masonry both use `width={800}` with
- * `aspectRatio: none`)
- */
+/** Callers often pass only `width` as a srcset cap; this keeps the photo's own ratio. */
 export const heightForWidth = (
   nativeWidth: number,
   nativeHeight: number,
@@ -119,9 +109,8 @@ export const getResponsiveWidths = (candidates: unknown, maxWidth?: number) => {
     return [nativeWidth];
   }
 
-  // Without the native width, the srcset caps at the largest step *below* it and
-  // a 1181px source is served at 640w. The two exclusions are deliberate: above
-  // every step, the cap stops a 6000px upload becoming a 6000px variant.
+  // Without the native width a 1181px source is served at 640w; the upper cap stops
+  // a 6000px upload becoming a 6000px variant.
   const largestCandidate = normalizedWidths[normalizedWidths.length - 1];
   const largestStep = filteredWidths[filteredWidths.length - 1];
   const fillsGapBetweenSteps =
@@ -169,7 +158,7 @@ export function resolveShareImage(source: string): ShareImage {
   };
 }
 
-/** Site-relative src plus width/height for Open Graph. Local photos become a 1200×630 cover crop. */
+/** Local photos become a 1200×630 cover crop. */
 export async function resolveOpenGraphImage(source: string): Promise<{
   src: string;
   width?: number;
@@ -274,8 +263,7 @@ export function prepareImageData({
         imageHeight = imageHeight || resolvedImage.height;
         shouldRenderOptimizedPicture = true;
 
-        // Width-only requests keep the source ratio unless a named crop
-        // (landscape, square, …) is about to replace both edges.
+        // Width-only requests keep the source ratio, unless a named crop is about to replace both edges.
         if (
           (!aspectRatio || aspectRatio === "none") &&
           width &&

@@ -2,8 +2,7 @@ import { preview, band, bar, box, ink, line } from "../../../../../scripts/previ
 
 const B = band(960);
 
-// Four columns, each with its own rail from the marker to the column edge —
-// nothing crosses the gap between them.
+// Each column has its own rail; nothing crosses the gap between them.
 export default preview({
   width: B.w,
   draw: [

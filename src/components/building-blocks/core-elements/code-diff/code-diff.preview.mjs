@@ -15,8 +15,7 @@ import {
 const B = band(760);
 const gutter = B.left + 22;
 
-// The +/- gutter column and the two tinted rows are what separate this from a
-// plain Code Block at thumbnail size.
+// The +/- gutter and tinted rows are the tell against Code Block.
 export default preview({
   width: B.w,
   draw: [

@@ -1,11 +1,7 @@
 /**
- * Language tabs, with the reader's choice remembered site-wide — a Python
- * developer stays in Python across every page. Registered in
- * `editor-live-sync.js` too, because inline scripts don't run in the editor.
- *
- * The choice is stored per tab *label*, not per block: two blocks offering
- * "Node" and "Python" agree, and a block that doesn't offer the stored label
- * keeps its own first tab rather than showing nothing.
+ * Also registered in `editor-live-sync.js`: inline scripts don't run in the editor.
+ * The site-wide choice is stored per tab *label*; a block without that label
+ * keeps its own first tab.
  */
 const STORAGE_KEY = "docs:code-language";
 
@@ -59,7 +55,6 @@ export function setupCodeTabs(root: HTMLElement): void {
     if (!tab?.dataset.label) return;
 
     storeLabel(tab.dataset.label);
-    // Every block on the page follows, which is the point of remembering it.
     document
       .querySelectorAll<HTMLElement>(".code-tabs")
       .forEach((block) => activate(block, tab.dataset.label as string));

@@ -1,13 +1,5 @@
-/**
- * Site font registration — single place to change families, weights, or provider.
- *
- * - Used by `astro.config.mjs` (`fonts`) and layout `<SiteFonts />` (preload / Font component).
- * - `cssVariable` values must match tokens consumed in CSS (`--font-body`, `--font-headings`, `--font-mono`).
- * - Prefer `fontProviders.fontsource()` (local via @fontsource packages) over remote providers.
- * - Use a weight range string (e.g. `"100 900"`) for variable fonts instead of discrete weights.
- *
- * @see https://docs.astro.build/en/guides/fonts/
- */
+// `cssVariable` values must match the tokens CSS reads (`--font-body`, `--font-headings`,
+// `--font-mono`). Variable fonts take a weight range string such as `"100 900"`.
 import { fontProviders } from "astro/config";
 
 export const siteFonts = [

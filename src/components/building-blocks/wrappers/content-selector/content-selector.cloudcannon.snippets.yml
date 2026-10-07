@@ -1,8 +1,6 @@
-# Raw rather than `mdx_paired_component`: the panels are a `repeating` parser so
-# each one is an array item, and its body is `content` with `allow_nested`, which
-# is what lets an Alert or CodeBlock sit inside a tab. Never give
-# `ContentSelectorPanel` its own snippet — it would match standalone and steal
-# the panels, leaving this one empty.
+# Raw, not `mdx_paired_component`: a `repeating` parser with `allow_nested` is what
+# lets snippets sit inside a tab. Never give `ContentSelectorPanel` its own
+# snippet — it would match standalone and steal the panels, leaving this empty.
 content-selector:
   snippet: "<ContentSelector [[selector_args]]>[[panels]]</ContentSelector>"
   inline: false

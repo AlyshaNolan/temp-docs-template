@@ -1,7 +1,5 @@
-# Reference entries, used by the `param-list` component's `params` array input.
-#
-# Must live here, not in the component's inputs.yml — `_structures` is not a
-# valid key in an `_inputs_from_glob` file.
+# Used by `param-list` `params`; must live here — `_structures` is not a valid
+# key in an `_inputs_from_glob` file.
 paramListItems:
   values:
     - label: Parameter

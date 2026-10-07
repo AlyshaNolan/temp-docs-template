@@ -3,7 +3,7 @@ Vendored from CloudCannon/agent-skills @ b70076b102b0f1e20d05c4e3328d822f2298e11
 Upstream paths:
   - skills/cloudcannon-visual-editing/editable-regions.md
   - skills/cloudcannon-visual-editing/editable-regions-internals.md
-Adapted for this starter (astro-component-starter) — resync by diffing against upstream.
+Adapted for this starter (stratus-astro-template) — resync by diffing against upstream.
 "In this starter:" callouts mark where generic CloudCannon guidance is overridden here.
 See .agents/skills/STYLE.md § "This starter overrides generic CloudCannon docs".
 -->
@@ -12,13 +12,13 @@ See .agents/skills/STYLE.md § "This starter overrides generic CloudCannon docs"
 
 Generic reference for `@cloudcannon/editable-regions` — the client-side system that makes DOM elements interactive inside CloudCannon's Visual Editor. This file is the vendored, SSG-agnostic API. For how **this repo** wires bindings (which building blocks translate which attributes), see the `editable-regions` skill — it owns the starter-specific tables and links here for the underlying API.
 
-> **In this starter:** Page sections almost never write `data-editable` directly. Building blocks (`Heading`, `Text`, `Image`, `Grid`, `ButtonGroup`, …) accept higher-level props — `data-prop`, `data-children-prop`, `data-prop-src`/`data-prop-alt` — and translate them to the raw `data-editable="…"` attributes documented below. `data-children-prop="items"` becomes `data-editable="array" data-prop="items"` on the rendered element. Read the raw attributes here to understand behaviour; write the building-block props in practice. The `editable-regions` skill owns that translation table.
+> **In this starter:** Page sections almost never write `data-editable` directly. Building blocks (`Heading`, `Text`, `Image`, `Grid`, `ButtonGroup`, …) accept higher-level props — `data-prop`, `data-children-prop`, `data-prop-src`/`data-prop-alt` — and translate them to the raw `data-editable="…"` attributes documented below. `data-children-prop="items"` becomes `data-editable="array" data-prop="items"` on the rendered element. Read the raw attributes here to understand behavior; write the building-block props in practice. The `editable-regions` skill owns that translation table.
 
 ## Region Types
 
 ### Primitive vs component regions
 
-| Kind          | Types                                            | Behaviour                                                                                                         | Use when                                                                                                                    |
+| Kind          | Types                                            | Behavior                                                                                                          | Use when                                                                                                                    |
 | ------------- | ------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
 | **Primitive** | `text`, `image`, `array`, `array-item`, `source` | Updates its own slice of the live DOM directly. No registered renderer needed.                                    | Inline on-canvas editing of a single value or list.                                                                         |
 | **Component** | `component`, `snippet` (extends component)       | Re-renders from structured data so the whole template slice stays in sync — text, images, styles, derived markup. | The section has conditional elements, style/class bindings, or computed content. Nest primitives inside for inline editing. |
@@ -67,11 +67,11 @@ Extends `EditableComponent` for editing snippets within rich text content. Manag
 
 Primitive editables update their own DOM slice but can't re-render the surrounding template. Wrap a section in a component when it has any of the signals below — without a component region, data-driven changes to conditional or computed markup don't reflect live.
 
-| Signal                   | Example                                                      |
-| ------------------------ | ------------------------------------------------------------ |
-| Conditional elements     | A button that appears/disappears based on a boolean          |
-| Style or class bindings  | Alternating background colours, layout order driven by index |
-| Computed/derived content | A badge or label that changes based on another field         |
+| Signal                   | Example                                                     |
+| ------------------------ | ----------------------------------------------------------- |
+| Conditional elements     | A button that appears/disappears based on a boolean         |
+| Style or class bindings  | Alternating background colors, layout order driven by index |
+| Computed/derived content | A badge or label that changes based on another field        |
 
 **When in doubt, prefer a component.** Cost: one registration call + a wrapper element. Benefit: every data-driven change live-updates.
 
@@ -130,7 +130,7 @@ Upstream documents custom-element hosts as equivalent to `data-editable` attribu
 
 ## Internals & JavaScript API
 
-**Only reach for this section when debugging unexpected Visual Editor behaviour.** The region types and attribute reference above cover normal wiring.
+**Only reach for this section when debugging unexpected Visual Editor behavior.** The region types and attribute reference above cover normal wiring.
 
 ### Lifecycle Trace: A Text Editable Region
 

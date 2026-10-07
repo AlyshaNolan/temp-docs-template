@@ -6,9 +6,6 @@ dist/
 public/pagefind/
 public/_astro/
 
-_docs/
-/docGen.js
-
 # generated types
 .astro/
 
@@ -48,14 +45,3 @@ yarn-error.log*
 
 # Agent worktrees (separate checkouts of this repo)
 .claude/worktrees/
-
-# Siteready run artifacts (static-site QA is run from outside this repo)
-.siteready-last-run.json
-.siteready-link-cache.json
-.siteready-baseline.json
-.siteready-history.json
-siteready-report.*
-
-# Reference material for the initial build, not part of the site
-resources-temp/
-alto-hugo-template-main/

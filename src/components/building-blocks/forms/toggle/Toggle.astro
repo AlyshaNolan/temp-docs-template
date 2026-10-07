@@ -106,8 +106,8 @@ const fieldId = generateFieldId("toggle", customId, name || label);
         background-color: var(--color-bg);
         border-radius: var(--radius-full);
         bottom: 3px;
-        /* State-tinted knob halo (dark in light theme, light in dark theme via
-           --color-state-active) — intentionally not an elevation-scale shadow. */
+        /* Intentionally not an elevation-scale shadow: it tints per theme via
+           --color-state-active. */
         box-shadow: 0 2px 4px var(--color-state-active);
         content: "";
         height: 20px;

@@ -1,9 +1,6 @@
 type InitCallback = () => void;
 
-/**
- * Run client init on first load and on Astro page navigations.
- * Prevents duplicate runs for the same URL.
- */
+/** Runs on first load and each Astro navigation, once per URL. */
 export function onPageLoad(init: InitCallback): void {
   let lastUrl = "";
 

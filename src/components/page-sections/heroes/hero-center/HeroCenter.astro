@@ -86,9 +86,6 @@ const {
 <style is:global>
   @layer page-sections {
     .hero-center {
-      /* A display heading set across a wide column reads as one long line; the
-         cap is what gives it the two-line break the design has. Centre-aligned
-         heroes already sit in a narrower measure. */
       &:has(.heading-inner.align-start) {
         .heading,
         .subtext {
@@ -96,12 +93,8 @@ const {
         }
       }
 
-      /* Two flow overrides, both because a display heading needs different air
-         than body text: the pill is chrome for the heading rather than a block
-         of its own (`loose` would put 48px between them), and a lede set 8px
-         under a -0.045em h1 reads as though it collided with it.
-         Set through `--space-before`, not a margin — the utils layer wins over
-         a raw `margin-top` here, which `npm run test:flow-margins` catches. */
+      /* Via `--space-before`, not a margin: the utils layer beats a raw
+         `margin-top` here (`npm run test:flow-margins` catches it). */
       .hero-center-eyebrow + .heading {
         --space-before: var(--space-before-default);
       }

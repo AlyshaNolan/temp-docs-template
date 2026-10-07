@@ -97,6 +97,7 @@ _structures:
             options:
               values: data.icons
           iconColor:
+            label: Icon color
             type: select
             comment: The color of the icon.
             hidden: "!iconName"

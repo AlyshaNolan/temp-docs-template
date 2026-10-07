@@ -39,8 +39,9 @@ changes:
 in the commit, not here.
 
 Use these tags: **Added**, **Changed**, **Deprecated**, **Removed**, **Fixed**,
-**Security**. An entry tagged `breaking` also raises a callout on the reference
-page it affects.
+**Security**, and **Breaking** for a change that needs readers to act. Nothing
+links a breaking entry to the page it affects — add an `Alert` there by hand if
+it needs one.
 
 Leave internal-only work — refactors, code style, test changes — out entirely.
 

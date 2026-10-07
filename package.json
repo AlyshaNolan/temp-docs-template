@@ -1,9 +1,9 @@
 {
-  "name": "astro-component-starter",
+  "name": "stratus-astro-template",
   "type": "module",
-  "version": "2.0.0",
+  "version": "1.0.0",
   "description": "A documentation site starter built with Astro, designed for visual editing in CloudCannon",
-  "keywords": ["documentation", "docs", "astro", "cloudcannon", "design-tokens"],
+  "keywords": ["documentation", "docs", "astro", "cloudcannon", "template"],
   "author": "CloudCannon",
   "license": "MIT",
   "scripts": {

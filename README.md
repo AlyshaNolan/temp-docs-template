@@ -1,14 +1,16 @@
-# Astro Documentation Starter
+# Stratus
 
-A complete documentation site built with Astro, designed for visual editing in
+Stratus is a complete documentation site built with Astro, designed for visual editing in
 [CloudCannon](https://cloudcannon.com/). You clone it, you own it. Every component is your
 source code to modify, extend, or delete.
+
+[![Deploy to CloudCannon](https://buttons.cloudcannon.com/deploy.svg)](#)
 
 You write Markdown; the template handles the grouped sidebar, client-side search, the
 on-this-page rail, code tabs, diagrams, a print layout, and a 404 that searches. It ships dark
 by default — `defaultTheme` in `src/data/theme.json` takes `dark`, `light` or `system`.
 
-![The documentation starter's overview page](docs/images/homepage.png)
+![The Stratus overview page](docs/images/homepage.png)
 
 ## Quick Start
 
@@ -53,7 +55,7 @@ that uses it, so there is nothing to read that you can't also click.
 A documentation page is one `.mdx` file. Its path is its URL, and its frontmatter places it in
 the sidebar:
 
-````mdx
+```mdx
 ---
 title: Webhooks
 description: Receive events as they happen.
@@ -69,14 +71,17 @@ order: 2
   text="Deploy the new key first."
 />
 
-```js title="webhook.js" {2}
-export default {
-  retries: 5,
-};
+<CodeBlock
+  language="js"
+  filename="webhook.js"
+  highlight="2"
+  code={'export default {\n  retries: 5,\n};'}
+/>
 ```
-````
 
-```
+Only `.mdx` files are loaded — a `.md` file in `src/content/docs/` is silently skipped. Code
+samples use `CodeBlock` rather than a Markdown fence, so they survive a round trip through
+CloudCannon's editor.
 
 **The sidebar is derived, not configured.** `group` and `order` place a page; a page with no
 `group` still builds and is searchable, it just has no sidebar entry.
@@ -120,13 +125,11 @@ Every component ships with three files. This is what makes the system work: deve
 components, editors visually manage content.
 
 ```
-
 src/components/.../button/
-├── Button.astro # The component
-├── button.cloudcannon.inputs.yml # What editors see and can change
-└── button.cloudcannon.structure-value.yml # Defaults and picker metadata
-
-````
+├── Button.astro                            # The component
+├── button.cloudcannon.inputs.yml           # What editors see and can change
+└── button.cloudcannon.structure-value.yml  # Defaults and picker metadata
+```
 
 A fourth, `button.cloudcannon.snippets.yml`, adds it to the Content Editor's insert menu for
 documentation pages.
@@ -135,7 +138,7 @@ Scaffold them, wired up correctly:
 
 ```bash
 npm run new:component building-blocks/core-elements/my-thing
-````
+```
 
 ## Key Directories
 
@@ -167,11 +170,11 @@ Rebranding is a token change, not a redesign:
 - **Fonts** — `site-fonts.mjs`, the single source of truth
 - **Header, footer, SEO defaults** — `src/data/*.json`
 
-The accent (`--color-accent`) is deliberately not the button colour: links, the active sidebar
+The accent (`--color-accent`) is deliberately not the button color: links, the active sidebar
 item, focus rings and code annotations use it, while primary buttons stay ink on paper. Change
 it and the page doesn't become a wall of one hue.
 
-`npm run lint:css-vars` fails the build on any `var(--x)` that doesn't resolve, which catches
+`npm run lint:css-vars` (part of `npm run check`) fails on any `var(--x)` that doesn't resolve, which catches
 the silent-failure class of theming bug — an unresolved custom property is invalid at
 computed-value time, so the declaration just inherits with no error anywhere. Run
 `npm run lint:css-vars -- --list` to print every token that exists.

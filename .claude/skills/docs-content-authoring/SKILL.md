@@ -52,9 +52,10 @@ Validated by `docSchema` in `src/content.config.ts`; an unknown key is a build e
 | `order`               | number   | `0`     | Position within the group. Ties break alphabetically by title.              |
 | `keywords`            | string[] | —       | Meta keywords.                                                              |
 | `image`               | string   | —       | Social share image.                                                         |
-| `noindex`             | boolean  | `false` | Keeps the page out of search engines.                                       |
+| `noindex`             | boolean  | `false` | Keeps the page out of search engines and the site's own search.             |
 | `showTableOfContents` | boolean  | `true`  | The on-this-page rail, built from the page's `h2`/`h3`.                     |
 | `showFeedback`        | boolean  | `true`  | The helpful vote at the foot of the page.                                   |
+| `showCopyPage`        | boolean  | `true`  | The Copy page menu beside the title.                                        |
 | `showPager`           | boolean  | `true`  | Previous/next links across the sidebar's reading order.                     |
 
 `group` must match a `navGroups` entry in `src/data/sidebar.json` to be ordered deliberately; an unlisted group is appended rather than dropped.
@@ -65,7 +66,7 @@ There is no `updated` key. The date in the meta line is the file's last commit, 
 
 Headings, lists, tables, blockquotes, links and inline code all work and are styled by `src/styles/base/_prose.css`. That file owns the page rhythm, and it is three numbers: **8px** under a heading, **24px** around a block (callout, code, diagram, table, figure, parameter list), **44px** before the next heading. Nothing in content should need to adjust it — if a page looks wrong, the rule is wrong. Use `h2` for sections and `h3` beneath — those are what the on-this-page rail lists, and each gets a copyable `#` anchor on hover.
 
-Link internally by URL: `[Configuration](/configuration/)`. `npm run lint:links` fails the build on an internal link that resolves to no page, so a renamed page can't quietly rot. It also warns on an orphan page — one no other page links to, which for a page with no `group` means only search reaches it.
+Link internally by URL: `[Configuration](/configuration/)`. `npm run lint:links` (part of `npm run check`) fails on an internal link that resolves to no page, so a renamed page can't quietly rot. It also warns on an orphan page — one no other page links to, which for a page with no `group` means only search reaches it.
 
 ### No code fences
 
@@ -95,13 +96,13 @@ These are available in any `.mdx` page with no import, and each has a CloudCanno
 | `Accordion`       | Optional depth in a disclosure                                        | `items[]` of `{ title, contentSections[] }`                              |
 | `ContentSelector` | Tabs whose panels hold prose and other components                     | `<ContentSelectorPanel title>` children, `navigationPosition`, `variant` |
 | `Form`            | Any form. Posts to the site by default, which CloudCannon captures    | `action`, `formBlocks[]`                                                 |
-| `Video`           | A local file or an embed id                                           | `source`, `title`                                                        |
+| `Video`           | A YouTube or Vimeo embed, or a local file                             | `type`, `videoId` (embeds), `source` (local), `title`                    |
 | `Embed`           | Raw HTML in a fixed aspect ratio — a sandbox, a map, another service  | children (the HTML), `aspectRatio`                                       |
 | `Badge`           | A status pill: Beta, Deprecated, a version marker                     | `text`, `variant`, `iconName`, `showDot`, `link`                         |
-| `Steps`           | A numbered walkthrough                                                | `items[]` of `{ contentSections[] }`, `orientation`, `heading`           |
+| `Steps`           | A numbered walkthrough                                                | `items[]` of `{ contentSections[] }`, `orientation`                      |
 | `FaqSection`      | Questions and answers in an accordion                                 | `items[]` of `{ title, contentSections[] }`, `heading`                   |
 
-`Steps` and `FaqSection` are page sections, so they carry section chrome: in a page body set `maxContentWidth`, `paddingHorizontal` and `paddingVertical` to `none`, write the section's heading as a Markdown `##` (which the on-this-page rail reads) and pass `heading=""` so it isn't printed twice. `/introduction/` and `/installation/` do this.
+`FaqSection` is a page section: write its heading as a Markdown `##` (which the on-this-page rail reads) and pass `heading=""` so it isn't printed twice. Pass only the props a component's snippet declares — the Content Editor can't parse a snippet with an extra one. `/installation/` does this.
 
 Every building block in the library can be used the same way — the table lists the ones a documentation page usually reaches for. The full catalog is in [page-content-authoring/component-catalog.md](../page-content-authoring/component-catalog.md).
 
@@ -148,7 +149,7 @@ changes:
 ```
 
 `tag` comes from the `changelogChanges` structure — Added, Changed, Deprecated,
-Removed, Fixed, Security, Breaking. Breaking and Added are colour-coded; the
+Removed, Fixed, Security, Breaking. Breaking and Added are color-coded; the
 rest render neutral. The file has no body and no URL of its own; the version is
 an anchor on the changelog page.
 

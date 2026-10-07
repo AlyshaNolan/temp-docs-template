@@ -1,11 +1,6 @@
 /**
- * Renders Mermaid source into SVG in the browser.
- *
- * Mermaid needs a DOM to lay a diagram out, so there is no build-time render
- * without shipping a headless browser in the build. Instead the source stays in
- * the HTML inside a `<pre>` — searchable, printable, and readable with no JS —
- * and the SVG replaces it once Mermaid loads. The import is dynamic, so the
- * library (which is large) is fetched only on pages that contain a diagram.
+ * Client-side only: Mermaid needs a DOM, so a build-time render would mean a
+ * headless browser in the build. Keep the import dynamic — the library is large.
  */
 let mermaidPromise: Promise<typeof import("mermaid").default> | undefined;
 let themeWatcherBound = false;
@@ -16,10 +11,7 @@ function loadMermaid() {
   return mermaidPromise;
 }
 
-/**
- * Mermaid has its own palette, so it is handed the site's tokens instead —
- * otherwise the one element on the page that ignores the theme is the diagram.
- */
+/** Mermaid ignores the site theme unless handed its tokens. */
 function themeVariables(): Record<string, string> {
   const styles = getComputedStyle(document.documentElement);
   const token = (name: string) => styles.getPropertyValue(name).trim();
@@ -70,13 +62,12 @@ async function render(root: HTMLElement): Promise<void> {
     target.innerHTML = svg;
     root.setAttribute("data-diagram-rendered", "");
   } catch {
-    // A diagram that won't parse leaves the source visible rather than an
-    // empty box — the reader still gets the content, and the author sees why.
+    // A parse error leaves the source visible rather than an empty box.
     root.removeAttribute("data-diagram-rendered");
   }
 }
 
-/** Re-render on a theme flip: the SVG bakes its colours in at render time. */
+/** Re-render on a theme flip: the SVG bakes its colors in at render time. */
 function watchTheme(): void {
   if (themeWatcherBound) return;
   themeWatcherBound = true;

@@ -1,11 +1,5 @@
 ---
-/**
- * A single copyable shell command — the "run this to start" line. Sits in an
- * action row beside a button, so its height matches the buttons around it.
- *
- * Built on the shared code surface's copy behaviour (`code-block/setup.ts`),
- * which is why the command carries `data-code-source`.
- */
+// Copy comes from `code-block/setup.ts`, which needs `data-code-source` on the command.
 import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
 
 const {
@@ -76,8 +70,6 @@ const commandDataAttributes = effectiveDataProp
 
 <style is:global>
   @layer components {
-    /* Overrides the code surface's dark panel: this one sits in a row of
-       buttons on the page background, not around a block of code. */
     .command-line.code-surface {
       background-color: var(--color-bg-surface);
       border-color: var(--color-border);

@@ -1,6 +1,6 @@
 ---
 name: adding-fonts
-description: Use when adding a new font, swapping the body or heading typeface, adding a third font family (mono/display), or troubleshooting font loading/preload/network requests in the Astro component starter.
+description: Use when adding a new font, swapping the body or heading typeface, adding a third font family (mono/display), or troubleshooting font loading/preload/network requests in Stratus.
 ---
 
 # Adding & changing fonts
@@ -27,15 +27,15 @@ Fonts are configured in exactly one file, `site-fonts.mjs` at the project root, 
 
 `siteFonts` is an array of font family entries. Fields, verified against Astro's `FontFamilySchema` and how `SiteFonts.astro` consumes them:
 
-| Field              | Meaning                                                                                                                                                                                                                                                                                                       |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `name`             | The font family name. For `fontProviders.fontsource()` it **must match the Fontsource catalog name exactly** (case-sensitive); for `fontProviders.local()` it's an arbitrary label.                                                                                                                           |
-| `cssVariable`      | Which design-system CSS custom property this entry fills — currently `--font-body` or `--font-headings` (add a new one, e.g. `--font-display`, for a third family). `Font.astro` looks this up via `componentDataByCssVariable`; a typo throws a build-time `FontFamilyNotFound` error, not a silent failure. |
-| `provider`         | `fontProviders.fontsource()` (preferred) or `fontProviders.local()` (proprietary files) — see below.                                                                                                                                                                                                          |
-| `weights`          | Discrete weights (`[400, 600, 700]`) or a variable-font range string (`["100 900"]`).                                                                                                                                                                                                                         |
-| `styles`           | e.g. `["normal"]`, `["normal", "italic"]`.                                                                                                                                                                                                                                                                    |
-| `subsets`          | Character subsets to fetch, e.g. `["latin"]` — keeps the self-hosted files small. Only meaningful for remote-catalog providers (fontsource/google/etc.), not `local()`.                                                                                                                                       |
-| `options.variants` | `local()` only — see [Proprietary/local fonts](#proprietary-fonts-fontproviderslocal).                                                                                                                                                                                                                        |
+| Field              | Meaning                                                                                                                                                                                                                                                                                                                      |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `name`             | The font family name. For `fontProviders.fontsource()` it **must match the Fontsource catalog name exactly** (case-sensitive); for `fontProviders.local()` it's an arbitrary label.                                                                                                                                          |
+| `cssVariable`      | Which design-system CSS custom property this entry fills — currently `--font-body`, `--font-headings` or `--font-mono` (add a new one, e.g. `--font-display`, for another family). `Font.astro` looks this up via `componentDataByCssVariable`; a typo throws a build-time `FontFamilyNotFound` error, not a silent failure. |
+| `provider`         | `fontProviders.fontsource()` (preferred) or `fontProviders.local()` (proprietary files) — see below.                                                                                                                                                                                                                         |
+| `weights`          | Discrete weights (`[400, 600, 700]`) or a variable-font range string (`["100 900"]`).                                                                                                                                                                                                                                        |
+| `styles`           | e.g. `["normal"]`, `["normal", "italic"]`.                                                                                                                                                                                                                                                                                   |
+| `subsets`          | Character subsets to fetch, e.g. `["latin"]` — keeps the self-hosted files small. Only meaningful for remote-catalog providers (fontsource/google/etc.), not `local()`.                                                                                                                                                      |
+| `options.variants` | `local()` only — see [Proprietary/local fonts](#proprietary-fonts-fontproviderslocal).                                                                                                                                                                                                                                       |
 
 Astro computes an optimized, metric-matched fallback stack automatically and bakes it into the `--font-body`/`--font-headings` custom property value — do not hand-write a fallback stack in CSS (see `optimizedFallbacks`/`fallbacks` options in Astro's font reference if you need to override it).
 
@@ -45,8 +45,8 @@ Astro computes an optimized, metric-matched fallback stack automatically and bak
    ```bash
    npm install @fontsource/<font-name>
    ```
-2. **Then run `npm run deps:sync`** (never a bare `npm install` after — it breaks the Linux CI lockfile; see `CLAUDE.md`).
-3. **Edit the matching entry** in `site-fonts.mjs` — keep `cssVariable` as `--font-body` or `--font-headings`, change `name` to the new font's exact catalog name, and set `weights`/`styles` to what the new font ships:
+2. **Then run `npm run deps:sync`** (never a bare `npm install` after — it breaks the Linux CI lockfile; see `AGENTS.md`).
+3. **Edit the matching entry** in `site-fonts.mjs` — keep `cssVariable` as `--font-body`, `--font-headings` or `--font-mono`, change `name` to the new font's exact catalog name, and set `weights`/`styles` to what the new font ships:
    ```js
    {
      name: "Open Sans",
@@ -61,27 +61,29 @@ Astro computes an optimized, metric-matched fallback stack automatically and bak
 
 Nothing else changes — `astro.config.mjs` and `SiteFonts.astro` already read `siteFonts` generically, and every component already consumes `var(--font-body)` / `var(--font-headings)` from `src/styles/base/_typography.css`.
 
-## Add a third family (mono, display, etc.)
+## Add another family (display, etc.)
+
+Body, headings and mono (`--font-mono`, JetBrains Mono) already ship. For a fourth:
 
 1. Install the package and sync deps as above.
-2. Add a new entry with a **new** `cssVariable` (do not reuse `--font-body`/`--font-headings`):
+2. Add a new entry with a **new** `cssVariable` (do not reuse an existing one):
    ```js
    {
-     name: "JetBrains Mono",
-     cssVariable: "--font-mono",
+     name: "Fraunces",
+     cssVariable: "--font-display",
      provider: fontProviders.fontsource(),
-     weights: [400, 700],
+     weights: [600],
      styles: ["normal"],
      subsets: ["latin"],
    },
    ```
-3. Declare (or override) the token in `src/styles/variables/_fonts.css` if it isn't there yet, and consume it as `var(--font-mono)` from CSS. `--font-mono` currently exists there as a hand-written system-font stack (no self-hosted file); pointing it at a `siteFonts` entry instead replaces that stack.
+3. Consume it as `var(--font-display)` from CSS. Astro's `<Font />` declares the property from `site-fonts.mjs`, and `npm run lint:css-vars` reads that file too, so nothing goes in `src/styles/variables/_fonts.css`.
 
 ## Proprietary fonts: `fontProviders.local()`
 
 Use this only for a font not published on Fontsource (e.g. a licensed brand typeface). Prefer Fontsource whenever the font is available there.
 
-1. **Place `.woff2` files under `src/assets/fonts/`** (the directory exists, currently empty). **MUST NOT** put font files in `public/` — Astro's own guidance: files there get duplicated into the build output.
+1. **Place `.woff2` files under `src/assets/fonts/`** (create the directory — it doesn't ship with the template). **MUST NOT** put font files in `public/` — Astro's own guidance: files there get duplicated into the build output.
 2. Configure with explicit variants:
    ```js
    {

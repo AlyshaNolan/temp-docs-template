@@ -1,15 +1,8 @@
 /**
- * Validates the CloudCannon YAML against the official JSON Schemas from
- * `@cloudcannon/configuration-types` — invalid keys, out-of-enum values, wrong
- * input types.
+ * Validate the CloudCannon YAML against the JSON Schemas in
+ * `@cloudcannon/configuration-types`. `loadValidator` filters raw Ajv union-branch noise.
  *
  *   node scripts/cms/lint-schema.mjs [--only <substring>]
- *
- * Complements `lint:cms`, which checks the same files against the *components*
- * (prop drift, `_component` resolution). Neither subsumes the other.
- *
- * Error formatting is delegated to the package's `loadValidator`: it suppresses
- * non-matching union-branch noise, which raw Ajv output drowns in.
  */
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -25,13 +18,8 @@ const root = join(dirname(new URL(import.meta.url).pathname), "..", "..");
 const args = process.argv.slice(2);
 const only = args.includes("--only") ? args[args.indexOf("--only") + 1] : null;
 
-// Each glob is validated against the schema for the `*_from_glob` key that
-// loads it in cloudcannon.config.yml — the same names the schema package uses,
-// so this mapping stays auditable against the loader.
+// Each glob uses the schema for the `*_from_glob` key that loads it in cloudcannon.config.yml.
 const TARGETS = [
-  // The root config itself. Easy to forget because it isn't glob-collected, but
-  // it holds the `data_config` datasets and collection `_inputs` that every
-  // component leans on — and a stray key here fails the same silent way.
   {
     schema: "global",
     pattern: "cloudcannon.config.yml",
@@ -52,8 +40,7 @@ const TARGETS = [
     schema: "_structures_from_glob",
     pattern: ".cloudcannon/structures/*.cloudcannon.structures.yml",
   },
-  // Both the hand-written source file and the one the build merges the editor's
-  // redirects into — a bad route in either is a silent 404 in production.
+  // Source and built copies: a bad route in either is a silent 404 in production.
   {
     schema: "routing",
     pattern: ".cloudcannon/routing.json",

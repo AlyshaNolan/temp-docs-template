@@ -14,8 +14,7 @@ import {
 
 const B = band(760);
 
-// Three nodes joined by arrows — the branch is what says "flowchart" rather
-// than "three cards".
+// The branching arrows are the tell against three cards.
 const node = (x, y, w) => [
   box(x, y, w, 64, { r: 10, fill: paper, stroke: glyph, sw: 2 }),
   bar(x + 24, y + 26, w - 48, "label", { fill: subject }),

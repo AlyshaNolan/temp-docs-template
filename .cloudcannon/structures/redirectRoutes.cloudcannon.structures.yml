@@ -1,8 +1,5 @@
-# Editor-managed redirects, used by the `redirects` data file's `routes` input.
-#
-# Coupled to `scripts/cms/routing.mjs`, which merges these ahead
-# of the rules in `.cloudcannon/routing.json` at build time. A redirect added
-# here goes live on the next build, not on save.
+# `scripts/cms/routing.mjs` merges these ahead of `.cloudcannon/routing.json` at
+# build time, so a redirect goes live on the next build, not on save.
 redirectRoutes:
   style: modal
   values:

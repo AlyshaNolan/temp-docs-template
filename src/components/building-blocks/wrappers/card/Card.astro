@@ -20,8 +20,7 @@ const {
   backgroundColor,
   background,
   link,
-  // Purely for CloudCannon: gates whether the beforeContentSections/afterContentSections
-  // inputs are shown in the editor. Rendering itself is driven by content presence, below.
+  // Only gates which inputs CloudCannon shows; rendering follows content presence.
   showBeforeAfter: _showBeforeAfter = false,
   rounded = false,
   border = false,
@@ -221,10 +220,6 @@ const usesAfterContentSections = !hasAfterSlot && afterContentSections;
     .card {
       display: block;
 
-      /* A lift and a border, not a scale: a scale blurs text mid-transition and
-         reads as a photo zoom, which is wrong for a card that is mostly words.
-         The heading's trailing icon slides and picks up the accent with it, so
-         the whole card reads as one link. */
       > a.card-inner,
       > button.card-inner {
         transition:
@@ -260,9 +255,7 @@ const usesAfterContentSections = !hasAfterSlot && afterContentSections;
         transform: none;
       }
 
-      /* The global reset only kills the transition, leaving the movement as an
-         instant jump — the movement itself has to go. The border, shadow and
-         accent stay: they are the affordance, and they don't move. */
+      /* The global reset only kills the transition, so the movement itself has to go. */
       @media (prefers-reduced-motion: reduce) {
         > a.card-inner:hover,
         > button.card-inner:hover {
@@ -293,10 +286,7 @@ const usesAfterContentSections = !hasAfterSlot && afterContentSections;
         position: relative;
         text-decoration: none;
 
-        /* Themed cards with a media background get a solid theme-colored
-           backing so text stays legible if the image/video fails to load or
-           is still buffering. The media is a child painted on top, so this is
-           invisible when it loads. */
+        /* Keeps text legible while the media loads or if it fails; the media paints over it. */
         &[data-theme]:has(> .background-image),
         &[data-theme]:has(> .background-pattern),
         &[data-theme]:has(> .video.background) {
@@ -314,10 +304,8 @@ const usesAfterContentSections = !hasAfterSlot && afterContentSections;
           border: var(--border-width-sm) solid var(--color-border);
         }
 
-        /* Parallax: the background image is pinned to the viewport and the card
-           clips it with clip-path, because neither overflow nor border-radius
-           clips a fixed-position child. clip-path itself does not create a
-           containing block, so the image stays viewport-anchored. */
+        /* clip-path, because overflow and border-radius don't clip a fixed child,
+           and it creates no containing block, so the image stays viewport-anchored. */
         &.background-fixed {
           clip-path: inset(0);
 
@@ -443,8 +431,6 @@ const usesAfterContentSections = !hasAfterSlot && afterContentSections;
       }
     }
 
-    /* Parallax scrolling is a common vestibular trigger — fall back to a
-       regular background image. */
     @media (prefers-reduced-motion: reduce) {
       .card > .card-inner.background-fixed > .background-image {
         position: absolute;

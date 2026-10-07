@@ -34,11 +34,6 @@ function getBasename(filePath: string): string {
   return filePath.slice(filePath.lastIndexOf("/") + 1);
 }
 
-/**
- * Given a video source path (relative to public/), finds all sibling files
- * with the same base name and a recognised video extension.
- * The selected source is always listed first so browsers prefer it.
- */
 function fallback(source: string): VideoSource[] {
   const ext = getExtension(source).toLowerCase();
 
@@ -46,12 +41,8 @@ function fallback(source: string): VideoSource[] {
 }
 
 /**
- * Given a video source path (relative to public/), finds all sibling files
- * with the same base name and a recognised video extension.
- * The selected source is always listed first so browsers prefer it.
- *
- * Falls back to a single source entry when running client-side
- * (e.g. CloudCannon visual editor) where node:fs is unavailable.
+ * Siblings in `public/` sharing the base name, the selected source first. In the
+ * editor there is no `node:fs`, so it returns the selected source alone.
  */
 export async function discoverVideoSources(source: string): Promise<VideoSource[]> {
   if (typeof process === "undefined" || typeof process.cwd !== "function") {

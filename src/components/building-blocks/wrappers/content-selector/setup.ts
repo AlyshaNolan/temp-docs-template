@@ -1,16 +1,7 @@
 /**
- * Shared setup logic for the Content Selector.
- *
- * Panel switching is pure CSS (hidden radio + sibling selectors), so the
- * component works with no JS at all. This adds the two things CSS can't do:
- * keep `aria-expanded`/`aria-hidden` in step with the checked radio, and make
- * Enter and Space activate a tab — the visible tab is a `<label>`, which gets
- * `tabindex="0"` but no native key handling.
- *
- * Used by:
- * - `ContentSelector.astro`'s inline `<script>` on the live site
- * - `editor-live-sync.js` in the CloudCannon editor, where CC's
- *   editable-regions renderer strips inline scripts
+ * Panel switching is pure CSS; this only syncs aria state and adds Enter/Space
+ * to the `<label>` tabs. Also registered in `editor-live-sync.js`: the editor
+ * strips inline scripts.
  */
 
 function updatePanelAriaState(input: HTMLInputElement, isSelected: boolean): void {

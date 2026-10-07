@@ -1,16 +1,8 @@
 /**
- * Every internal link in the built site must resolve to a page.
+ * Fail on any internal href in `dist/` with no matching file; warn on orphan pages
+ * (in practice a page with no `group` that nothing links to).
  *
  *   node scripts/check/links.mjs
- *
- * A renamed documentation page leaves dead links behind and nothing errors —
- * the page still builds, the link still looks like a link. This walks `dist/`
- * (building it first when it is missing or stale) and fails on any local href
- * with no corresponding file.
- *
- * It also warns, without failing, on orphan pages: no other page links to
- * them. Sidebar links are in every page's HTML, so in practice this flags a
- * page with no `group` that nothing links to — reachable only through search.
  */
 import { execSync } from "node:child_process";
 import { existsSync, readFileSync, statSync } from "node:fs";
@@ -20,8 +12,7 @@ import { glob } from "glob";
 const root = join(import.meta.dirname, "..", "..");
 const dist = join(root, "dist");
 
-// Inputs whose edits change the built HTML, so a build older than any of them
-// can't be trusted for this check.
+// A build older than any of these is a false pass.
 const SOURCES = ["src", "public", "astro.config.mjs", "site-fonts.mjs"];
 
 async function newestMtime(target) {
@@ -43,10 +34,6 @@ async function newestMtime(target) {
   return newest;
 }
 
-/**
- * A stale `dist/` passes a check it should fail — the build predates the edit
- * that broke the link, so the dead href simply isn't in the HTML being read.
- */
 async function staleReason() {
   if (!existsSync(dist)) return "dist/ not found";
 
@@ -63,12 +50,7 @@ if (reason) {
   execSync("npx astro build", { cwd: root, stdio: "inherit" });
 }
 
-/**
- * `/preview-renders/*` only exists in a `COMPONENT_PREVIEWS=true` build. Those
- * pages render a component from its defaults, so a nav component synthesises a
- * trail from a URL that is not a real route — checking them reports links the
- * site never ships.
- */
+// `COMPONENT_PREVIEWS=true` harness pages synthesize links the site never ships.
 const HARNESS = "preview-renders/";
 
 // Entry points a reader arrives at directly, never by following a link.
@@ -86,7 +68,6 @@ for (const page of pages) {
   known.add(url);
 }
 
-// Non-HTML assets the site ships (favicon, previews, uploads, the search index).
 for (const asset of await glob("**/*", { cwd: dist, nodir: true })) known.add(`/${asset}`);
 
 const HREF = /\shref="([^"]+)"/g;

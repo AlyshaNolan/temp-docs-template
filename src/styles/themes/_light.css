@@ -6,9 +6,6 @@
   --color-brand-subtle: var(--brand-light-subtle, var(--gray-600));
   --color-brand-on: var(--brand-light-on, var(--white));
 
-  /* The accent is the interactive colour — links, active nav, focus, selection.
-     It is deliberately not `--color-brand`: primary buttons stay ink-on-paper,
-     so an accent change never turns the page into a wall of one hue. */
   --color-accent: var(--accent-light, var(--teal-700));
   --color-accent-hover: var(--accent-light-hover, var(--teal-800));
   --color-accent-on: var(--accent-light-on, var(--white));
@@ -36,8 +33,6 @@
 
   --color-bg-code: color-mix(in srgb, var(--black) 7%, transparent);
 
-  /* Code blocks stay dark in both themes: a sample that inverts with the page
-     re-reads as a different snippet, and syntax colours are tuned for one ground. */
   --color-code-bg: #0c0e12;
   --color-code-text: #e7eaef;
   --color-code-muted: #7f8b9e;
@@ -53,8 +48,6 @@
   --color-border-strong: var(--gray-300);
   --color-border-subtle: var(--gray-100);
 
-  /* Opaque "plain" set for chrome sitting on imagery or tints (e.g. the plain
-     Badge) — the theme's base surface, so it flips with light/dark. */
   --color-bg-plain: var(--white);
   --color-border-plain: var(--gray-200);
   --color-text-plain: var(--gray-950);

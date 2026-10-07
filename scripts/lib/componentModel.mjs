@@ -1,12 +1,6 @@
 /**
- * Reusable component-model primitives shared by scripts that need to reason
- * about the Astro component library and its co-located CloudCannon YAML —
- * currently `scripts/cms/lint.mjs`, `scripts/docs/check.mjs`, and
- * `scripts/docs/catalog.mjs`.
- *
- * Component-key derivation itself is NOT reimplemented here — it is imported
- * from `src/components/utils/componentKey.mjs`, the single source of truth
- * shared with the render registry and the Visual Editor.
+ * Component-model primitives for scripts that read components and their CloudCannon
+ * YAML. Never reimplement key derivation here — import `componentKey.mjs`.
  */
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -14,17 +8,10 @@ import { glob } from "glob";
 import * as yaml from "js-yaml";
 import { componentKeyFromPath, pascalToKebab } from "../../src/components/utils/componentKey.mjs";
 
-// Destructure parser: pull the prop names out of `const { ... } = Astro.props`.
-// Handles renames (`class: className`), quoted keys (`'data-prop': x`), aliased
-// with defaults (`useDefaultEditableBinding: _x = false`), plain-with-default
-// (`size = "md"`), multi-line, nested-brace defaults (`imageElementAttributes = {}`),
-// and the rest element (`...htmlAttributes`).
-
 /**
+ * Parse `const { ... } = Astro.props`. `defaults` holds each prop's raw default
+ * expression; null means no destructure (the component takes no props).
  * @returns {{ props: Set<string>, hasRest: boolean, defaults: Map<string, string> } | null}
- *   props = the concrete property names the component reads; defaults = the raw
- *   default expression per prop that has one; null if no `Astro.props`
- *   destructure was found (component takes no props).
  */
 export function parseDestructure(source) {
   const marker = "= Astro.props";
@@ -32,7 +19,6 @@ export function parseDestructure(source) {
 
   if (markerIdx === -1) return null;
 
-  // Walk back from the `}` before the marker to its matching `{`.
   const closeIdx = source.lastIndexOf("}", markerIdx);
 
   if (closeIdx === -1) return null;
@@ -54,8 +40,7 @@ export function parseDestructure(source) {
   }
   if (openIdx === -1) return null;
 
-  // Strip JS comments — destructures carry doc comments (`/** ... */`) whose
-  // punctuation (backticks, `=`, `:`) would otherwise corrupt key extraction.
+  // Comment punctuation (backticks, `=`, `:`) would corrupt key extraction.
   const inner = source
     .slice(openIdx + 1, closeIdx)
     .replace(/\/\*[\s\S]*?\*\//g, "")
@@ -74,7 +59,6 @@ export function parseDestructure(source) {
       hasRest = true;
       continue;
     }
-    // Key is the text before the first top-level `:` (rename) or `=` (default).
     let key = part;
     const cut = firstTopLevelDelimiter(part);
 
@@ -98,7 +82,6 @@ export function parseDestructure(source) {
   return { props, hasRest, defaults };
 }
 
-/** Split a destructure body on top-level commas (ignoring nested brackets/strings). */
 function splitTopLevel(text) {
   const out = [];
   let depth = 0;
@@ -124,7 +107,6 @@ function splitTopLevel(text) {
   return out;
 }
 
-/** Index of the first top-level `:` or `=` in a single destructure entry, or -1. */
 function firstTopLevelDelimiter(part) {
   let depth = 0;
   let quote = null;
@@ -148,7 +130,6 @@ export function loadYaml(absPath) {
   return yaml.load(readFileSync(absPath, "utf8"));
 }
 
-/** Collect every value stored under a `_component` key, recursively. */
 export function collectComponentRefs(node, out = []) {
   if (Array.isArray(node)) {
     for (const item of node) collectComponentRefs(item, out);
@@ -161,7 +142,7 @@ export function collectComponentRefs(node, out = []) {
   return out;
 }
 
-/** Extract the YAML frontmatter block from a .md/.mdx file, or null. */
+/** Parsed YAML frontmatter, or null when missing or invalid. */
 export function frontmatter(source) {
   const match = /^---\r?\n([\s\S]*?)\r?\n---/.exec(source);
 
@@ -173,7 +154,7 @@ export function frontmatter(source) {
   }
 }
 
-/** Is this .astro a component's own main file (kebab filename === dir name)? */
+/** Main file: kebab filename === dir name. */
 export function isMainComponentFile(astroAbsPath) {
   const dir = dirname(astroAbsPath);
   const base = astroAbsPath.slice(dir.length + 1).replace(/\.astro$/, "");
@@ -181,15 +162,9 @@ export function isMainComponentFile(astroAbsPath) {
   return pascalToKebab(base) === dir.split("/").pop();
 }
 
-// Meta keys that appear at the top level of a `value:` block or an inputs file
-// but are not component props. `_component` is special-cased where relevant.
 export const NON_PROP_KEY = (key) => key.startsWith("_");
 
 /**
- * Build an index of every component under `src/components/`: its registry
- * key, whether it's a directory's *main* component, its parsed destructure,
- * and the paths of its co-located CloudCannon YAML (if present).
- *
  * @param {string} root repo root (the directory containing `src/`).
  * @returns {Promise<{
  *   componentKeys: Set<string>,
@@ -235,11 +210,8 @@ export async function buildComponentIndex(root) {
 }
 
 /**
- * The full set of prop-shaped keys a component's editor config is allowed to
- * use: its destructured `Astro.props` names, its `inputs.yml` top-level keys
- * (dotted keys collapsed to their first segment, mirroring CloudCannon's own
- * nested-input addressing), and its `structure-value.yml` `value:` keys.
- *
+ * Union of destructured props, `inputs.yml` keys (first dotted segment) and
+ * `structure-value.yml` `value:` keys.
  * @param {{
  *   parsed: { props: Set<string>, hasRest: boolean } | null,
  *   inputsPath: string | null,

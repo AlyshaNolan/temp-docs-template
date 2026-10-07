@@ -11,8 +11,7 @@ import {
 
 const B = band(560);
 
-// A prompt glyph, the command, and a copy affordance — one pill-shaped row,
-// which is what separates it from a full code block.
+// One pill-shaped row is the tell against a full code block.
 export default preview({
   width: B.w,
   draw: [

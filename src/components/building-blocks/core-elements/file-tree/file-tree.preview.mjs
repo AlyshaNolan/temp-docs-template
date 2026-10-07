@@ -14,8 +14,7 @@ const B = band(560);
 const stem = B.left + 36;
 const stem2 = stem + 44;
 
-// The drawn connectors are the component — a bare stack of bars would be a
-// list. Depths: root, two children, one grandchild.
+// The drawn connectors are the component; without them it is a list.
 export default preview({
   width: B.w,
   draw: [

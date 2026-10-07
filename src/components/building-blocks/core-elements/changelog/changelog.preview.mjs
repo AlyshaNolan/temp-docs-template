@@ -12,8 +12,7 @@ import {
 
 const B = band(760);
 
-// Two releases stacked, not one — the repeat is what says "the whole history",
-// which is the difference between this and a single tagged list.
+// Two releases, not one: the repeat is the tell against a single tagged list.
 const change = (y, tagW, textW, tagFill) => [
   box(B.left, y, tagW, 20, { r: 6, fill: tagFill }),
   bar(B.left + tagW + 20, y + 4, textW, "body", { fill: body }),

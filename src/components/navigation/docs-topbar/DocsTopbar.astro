@@ -1,14 +1,6 @@
 ---
-/**
- * The fixed documentation header: drawer trigger, brand + version badge,
- * optional top-level links, search, theme toggle. Site chrome fed by
- * `src/data/header.json` — no CloudCannon YAML, wired by hand in `Docs.astro`.
- *
- * The editable regions bind to `@data[header]`, not the current file, so the
- * header is edited on canvas from whatever page is open. The prefix needs
- * `data_config.header` in `cloudcannon.config.yml`; `@file[<path>]` resolves
- * through `CloudCannon.file()` instead and does not answer to these paths.
- */
+// Regions bind to `@data[header]`, which needs `data_config.header` in
+// `cloudcannon.config.yml`; `@file[<path>]` does not answer to these paths.
 import { DOCS_NAV_TOGGLE_ID } from "@components/navigation/docs-sidebar/navToggle";
 import Search from "@components/navigation/search/Search.astro";
 import ThemeToggle from "@components/navigation/theme-toggle/ThemeToggle.astro";
@@ -162,8 +154,7 @@ const {
       }
     }
 
-    /* Image swaps its alternate on "toggled away from the site default", but
-       these props are named light/dark, so key the swap off the live scheme. */
+    /* Keyed off the live scheme: Image's own swap means "away from the site default". */
     html[data-theme="light"] .docs-topbar .docs-topbar-logo {
       .image-primary {
         display: block;

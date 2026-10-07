@@ -13,7 +13,7 @@ order: 1
       "name": "logoSource",
       "type": "string",
       "required": true,
-      "description": "Path to the header logo, an SVG or PNG. Used in both colour modes unless `logoAlternateSource` is set."
+      "description": "Path to the header logo, an SVG or PNG. Used in both color modes unless `logoAlternateSource` is set."
     },
     {
       "name": "logoAlternateSource",
@@ -83,6 +83,12 @@ order: 1
       "description": "The site's source repository. `src/utils/repository.ts` derives the per-page \"Edit this page\" link from it; a `/tree/<branch>` suffix names the branch edit links target, defaulting to `main`. Empty hides the link."
     },
     {
+      "name": "editPageLabel",
+      "type": "string",
+      "defaultValue": "\"Edit this page\"",
+      "description": "Text of the edit link."
+    },
+    {
       "name": "feedback.enabled",
       "type": "boolean",
       "defaultValue": "true",
@@ -92,7 +98,13 @@ order: 1
       "name": "feedback.action",
       "type": "string",
       "defaultValue": "\"/\"",
-      "description": "Where the vote is posted. The default posts to the site itself, which CloudCannon Forms captures with no extra setup."
+      "description": "Where the vote is posted. The default posts to the site itself, which CloudCannon Forms captures once the site is linked to an Inbox — see [Feedback & forms](/feedback-and-forms/#setting-up-cloudcannon-forms)."
+    },
+    {
+      "name": "feedback.prompt",
+      "type": "string",
+      "defaultValue": "\"Was this page helpful?\"",
+      "description": "The question beside the vote buttons."
     },
     {
       "name": "feedback.successMessage",
@@ -116,7 +128,7 @@ order: 1
 
 ## theme.json
 
-The accent and brand colours live here too — see [Theming](/theming/).
+The accent and brand colors live here too — see [Theming](/theming/).
 
 <ParamList
   params={[
@@ -124,9 +136,161 @@ The accent and brand colours live here too — see [Theming](/theming/).
       "name": "defaultTheme",
       "type": "\"dark\" | \"light\" | \"system\"",
       "defaultValue": "\"dark\"",
-      "description": "The colour scheme before a reader chooses one. `system` follows their operating system; the other two don't. See [Theming](/theming/#dark-mode)."
+      "description": "The color scheme before a reader chooses one. `system` follows their operating system; the other two don't. See [Theming](/theming/#dark-mode)."
+    },
+    {
+      "name": "themeSelector",
+      "type": "boolean",
+      "defaultValue": "true",
+      "description": "Shows a swatch button in the corner of CloudCannon's Visual Editor that opens these theme settings. Visitors to the published site never see it."
+    },
+    {
+      "name": "theme.accentLight",
+      "type": "string",
+      "description": "The interactive color in light mode — links, the active sidebar item, focus rings and code annotations."
+    },
+    {
+      "name": "theme.accentDark",
+      "type": "string",
+      "description": "The same role in dark mode. Use a paler step than the light one."
+    },
+    {
+      "name": "theme.brandLight",
+      "type": "string",
+      "description": "Primary button and brand fill in light mode."
+    },
+    {
+      "name": "theme.brandDark",
+      "type": "string",
+      "description": "Primary button and brand fill in dark mode."
+    },
+    {
+      "name": "theme.radius",
+      "type": "number",
+      "description": "Corner rounding in pixels, driving every radius on the site. `0` is square."
     }
   ]}
+/>
+
+## seo.json
+
+<ParamList
+  params={[
+    {
+      "name": "siteName",
+      "type": "string",
+      "required": true,
+      "description": "The site's name in structured data, and the brand name when a page sets none."
+    },
+    {
+      "name": "url",
+      "type": "string",
+      "required": true,
+      "description": "The production URL, used for canonical links and structured data. Keep it equal to `site` in `astro.config.mjs` — `npm run check` warns while either is still `https://example.com`."
+    },
+    {
+      "name": "description",
+      "type": "string",
+      "description": "The meta description for any page without its own."
+    },
+    {
+      "name": "titleFormat",
+      "type": "string",
+      "description": "The browser title. `{title}` is replaced with the page's title: `{title} | Acme` gives \"Installation | Acme\"."
+    },
+    {
+      "name": "logoSource",
+      "type": "string",
+      "description": "The social share image for pages that set no `image`. Empty means link previews show no picture."
+    },
+    {
+      "name": "faviconSource",
+      "type": "string",
+      "defaultValue": "\"/favicon.svg\"",
+      "description": "The browser tab icon, as an SVG."
+    },
+    {
+      "name": "faviconIcoSource",
+      "type": "string",
+      "defaultValue": "\"/favicon.ico\"",
+      "description": "The fallback tab icon for browsers without SVG favicon support."
+    },
+    {
+      "name": "twitterSite",
+      "type": "string",
+      "description": "The site's X (Twitter) handle, including the `@`. Optional."
+    }
+  ]}
+/>
+
+## footer.json
+
+<ParamList
+  params={[
+    {
+      "name": "links",
+      "type": "{ name, path }[]",
+      "description": "Text links in the footer."
+    },
+    {
+      "name": "socials",
+      "type": "{ icon, link }[]",
+      "description": "Icon links. `icon` is an id from `src/icons/`, such as `social/github`."
+    },
+    {
+      "name": "footerText",
+      "type": "string",
+      "description": "The line of small print — a copyright notice or license."
+    }
+  ]}
+/>
+
+## announcementBar.json
+
+<ParamList
+  params={[
+    {
+      "name": "enabled",
+      "type": "boolean",
+      "description": "Shows the bar at the top of every page."
+    },
+    {
+      "name": "text",
+      "type": "string",
+      "description": "The message, in Markdown, so it can carry a link. A reader who dismisses the bar doesn't see it again until the text changes."
+    }
+  ]}
+/>
+
+## breadcrumbs.json
+
+<ParamList
+  params={[
+    {
+      "name": "homeLabel",
+      "type": "string",
+      "defaultValue": "\"Docs\"",
+      "description": "Label for the first crumb, which links to the site root."
+    }
+  ]}
+/>
+
+## redirects.json
+
+<ParamList
+  params={[
+    {
+      "name": "routes",
+      "type": "{ from, to, status }[]",
+      "description": "Old URLs and where they go now. `from` is a path on this site; `to` is a path or a full URL; `status` is `\"301\"` (permanent) or `\"302\"` (temporary). Add one whenever a page is renamed or moved, so shared links keep working."
+    }
+  ]}
+/>
+
+<Alert
+  variant="warning"
+  title="Redirects only work on CloudCannon hosting"
+  text="`npm run build` turns these into CloudCannon's routing file, so they take effect on the next build of a CloudCannon-hosted site. Another host ignores them — recreate them in that host's own redirect config."
 />
 
 ## Reading config in a component
@@ -139,7 +303,7 @@ config loader to learn.
     {
       "label": "Astro",
       "language": "astro",
-      "code": "---\nimport header from \"@data/header.json\";\n---\n\n<p>{header.wordmark}</p>"
+      "code": "---\nimport header from \"@data/header.json\";\n---\n\n<nav>\n  {header.topbarLinks.map((link) => <a href={link.path}>{link.name}</a>)}\n</nav>"
     },
     {
       "label": "Node",
@@ -147,12 +311,4 @@ config loader to learn.
       "code": "import sidebar from \"./src/data/sidebar.json\" with { type: \"json\" };\n\nconsole.log(sidebar.navGroups.map((group) => group.name));"
     }
   ]}
-/>
-
-## Deprecations
-
-<Alert
-  variant="warning"
-  title="Removed in 3.0"
-  text="`mainNav.json` is replaced by `header.json` and `sidebar.json`, with the edit link in `pageTools.json`. The old file is no longer read."
 />

@@ -14,6 +14,8 @@ Releases live in `src/content/changelog/` — one Markdown file each, holding a 
 
 The summary sits between the version heading and the list — use it for what a release is about, or for an upgrade note. Leave it out and the release goes straight from its heading to its lines.
 
-Entries tagged `breaking` also get a callout on the reference page they affect.
+The same releases are published as an RSS feed at [`/changelog.xml`](/changelog.xml), so readers can subscribe to them. The feed is built from the collection too, so it needs no upkeep.
+
+An entry tagged `Breaking` is color-coded here. Nothing else happens automatically — if the change affects a reference page, consider adding an `Alert` there too.
 
 <Changelog limit={0}/>

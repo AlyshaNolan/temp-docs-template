@@ -30,8 +30,7 @@ if (!htmlAttributes.id && label) {
 const masonry = layout === "masonry";
 const columnCount = Math.min(4, Math.max(2, Math.round(Number(columns) || 3)));
 
-// Masonry mode keeps each cover's own shape — a fixed crop there would make
-// every card the same height, which is the whole point of the grid layout.
+// Masonry keeps each cover's own shape: a fixed crop would make every card the same height.
 const cardRatio = masonry ? "none" : aspectRatio;
 const gapValue = gap === "none" ? "0px" : `var(--spacing-${gap})`;
 
@@ -64,9 +63,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
 
 {
   masonry ? (
-    /* The Masonry wrapper brings its own order-preserving enhancement and
-       editor wiring, so masonry mode composes it rather than repeating the
-       layout JS here. */
+    /* Composes Masonry for its layout JS and editor wiring — don't repeat it here. */
     <div
       class:list={["card-grid", "stackable", className]}
       {...htmlAttributes}
@@ -81,10 +78,8 @@ if (!_component && !hasItems && !hasSlotContent) return;
         data-children-prop={effectiveChildrenProp}
       >
         <slot>
-          {/* MasonryItem is the measurement probe for the JS enhancement.
-               CardGridItem can't be the grid child: it has overflow:hidden
-               and a flex column, so measuring it after the row-span is set
-               feeds back into an 8px-tall collapse. */}
+          {/* MasonryItem is the measurement probe: measuring CardGridItem
+               (overflow:hidden, flex column) feeds back into an 8px collapse. */}
           {items?.map((item: ItemProps) => (
             <MasonryItem {...itemRegionAttributes}>
               <CardGridItem

@@ -1,20 +1,8 @@
 /**
- * Theme selector — the starter's worked example of the CloudCannon Visual
- * Editor JavaScript API.
- *
- * The API call that matters for live preview is `api.dataset("theme")`, not
- * `api.file("src/data/theme.json")` — see `resolveDataSource` in
- * `@component-utils/editorData`, which both this and `@component-utils/siteChrome` use.
- * `@cloudcannon/editable-regions` resolves every `@data[key]` binding the same
- * way — see `nodes/editable.ts`.
- *
- * The change handler writes custom properties onto `<html>`. They inherit, so
- * every element — including a section pinning its own `data-theme` — repaints in
- * the same frame, with no re-render and no stylesheet rewriting.
- *
- * The `themeSelector` switch is read from that same handle rather than gated at
- * build time, so unticking it hides the button in the same frame — a build-time
- * gate would leave no element to hide, and no way back without a rebuild.
+ * Live preview needs `api.dataset("theme")`, not `api.file(...)` — resolve it via
+ * `resolveDataSource`. Properties go on `<html>` so a section pinning its own
+ * `data-theme` inherits them. The `themeSelector` switch must not be gated at build
+ * time: that leaves no element to unhide.
  */
 
 import type {
@@ -31,17 +19,12 @@ const VISIBILITY_KEY = "themeSelector";
 const THEME_FILE = "src/data/theme.json";
 const THEME_SLUG = "theme";
 
-/** How often the fallback poll re-reads while a panel is open, in ms. */
 const POLL_INTERVAL = 300;
-/** How long that poll runs before giving up, in ms. */
 const POLL_LIMIT = 300_000;
 
 declare const window: CloudCannonEditorWindow;
 
-/**
- * What this module last wrote. A client-side navigation serves the page as it
- * was built, so unsaved edits have to be reapplied over it.
- */
+/** Reapplied after client-side navigation, which serves the page as built. */
 let applied: Record<string, string> = {};
 let visible = false;
 
@@ -59,10 +42,7 @@ function apply(properties: Record<string, string>) {
   applied = properties;
 }
 
-/**
- * Every selector in the document, not the one `wire` was handed: a client-side
- * navigation swaps in a fresh copy that ships `hidden`.
- */
+/** Every selector, not just `wire`'s: navigation swaps in a fresh copy that ships `hidden`. */
 function setVisible(next: boolean) {
   visible = next;
 
@@ -88,17 +68,11 @@ function readTheme(data: unknown): Record<string, unknown> {
 }
 
 interface Live {
-  /** The resolved data handle, for opening the panel. */
   file: CloudCannonJavaScriptV1APIFile;
-  /** Starts the fallback poll when no change event has proven the subscription. */
   startPolling: () => void;
 }
 
-/**
- * One subscription for the document. A client-side navigation re-runs setup
- * against a fresh element; re-resolving would stack a second set of change
- * listeners on the same handle, each re-reading on every drag of the picker.
- */
+/** One subscription per document: re-resolving on navigation would stack duplicate listeners. */
 let live: Promise<Live | undefined> | undefined;
 
 function connect(api: CloudCannonJavaScriptV1API): Promise<Live | undefined> {
@@ -120,9 +94,7 @@ function connect(api: CloudCannonJavaScriptV1API): Promise<Live | undefined> {
       setVisible(readVisible(data));
     });
 
-    // A change event proves the subscription reaches this frame, which is what
-    // retires the poll below. Never assume it: this ran for a release subscribed
-    // only to the file handle, where it never arrived.
+    // Only a received change event retires the poll; never assume the subscription reaches here.
     let liveEvents = false;
     let poll: ReturnType<typeof setInterval> | undefined;
 

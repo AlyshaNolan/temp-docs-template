@@ -1,12 +1,5 @@
-/**
- * Drives the "Copy page" menu. Registered in `editor-live-sync.js` as well as
- * the component's inline script, because inline scripts don't run in the
- * CloudCannon editor.
- *
- * Open/close and copy are delegated from `document` and bound once, so Astro's
- * view transitions can't stack listeners on detached DOM — the same shape as
- * `heading-links/setup.ts`. Per-root setup only reveals the control.
- */
+// Also registered in `editor-live-sync.js`. Handlers are delegated from `document`
+// and bound once, so view transitions can't stack listeners on detached DOM.
 import { llmPrompt } from "@utils/docsMarkdown";
 
 const RESET_MS = 1600;
@@ -45,8 +38,7 @@ function pageMarkdown(root: HTMLElement): Promise<string> {
   });
 
   markdown.set(root, pending);
-  // A failed fetch must not poison the cache, or every later attempt reports a
-  // failure that has already gone away.
+  // A failed fetch must not poison the cache.
   pending.catch(() => markdown.delete(root));
 
   return pending;
@@ -127,8 +119,7 @@ function onClick(event: MouseEvent): void {
 
   setOpen(root, false);
 
-  // Printing while the menu is open would trap focus behind the print dialog;
-  // the print stylesheet hides the control itself, so nothing reaches paper.
+  // An open menu would trap focus behind the print dialog.
   if (item.dataset.action === "print") {
     window.print();
     return;

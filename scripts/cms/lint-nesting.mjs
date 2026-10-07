@@ -1,16 +1,7 @@
 /**
- * Nesting-context registration policy.
- *
- * `.cloudcannon/structures/*Sections.*.yml` decide which components the editor
- * offers inside each slot. The policy — two uniform tiers, and why exclusions
- * must be transitively closed — is in
- * `.agents/skills/create-component/cloudcannon-yaml.md`.
- *
- * Two checks:
- *   1. Every context in a tier lists that tier's exact set.
- *   2. No context excludes a component that is reachable anyway through a
- *      wrapper it does allow — such an exclusion restricts nothing and only
- *      makes the picker inconsistent.
+ * Check `.cloudcannon/structures/*Sections.*.yml` against the two-tier policy in
+ * `.agents/skills/create-component/cloudcannon-yaml.md`: each tier lists its exact
+ * set, and no exclusion is reachable anyway through an allowed wrapper.
  *
  *   node scripts/cms/lint-nesting.mjs
  */

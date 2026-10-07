@@ -4,24 +4,14 @@ import type {
 } from "@cloudcannon/javascript-api";
 
 export interface EditorDataSource {
-  /** The file to open a panel on and read through. */
   file: CloudCannonJavaScriptV1APIFile;
-  /** Every handle that might emit `change` for this data. */
   emitters: { addEventListener(event: "change", fn: () => void): void }[];
 }
 
 /**
- * Resolve a `src/data` JSON file to a live handle, preferring the dataset.
- *
- * Prefer the dataset because CloudCannon fires `change` on it while a panel is
- * open; the file handle only settles up later, which shows as chrome that
- * repaints on navigation but not while a field is being typed into. The dataset
- * only exists if the key is declared under `data_config` in
- * `cloudcannon.config.yml`.
- *
- * CloudCannon has answered to both the bare and the leading-slash spelling of a
- * source path, and a wrong guess throws nothing useful — `data.get()` just
- * resolves `undefined` — so probe and keep whichever returns data.
+ * Prefers the dataset (needs `data_config` in `cloudcannon.config.yml`): only it fires
+ * `change` while a panel is open. Both path spellings are probed because a wrong one
+ * throws nothing — `data.get()` just resolves `undefined`.
  */
 export async function resolveDataSource(
   api: CloudCannonJavaScriptV1API,
@@ -50,7 +40,7 @@ export async function resolveDataSource(
   return undefined;
 }
 
-/** Coalesce bursts of `change` events into one repaint per frame. */
+/** One repaint per frame for a burst of `change` events. */
 export function framed(repaint: () => void): () => void {
   let queued = false;
 

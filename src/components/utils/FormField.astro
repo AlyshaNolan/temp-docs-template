@@ -1,13 +1,6 @@
 ---
-/*
- * The shell every labelled form control shares: root, label, hint, the control
- * itself (default slot), error. Not a placeable component — no CloudCannon
- * YAML, not in any picker.
- *
- * `hintId`/`errorId` come from the caller rather than being derived here: the
- * control needs them for `aria-describedby`, and it renders in the slot.
- * `formFieldIds()` in `formField.ts` produces both plus the control's ARIA.
- */
+// `hintId`/`errorId` come from the caller (`formFieldParts()` in `formField.ts`): the slotted
+// control needs them for `aria-describedby`, so they can't be derived here.
 import { isNonEmptyString } from "./isNonEmptyString";
 
 const {

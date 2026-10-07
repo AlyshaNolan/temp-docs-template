@@ -1,7 +1,7 @@
 <!--
 Vendored from CloudCannon/agent-skills @ b70076b102b0f1e20d05c4e3328d822f2298e115
 Upstream path: skills/cloudcannon-configuration/structures.md
-Adapted for this starter (astro-component-starter) — resync by diffing against upstream.
+Adapted for this starter (stratus-astro-template) — resync by diffing against upstream.
 "In this starter:" callouts mark where generic CloudCannon guidance is overridden here.
 CLI-config-generation flows from upstream are dropped — this repo does not generate config.
 See .agents/skills/STYLE.md § "This starter overrides generic CloudCannon docs".
@@ -311,7 +311,7 @@ _inputs:
 | ----------------------------------------------------------------- | --------------------------------------- |
 | Content: `title`, `subtitle`, `tagline`, `content`, `description` | `id` — HTML anchors, not content        |
 | Media: `image`, `images`                                          | `isDark` — theme variant, hardcoded     |
-| Behaviour: `isReversed`, `isAfterContent`, `isBeforeContent`      | `classes` — CSS customization           |
+| Behavior: `isReversed`, `isAfterContent`, `isBeforeContent`       | `classes` — CSS customization           |
 | Array: `items`, `links`, `socials`, `buttonSections`              | `bg` — background slot content          |
 | Configuration: `columns`, `count`                                 | `defaultIcon` — component-level default |
 

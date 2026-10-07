@@ -13,8 +13,7 @@ import {
 
 const B = band(760);
 
-// Two accent-numbered markers against the code, repeated as notes under a
-// divider — the paired numbers are the component's whole idea.
+// The paired accent numbers are the component's whole idea.
 export default preview({
   width: B.w,
   draw: [

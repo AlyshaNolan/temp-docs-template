@@ -1,9 +1,4 @@
-/**
- * Build-time loader for the documentation nav: reads the `docs` collection and
- * hands it to the shared model in `docsNavModel.ts`, which is where the shape
- * is decided. The Visual Editor feeds that same model from CloudCannon's API,
- * so the derivation lives in one place and cannot drift.
- */
+// Build-time loader only — the derivation lives in `docsNavModel.ts`, shared with the editor.
 import sidebar from "@data/sidebar.json";
 import { buildDocsNav, type DocsNav } from "@utils/docsNavModel";
 import { getCollection } from "astro:content";

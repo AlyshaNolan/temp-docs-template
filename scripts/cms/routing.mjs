@@ -1,16 +1,8 @@
 /**
- * Writes `_cloudcannon/routing.json` into the build output, merging the
- * editor's redirects from `src/data/redirects.json` ahead of the rules in
- * `.cloudcannon/routing.json`.
- *
- * CloudCannon reads the built file in preference to the source one, so this is
- * what lets an editor add a redirect without touching the repository. It can't
- * be an Astro route: `src/pages/_cloudcannon/` starts with an underscore, which
- * Astro treats as private and never emits.
- *
- * Rules are matched in order and the source file ends with a catch-all that
- * serves the 404 page, so editor routes have to come first. Headers are not
- * editable — nothing in the CMS should be able to drop a security header.
+ * Write `_cloudcannon/routing.json` into the build output: editor redirects from
+ * `src/data/redirects.json` ahead of `.cloudcannon/routing.json`, whose catch-all
+ * 404 rule must stay last. Not an Astro route — Astro never emits `_`-prefixed pages.
+ * Headers stay source-only so the CMS can never drop a security header.
  *
  *   node scripts/cms/routing.mjs [--out dist]
  */
@@ -27,9 +19,7 @@ const readJson = (path) => JSON.parse(readFileSync(join(root, path), "utf8"));
 const base = readJson(".cloudcannon/routing.json");
 const { routes = [] } = readJson("src/data/redirects.json");
 
-// A half-filled row is a redirect an editor started and abandoned. Emitting it
-// would send readers to `undefined`; dropping it leaves the 404 page to do its
-// job, which is the safer of the two.
+// A half-filled row would redirect readers to `undefined`.
 const editorRoutes = routes
   .filter((route) => route?.from?.trim() && route?.to?.trim())
   .map((route) => ({

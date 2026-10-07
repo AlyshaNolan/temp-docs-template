@@ -94,9 +94,6 @@ const imageAltProp = imageAltDataProp ?? (imageEditable ? "imageAlt" : undefined
       flex-direction: column;
       overflow: hidden;
 
-      /* A linked card lifts, and a trailing heading icon slides into the accent
-         with it — the arrow is what says "this whole card is the link", so it
-         has to move rather than the text picking up an underline. */
       &:has(> .card-grid-hit) {
         position: relative;
         transition:
@@ -126,9 +123,7 @@ const imageAltProp = imageAltDataProp ?? (imageEditable ? "imageAlt" : undefined
         }
       }
 
-      /* The reset kills the transition, leaving the movement as an instant
-         jump — the movement itself has to go. The border, shadow and accent
-         stay: they are the affordance, and they don't move. */
+      /* The global reset only kills the transition, so the movement itself has to go. */
       @media (prefers-reduced-motion: reduce) {
         &:has(> .card-grid-hit):hover {
           transform: none;

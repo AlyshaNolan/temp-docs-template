@@ -33,11 +33,13 @@ Build a page by listing existing components in the `pageSections` frontmatter of
 
 Pages are Markdown files under `src/content/pages/`. The file's path becomes the URL; almost all content lives in frontmatter, not the body.
 
-| File path                            | URL         |
-| ------------------------------------ | ----------- |
-| `src/content/pages/index.md`         | `/`         |
-| `src/content/pages/about.md`         | `/about/`   |
-| `src/content/pages/product/index.md` | `/product/` |
+| File path                          | URL        |
+| ---------------------------------- | ---------- |
+| `src/content/pages/index.md`       | `/`        |
+| `src/content/pages/<name>.md`      | `/<name>/` |
+| `src/content/pages/<dir>/index.md` | `/<dir>/`  |
+
+Only `index.md` ships; the other rows show where a new page would go.
 
 **Both collections mount at the site root.** `src/pages/[...slug].astro` serves `pages` and `docs` from the same route, and a slug claimed by both is a build error naming the two files — not a coin toss. Documentation pages live in `src/content/docs/`; see [docs-content-authoring](../docs-content-authoring/SKILL.md).
 
@@ -108,7 +110,7 @@ pageSections:
     backgroundColor: surface
   - _component: page-sections/conversion/cta-split
     heading: Ready to start building?
-    subtext: Browse the complete component library.
+    subtext: Start with the installation guide.
     buttonSections:
       - _component: building-blocks/core-elements/button
         text: Read the introduction
@@ -132,13 +134,13 @@ In short: `colorScheme` sets the section's theme; `backgroundColor` paints its b
 | ------------------------------------ | ------------------------------------------- |
 | Page intro / banner                  | `page-sections/heroes/hero-center`          |
 | A row of headline numbers            | `page-sections/explainers/stats`            |
-| An ordered walkthrough               | `page-sections/explainers/steps`            |
+| An ordered walkthrough               | `page-sections/explainers/steps-section`    |
 | Cards linking into the documentation | `page-sections/collections/card-collection` |
 | Questions and answers                | `page-sections/explainers/faq-section`      |
 | Closing call to action               | `page-sections/conversion/cta-split`        |
 | Anything else — free composition     | `page-sections/builders/custom-section`     |
 
-`hero-center`, `stats` and `card-collection` all take `alignmentHorizontal` — set it to `start` for a documentation landing page, where centred headings read as marketing.
+`hero-center`, `stats` and `card-collection` all take `alignmentHorizontal` — set it to `start` for a documentation landing page, where centered headings read as marketing.
 
 Three options worth knowing when building a landing page:
 

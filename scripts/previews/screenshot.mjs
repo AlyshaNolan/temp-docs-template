@@ -3,13 +3,8 @@
  *
  *   node scripts/previews/screenshot.mjs [--skip-build] [--only <substring>] [--out <dir>]
  *
- * Builds the bare `preview-renders/*` pages (COMPONENT_PREVIEWS=true), serves
- * dist/, and screenshots each component's rendered output to a PNG. These PNGs
- * ground recipe authoring (`*.preview.mjs`) — they are never an input to the
- * committed SVGs, which are produced deterministically by `build.mjs`.
- *
- * Requires Chrome/Edge/Chromium (or CHROME_PATH). Output defaults to
- * `.preview-screenshots/` (git-ignored, regenerated on demand).
+ * Never an input to the committed SVGs. Requires Chrome/Edge/Chromium (or
+ * CHROME_PATH); writes to `.preview-screenshots/` (git-ignored).
  */
 import { execSync } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, statSync } from "node:fs";
@@ -51,7 +46,7 @@ if (!skipBuild) {
   execSync("npx astro build", {
     cwd: root,
     stdio: "inherit",
-    env: { ...process.env, COMPONENT_PREVIEWS: "true", DISABLE_COMPONENT_LIBRARY: "true" },
+    env: { ...process.env, COMPONENT_PREVIEWS: "true" },
   });
 }
 

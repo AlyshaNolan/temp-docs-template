@@ -1,7 +1,5 @@
-# Only the section's own content, plus the two wrapper knobs that still do
-# something in a documentation page: `.prose` zeroes a nested section's
-# max-width and both paddings (see `_prose.css`), so offering those here would
-# be four fields that change nothing.
+# Max-width and paddings are left off: `.prose` zeroes them on a nested section
+# (see `_prose.css`), so they would change nothing in a docs page.
 faqSection:
   template: mdx_component
   inline: false

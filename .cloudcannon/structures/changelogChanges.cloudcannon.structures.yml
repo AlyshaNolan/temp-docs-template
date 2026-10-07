@@ -1,5 +1,3 @@
-# Changelog lines, used by the `changes` array input on the `changelog`
-# collection (`cloudcannon.config.yml`).
 changelogChanges:
   values:
     - label: Change
@@ -10,7 +8,7 @@ changelogChanges:
       _inputs:
         tag:
           type: select
-          comment: The kind of change. "Breaking" and "Added" are colour-coded; anything else renders neutral.
+          comment: The kind of change. "Breaking" and "Added" are color-coded; anything else renders neutral.
           options:
             values:
               - Added

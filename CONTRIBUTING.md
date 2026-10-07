@@ -1,6 +1,6 @@
 # Contributing
 
-Read [`CLAUDE.md`](CLAUDE.md) (commands, conventions that bite), [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) (how the machinery fits together), and [`AGENTS.md`](AGENTS.md) (skills index) before changing anything structural. This file covers the contribution mechanics they don't.
+Read [`AGENTS.md`](AGENTS.md) (commands, conventions that bite, skills index) and [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) (how the machinery fits together) before changing anything structural. This file covers the contribution mechanics they don't.
 
 ## Adding a component
 
@@ -16,19 +16,9 @@ The canonical playbook is the [create-component skill](.agents/skills/create-com
 8. Place it on a page under `src/content/` so it ships composed — and so the smoke tests can reach it.
 9. `npm run check`, then verify in the Visual Editor (`npm run dev`).
 
-## The check gauntlet
+## Checks
 
-Run `npm run check` before claiming any work done. It chains:
-
-- `lint` — ESLint on JS/TS/Astro, ESLint on YAML, Stylelint on CSS.
-- `format` — Prettier check across the repo (`format:fix` / `check:fix` to auto-fix).
-- `typecheck` — `astro check` (TypeScript across `.astro` files).
-- `previews:check` — fails if a component is missing its `*.preview.mjs` recipe or built SVG (or an SVG is orphaned / `image:` unwired / a committed SVG is stale vs. its recipe); browser-free.
-- `agents:check` — fails if `.claude/skills/` or `.cursor/rules/` drift from canonical `.agents/`.
-- `docs:catalog:check` — fails if the component tables in the page-content-authoring skill are stale.
-- `lint:cms` — validates the CloudCannon layer against the components: prop drift, orphaned/missing YAML, `_component` resolution.
-- `lint:roots` / `lint:nesting` / `lint:schema` — editor-root attributes, the picker's nesting policy, and the official CloudCannon JSON Schemas.
-- `lint:links` — every internal link in the built site resolves; warns (without failing) on orphan pages no other page links to.
+Run `npm run check` before claiming any work done — it is what CI runs. The `check` script in [`package.json`](package.json) is the list of what it chains; `npm run check:fix` auto-fixes lint and formatting.
 
 ## Dependencies: never bare `npm install`
 
@@ -40,4 +30,4 @@ There is no `CHANGELOG.md`. The site publishes its own changelog from `src/conte
 
 ## Skills layout
 
-Agent skills and rules live canonically in `.agents/` (`skills/<skill>/SKILL.md`, `rules/<name>.md`). `.claude/skills/` and `.cursor/rules/` are generated copies — never hand-edit them. Edit under `.agents/`, then run `npm run agents:sync`; `agents:check` fails CI on drift.
+`AGENTS.md` is the one instructions file for every coding agent; `CLAUDE.md` only imports it and the rules. Agent skills and rules live canonically in `.agents/` (`skills/<skill>/SKILL.md`, `rules/<name>.md`). `.claude/skills/` and `.cursor/rules/` are generated copies — never hand-edit them. Edit under `.agents/`, then run `npm run agents:sync`; `agents:check` fails CI on drift.

@@ -1,19 +1,14 @@
 /**
- * Order-preserving masonry — upgrades a consumer's CSS-columns baseline to a
- * grid with measured row spans, without moving DOM nodes (so tab order and
- * CloudCannon editable bindings survive). No-ops where `display: masonry` is
- * native: the consumer's `@supports` block must test the exact string tested
- * here. Shared by the Masonry wrapper and Gallery Grid.
+ * Never move DOM nodes here: tab order and editable bindings depend on source order.
+ * A consumer's `@supports` block must test the exact `display: masonry` string tested here.
  */
 
 import { masonrySpan } from "./masonrySpan";
 
-/* A measurement quantum, not a design token. Must match `grid-auto-rows` in
- * every consumer's enhanced CSS block. */
+/* Must match `grid-auto-rows` in every consumer's enhanced CSS block. */
 export const ROW_UNIT = 8;
 
-/** `root` takes the `data-masonry-enhanced` attribute the consumer's CSS keys
- *  on; Gallery Grid passes the same element as both root and inner. */
+/** `root` takes the `data-masonry-enhanced` attribute the consumer's CSS keys on. */
 export function enhanceMasonryLayout(root: HTMLElement, inner: HTMLElement): void {
   if (CSS.supports("display", "masonry")) return;
 
@@ -27,8 +22,7 @@ export function enhanceMasonryLayout(root: HTMLElement, inner: HTMLElement): voi
     const gap = parseFloat(getComputedStyle(inner).columnGap) || 0;
 
     for (const item of Array.from(inner.children) as HTMLElement[]) {
-      // Measure the item's content wrapper, never the spanning item itself —
-      // the span changes the item's height, and measuring that would loop.
+      // Never measure the spanning item itself: its span changes its height, so it would loop.
       const probe = (item.firstElementChild as HTMLElement | null) ?? item;
       const span = masonrySpan(probe.getBoundingClientRect().height, gap, ROW_UNIT);
       const value = `span ${span}`;
@@ -43,19 +37,15 @@ export function enhanceMasonryLayout(root: HTMLElement, inner: HTMLElement): voi
 
   const observeItems = () => {
     for (const item of Array.from(inner.children)) {
-      // An editable-region re-render swaps an item's contents, detaching the
-      // probe this observes — watch each item so the new probe is picked up.
+      // An editor re-render swaps an item's contents, detaching the observed probe.
       mutationObserver.observe(item, { childList: true });
 
       if (item.firstElementChild) resizeObserver.observe(item.firstElementChild);
     }
   };
 
-  // Container resizes (column-count) and content resizes (image loads, editor
-  // typing) both re-span. Observing an element twice is a no-op.
   const resizeObserver = new ResizeObserver(queueRelayout);
 
-  // The editor adds, removes and re-renders items live.
   const mutationObserver = new MutationObserver(() => {
     observeItems();
     queueRelayout();

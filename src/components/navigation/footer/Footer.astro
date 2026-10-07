@@ -1,13 +1,7 @@
 ---
 /**
- * A one-line site footer: legal text, links, socials. Docs pages carry their
- * own navigation in the sidebar, so the footer stays out of the way rather
- * than repeating it as a sitemap.
- *
- * `editableSource` prefixes the editable-region paths. The shell passes
- * `@data[footer]` because the site footer reads `footer.json`, not the open
- * page; placed in a page builder the prop is absent and the bindings fall back
- * to the page's own frontmatter. Hardcoding either one breaks the other use.
+ * `editableSource` is `@data[footer]` from the shell and absent in a page builder,
+ * where bindings fall back to page frontmatter. Hardcoding either breaks the other.
  */
 import SocialLinks from "@core-elements/social-links/SocialLinks.astro";
 import type { SocialLink } from "../../../types";

@@ -1,7 +1,5 @@
-# Language tabs, used by the `code-tabs` component's `tabs` array input.
-#
-# Must live here, not in the component's inputs.yml — `_structures` is not a
-# valid key in an `_inputs_from_glob` file.
+# Used by `code-tabs` `tabs`; must live here — `_structures` is not a valid key
+# in an `_inputs_from_glob` file.
 codeTabs:
   values:
     - label: Tab

@@ -14,8 +14,7 @@ import {
 
 const B = band(760);
 
-// Three outlined tabs above the code, the first filled — at thumbnail size the
-// tab row has to be the loudest thing here, or this reads as a plain code block.
+// The tab row must be the loudest thing, or this reads as a plain code block.
 const tab = (x, w, active) => [
   box(x, 16, w, 46, { r: 9, fill: active ? paper : panel, stroke: line, sw: 2 }),
   bar(x + 20, 31, w - 40, "label", { fill: active ? accent : subject }),

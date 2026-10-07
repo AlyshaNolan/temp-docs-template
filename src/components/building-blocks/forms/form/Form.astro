@@ -28,9 +28,8 @@ const hasSlotContent = Astro.slots.has("default");
 
 if (!_component && !hasFormBlocks && !hasSlotContent) return;
 
-// `multipart/form-data` only when a file field needs it — endpoints and audits
-// both treat a multipart form with nothing to upload as a mistake. A slot-built
-// form can't be inspected, so set `enctype` on the component to override.
+// Multipart only when a file field needs it; a slot-built form can't be
+// inspected, so it needs `enctype` set on the component.
 const hasFileUpload = (formBlocks as FormBlock[])?.some((block) =>
   String(block?._component ?? "").endsWith("/file-upload")
 );
@@ -100,9 +99,7 @@ const hasFileUpload = (formBlocks as FormBlock[])?.some((block) =>
       width: 100%;
 
       > .form-fields {
-        /* The form owns the space between its blocks. A margin on each field
-           would also sit below the last one, between the form and whatever
-           follows it. */
+        /* Not per-field margins: they would also sit below the last field. */
         align-items: flex-start;
         display: flex;
         flex-direction: column;

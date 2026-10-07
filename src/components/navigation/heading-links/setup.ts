@@ -1,10 +1,4 @@
-/**
- * Clicking a prose heading copies a link to that section.
- *
- * The affordance is the `#` CSS adds on hover (see `base/_prose.css`); this
- * makes it work. Registered in `editor-live-sync.js` too, because inline
- * scripts don't run in the CloudCannon editor.
- */
+// Also registered in `editor-live-sync.js`; the hover `#` lives in `base/_prose.css`.
 const TOAST_MS = 1600;
 
 let bound = false;
@@ -26,8 +20,7 @@ function showToast(message: string): void {
 }
 
 export function setupHeadingLinks(): void {
-  // Bound once at document level, resolving the heading at event time, so
-  // Astro view transitions can't stack listeners on detached DOM.
+  // Bound once, resolving the heading at event time, so view transitions can't stack listeners.
   if (bound) return;
   bound = true;
 
@@ -36,8 +29,7 @@ export function setupHeadingLinks(): void {
       ".prose h2[id], .prose h3[id]"
     );
 
-    // Steps and tabs render their own label headings; those carry no anchor
-    // affordance (see `base/_prose.css`), so they must not copy a link either.
+    // Steps and tabs headings have no anchor affordance in `base/_prose.css`; keep the two in step.
     if (!heading || heading.closest(".step-content, .content-selector-tab")) return;
 
     event.preventDefault();

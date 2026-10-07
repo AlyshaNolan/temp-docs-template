@@ -1,10 +1,4 @@
 ---
-/**
- * The site's only route. It serves two collections, both mounted at the site
- * root: `pages` (page-builder entries — the overview) and `docs` (Markdown
- * articles). A slug claimed by both is a build error rather than a coin toss
- * over which one wins.
- */
 import Breadcrumbs from "@components/navigation/breadcrumbs/Breadcrumbs.astro";
 import CopyPage from "@components/navigation/copy-page/CopyPage.astro";
 import DocsPager from "@components/navigation/docs-pager/DocsPager.astro";
@@ -63,8 +57,7 @@ const nav = await getDocsNav();
 const { Content, headings } = await render(entry as CollectionEntry<"docs">);
 
 const tocHeadings = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
-// Rendered whenever the page has headings to list, then hidden if the switch is
-// off — a build-time gate would leave the editor nothing to reveal.
+// Hidden rather than gated: a build-time gate leaves the editor nothing to reveal.
 const hasToc = tocHeadings.length > 0;
 const showTableOfContents = Boolean(doc?.data.showTableOfContents) && hasToc;
 
@@ -81,8 +74,7 @@ const updated = updatedDate
     })
   : "";
 const editUrl = doc ? editPageUrl(doc.filePath) : "";
-// Opt-out, not opt-in: a page missing the frontmatter default (a content
-// entry parsed before the field existed) must still get the control.
+// Opt-out: an entry parsed before the field existed must still get the control.
 const showCopyPage = Boolean(doc && doc.data.showCopyPage !== false && pageTools.copyPage.enabled);
 const showFeedback = Boolean(doc?.data.showFeedback && pageTools.feedback?.enabled);
 ---
@@ -109,9 +101,7 @@ const showFeedback = Boolean(doc?.data.showFeedback && pageTools.feedback?.enabl
   {
     doc ? (
       <article class="doc">
-        {/* Only the Home and current crumbs have a path to bind: the group and
-            parent crumbs are derived by joining files. `@component-utils/siteChrome`
-            keeps those live in the editor instead. */}
+        {/* Group and parent crumbs have no path to bind; `siteChrome` keeps them live. */}
         <Breadcrumbs
           class="doc-breadcrumbs"
           currentProp="title"
@@ -219,17 +209,12 @@ const showFeedback = Boolean(doc?.data.showFeedback && pageTools.feedback?.enabl
       margin-bottom: var(--spacing-md);
     }
 
-    /* Keeps the control at the right edge on the row it lands on, wrapped or
-       not — `space-between` would flush it left once it had a row to itself. */
+    /* Not `space-between`: that flushes it left once it wraps to its own row. */
     .doc-heading > .copy-page {
       flex: none;
       margin-inline-start: auto;
     }
 
-    /* Wide enough for a heading column beside the control: the title takes the
-       remaining space and wraps its own text, so the control holds the corner.
-       Narrower than this the two share a line only by squeezing the title into
-       a column that breaks words mid-way, so it wraps to its own row instead. */
     @media (width >= 640px) {
       .doc-heading {
         flex-wrap: nowrap;

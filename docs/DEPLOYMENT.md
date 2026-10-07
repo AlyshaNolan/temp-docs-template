@@ -6,13 +6,13 @@ no build settings to fill in by hand.
 
 ## What's already configured
 
-| File                                      | What it does                                                                                                                       |
-| ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| `.cloudcannon/initial-site-settings.json` | Build defaults CloudCannon reads on first sync: SSG `astro`, `npm ci`, `npm run build`, output `dist`, Node version from `.nvmrc`. |
-| `cloudcannon.config.yml`                  | Collections, data editing, the icon picker, and the globs that pull in every component's schema.                                   |
-| `.cloudcannon/structures/`                | Generated "Add section" entries — one per component, with previews.                                                                |
-| `.cloudcannon/routing.json`               | 404 handling, security headers (HSTS, nosniff, framing, referrer, permissions), and `X-Robots-Tag` on the 404 page.                |
-| `.cloudcannon/schemas/`                   | Front matter schemas for new pages and posts.                                                                                      |
+| File                                      | What it does                                                                                                        |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `.cloudcannon/initial-site-settings.json` | Build defaults CloudCannon reads on first sync: SSG `astro`, `npm i`, `npm run build`, output `dist`, Node 24.      |
+| `cloudcannon.config.yml`                  | Collections, data editing, the icon picker, and the globs that pull in every component's schema.                    |
+| `.cloudcannon/structures/`                | One file per picker (page sections, card contents, form fields…), each gathering its components' schemas by glob.   |
+| `.cloudcannon/routing.json`               | 404 handling, security headers (HSTS, nosniff, framing, referrer, permissions), and `X-Robots-Tag` on the 404 page. |
+| `.cloudcannon/schemas/`                   | Templates for new files: a documentation page, a reference page, a page-builder page and a changelog release.       |
 
 Because component schemas are aggregated by glob, a component you add is registered with the
 editor automatically — there is no separate CloudCannon-side registration step.
@@ -28,13 +28,13 @@ editor automatically — there is no separate CloudCannon-side registration step
 4. Build. CloudCannon picks up the settings above, runs `npm run build`, and serves `dist`.
 
 CloudCannon's own [documentation](https://cloudcannon.com/documentation/) is the reference for
-the account-side details — organisations, permissions, custom domains, and staging branches.
+the account-side details — organizations, permissions, custom domains, and staging branches.
 
 ## Set your production URL
 
 This is the one thing a fresh clone will get wrong, and it fails silently. `site` in
 `astro.config.mjs` is the base for every absolute URL Astro emits — canonical tags, the
-sitemap, RSS links, and the JSON-LD `@id` graph. Left at `https://example.com` the build
+sitemap, the changelog's RSS feed, and the JSON-LD `@id` graph. Left at `https://example.com` the build
 still succeeds and the pages still look right, while every one of those URLs points at a
 domain you don't own.
 
@@ -76,11 +76,11 @@ in `optionalDependencies` alongside the equivalent `sharp` and `rollup` packages
 
 - `npm run check` — the full gate, including the placeholder warning.
 - `npm run build && npm run preview` — production build with search indexed.
-- Confirm `src/data/seo.json` has your name, description, and logo, and that
-  `src/data/header.json` no longer carries the template's logo (`src/assets/images/logo/`) and `seo.json` its favicons, `src/content/changelog/`
-  the template's releases (the header badge shows the newest one), nor
-  `src/data/pageTools.json` its `repositoryUrl`. `npm run check:placeholders` lists what is still unset.
-- Edit `public/llms.txt` so it lists _your_ pages, not the template's.
+- Replace the template's branding. `npm run check:placeholders` lists what is still unset:
+  - `src/data/seo.json` — your name, description, logo and favicons.
+  - `src/data/header.json` — your logo, not the one in `src/assets/images/logo/`.
+  - `src/data/pageTools.json` — your `repositoryUrl`.
+  - `src/content/changelog/` — your releases, not the template's (the header badge shows the newest).
 - `npm run lint:links` — a page renamed late in the project leaves dead links behind, and
   nothing else notices. Read its orphan warnings too: a page nothing links to is only
   reachable through search.

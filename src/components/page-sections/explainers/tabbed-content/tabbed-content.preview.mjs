@@ -14,9 +14,7 @@ import {
 
 const B = band(960);
 
-// A section heading over one bordered panel whose tabs run along the top, the
-// first underlined in the accent. Horizontal tabs are the tell against
-// `content-selector`, whose own preview runs its tab list down the side.
+// Horizontal tabs are the tell against `content-selector`, whose tabs run down the side.
 export default preview({
   width: B.w,
   draw: [

@@ -1,5 +1,4 @@
-/** Row-span math for masonry's grid enhancement — an item spans enough tiny
- *  auto-rows to cover its content plus one visual gap. Pure, so it unit-tests. */
+/** Enough auto-rows to cover the content plus one gap. */
 export function masonrySpan(contentHeight: number, gapPx: number, unitPx: number): number {
   if (!Number.isFinite(contentHeight) || contentHeight <= 0) return 1;
 

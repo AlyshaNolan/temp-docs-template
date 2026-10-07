@@ -215,19 +215,19 @@ Page section wrappers expose `label` to authors as `sectionLabel` and forward it
 
 | Interaction              | Technique                                                       | Example                 |
 | ------------------------ | --------------------------------------------------------------- | ----------------------- |
-| Modal / popup / dropdown | Popover API (`popover`, `popovertarget`)                        | `Modal.astro`           |
+| Modal / popup / dropdown | Popover API (`popover`, `popovertarget`)                        | `ModalShell.astro`      |
 | Expand / collapse        | `<details>` / `<summary>` (`name` for single-open)              | `AccordionItem.astro`   |
 | Tabs / switcher          | Hidden radio inputs + `:checked` sibling + `:has()` fallback    | `ContentSelector.astro` |
-| Enter/exit animations    | `@starting-style` + `allow-discrete` transitions                | `Modal.astro`           |
+| Enter/exit animations    | `@starting-style` + `allow-discrete` transitions                | `ModalShell.astro`      |
 | Conditional visibility   | `:has()` or checkbox/radio toggle                               | `ContentSelector.astro` |
 | Responsive layout        | Container queries (`container-type: inline-size`, `@container`) | `Split.astro`           |
 
 ## Interactive components (JS that must run in the editor)
 
-**MUST NOT:** rely on an inline `<script>` for behaviour that must also work inside the CloudCannon Visual Editor.
+**MUST NOT:** rely on an inline `<script>` for behavior that must also work inside the CloudCannon Visual Editor.
 **Why:** the editor renders Astro via React's `renderToStaticMarkup`, which strips inline `<script>` tags — so inline setup never runs in the editor.
 
-| Where the behaviour must run         | How to wire it                                                                                                       |
+| Where the behavior must run          | How to wire it                                                                                                       |
 | ------------------------------------ | -------------------------------------------------------------------------------------------------------------------- |
 | Live site only (progressive enhance) | Inline `<script>` with the `onPageLoad` utility (below).                                                             |
 | Live site **and** the editor         | Put setup in an importable module (see `content-selector/setup.ts`); register + re-init it in `editor-live-sync.js`. |
@@ -246,4 +246,4 @@ Page section wrappers expose `label` to authors as `sectionLabel` and forward it
 </script>
 ```
 
-Query inside the callback, early-return when none found, keep it minimal — enhance, don't replace, the CSS-first behaviour.
+Query inside the callback, early-return when none found, keep it minimal — enhance, don't replace, the CSS-first behavior.

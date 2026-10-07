@@ -1,15 +1,7 @@
 ---
 /**
- * Resolves the colour scheme before first paint, so there is no flash.
- *
- * Three inputs, in order: the reader's stored choice, then the site's
- * configured default (`defaultTheme` in `src/data/theme.json`), then — only
- * when that default is `system` — the operating system's preference. A site
- * that ships dark stays dark for a reader whose OS is light until they say
- * otherwise.
- *
- * `data-theme` on `<html>` is the *baseline*: every themed element is flipped
- * relative to its own default, which is what lets a section pin a scheme.
+ * Precedence: stored choice, then `defaultTheme`, then the OS only when that is `system`.
+ * `data-theme` on `<html>` is a baseline each section flips relative to its own default.
  */
 const { defaultTheme = "system" } = Astro.props;
 ---

@@ -28,9 +28,7 @@ const {
   ...htmlAttributes
 } = Astro.props;
 
-// Without an image the second column is the buttons — otherwise the text sits
-// in a 400px column with the buttons stacked under it and the rest of the
-// section empty.
+// Without an image the buttons take the second column, or it sits empty.
 const hasImage = Boolean(imageSource);
 ---
 

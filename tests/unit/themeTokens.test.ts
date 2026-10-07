@@ -46,7 +46,7 @@ describe("themeCustomProperties", () => {
 
   it("omits every property it has no usable value for", () => {
     expect(themeCustomProperties({})).toEqual({});
-    expect(themeCustomProperties({ accentLight: "not a colour" })).toEqual({});
+    expect(themeCustomProperties({ accentLight: "not a color" })).toEqual({});
   });
 
   it("sets the radius base from a non-negative number only", () => {

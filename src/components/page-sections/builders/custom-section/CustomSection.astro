@@ -386,8 +386,6 @@ const arrayDataAttributes =
           background-color: var(--color-bg-highlight);
         }
 
-        /* Flips with the theme rather than pinning a colour: a closing band
-           that is dark on a light page and light on a dark one. */
         > .bg-inverse {
           background-color: var(--color-bg-inverse);
         }
@@ -410,10 +408,8 @@ const arrayDataAttributes =
       }
     }
 
-    /* Everything on the inverse band has to flip with it — text and controls
-       both, or a primary button ends up the same colour as the band it sits on.
-       Scoped to the section's own content so a nested section with its own
-       background is unaffected. */
+    /* Controls flip too, or a primary button matches the band. Scoped to own
+       content so a nested section with its own background is unaffected. */
     .custom-section:has(> .outer-content > .background.bg-inverse) > .outer-content > .content {
       color: var(--color-text-inverse);
 
@@ -444,8 +440,7 @@ const arrayDataAttributes =
       }
     }
 
-    /* A secondary button's fill is the neutral surface, which all but vanishes
-       on a tinted band — so it borrows an outline there instead. */
+    /* A secondary button's neutral fill vanishes on a tinted band. */
     .custom-section:has(> .outer-content > .background.bg-accent)
       > .outer-content
       > .content
@@ -466,8 +461,6 @@ const arrayDataAttributes =
       }
     }
 
-    /* Parallax scrolling is a common vestibular trigger — fall back to a
-       regular background image. */
     @media (prefers-reduced-motion: reduce) {
       .custom-section > .outer-content.background-fixed > .background-image {
         position: absolute;

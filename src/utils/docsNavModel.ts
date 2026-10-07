@@ -1,24 +1,8 @@
 /**
- * How the documentation sidebar is derived, with no dependency on how the pages
- * were loaded.
- *
- * `docsNav.ts` feeds this from `getCollection("docs")` at build time;
- * `siteChrome.ts` feeds it from `CloudCannon.collection()` in the Visual Editor,
- * where the answer includes edits that have not been built yet. One
- * implementation, two sources — a second copy would put a page in one place on
- * canvas and another after the rebuild.
- *
- * Two levels, from two different sources:
- *
- * - A page's `group` frontmatter (not its folder) puts it in a sidebar group.
- *   A page with no `group` builds and is searchable but never appears in the
- *   nav. Group order comes from `navGroups`; a group used in frontmatter but
- *   missing there is appended rather than dropped, so a new group is never
- *   silently invisible.
- * - A page's **path** nests it. `theming/token-reference.mdx` is a child of
- *   `theming.mdx` because that page exists, and inherits its group. Nesting is
- *   the file tree, so moving a page is the only thing that changes it — and a
- *   child whose parent page doesn't exist falls back to its own `group`.
+ * The one sidebar derivation, fed by `docsNav.ts` at build time and `siteChrome.ts`
+ * in the Visual Editor — a second copy would place a page differently on canvas.
+ * A page's `group` frontmatter (not its folder) picks its group; no `group`, no nav entry.
+ * Its path nests it under an existing parent page, whose group then overrides its own.
  */
 
 export type OrderedPage = { order: number; title: string };
@@ -29,13 +13,8 @@ export function comparePages(a: OrderedPage, b: OrderedPage): number {
 }
 
 /**
- * Group render order: the groups named in `sidebar.json`, in that order, then
- * any group named only in page frontmatter, alphabetically. Groups with no
- * pages drop out.
- *
- * Renaming a `navGroups` entry therefore renames nothing on screen — membership
- * comes from each page's `group`, so the old name survives in the alphabetical
- * tail instead.
+ * `sidebar.json` groups in order, then frontmatter-only groups alphabetically. Renaming
+ * a `navGroups` entry renames nothing: the old name survives in the alphabetical tail.
  */
 export function orderGroupNames(configured: string[], present: string[]): string[] {
   const extras = present.filter((name) => !configured.includes(name)).sort();
@@ -106,8 +85,6 @@ export function buildDocsNav(entries: DocsNavEntry[], config: DocsNavConfig = {}
 
   const sortPages = (pages: DocsNavPage[]) => pages.sort(comparePages);
 
-  // Nest before grouping: a child's group is its parent's, whatever its own
-  // frontmatter says, so the two levels can't disagree in the sidebar.
   const roots: DocsNavPage[] = [];
 
   for (const page of byId.values()) {

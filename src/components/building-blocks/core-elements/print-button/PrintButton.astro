@@ -1,12 +1,5 @@
 ---
-/**
- * A button that opens the browser's print dialog.
- *
- * It ships `hidden` and is revealed by `setup.ts` — printing needs JavaScript,
- * so with it off the reader sees nothing rather than a dead control. Every
- * browser's own print shortcut still works, which is why hiding it costs
- * nothing.
- */
+// Ships `hidden` and `setup.ts` reveals it, so with JS off there's no dead control.
 import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
 import Button from "@core-elements/button/Button.astro";
 
@@ -57,7 +50,6 @@ const effectiveDataProp = customDataProp ?? (useDefaultEditableBinding ? "text" 
       width: fit-content;
     }
 
-    /* Printing the page that offers the button would print the button. */
     @media print {
       .print-button {
         display: none !important;

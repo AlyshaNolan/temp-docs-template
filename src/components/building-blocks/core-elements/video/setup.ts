@@ -1,16 +1,7 @@
 /**
- * YouTube/Vimeo custom elements and autoplay repair for Video.
- *
- * Used by:
- * - `Video.astro`'s inline `<script>` on the live site
- * - `editor-live-sync.js` in the CloudCannon editor, where inline scripts
- *   don't run
- * - `VideoElements.astro` on isolated preview shells that may inject those
- *   tags without going through Video.astro
- *
- * Facade libraries are loaded only when a matching custom element is on the
- * page (`lite-vimeo` / `lite-youtube`). Vite splits those into their own
- * chunks; this file stays one module.
+ * Used by `Video.astro`'s inline script, `editor-live-sync.js` (inline scripts
+ * don't run in the editor) and `VideoElements.astro` on preview shells that
+ * inject the tags without Video.astro.
  */
 
 function containsSelector(root: ParentNode, selector: string): boolean {
@@ -34,9 +25,8 @@ function defineUsedVideoElements(root: ParentNode = document): void {
 }
 
 /**
- * Strips autoplay from hosted embeds for a reduced-motion visitor. Runs before
- * `defineUsedVideoElements` on purpose: until the facade library is imported
- * the custom elements are inert, so their attributes are still free to change.
+ * Must run before `defineUsedVideoElements`: the custom elements' attributes
+ * can only change while the facade library is unimported.
  */
 function disarmHostedAutoplay(root: ParentNode = document): void {
   const scope = (selector: string) => [
@@ -65,10 +55,8 @@ function isBroken(video: HTMLVideoElement) {
 }
 
 function repairAndPlay(video: HTMLVideoElement) {
-  // load() alone isn't enough in Firefox: the <source> nodes themselves
-  // can carry over a failed-selection state from the view-transition
-  // swap, so replace them with fresh nodes (no prior loading history)
-  // before retrying.
+  // load() alone isn't enough in Firefox: <source> nodes can carry a failed
+  // selection over from the view-transition swap, so replace them first.
   video.querySelectorAll("source").forEach((source) => {
     const fresh = document.createElement("source");
 
@@ -84,9 +72,8 @@ function repairAndPlay(video: HTMLVideoElement) {
 function tryPlay(video: HTMLVideoElement) {
   video.play().catch(() => {});
 
-  // A <video> adopted via a view-transition swap can stick without ever setting
-  // video.error (Firefox). Repair only on confirmed failure — an unconditional
-  // load() aborts a load that is merely still in flight (Chrome).
+  // Repair only on confirmed failure: an unconditional load() aborts a load
+  // still in flight (Chrome), yet Firefox can stick without setting video.error.
   if (isBroken(video)) {
     repairAndPlay(video);
     return;
@@ -102,10 +89,8 @@ function playAutoplayVideos(root: ParentNode = document) {
   // reset cannot reach — a visitor who asked for no motion gets no autoplay.
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-  // Not scoped under a ".video" ancestor: the "video" class sits directly
-  // on the <video> tag itself except for the background-media variant, so
-  // a ".video video[autoplay]" descendant selector silently misses every
-  // other case (vimeo, youtube, and the plain native <video>).
+  // Not scoped under ".video": that class sits on the <video> itself except in
+  // the background variant, so a descendant selector silently misses the rest.
   const videos = [
     ...(root instanceof Element && root.matches("video[autoplay]")
       ? [root as HTMLVideoElement]
@@ -115,9 +100,7 @@ function playAutoplayVideos(root: ParentNode = document) {
 
   if (!videos.length) return;
 
-  // Waiting until the video is actually scrolled into view gives the
-  // browser plenty of time to settle before we touch it, and naturally
-  // matches when the user would expect to see it play.
+  // Deferred to scroll-into-view so the swapped-in element has settled first.
   const observer = new IntersectionObserver(
     (entries, obs) => {
       entries.forEach((entry) => {

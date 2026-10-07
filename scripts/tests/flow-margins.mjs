@@ -1,20 +1,10 @@
 /**
- * Dead `margin-top` detector for the `@layer page-sections` layer.
+ * Fail on `@layer page-sections` top margins on non-first `.flow`/`.prose` children:
+ * the later `utils` layer's `_flow.css` silently overrides them. Use `spaceBefore`
+ * or `--space-before` instead. Walks the built CSSOM, since a static lint can't tell
+ * a flow child from a flex child. `auto` is exempt.
  *
- * `BaseLayout.astro` orders the layers `components, page-sections, utils`, and
- * `styles/utils/_flow.css` sets `margin-block-start` on `.flow > * + *`. So any
- * top margin a page section declares for one of its own flow children loses,
- * silently, whatever its specificity — the section renders at the flow rhythm
- * and the declaration is dead code. Spacing between flow siblings is set with
- * the `spaceBefore` prop or a `--space-before` custom property instead.
- *
- * A static lint can't tell a flow child from a flex/grid child, so this walks
- * the real CSSOM of the built site: for every `@layer page-sections` rule that
- * declares a top margin, it resolves the nested selector, keeps the matched
- * elements that are non-first children of a `.flow`/`.prose` parent, and fails
- * if any exist. `auto` is exempt (a flex push, not rhythm).
- *
- *   npm run build:with-library && node scripts/tests/flow-margins.mjs
+ *   COMPONENT_PREVIEWS=true npm run build && npm run test:flow-margins
  */
 import { execSync } from "node:child_process";
 import { existsSync } from "node:fs";
@@ -25,7 +15,7 @@ const root = join(dirname(new URL(import.meta.url).pathname), "..", "..");
 const distDir = join(root, "dist");
 
 if (!existsSync(distDir)) {
-  console.error("dist/ not found — run `npm run build:with-library` first.");
+  console.error("dist/ not found — run `COMPONENT_PREVIEWS=true npm run build` first.");
   process.exit(1);
 }
 
@@ -130,9 +120,7 @@ for (const path of pages) {
     for (const sheet of document.styleSheets) {
       try {
         walk(sheet.cssRules, null, null);
-      } catch {
-        // Cross-origin sheets have no readable cssRules; the site has none.
-      }
+      } catch {}
     }
 
     return results;

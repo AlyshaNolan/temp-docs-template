@@ -78,6 +78,7 @@ paddingVertical:
       - id: 2xl
         name: 2xl
 colorScheme:
+  label: Color scheme
   type: select
   comment: Color scheme theme for the card.
   options:
@@ -93,6 +94,7 @@ lockColorScheme:
   label: Lock color scheme
   comment: Keep this section on the color scheme above when a visitor toggles the site theme. Only has an effect when Color Scheme is Light or Dark.
 backgroundColor:
+  label: Background color
   type: select
   comment: Background color for the card.
   options:

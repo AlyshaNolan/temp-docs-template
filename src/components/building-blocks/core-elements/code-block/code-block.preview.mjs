@@ -13,8 +13,7 @@ import {
 
 const B = band(760);
 
-// A filename bar over dark code. The one accent-marked row is the highlighted
-// line — it's what separates this from a plain panel.
+// The accent-marked highlighted line is the tell against a plain panel.
 export default preview({
   width: B.w,
   draw: [

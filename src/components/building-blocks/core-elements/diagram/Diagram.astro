@@ -1,8 +1,5 @@
 ---
-/**
- * A Mermaid diagram. The source ships in the page and is replaced by SVG once
- * Mermaid loads — see `setup.ts` for why it renders client-side.
- */
+// The source is replaced by SVG client-side — see `setup.ts` for why.
 import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
 
 const {
@@ -88,8 +85,7 @@ if (!_component && !definition) return;
       }
     }
 
-    /* Paper has no JavaScript: print the source, which is the diagram's
-       content, rather than an empty frame. */
+    /* Print has no JavaScript, so the source is the diagram there. */
     @media print {
       .diagram[data-diagram-rendered] .diagram-source {
         display: block;

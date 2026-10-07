@@ -1,15 +1,8 @@
 /**
- * Copy the freshly built Pagefind index — plus the built image assets its
- * results reference — into `public/` so `astro dev` can serve them.
+ * Copy the built Pagefind index into `public/` so `astro dev` can serve it, plus
+ * the hashed `/_astro/*` thumbnails its results reference, which exist only in `dist/`.
  *
  *   npm run search:dev   (builds first, then runs this)
- *
- * Why the images too: the index stores hashed `/_astro/*` thumbnail URLs
- * that only exist in `dist/`, so those are copied as well. Both output
- * folders are gitignored and stale until this is rerun; later builds copy
- * them into `dist/` harmlessly (the index is regenerated, the images are
- * content-hashed), and deploy builds start from a clean checkout where
- * neither exists.
  */
 import { cpSync, existsSync, mkdirSync, readdirSync, rmSync } from "node:fs";
 import { dirname, extname, join } from "node:path";

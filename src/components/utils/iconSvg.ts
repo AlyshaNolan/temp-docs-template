@@ -1,16 +1,11 @@
 /**
- * Normalize a raw SVG file into the pieces `Icon.astro` renders:
- *
- *   - sized `1em` square, so Icon's `.size-*` scale can drive it with font-size
- *   - the source's own `width`/`height` dropped, so it can't force a pixel size
- *   - root paint attributes kept, so outline icons don't become silhouettes
- *   - `fill="currentColor"` when the artwork declares no paint of its own
+ * Normalizes an SVG for `Icon.astro`: `1em` square so `.size-*` drives it, source
+ * `width`/`height` dropped, root paint kept (or outline icons become silhouettes),
+ * and `fill="currentColor"` only when the artwork declares no paint of its own.
  */
 
 export interface NormalizedIcon {
-  /** Attributes for the emitted root `<svg>`, in render order. */
   attributes: Record<string, string>;
-  /** The artwork, to be injected with `set:html`. */
   body: string;
 }
 
@@ -20,11 +15,7 @@ const ROOT_ELEMENT =
 
 const ATTRIBUTE = /([^\s=/]+)\s*=\s*(?:"([^"]*)"|'([^']*)')/g;
 
-/**
- * Root attributes replaced or dropped below: sizing is re-derived, `xmlns` is
- * implicit inline, `aria-hidden` is re-added as policy, and the rest is export
- * residue.
- */
+/** Sizing is re-derived and `aria-hidden` re-added below; the rest is export residue. */
 const DROPPED_ROOT_ATTRIBUTES = new Set([
   "xmlns",
   "xmlns:xlink",
@@ -37,10 +28,7 @@ const DROPPED_ROOT_ATTRIBUTES = new Set([
   "id",
 ]);
 
-/**
- * Whether the artwork paints itself anywhere — including on a child, and not
- * counting `fill-rule` / `stroke-width`.
- */
+/** Includes children; `fill-rule` and `stroke-width` don't count as paint. */
 function declaresPaint(source: string): boolean {
   return /\b(?:fill|stroke)\s*=/.test(source);
 }
@@ -55,10 +43,7 @@ function parseAttributes(raw: string): Record<string, string> {
   return attributes;
 }
 
-/**
- * Reconstruct a `viewBox` from the declared dimensions. Without one the 1em
- * sizing has nothing to scale against and the icon renders clipped.
- */
+/** Without a `viewBox` the 1em sizing has nothing to scale against and clips the icon. */
 function deriveViewBox(attributes: Record<string, string>): string | null {
   const width = Number.parseFloat(attributes.width);
   const height = Number.parseFloat(attributes.height);
@@ -68,10 +53,6 @@ function deriveViewBox(attributes: Record<string, string>): string | null {
   return `0 0 ${width} ${height}`;
 }
 
-/**
- * @param source the contents of an `.svg` file.
- * @param name the icon's id, used for `data-icon` and in error messages.
- */
 export function normalizeIconSvg(source: string, name: string): NormalizedIcon {
   const root = ROOT_ELEMENT.exec(source);
 
@@ -101,7 +82,6 @@ export function normalizeIconSvg(source: string, name: string): NormalizedIcon {
   attributes["aria-hidden"] = "true";
   attributes["data-icon"] = name;
 
-  // Whitespace between elements is insignificant in SVG, so collapse it.
   const body = (root[2] ?? "").replace(/>\s+</g, "><").trim();
 
   return { attributes, body };

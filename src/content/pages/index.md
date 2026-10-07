@@ -45,17 +45,17 @@ pageSections:
     alignmentHorizontal: start
     subtext: ''
     stats:
-      - number: 55
+      - number: 58
         prefix: ''
         suffix: ''
         label: components
-        sublabel: page sections and building blocks
+        sublabel: page sections, building blocks and navigation blocks
       - number: 100
         prefix: ''
         suffix: ''
         label: Lighthouse performance
         sublabel: on the pages this site ships
-      - number: 23
+      - number: 33
         prefix: ''
         suffix: 'KB'
         label: search index
@@ -186,16 +186,16 @@ pageSections:
             size: sm
           - _component: building-blocks/core-elements/param-list
             params:
-              - name: wordmark
+              - name: logoAlt
                 type: string
                 required: true
                 defaultValue: ''
-                description: Shown in the header, page titles and OG metadata.
+                description: The logo's alt text — what screen readers announce, and what shows if the image fails to load.
               - name: defaultTheme
                 type: '"dark" | "light" | "system"'
                 required: false
                 defaultValue: '"dark"'
-                description: The colour scheme a reader gets before they choose one.
+                description: The color scheme a reader gets before they choose one.
     maxContentWidth: 2xl
     paddingHorizontal: none
     paddingVertical: lg
@@ -374,7 +374,7 @@ pageSections:
       - _component: building-blocks/core-elements/button
         text: Browse the components
         hideText: false
-        link: /media-and-components/
+        link: /page-builder/
         iconName: ''
         iconColor: default
         iconPosition: before

@@ -1,9 +1,8 @@
 paths:
   uploads: src/assets/images
   uploads_use_relative_path: false
-# Astro parses content with GFM. CloudCannon's editor defaults to plain
-# CommonMark, so without this a Markdown table round-trips out of the editor as
-# HTML (or as literal pipe text) with nothing reporting an error.
+# Without this the editor's CommonMark default silently turns GFM tables into
+# HTML or literal pipe text on save.
 markdown:
   engine: commonmark
   options:
@@ -73,10 +72,8 @@ collections_config:
         bold: true
         bulletedlist: true
         code_inline: true
-        # Off because a fence can't survive this editor: its `title=` and `{n}`
-        # meta have nowhere to live, CloudCannon draws it with its own chrome
-        # rather than the site's, and a fence holding a fence breaks the parse
-        # for the rest of the file. `CodeBlock` is the snippet that replaces it.
+        # Keep off: the editor drops a fence's meta, and a nested fence breaks the
+        # parse for the rest of the file. Use the `CodeBlock` snippet instead.
         code_block: false
         copyformatting: false
         embed: false
@@ -369,8 +366,8 @@ collections_config:
           preview:
             text: Theme
             icon: palette
-        comment: Accent, brand and corner radius for the whole site. Each colour seeds
-          a family — hover, surface, border and the legible text colour on top are
+        comment: Accent, brand and corner radius for the whole site. Each color seeds
+          a family — hover, surface, border and the legible text color on top are
           derived from it, so there is one swatch to pick per role.
         cascade: true
       themeSelector:
@@ -391,7 +388,7 @@ collections_config:
             - id: system
               name: System
           required: false
-        comment: The colour scheme before a reader chooses one. "System" follows their
+        comment: The color scheme before a reader chooses one. "System" follows their
           operating system; "Dark" and "Light" don't.
         cascade: true
       accentLight:
@@ -400,7 +397,7 @@ collections_config:
           format: hex
           alpha: false
           required: false
-        comment: The interactive colour in light mode — links, the active sidebar item,
+        comment: The interactive color in light mode — links, the active sidebar item,
           focus rings, the brand tile. Pick something that carries white text.
         cascade: true
       accentDark:
@@ -501,11 +498,8 @@ collection_groups:
       - data
   - heading: New Collections
     collections: []
-# Applies to every Visual Editor text region. `block` is the only region tier
-# that can carry a Styles menu, which is why the Hero Center heading opts into
-# it with `data-type="block"` — a `text` region has no `styles` key at all, and
-# `allow_custom_markup` has to stay on or the style's `<span>` is stripped on
-# save.
+# Only `block` regions get a Styles menu (Hero Center's heading opts in with
+# `data-type="block"`); `allow_custom_markup` off strips the style's `<span>` on save.
 _editables:
   block:
     allow_custom_markup: true
@@ -548,15 +542,10 @@ _inputs:
     cascade: true
 _snippets_imports:
   mdx: true
-# Every key here does two jobs: it makes `@data[<key>]` resolve for the editable
-# regions that bind site chrome across files, and it gives the JavaScript API a
-# dataset handle. Prefer the dataset over `api.file()` — CloudCannon fires
-# `change` on it while a panel is open, where the file handle only settles after
-# the panel closes. Remove an entry and both stop working, silently.
+# Each key backs `@data[<key>]` editable regions and a JS API dataset (which,
+# unlike `api.file()`, fires `change` while a panel is open). Removing one breaks both silently.
 data_config:
-  # Read by `theme-selector/setup.ts`, which repaints `<html>` as the colour
-  # picker is dragged. No region can do this: a theme is CSS custom properties,
-  # not the content of any element.
+  # Read by `theme-selector/setup.ts` to repaint live; no editable region can.
   theme:
     path: src/data/theme.json
   icons:
@@ -599,7 +588,7 @@ file_config:
       themeToggle:
         type: switch
         comment: Show the light/dark toggle in the header. The site still resolves a
-          colour scheme without it.
+          color scheme without it.
         cascade: true
       search:
         type: switch

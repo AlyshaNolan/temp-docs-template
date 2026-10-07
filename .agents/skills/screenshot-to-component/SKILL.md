@@ -93,7 +93,7 @@ Reference implementation for a heading-over-grid section: read `src/components/p
 
 Key rules that bite:
 
-- **`_component` is the kebab-case directory path** under `src/components/` (e.g. `page-sections/explainers/service-cards`). It must match the directory exactly, or `renderBlock.astro` logs "Component not found" and the section vanishes.
+- **`_component` is the kebab-case directory path** under `src/components/` (e.g. `page-sections/collections/card-collection` for `CardCollection.astro`). It must match the directory exactly, or `renderBlock.astro` logs "Component not found" and the section vanishes.
 - **Props are camelCase** and must match the `.astro` destructure exactly — the same name appears in the destructure, `inputs.yml`, and `structure-value.yml` defaults.
 - **Styling rules** (layer choice, tokens-only, no `:global()`) are owned by [create-component's Styling rules](../create-component/SKILL.md#styling-rules); token names come from [theming](../theming/SKILL.md).
 
@@ -108,7 +108,8 @@ Extract the visible text from the screenshot into the `structure-value.yml` defa
 **MUST:** use `/src/assets/images/placeholder.jpg` for every image the editor will replace. **Why:** it is the one committed placeholder asset (`src/assets/images/placeholder.jpg`); referencing a screenshot-derived path that does not exist breaks the image import at build time.
 
 ```yaml
-- _component: page-sections/explainers/service-cards
+# A new component the screenshot became, e.g. page-sections/explainers/<your-component>
+- _component: page-sections/explainers/<your-component>
   heading: Exact heading text from the screenshot
   subtext: >-
     Exact body copy from the screenshot; block scalar for multi-line.

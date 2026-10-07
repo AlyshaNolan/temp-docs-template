@@ -1,17 +1,8 @@
 ---
 /**
- * Documentation sidebar: standalone lead links, then a group per
- * `sidebar.json` `navGroups` entry. Site chrome, not a page-builder block —
- * its content comes from `getDocsNav()`, so there is no CloudCannon YAML.
- *
- * Below 1024px the same markup is the mobile drawer, opened by the topbar's
- * `<label for>` through the checkbox below (no JS, so it works in the
- * CloudCannon editor). Ordering matters: the CSS reaches the scrim and the nav
- * as siblings of `:checked`.
- *
- * The drawer covers the full viewport height, above the header. Anchoring it
- * below the header instead would mean knowing where the header is, and an
- * announcement bar above it moves it.
+ * Below 1024px this is the mobile drawer, opened by the topbar's `<label for>` via the
+ * checkbox (no JS, so it works in the editor). Keep the order: the CSS reaches the scrim
+ * and nav as siblings of `:checked`.
  */
 import Icon from "@core-elements/icon/Icon.astro";
 import type { DocsNav } from "@utils/docsNav";
@@ -161,10 +152,8 @@ const groupHasCurrent = (pages: { href: string; children?: { href: string }[] }[
 
     .docs-sidebar {
       grid-area: sidebar;
-      /* The sticky child can only stay pinned while this box is on screen, and
-         this box ends where the shell does — above the footer. Claiming the
-         footer's own top margin (`Footer.astro`) buys that much more pinned
-         range without ever overlapping it. */
+      /* Claims the footer's top margin (`Footer.astro`): the sticky child unpins
+         where this box ends. */
       margin-block-end: calc(-1 * var(--spacing-3xl));
     }
 
@@ -172,10 +161,8 @@ const groupHasCurrent = (pages: { href: string; children?: { href: string }[] }[
       display: flex;
       flex-direction: column;
       gap: var(--spacing-lg);
-      /* The nav lives in the gap between the topbar and the footer. A box
-         taller than that gap has nowhere to go at the end of the page: sticky
-         gives up and it rides up under the topbar, taking its first links with
-         it. Capped here, it scrolls internally instead. */
+      /* Uncapped, a nav taller than the topbar–footer gap rides up under the topbar
+         at the end of the page. */
       max-height: calc(100vh - var(--docs-topbar-height) - var(--docs-footer-height));
       overflow-y: auto;
       overscroll-behavior: contain;
@@ -219,8 +206,6 @@ const groupHasCurrent = (pages: { href: string; children?: { href: string }[] }[
       margin-top: var(--spacing-xs);
     }
 
-    /* Children are indented behind a rule rather than a bullet: the rule reads
-       as "inside this page" at a glance, and survives a long title wrapping. */
     .docs-sidebar-children {
       border-inline-start: var(--border-width-sm) solid var(--color-border);
       margin-block: 1px var(--spacing-xs);
@@ -260,8 +245,6 @@ const groupHasCurrent = (pages: { href: string; children?: { href: string }[] }[
       }
     }
 
-    /* A group only shows the disclosure affordance when it can actually close;
-       an always-open group is a label, not a control. */
     .docs-sidebar-group:not(.is-collapsible) > .docs-sidebar-group-label {
       cursor: default;
       pointer-events: none;

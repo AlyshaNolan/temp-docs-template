@@ -1,12 +1,6 @@
 @layer base {
-  /**
-   * Long-form documentation body. Everything a Markdown page can produce is
-   * styled here, so a docs page needs no per-page CSS.
-   *
-   * Spacing is bottom-margins only, and adjacent margins collapse — a heading's
-   * larger top margin wins over the previous block's bottom margin, so a
-   * section break is one gap rather than the sum of two.
-   */
+  /* Spacing relies on margin collapse: a heading's larger top margin absorbs the
+     previous block's bottom, so don't add padding or flex/grid here. */
   .prose {
     --prose-gap: 0.875rem;
     --prose-section-gap: 2.75rem;
@@ -71,10 +65,8 @@
       padding-inline-start: var(--spacing-lg);
     }
 
-    /* Scoped to the article's own lists like the rule above: a component
-       rendering sibling `<li>`s in a page body (Steps) would otherwise get a
-       stray margin on every item but the first, knocking its columns out of
-       line with nothing in the component to explain it. */
+    /* Scoped to the article's own lists: unscoped, it puts stray margins on a
+       component's sibling `<li>`s (Steps). */
     > :is(ul, ol) li + li {
       margin-top: var(--spacing-xs);
     }
@@ -95,9 +87,7 @@
       padding: 0.125em 0.375em;
     }
 
-    /* Anchor affordance: a `#` on hover, and clicking the heading copies the
-       link (see `navigation/heading-links/setup.ts`). It never competes with
-       the heading itself while reading. */
+    /* Clicking copies the link via `navigation/heading-links/setup.ts`. */
     :is(h2, h3)[id] {
       cursor: pointer;
       scroll-margin-top: calc(var(--docs-topbar-height) + var(--spacing-lg));
@@ -116,8 +106,7 @@
       }
     }
 
-    /* A step's card heading or a tab's label is a label inside a section, not a
-       place in the document — the section's own heading above it is linkable. */
+    /* Must match the exclusion in `navigation/heading-links/setup.ts`. */
     :is(.step-content, .content-selector-tab) :is(h2, h3)[id] {
       cursor: inherit;
 
@@ -137,8 +126,7 @@
       margin-block: var(--prose-section-gap);
     }
 
-    /* Wide tables scroll inside their own box rather than the page. The
-       wrapper is `ProseTable`, registered as `table` in `mdxComponents`. */
+    /* The wrapper is `ProseTable`, registered as `table` in `mdxComponents`. */
     > .table-scroll {
       margin-block: var(--spacing-lg);
       max-width: 100%;
@@ -181,8 +169,6 @@
       border-bottom: 0;
     }
 
-    /* A first column of identifiers is the common shape of a docs table, and
-       setting it in mono makes the table scannable as a key list. */
     tbody td:first-child code {
       background: none;
       color: var(--color-accent);
@@ -208,11 +194,6 @@
       padding-inline-start: var(--spacing-md);
     }
 
-    /* Blocks sit an even gap from whatever is on either side of them. The
-       previous `--prose-section-gap` bottom put 44px between two stacked
-       callouts, because a bottom-margin-only model can't tell a sibling of the
-       same kind from the next section — and the section break is the heading's
-       own top margin anyway. */
     > :is(
       .code-block,
       .code-tabs,
@@ -226,16 +207,12 @@
       margin-block-end: var(--spacing-lg);
     }
 
-    /* These carry no `.stackable` flow margin of their own, so the top is set
-       here too. */
+    /* No `.stackable` flow margin of their own, so the top is set here too. */
     > :is(figure, pre) {
       margin-block: var(--spacing-lg);
     }
 
-    /* CloudCannon's inline editor re-renders this region with its own Markdown
-       pass, so in the Visual Editor a fence is a bare <pre> with none of
-       Shiki's classes or token colours. Without this it draws no panel and the
-       text falls back to `--color-text`. */
+    /* In the Visual Editor a fence re-renders as a bare <pre> with no Shiki classes. */
     pre:not(.astro-code, .code-pre) {
       background-color: var(--color-code-bg);
       border: var(--border-width-sm) solid var(--color-code-border);
@@ -256,10 +233,8 @@
       }
     }
 
-    /* A Markdown fence is a bare <pre>, not the `CodeBlockSurface` markup, so
-       it grows its own panel and filename bar here. The copy button is added by
-       script (`code-block/setup.ts`) because copying needs JS anyway — with it
-       off, the header is still correct rather than showing a dead control. */
+    /* A fence is not `CodeBlockSurface` markup, so it draws its own panel here;
+       `code-block/setup.ts` adds its copy button. */
     > pre.astro-code {
       background-color: var(--color-code-bg);
       border: var(--border-width-sm) solid var(--color-code-border);
@@ -281,7 +256,6 @@
       padding-inline: var(--spacing-md);
     }
 
-    /* Untitled fences label themselves with the language instead. */
     > pre.astro-code:not([data-title])::before {
       content: attr(data-language);
     }
@@ -310,10 +284,8 @@
   }
 }
 
-/* Deliberately outside `@layer base`: a page section dropped into an article
-   brings its own gutters, max-width and band padding, and all three fight the
-   article that already supplies them. The classes setting those live in the
-   `utils` layer, so only a `utils` rule can countermand them. */
+/* Must be `utils`, not `base`: only a `utils` rule can countermand a section's
+   gutters, max-width and band padding inside an article. */
 @layer utils {
   .prose .custom-section > .outer-content > .content {
     --section-max-width: initial;

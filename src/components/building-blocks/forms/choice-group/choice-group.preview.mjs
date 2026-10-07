@@ -1,7 +1,6 @@
 import { preview, bar, checkbox, repeat, glyph } from "../../../../../scripts/previews/kit.mjs";
 
-// A radio/checkbox group with the second option selected. Exempt: a narrow stack
-// of option rows stretched to 560 would leave the labels floating in space.
+// Exempt: option rows stretched to 560 leave the labels floating.
 const OPTIONS = [190, 230, 170, 200];
 
 export default preview({

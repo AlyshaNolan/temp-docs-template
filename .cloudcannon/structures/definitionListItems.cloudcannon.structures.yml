@@ -1,10 +1,5 @@
-# Term/definition rows, used by the `definition-list` component's `items` array
-# input.
-#
-# Shared here rather than inline in the structure value: the component's MDX
-# snippet points at the same `_structures.definitionListItems`, and a structure
-# declared inside a structure value is invisible to it — the array renders as
-# free text.
+# Used by `definition-list` `items` and its MDX snippet. Keep it here: a structure
+# declared inside a structure value is invisible to the snippet (free text).
 definitionListItems:
   values:
     - label: Definition List Item

@@ -70,8 +70,6 @@ jobs:
       - name: Render every component's structure defaults
         run: npm run test:render
 
-  # Interactive smoke tests against the built site. This script locates Chrome
-  # via Playwright's Chromium, so installing it is enough here.
   browser-tests:
     name: Smoke tests
     runs-on: ubuntu-24.04
@@ -94,8 +92,7 @@ jobs:
       - name: Install Chromium for Playwright
         run: npx playwright-core install --with-deps chromium
 
-      # COMPONENT_PREVIEWS adds the /preview-renders/ routes the smoke tests
-      # drive components through — see scripts/tests/smoke.mjs.
+      # The smoke tests drive components through the /preview-renders/ routes this flag adds.
       - name: Build the site with the preview-render routes
         run: COMPONENT_PREVIEWS=true npm run build
 

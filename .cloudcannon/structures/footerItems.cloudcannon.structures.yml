@@ -1,13 +1,6 @@
-# Footer link and social-icon structures, used by the `footer` component's
-# `links` and `socials` array inputs.
-#
-# Must live here, not in the component's inputs.yml — `_structures` is not a
-# valid key in an `_inputs_from_glob` file.
-#
-# Distinct from the field-name-matched `links` / `socials` structures used by the
-# data files in `src/data/` — same idea, different consumers. Keep the `preview`
-# blocks in step with those: without one a structure-backed row has no
-# representation to draw, in the data panel or on canvas.
+# Used by `footer` `links`/`socials`; `_structures` is invalid in an inputs file.
+# Keep `preview` blocks in step with `links`/`socials` structures — without one a
+# row draws nothing in the data panel or on canvas.
 linkItems:
   style: modal
   values:

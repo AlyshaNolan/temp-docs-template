@@ -3,7 +3,7 @@ Vendored from CloudCannon/agent-skills @ b70076b102b0f1e20d05c4e3328d822f2298e11
 Upstream paths:
   - skills/cloudcannon-configuration/SKILL.md (§ Common invalid keys, § Symptom-driven gotchas)
   - skills/cloudcannon-configuration/astro/configuration-gotchas.md (validation-related sections)
-Adapted for this starter (astro-component-starter) — resync by diffing against upstream.
+Adapted for this starter (stratus-astro-template) — resync by diffing against upstream.
 "In this starter:" callouts mark where generic CloudCannon guidance is overridden here.
 CLI config-generation flows from upstream are dropped. Validation is kept but rebuilt on the
 official JSON Schemas via `npm run lint:schema` instead of the CLI — see below.
@@ -169,7 +169,7 @@ jq -r 'paths(scalars) | join(".")' src/data/*.json | sort -u
 
 Every path should have a corresponding `_inputs` entry or be intentionally left untyped. Keys in `_inputs` that do NOT appear in the JSON are dead config — remove them.
 
-> **In this starter:** site nav/footer/SEO data lives in `src/data/*.json` (see CLAUDE.md). Fonts are the exception — they change in `site-fonts.mjs` only, owned by the `adding-fonts` skill.
+> **In this starter:** site nav/footer/SEO data lives in `src/data/*.json` (see AGENTS.md). Fonts are the exception — they change in `site-fonts.mjs` only, owned by the `adding-fonts` skill.
 
 ## `_inputs` key collision across nesting levels
 
@@ -193,5 +193,5 @@ _inputs:
     node_modules/@cloudcannon/configuration-types/dist/cloudcannon-config.latest.schema.json
   ```
   The per-fragment schemas sit beside it, named for the `*_from_glob` key that loads them: `cloudcannon-structure-value`, `cloudcannon-inputs`, `cloudcannon-snippets`, `cloudcannon-structures`. Do not add a CLI step to any workflow.
-- **A clean `lint:schema` is not proof the editor is happy.** Some keys are valid-but-**deprecated** (e.g. `preview.view` on a snippet) and some are accepted-but-ignored, so they pass. Load the component in CloudCannon for anything behavioural.
+- **A clean `lint:schema` is not proof the editor is happy.** Some keys are valid-but-**deprecated** (e.g. `preview.view` on a snippet) and some are accepted-but-ignored, so they pass. Load the component in CloudCannon for anything behavioral.
 - Open `npm run dev` and confirm inputs render as the intended type (select, image, switch) — a field falling through to plain text means a missing or misnamed `_inputs` entry.

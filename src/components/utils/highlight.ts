@@ -1,12 +1,5 @@
-/**
- * Build-time syntax highlighting for code held in component props (code tabs,
- * annotated code) — Markdown fences are highlighted by Astro's own Shiki pass,
- * configured in `astro.config.mjs`. Both paths must use the same theme, or two
- * snippets on one page render in different palettes.
- *
- * The highlighter is created once per build: `createHighlighter` loads WASM and
- * grammar files, and paying that per component is seconds on a large site.
- */
+// Must share `CODE_THEME` with the Markdown fence pipeline in `astro.config.mjs`.
+// Create the highlighter once per build: per component costs seconds on a large site.
 import { createHighlighter, type Highlighter } from "shiki";
 import { CODE_THEME } from "@utils/codeTheme.mjs";
 
@@ -87,8 +80,7 @@ export async function highlightCode(
           }
         },
         pre(node) {
-          // The theme's own background would win over the code token; the
-          // palette is shared with Markdown fences via CSS, not inline styles.
+          // The theme's inline background would beat the shared CSS code token.
           node.properties.style = undefined;
           this.addClassToHast(node, "code-pre");
         },
@@ -114,12 +106,7 @@ export function parseLineRanges(input: string | undefined): number[] {
   return lines;
 }
 
-/**
- * Builds the `diff` map from three 1-based line-range strings ("3", "1,4-6").
- *
- * A line named by more than one wins in source order, so `highlight` beats
- * `added` beats `removed`.
- */
+/** A line named twice wins in source order: `highlight`, then `added`, then `removed`. */
 export function parseDiffLines(ranges: {
   removed?: string;
   added?: string;

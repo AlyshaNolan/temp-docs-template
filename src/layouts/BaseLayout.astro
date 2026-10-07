@@ -25,7 +25,6 @@ export interface Props {
     tags?: string[] | null;
   } | null;
   noindex?: boolean;
-  /** Colour scheme before any reader preference applies. */
   defaultTheme?: "light" | "dark";
 }
 
@@ -69,9 +68,7 @@ const themeStyle = themeStyleAttribute(themeData.theme);
       content={Astro.generator}
     />
     <style is:inline>
-      /* `pagefind` sits below `components` so component styles win over the
-         Pagefind Component UI stylesheet (imported into that layer by the
-         search component) without specificity fights or !important. */
+      /* `pagefind` must sit below `components` so component styles win over Pagefind's. */
       @layer reset, base, pagefind, components, page-sections, utils, overrides;
     </style>
 
@@ -122,6 +119,12 @@ const themeStyle = themeStyleAttribute(themeData.theme);
       type="application/xml"
       title="Sitemap"
       href="/sitemap-index.xml"
+    />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title={`${seoData.siteName} changelog`}
+      href="/changelog.xml"
     />
 
     <slot name="head" />

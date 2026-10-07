@@ -1,11 +1,6 @@
 /**
- * Smoke tests for the interactive components, run against a BUILT site.
- *
- * Requires `COMPONENT_PREVIEWS=true npm run build` first: that adds the
- * `/preview-renders/<component key>/` routes, one bare page per component, and
- * a component only reachable through a page builder has nowhere else to be
- * driven from. The real documentation pages carry the shell (drawer, theme
- * toggle, search, table of contents).
+ * Smoke tests for the interactive components. Requires
+ * `COMPONENT_PREVIEWS=true npm run build` first for the `/preview-renders/` routes.
  *
  *   node scripts/tests/smoke.mjs [--only <substring>]
  */
@@ -26,9 +21,7 @@ function assert(condition, message) {
   if (!condition) throw new Error(message);
 }
 
-// `/preview-renders/<component key>/` is a bare page holding one component,
-// rendered from its structure-value defaults. Those routes only exist in a
-// COMPONENT_PREVIEWS=true build — see the marker check below.
+// One component per page, rendered from its structure-value defaults.
 const PREVIEW_ROOT = "[data-preview-root]";
 
 const tests = [
@@ -76,9 +69,7 @@ const tests = [
 
       assert(onScreen, "the drawer is open but is not positioned on screen");
 
-      // Tapping the page behind the drawer closes it. The scrim spans the
-      // whole viewport but the drawer sits on top of most of it, so the click
-      // has to land in the strip the drawer leaves uncovered.
+      // The drawer covers most of the scrim, so click the strip it leaves uncovered.
       const strip = await page.evaluate(() => {
         const drawer = document.querySelector("nav.docs-sidebar").getBoundingClientRect();
 
@@ -438,9 +429,7 @@ const tests = [
         );
       }, masonrySel);
 
-      // …and the first three items sit in three distinct columns,
-      // left-to-right — source order preserved, unlike the columns fallback,
-      // which would stack items 1..N down the first column.
+      // …in source order across columns, unlike the CSS-columns fallback.
       const xs = await page.evaluate(
         (sel) =>
           [...document.querySelector(sel).querySelectorAll(".masonry-inner > *")]
@@ -456,13 +445,8 @@ const tests = [
     },
   },
   {
-    // Pins the fix for stale row spans after a CloudCannon region re-render.
-    // The probe `masonryEnhance` measures is the item's first child, which the
-    // re-render replaces; the swap itself self-heals (the detached probe
-    // reports 0x0, which fires a relayout), but the REPLACEMENT is only
-    // observed if the item's own childList is watched. So this swaps the child
-    // and then resizes the new one, which is an image load or another keypress
-    // in the editor.
+    // A region re-render replaces the measured probe; the replacement is only
+    // observed if the item's childList is watched, so swap it and then resize it.
     name: "masonry re-measures an item after its contents are replaced",
     path: "/preview-renders/building-blocks/wrappers/masonry/",
     viewport: DESKTOP,
@@ -488,9 +472,7 @@ const tests = [
         item.firstElementChild.replaceWith(item.firstElementChild.cloneNode(true));
       }, masonrySel);
 
-      // Let the relayout the swap queued actually run before growing the
-      // replacement. Otherwise that pending frame can measure the grown probe
-      // by luck, and the assertion below passes without anything observing it.
+      // Otherwise the swap's pending relayout can measure the grown probe and pass by luck.
       await page.evaluate(
         () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))
       );
@@ -666,9 +648,7 @@ try {
       viewport: test.viewport,
       deviceScaleFactor: 1,
       colorScheme: "light",
-      // Keeps CSS transitions and entrance animations from
-      // racing the assertions; Embla's manual navigation is JS-driven and
-      // unaffected (matches scripts/previews/screenshot.mjs).
+      // Stops transitions racing the assertions; matches scripts/previews/screenshot.mjs.
       reducedMotion: "reduce",
     });
 

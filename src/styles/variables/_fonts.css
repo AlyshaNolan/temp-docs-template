@@ -26,8 +26,6 @@
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
 
-  /* Headings tighten as they grow — a display line set at body tracking reads
-     as loose and unresolved. Applied in `base/_typography.css`. */
   --letter-spacing-normal: 0;
   --letter-spacing-tight: -0.02em;
   --letter-spacing-tighter: -0.033em;

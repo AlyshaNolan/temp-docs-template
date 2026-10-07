@@ -1,8 +1,4 @@
-/**
- * Scroll-spy for the on-this-page rail. Used by `Toc.astro`'s inline
- * script and by `editor-live-sync.js`, where inline scripts don't run.
- * Anchor links work without it — the spy is progressive enhancement.
- */
+// Also registered in `editor-live-sync.js`.
 
 export function setupToc(toc: HTMLElement): void {
   if (toc.hasAttribute("data-toc-initialized")) return;
@@ -36,8 +32,6 @@ export function setupToc(toc: HTMLElement): void {
     activeLink = link;
   };
 
-  // The heading currently in the top band of the viewport wins; scrolling back
-  // up re-activates the previous section as its heading re-enters the band.
   const observer = new IntersectionObserver(
     (entries) => {
       const visible = entries
