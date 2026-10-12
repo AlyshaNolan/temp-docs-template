@@ -6,12 +6,22 @@ paths:
 markdown:
   engine: commonmark
   options:
-    gfm: true
-    table: true
-    strikethrough: true
-    linkify: true
-    code_block_fences: "```"
-    escape_snippets_in_code_blocks: true
+    xhtml: false
+    breaks: false
+    linkify: false
+    typographer: false
+    spaced_lists: false
+    sentence_per_line: false
+    gfm: false
+    code_block_fences: '```'
+    escape_snippets_in_code_blocks: false
+    treat_indentation_as_code: false
+    table: false
+    strikethrough: false
+    subscript: false
+    superscript: false
+    heading_ids: false
+    attributes: false
 collections_config:
   landing_pages:
     path: src/content/pages
