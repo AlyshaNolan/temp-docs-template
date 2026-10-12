@@ -34,15 +34,7 @@ The reset script asks for your site name and URL, then clears the demo content a
 
 `npm run check:placeholders` lists everything still set to the template's values. It runs as part of `npm run check`, as a warning.
 
-| File | Replace |
-| --- | --- |
-| `astro.config.mjs` | `site` |
-| `src/data/seo.json` | `url`, `siteName`, `titleFormat`, `description`, favicons, share image |
-| `src/data/header.json` | The logo and the topbar links |
-| `src/data/footer.json` | Links, social icons and the small print |
-| `src/data/pageTools.json` | `repositoryUrl`, which every "Edit this page" link is built from |
-| `src/content/changelog/` | The template's releases — the header badge shows the newest |
-| `src/data/announcementBar.json` | The launch message |
+\| File \| Replace \| \| --- \| --- \| \| `astro.config.mjs` \| `site` \| \| `src/data/seo.json` \| `url`, `siteName`, `titleFormat`, `description`, favicons, share image \| \| `src/data/header.json` \| The logo and the topbar links \| \| `src/data/footer.json` \| Links, social icons and the small print \| \| `src/data/pageTools.json` \| `repositoryUrl`, which every "Edit this page" link is built from \| \| `src/content/changelog/` \| The template's releases — the header badge shows the newest \| \| `src/data/announcementBar.json` \| The launch message \|
 
 <Alert variant="tip" title="Make it a hard failure in your own CI" text="Add `npm run check:placeholders -- --strict` to your pipeline and a build with a placeholder URL fails instead of warning."/>
 
@@ -55,7 +47,4 @@ The reset script asks for your site name and URL, then clears the demo content a
 
 https://consultations.ag.gov.au/integrity/forced-marriage/user\_uploads/forced-marriage\_public-consultation-paper-2024.pdf
 
-[^1]:
-    https://consultations.ag.gov.au/integrity/forced-marriage/user\_uploads/forced-marriage\_public-consultation-paper-2024.pdf
-
-&nbsp;
+[https://consultations.ag.gov.au/integrity/forced-marriage/user\_uploads/forced-marriage\_public-consultation-paper-2024.pdf](https://consultations.ag.gov.au/integrity/forced-marriage/user_uploads/forced-marriage_public-consultation-paper-2024.pdf)
