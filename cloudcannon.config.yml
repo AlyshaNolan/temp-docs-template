@@ -542,6 +542,10 @@ _inputs:
     cascade: true
 _snippets_imports:
   mdx: true
+  python_markdown_extensions:
+    include:
+      - python_markdown_footnote
+      - python_markdown_footnote_marker
 # Each key backs `@data[<key>]` editable regions and a JS API dataset (which,
 # unlike `api.file()`, fires `change` while a panel is open). Removing one breaks both silently.
 data_config:
