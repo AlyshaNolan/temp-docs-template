@@ -68,6 +68,8 @@ Headings, lists, tables, blockquotes, links and inline code all work and are sty
 
 Link internally by URL: `[Configuration](/configuration/)`. `npm run lint:links` (part of `npm run check`) fails on an internal link that resolves to no page, so a renamed page can't quietly rot. It also warns on an orphan page — one no other page links to, which for a page with no `group` means only search reaches it.
 
+Footnotes are GFM: `text.[^id]` in the sentence, `[^id]: note` on its own line anywhere in the file. They render numbered in marker order at the foot of the page, and the Content Editor round-trips them through the `python_markdown_footnote` snippet imports in `cloudcannon.config.yml`. The generated "Footnotes" heading is kept out of the on-this-page rail by the filter in `src/pages/[...slug].astro`.
+
 ### No code fences
 
 Code goes in a `CodeBlock`, never a Markdown fence. The fence pipeline still exists — `fenceMetaTransformer` in `src/utils/markdown.mjs` reads `title=` and `{2,5-7}` off the meta string — but nothing in `src/content/` uses it, and the Content Editor's code-block control is off (`code_block: false`), because a fence cannot survive CloudCannon:

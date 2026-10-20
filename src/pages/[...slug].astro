@@ -56,7 +56,9 @@ const entry = (doc ?? page)!;
 const nav = await getDocsNav();
 const { Content, headings } = await render(entry as CollectionEntry<"docs">);
 
-const tocHeadings = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
+const tocHeadings = headings.filter(
+  (heading) => (heading.depth === 2 || heading.depth === 3) && heading.slug !== "footnote-label"
+);
 // Hidden rather than gated: a build-time gate leaves the editor nothing to reveal.
 const hasToc = tocHeadings.length > 0;
 const showTableOfContents = Boolean(doc?.data.showTableOfContents) && hasToc;

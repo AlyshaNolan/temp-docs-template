@@ -281,6 +281,53 @@
       font-size: var(--font-size-sm);
       margin-top: var(--spacing-sm);
     }
+
+    [data-footnote-ref] {
+      scroll-margin-top: calc(var(--docs-topbar-height) + var(--spacing-lg));
+      text-decoration: none;
+
+      &::before {
+        content: "[";
+      }
+
+      &::after {
+        content: "]";
+      }
+    }
+
+    sup:has(> [data-footnote-ref]) {
+      font-size: var(--font-size-xs);
+      line-height: 0;
+    }
+
+    > .footnotes {
+      border-top: var(--border-width-sm) solid var(--color-border);
+      font-size: var(--font-size-sm);
+      margin-block-start: var(--prose-section-gap);
+      padding-block-start: var(--spacing-lg);
+
+      /* GFM marks this heading `sr-only`, a class this site doesn't define. */
+      > #footnote-label {
+        clip-path: inset(50%);
+        height: 1px;
+        overflow: hidden;
+        position: absolute;
+        white-space: nowrap;
+        width: 1px;
+      }
+
+      li {
+        scroll-margin-top: calc(var(--docs-topbar-height) + var(--spacing-lg));
+      }
+
+      li > p {
+        margin-block: 0;
+      }
+
+      [data-footnote-backref] {
+        text-decoration: none;
+      }
+    }
   }
 }
 

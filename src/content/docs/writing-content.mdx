@@ -156,6 +156,22 @@ Markdown tables get a bordered panel and horizontal scroll on narrow screens.
 | `user.created` | 3       | User object        |
 | `plan.changed` | 3       | Subscription delta |
 
+## Footnotes
+
+Put a marker in the sentence and the note anywhere in the file. Notes collect at the foot of the
+page in marker order, each with a link back to where it was cited.[^order] Use them for an aside
+that would break the flow of a sentence, such as a source or an edge case.[^print]
+
+<CodeBlock
+  language="mdx"
+  filename="footnote.mdx"
+  code={'Retries back off exponentially.[^backoff]\n\n[^backoff]: 1s, 2s, 4s, 8s, then 16s, with up to 20% jitter.'}
+/>
+
+[^order]: The label in the brackets is only an id. Notes are numbered in the order their markers appear, whatever you call them.
+
+[^print]: Footnotes survive the print layout, so a saved PDF keeps its sources.
+
 ## Cross-links
 
 Link by URL — `[Configuration](/configuration/)`. `npm run lint:links` fails `npm run check` on
