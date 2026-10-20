@@ -21,33 +21,76 @@ function storeLabel(label: string): void {
   }
 }
 
-function activate(root: HTMLElement, label: string): void {
-  const tabs = Array.from(root.querySelectorAll<HTMLButtonElement>('[role="tab"]'));
-  const target = tabs.find((tab) => tab.dataset.label === label);
+// The editor's re-render copies the server's attributes onto the existing
+// nodes, resetting every block to its first tab; these survive because the
+// nodes do, and the observer puts the selection back.
+const selectedIndex = new WeakMap<HTMLElement, number>();
+const initialized = new WeakSet<HTMLElement>();
+
+function getTabs(root: HTMLElement): HTMLButtonElement[] {
+  return Array.from(root.querySelectorAll<HTMLButtonElement>('[role="tab"]'));
+}
+
+function activateIndex(root: HTMLElement, index: number): void {
+  const tabs = getTabs(root);
+  const target = tabs[Math.min(index, tabs.length - 1)];
 
   if (!target) return;
+
+  selectedIndex.set(root, tabs.indexOf(target));
 
   for (const tab of tabs) {
     const selected = tab === target;
     const panel = document.getElementById(tab.getAttribute("aria-controls") ?? "");
 
-    tab.setAttribute("aria-selected", String(selected));
+    if (tab.getAttribute("aria-selected") !== String(selected)) {
+      tab.setAttribute("aria-selected", String(selected));
+    }
     tab.tabIndex = selected ? 0 : -1;
-    if (panel) panel.hidden = !selected;
+    if (panel && panel.hidden === selected) panel.hidden = !selected;
   }
 }
 
+function activate(root: HTMLElement, label: string): void {
+  const index = getTabs(root).findIndex((tab) => tab.dataset.label === label);
+
+  if (index !== -1) activateIndex(root, index);
+}
+
+function restoreSelection(root: HTMLElement): void {
+  const index = selectedIndex.get(root);
+
+  if (index === undefined) return;
+
+  const tabs = getTabs(root);
+  const current = tabs.findIndex((tab) => tab.getAttribute("aria-selected") === "true");
+  const panelsInSync = tabs.every(
+    (tab, i) =>
+      document.getElementById(tab.getAttribute("aria-controls") ?? "")?.hidden !== (i === current)
+  );
+
+  if (current !== Math.min(index, tabs.length - 1) || !panelsInSync) activateIndex(root, index);
+}
+
 export function setupCodeTabs(root: HTMLElement): void {
-  if (root.hasAttribute("data-code-tabs-initialized")) return;
   root.setAttribute("data-code-tabs-initialized", "");
+  if (initialized.has(root)) return;
+  initialized.add(root);
 
-  const tabs = Array.from(root.querySelectorAll<HTMLButtonElement>('[role="tab"]'));
+  if (!getTabs(root).length) return;
 
-  if (!tabs.length) return;
+  selectedIndex.set(root, 0);
 
   const stored = readStoredLabel();
 
-  if (stored && tabs.some((tab) => tab.dataset.label === stored)) activate(root, stored);
+  if (stored) activate(root, stored);
+
+  new MutationObserver(() => restoreSelection(root)).observe(root, {
+    subtree: true,
+    childList: true,
+    attributes: true,
+    attributeFilter: ["aria-selected", "hidden"],
+  });
 
   root.addEventListener("click", (event) => {
     const tab = (event.target as HTMLElement).closest<HTMLButtonElement>('[role="tab"]');
@@ -65,6 +108,7 @@ export function setupCodeTabs(root: HTMLElement): void {
 
     if (key !== "ArrowLeft" && key !== "ArrowRight") return;
 
+    const tabs = getTabs(root);
     const current = tabs.findIndex((tab) => tab.getAttribute("aria-selected") === "true");
     const next = tabs[(current + (key === "ArrowRight" ? 1 : -1) + tabs.length) % tabs.length];
 
