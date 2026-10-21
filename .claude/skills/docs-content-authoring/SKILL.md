@@ -68,7 +68,7 @@ Headings, lists, tables, blockquotes, links and inline code all work and are sty
 
 Link internally by URL: `[Configuration](/configuration/)`. `npm run lint:links` (part of `npm run check`) fails on an internal link that resolves to no page, so a renamed page can't quietly rot. It also warns on an orphan page — one no other page links to, which for a page with no `group` means only search reaches it.
 
-Footnotes are GFM: `text.[^id]` in the sentence, `[^id]: note` on its own line anywhere in the file. They render numbered in marker order at the foot of the page, and the Content Editor round-trips them through the `python_markdown_footnote` snippet imports in `cloudcannon.config.yml`. The generated "Footnotes" heading is kept out of the on-this-page rail by the filter in `src/pages/[...slug].astro`.
+Footnotes are GFM: `text.[^1]` in the sentence, `[^1]: note` on its own line anywhere in the file. **The id must be a number** — the Content Editor's footnote snippets only match `[^1]`, and on save it escapes a word id (`[^order]`) to `\[^order\]`, which then renders as literal text. They render numbered in marker order at the foot of the page, and the Content Editor round-trips them through the `python_markdown_footnote` snippet imports in `cloudcannon.config.yml`. The generated "Footnotes" heading is kept out of the on-this-page rail by the filter in `src/pages/[...slug].astro`.
 
 ### No code fences
 

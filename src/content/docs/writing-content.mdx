@@ -205,15 +205,15 @@ Put a marker in the sentence and the note anywhere in the file. Notes collect at
 <CodeBlock language="mdx" filename="footnote.mdx" showCopy={true}>
 
 ```
-Retries back off exponentially.[^backoff]
+Retries back off exponentially.[^1]
 
-[^backoff]: 1s, 2s, 4s, 8s, then 16s, with up to 20% jitter.
+[^1]: 1s, 2s, 4s, 8s, then 16s, with up to 20% jitter.
 ```
 
 </CodeBlock>
 
 [^1]:
-    The label in the brackets is only an id. Notes are numbered in the order their markers appear, whatever you call them.
+    Use a number as the id. The Content Editor only recognizes numbered footnotes, and saves any other id as plain text.
 
 [^2]:
     Footnotes survive the print layout, so a saved PDF keeps its sources.
