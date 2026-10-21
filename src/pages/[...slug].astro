@@ -206,20 +206,26 @@ const showFeedback = Boolean(doc?.data.showFeedback && pageTools.feedback?.enabl
     .doc-heading {
       align-items: start;
       display: flex;
-      flex-wrap: wrap;
+      flex-direction: column;
       gap: var(--spacing-md);
       margin-bottom: var(--spacing-md);
     }
 
-    /* Not `space-between`: that flushes it left once it wraps to its own row. */
     .doc-heading > .copy-page {
       flex: none;
-      margin-inline-start: auto;
+    }
+
+    .doc-heading .copy-page-menu {
+      inset-inline: 0 auto;
     }
 
     @media (width >= 640px) {
       .doc-heading {
-        flex-wrap: nowrap;
+        flex-direction: row;
+      }
+
+      .doc-heading .copy-page-menu {
+        inset-inline: auto 0;
       }
 
       .doc-title {
