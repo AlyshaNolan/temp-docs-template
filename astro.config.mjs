@@ -9,6 +9,8 @@ import mdx from "@astrojs/mdx";
 import { siteFonts } from "./site-fonts.mjs";
 import { CODE_THEME } from "./src/utils/codeTheme.mjs";
 import { fenceMetaTransformer } from "./src/utils/markdown.mjs";
+import { satteri } from "@astrojs/markdown-satteri";
+import { codeTabsPlugin } from "./src/utils/codeTabsPlugin.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -28,6 +30,7 @@ export default defineConfig({
     domains: [],
   },
   markdown: {
+    processor: satteri({ mdastPlugins: [codeTabsPlugin] }),
     shikiConfig: {
       theme: CODE_THEME,
       transformers: [fenceMetaTransformer()],

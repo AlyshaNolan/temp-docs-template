@@ -23,30 +23,60 @@ below. Until then, a vote on a CloudCannon-hosted site has nowhere to go.
 
 To send it somewhere else, change one field:
 
-<CodeTabs
-  tabs={[
-    {
-      label: "CloudCannon",
-      language: "json",
-      code: "{\n  \"feedback\": {\n    \"enabled\": true,\n    \"action\": \"/\"\n  }\n}"
-    },
-    {
-      label: "Formspree",
-      language: "json",
-      code: "{\n  \"feedback\": {\n    \"enabled\": true,\n    \"action\": \"https://formspree.io/f/YOUR_ID\"\n  }\n}"
-    },
-    {
-      label: "Netlify",
-      language: "json",
-      code: "{\n  \"feedback\": {\n    \"enabled\": true,\n    \"action\": \"/\"\n  }\n}\n\n// Netlify needs the form to declare itself; the block already\n// posts a `form-name` field, so add data-netlify=\"true\" in\n// navigation/page-feedback/PageFeedback.astro."
-    },
-    {
-      label: "Your own",
-      language: "json",
-      code: "{\n  \"feedback\": {\n    \"enabled\": true,\n    \"action\": \"https://api.acme.com/docs-feedback\"\n  }\n}"
-    }
-  ]}
-/>
+<CodeTabs>
+<CodeTab label="CloudCannon" language="json">
+
+```
+{
+  "feedback": {
+    "enabled": true,
+    "action": "/"
+  }
+}
+```
+
+</CodeTab>
+<CodeTab label="Formspree" language="json">
+
+```
+{
+  "feedback": {
+    "enabled": true,
+    "action": "https://formspree.io/f/YOUR_ID"
+  }
+}
+```
+
+</CodeTab>
+<CodeTab label="Netlify" language="json">
+
+```
+{
+  "feedback": {
+    "enabled": true,
+    "action": "/"
+  }
+}
+
+// Netlify needs the form to declare itself; the block already
+// posts a `form-name` field, so add data-netlify="true" in
+// navigation/page-feedback/PageFeedback.astro.
+```
+
+</CodeTab>
+<CodeTab label="Your own" language="json">
+
+```
+{
+  "feedback": {
+    "enabled": true,
+    "action": "https://api.acme.com/docs-feedback"
+  }
+}
+```
+
+</CodeTab>
+</CodeTabs>
 
 The payload is the same in every case — three fields, posted as `multipart/form-data`:
 

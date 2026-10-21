@@ -72,7 +72,7 @@ Footnotes are GFM: `text.[^id]` in the sentence, `[^id]: note` on its own line a
 
 ### No code fences
 
-Code goes in a `CodeBlock`, never a Markdown fence. The fence pipeline still exists — `fenceMetaTransformer` in `src/utils/markdown.mjs` reads `title=` and `{2,5-7}` off the meta string — but nothing in `src/content/` uses it, and the Content Editor's code-block control is off (`code_block: false`), because a fence cannot survive CloudCannon:
+Code goes in a `CodeBlock`, never a Markdown fence — except the fence inside a `<CodeTab>` (below), which belongs to the CodeTabs snippet rather than the rich text. The fence pipeline still exists — `fenceMetaTransformer` in `src/utils/markdown.mjs` reads `title=` and `{2,5-7}` off the meta string — but nothing in `src/content/` uses it, and the Content Editor's code-block control is off (`code_block: false`), because a fence cannot survive CloudCannon:
 
 - Its `title=` and `{2,5-7}` meta have nowhere to live; the editor models a language and nothing else.
 - CloudCannon draws it with its own chrome, so the same sample looks like two different components either side of a save.
@@ -86,7 +86,7 @@ These are available in any `.mdx` page with no import, and each has a CloudCanno
 | ----------------- | --------------------------------------------------------------------- | ------------------------------------------------------------------------ |
 | `Alert`           | A callout: note, tip, warning, danger                                 | `variant`, `title`, `text` (markdown)                                    |
 | `CodeBlock`       | A code sample from a prop rather than a fence                         | `code`, `language`, `filename`, `highlight`                              |
-| `CodeTabs`        | One sample in several languages, choice remembered site-wide          | `tabs[]` of `{ label, language, code, highlight }`, `filename`           |
+| `CodeTabs`        | One sample in several languages, choice remembered site-wide          | `<CodeTab label language highlight>` children, `filename`, `showCopy`    |
 | `CodeAnnotations` | Code with numbered notes underneath                                   | `code`, `language`, `filename`, `notes[]` of `{ line, text }`            |
 | `CodeDiff`        | A sample with changed lines marked, still highlighted in its language | `code`, `language`, `filename`, `added`, `removed`, `highlight`          |
 | `FileTree`        | A directory tree drawn from an indented list of paths                 | `paths`, `title`, `added`, `removed`, `highlight`                        |
@@ -126,7 +126,28 @@ Every building block in the library can be used the same way — the table lists
 <CodeBlock language="js" code={"export default {\n  search: { provider: 'local' },\n}"} />
 ```
 
-**Array and object props take unquoted keys** — `params={[{ name: "x", type: "string" }]}`, not `"name":`. CloudCannon keeps the quotes as part of the field name, so the item's `_inputs` never match: every field falls back to plain text, and a multi-line `code` value is saved back with raw newlines that break the build.
+**`CodeTabs` takes `<CodeTab>` children, one fence each** — not a `tabs={[…]}` prop. CloudCannon saves a multi-line string prop with raw newlines, which breaks the MDX build, so the code lives in a fence and `src/utils/codeTabsPlugin.mjs` builds `tabs` from it. Put `language` on the `CodeTab`, leave the fence bare, and use a longer fence when the sample itself contains three backticks.
+
+````mdx
+<CodeTabs>
+<CodeTab label="npm" language="bash">
+
+```
+npm install stratus
+```
+
+</CodeTab>
+<CodeTab label="pnpm" language="bash">
+
+```
+pnpm add stratus
+```
+
+</CodeTab>
+</CodeTabs>
+````
+
+**Array and object props take unquoted keys** — `params={[{ name: "x", type: "string" }]}`, not `"name":`. CloudCannon keeps the quotes as part of the field name, so the item's `_inputs` never match: every field falls back to plain text.
 
 Reach for `{'…'}` when the sample contains double quotes, so the JSON inside stays unescaped. This bites hardest on `FileTree` and `CodeDiff`, where the indentation _is_ the content: two lost spaces re-parent a whole subtree.
 

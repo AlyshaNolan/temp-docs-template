@@ -24,25 +24,45 @@ so an editor changes them in the app rather than in a pull request.
 
 Every key in every file is listed in the [Config API](/config-api/).
 
-<CodeTabs
-  tabs={[
-    {
-      label: "header.json",
-      language: "json",
-      code: "{\n  \"logoSource\": \"/src/assets/images/logo/logo-light.svg\",\n  \"logoAlternateSource\": \"/src/assets/images/logo/logo-dark.svg\",\n  \"logoAlt\": \"Stratus\",\n  \"showVersionNumber\": true,\n  \"search\": true,\n  \"themeToggle\": true\n}"
-    },
-    {
-      label: "sidebar.json",
-      language: "json",
-      code: "{\n  \"homeLabel\": \"Overview\",\n  \"navGroups\": [\n    { \"name\": \"Getting started\", \"collapsed\": false },\n    { \"name\": \"Reference\", \"collapsed\": true }\n  ]\n}"
-    },
-    {
-      label: "pageTools.json",
-      language: "json",
-      code: "{\n  \"repositoryUrl\": \"https://github.com/acme/docs\",\n  \"feedback\": { \"enabled\": true, \"action\": \"/\" }\n}"
-    }
-  ]}
-/>
+<CodeTabs>
+<CodeTab label="header.json" language="json">
+
+```
+{
+  "logoSource": "/src/assets/images/logo/logo-light.svg",
+  "logoAlternateSource": "/src/assets/images/logo/logo-dark.svg",
+  "logoAlt": "Stratus",
+  "showVersionNumber": true,
+  "search": true,
+  "themeToggle": true
+}
+```
+
+</CodeTab>
+<CodeTab label="sidebar.json" language="json">
+
+```
+{
+  "homeLabel": "Overview",
+  "navGroups": [
+    { "name": "Getting started", "collapsed": false },
+    { "name": "Reference", "collapsed": true }
+  ]
+}
+```
+
+</CodeTab>
+<CodeTab label="pageTools.json" language="json">
+
+```
+{
+  "repositoryUrl": "https://github.com/acme/docs",
+  "feedback": { "enabled": true, "action": "/" }
+}
+```
+
+</CodeTab>
+</CodeTabs>
 
 <ParamList
   params={[

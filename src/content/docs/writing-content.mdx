@@ -105,25 +105,46 @@ blank line in the list doesn't shift them.
 Use `CodeTabs` for one sample in several languages. The reader's choice is remembered
 site-wide, so a Python developer stays in Python across every page.
 
-<CodeTabs
-  tabs={[
-    {
-      label: "cURL",
-      language: "bash",
-      code: "curl https://api.acme.com/v1/invoices \\\n  -H \"Authorization: Bearer $ACME_KEY\" \\\n  -d customer=cus_8Kq2 \\\n  -d amount=4900"
-    },
-    {
-      label: "Node",
-      language: "js",
-      code: "import { Acme } from '@acme/sdk'\n\nconst acme = new Acme(process.env.ACME_KEY)\n\nconst invoice = await acme.invoices.create({\n  customer: 'cus_8Kq2',\n  amount: 4900,\n})"
-    },
-    {
-      label: "Python",
-      language: "python",
-      code: "from acme import Acme\n\nacme = Acme(os.environ['ACME_KEY'])\n\ninvoice = acme.invoices.create(\n    customer='cus_8Kq2',\n    amount=4900,\n)"
-    }
-  ]}
-/>
+<CodeTabs>
+<CodeTab label="cURL" language="bash">
+
+```
+curl https://api.acme.com/v1/invoices \
+  -H "Authorization: Bearer $ACME_KEY" \
+  -d customer=cus_8Kq2 \
+  -d amount=4900
+```
+
+</CodeTab>
+<CodeTab label="Node" language="js">
+
+```
+import { Acme } from '@acme/sdk'
+
+const acme = new Acme(process.env.ACME_KEY)
+
+const invoice = await acme.invoices.create({
+  customer: 'cus_8Kq2',
+  amount: 4900,
+})
+```
+
+</CodeTab>
+<CodeTab label="Python" language="python">
+
+```
+from acme import Acme
+
+acme = Acme(os.environ['ACME_KEY'])
+
+invoice = acme.invoices.create(
+    customer='cus_8Kq2',
+    amount=4900,
+)
+```
+
+</CodeTab>
+</CodeTabs>
 
 ## Code annotations
 
