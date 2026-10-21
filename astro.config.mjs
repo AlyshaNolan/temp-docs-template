@@ -56,6 +56,9 @@ export default defineConfig({
   vite: {
     build: {
       minify: "esbuild",
+      // Astro builds pages with target `esnext`, so without this the CSS minifier assumes
+      // no browser needs a prefix and strips `-webkit-text-size-adjust` and friends.
+      cssTarget: ["chrome111", "edge111", "firefox114", "safari16.4", "ios16.4"],
       chunkSizeWarningLimit: 1024,
     },
     plugins: [
