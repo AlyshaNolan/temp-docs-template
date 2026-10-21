@@ -10,7 +10,6 @@ showFeedback: true
 showCopyPage: true
 showPager: true
 ---
-
 ## Collapsible sections
 
 Wrap optional depth in a disclosure. It uses the native `<details>` element, so it is keyboard accessible and prints expanded.
@@ -103,11 +102,7 @@ An embed takes the video's ID, not its URL — the part after `v=` on YouTube, o
 <CodeBlock language="mdx" filename="video.mdx">
 
 ```
-<Video
-  type="youtube"
-  videoId="fxWuYi5jPkA"
-  title="Build your editing experience locally with the CloudCannon dev server"
-/>
+<Video type="youtube" title="Build your editing experience locally with the CloudCannon dev server" videoId="fxWuYi5jPkA"/>
 ```
 
 </CodeBlock>
@@ -121,11 +116,7 @@ Put the file under `public/videos/` and pass its path from `public/`. Upload a `
 <CodeBlock language="mdx" filename="video.mdx">
 
 ```
-<Video
-  type="local-source"
-  source="/videos/glass.mp4"
-  title="Glass"
-/>
+<Video type="local-source" title="Glass" source="/videos/glass.mp4"/>
 ```
 
 </CodeBlock>
