@@ -172,11 +172,6 @@ const imageAltProp = imageAltDataProp ?? (imageEditable ? "imageAlt" : undefined
         inset: 0;
         position: absolute;
         z-index: var(--layer-0);
-
-        /* The overlay covers the body, so in the editor it would swallow every click meant for an editable region. */
-        [data-editor] & {
-          pointer-events: none;
-        }
       }
     }
   }

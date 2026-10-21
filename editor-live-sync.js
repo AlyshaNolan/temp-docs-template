@@ -162,6 +162,13 @@ function initNewComponents(root) {
   setupAllVideos(root);
 }
 
+// CloudCannon resets attributes on <html>, so editor-only CSS can't hang off a flag there; a
+// <style> in <head> survives. The stretched card link would otherwise swallow clicks on editable regions.
+const editorStyles = document.createElement("style");
+
+editorStyles.textContent = ".card-grid-hit { pointer-events: none; }";
+document.head.append(editorStyles);
+
 const observer = new MutationObserver((mutations) => {
   for (const mutation of mutations) {
     const { type } = mutation;
