@@ -1,4 +1,10 @@
 @layer base {
+  /* Mobile Safari otherwise inflates the font size of horizontally scrolling code blocks. */
+  :root {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
   :where(:root) {
     html,
     body {
