@@ -10,6 +10,7 @@ showFeedback: true
 showCopyPage: true
 showPager: true
 ---
+
 ## header.json
 
 <ParamList params={[{ name: "logoSource", type: "string", required: true, description: "Path to the header logo, an SVG or PNG. Used in both color modes unless `logoAlternateSource` is set." }, { name: "logoAlternateSource", type: "string", description: "Path to the logo shown in dark mode." }, { name: "logoAlt", type: "string", description: "Alt text for the logo, usually the site name." }, { name: "showVersionNumber", type: "boolean", description: "Badge beside the brand showing the latest changelog version. Hidden when off or when the changelog has no releases." }, { name: "topbarLinks", type: "{ name, path }[]", description: "Links in the header, to the right of the brand. Hidden below 640px." }, { name: "search", type: "boolean", defaultValue: "true", description: "Shows the search control and binds ⌘K." }, { name: "searchPlaceholder", type: "string", description: "Placeholder inside the overlay's input." }, { name: "themeToggle", type: "boolean", defaultValue: "true", description: "Shows the light/dark control in the header. The scheme is still resolved without it." }]}/>

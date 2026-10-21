@@ -72,7 +72,7 @@ Footnotes are GFM: `text.[^id]` in the sentence, `[^id]: note` on its own line a
 
 ### No code fences
 
-Code goes in a `CodeBlock`, never a Markdown fence — except the fence inside a `<CodeTab>` (below), which belongs to the CodeTabs snippet rather than the rich text. The fence pipeline still exists — `fenceMetaTransformer` in `src/utils/markdown.mjs` reads `title=` and `{2,5-7}` off the meta string — but nothing in `src/content/` uses it, and the Content Editor's code-block control is off (`code_block: false`), because a fence cannot survive CloudCannon:
+Code goes in a `CodeBlock`, never a bare Markdown fence. The fence inside `<CodeBlock>` or `<CodeTab>` (below) is the exception: it belongs to that component's snippet, not to the rich text. The fence pipeline still exists — `fenceMetaTransformer` in `src/utils/markdown.mjs` reads `title=` and `{2,5-7}` off the meta string — but nothing in `src/content/` uses it, and the Content Editor's code-block control is off (`code_block: false`), because a fence cannot survive CloudCannon:
 
 - Its `title=` and `{2,5-7}` meta have nowhere to live; the editor models a language and nothing else.
 - CloudCannon draws it with its own chrome, so the same sample looks like two different components either side of a save.
@@ -85,7 +85,7 @@ These are available in any `.mdx` page with no import, and each has a CloudCanno
 | Tag               | For                                                                   | Key props                                                                |
 | ----------------- | --------------------------------------------------------------------- | ------------------------------------------------------------------------ |
 | `Alert`           | A callout: note, tip, warning, danger                                 | `variant`, `title`, `text` (markdown)                                    |
-| `CodeBlock`       | A code sample from a prop rather than a fence                         | `code`, `language`, `filename`, `highlight`                              |
+| `CodeBlock`       | One code sample, in a fence between the tags                          | the fence, `language`, `filename`, `highlight`, `showCopy`               |
 | `CodeTabs`        | One sample in several languages, choice remembered site-wide          | `<CodeTab label language highlight>` children, `filename`, `showCopy`    |
 | `CodeAnnotations` | Code with numbered notes underneath                                   | `code`, `language`, `filename`, `notes[]` of `{ line, text }`            |
 | `CodeDiff`        | A sample with changed lines marked, still highlighted in its language | `code`, `language`, `filename`, `added`, `removed`, `highlight`          |
@@ -120,13 +120,21 @@ Every building block in the library can be used the same way — the table lists
 
 **MDX quoting bites here.** A prop value in double quotes cannot contain a double quote — the parser reads it as the end of the attribute and then fails on the next character. Avoid quoted words inside prop text.
 
-**Multi-line code is one line, with `\n` escapes.** Only a braces-wrapped JS string keeps the indentation: MDX strips two leading spaces from every continuation line of a template literal, and _all_ leading whitespace from a quoted attribute that spans lines. Both build fine and render the sample wrong.
+**`CodeBlock` and `CodeTabs` take their code in a fence between the tags** — not a `code=` or `tabs=` prop. CloudCannon saves a multi-line string prop with raw newlines, which breaks the MDX build, so the code lives in a fence and `src/utils/codeFencePlugin.mjs` turns it back into the prop. Put `language` on the tag, leave the fence bare, and use a longer fence when the sample itself contains three backticks.
 
-```mdx
-<CodeBlock language="js" code={"export default {\n  search: { provider: 'local' },\n}"} />
+````mdx
+<CodeBlock language="js" filename="astro.config.mjs">
+
+```
+export default {
+  search: { provider: 'local' },
+}
 ```
 
-**`CodeTabs` takes `<CodeTab>` children, one fence each** — not a `tabs={[…]}` prop. CloudCannon saves a multi-line string prop with raw newlines, which breaks the MDX build, so the code lives in a fence and `src/utils/codeTabsPlugin.mjs` builds `tabs` from it. Put `language` on the `CodeTab`, leave the fence bare, and use a longer fence when the sample itself contains three backticks.
+</CodeBlock>
+````
+
+`CodeTabs` takes one `<CodeTab>` per language, each holding its own fence:
 
 ````mdx
 <CodeTabs>
@@ -149,7 +157,7 @@ pnpm add stratus
 
 **Array and object props take unquoted keys** — `params={[{ name: "x", type: "string" }]}`, not `"name":`. CloudCannon keeps the quotes as part of the field name, so the item's `_inputs` never match: every field falls back to plain text.
 
-Reach for `{'…'}` when the sample contains double quotes, so the JSON inside stays unescaped. This bites hardest on `FileTree` and `CodeDiff`, where the indentation _is_ the content: two lost spaces re-parent a whole subtree.
+`CodeAnnotations`, `CodeDiff` and `FileTree` still take their code as a prop: one line with `\n` escapes, in braces — `code={"a\n  b"}`. MDX strips two leading spaces from every continuation line of a template literal and _all_ leading whitespace from a quoted attribute that spans lines; both build and render the sample wrong. Reach for `{'…'}` when the sample contains double quotes. A save in CloudCannon breaks these three the same way it broke `CodeBlock`.
 
 **Never an `export const`, and never a bare `{identifier}`.** CloudCannon has no expression to evaluate: the export renders as plain text in the Content Editor, and the component whose prop reads it fails to parse as a snippet, so it renders as plain text too. The value has to sit in the attribute.
 

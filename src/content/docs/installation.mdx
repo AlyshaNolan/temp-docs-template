@@ -21,11 +21,15 @@ Two routes, both ending with a repository of your own.
 Open [Use this template](https://github.com/AlyshaNolan/temp-docs-template/generate) on the
 repository, name your copy, then clone it and install:
 
-<CodeBlock
-  language="bash"
-  filename="terminal"
-  code={"git clone https://github.com/your-org/acme-docs.git\ncd acme-docs\nnpm ci"}
-/>
+<CodeBlock language="bash" filename="terminal">
+
+```
+git clone https://github.com/your-org/acme-docs.git
+cd acme-docs
+npm ci
+```
+
+</CodeBlock>
 
 <Alert
   variant="note"
@@ -48,11 +52,16 @@ editable on the page.
 
 ## Run the dev server
 
-<CodeBlock
-  language="bash"
-  filename="terminal"
-  code={"npm run dev\n\n  → docs ready at http://localhost:4321\n  → watching src/content/docs for changes"}
-/>
+<CodeBlock language="bash" filename="terminal">
+
+```
+npm run dev
+
+  → docs ready at http://localhost:4321
+  → watching src/content/docs for changes
+```
+
+</CodeBlock>
 
 <Alert
   variant="tip"
@@ -70,11 +79,20 @@ Create an `.mdx` file anywhere under `src/content/docs/`. The path becomes the U
   text="Only `.mdx` files are loaded. A `.md` file in `src/content/docs/` is skipped without an error, so the page simply never appears. MDX is Markdown plus components — write it exactly as you would Markdown."
 />
 
-<CodeBlock
-  language="mdx"
-  filename="src/content/docs/webhooks.mdx"
-  code={"---\ntitle: Webhooks\ndescription: Receive events as they happen.\ngroup: Guides\norder: 2\n---\n\nSubscribe to events and we'll POST them to your endpoint."}
-/>
+<CodeBlock language="mdx" filename="src/content/docs/webhooks.mdx">
+
+```
+---
+title: Webhooks
+description: Receive events as they happen.
+group: Guides
+order: 2
+---
+
+Subscribe to events and we'll POST them to your endpoint.
+```
+
+</CodeBlock>
 
 ## Deploy
 

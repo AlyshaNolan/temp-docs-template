@@ -43,30 +43,48 @@ Four kinds. Use them for things a reader would otherwise learn the hard way.
 <Alert variant="warning" title="Warning" text="Something that will surprise them if they skip it." />
 <Alert variant="danger" title="Danger" text="Data loss, irreversible actions, breaking changes." />
 
-<CodeBlock
-  language="mdx"
-  filename="callout.mdx"
-  code={'<Alert\n  variant="warning"\n  title="Rotating a key revokes the old one"\n  text="Existing clients fail on the next request. Deploy the new key before rotating."\n/>'}
+<CodeBlock language="mdx" filename="callout.mdx">
+
+```
+<Alert
+  variant="warning"
+  title="Rotating a key revokes the old one"
+  text="Existing clients fail on the next request. Deploy the new key before rotating."
 />
+```
+
+</CodeBlock>
 
 ## Code blocks
 
 `CodeBlock` takes the sample, its language, a `filename` for the header bar and a line range
-to highlight. Write the sample as a single-line string with `\n` between lines — that is the
-only form that keeps its indentation.
+to highlight. The sample goes in a fence between the tags, so it keeps its indentation
+exactly; leave the fence bare and put the language on `CodeBlock`.
 
-<CodeBlock
-  language="mdx"
-  filename="sample.mdx"
-  code={'<CodeBlock\n  language="json"\n  filename="src/data/theme.json"\n  highlight="3"\n  code={…}\n/>'}
-/>
+<CodeBlock language="mdx" filename="sample.mdx">
 
-<CodeBlock
-  language="json"
-  filename="src/data/theme.json"
-  highlight="3"
-  code={'{\n  "themeSelector": true,\n  "defaultTheme": "dark"\n}'}
-/>
+````
+<CodeBlock language="json" filename="src/data/theme.json" highlight="3">
+
+```
+…
+```
+
+</CodeBlock>
+````
+
+</CodeBlock>
+
+<CodeBlock language="json" filename="src/data/theme.json" highlight="3">
+
+```
+{
+  "themeSelector": true,
+  "defaultTheme": "dark"
+}
+```
+
+</CodeBlock>
 
 ## Diffs
 
@@ -183,11 +201,15 @@ Put a marker in the sentence and the note anywhere in the file. Notes collect at
 page in marker order, each with a link back to where it was cited.[^order] Use them for an aside
 that would break the flow of a sentence, such as a source or an edge case.[^print]
 
-<CodeBlock
-  language="mdx"
-  filename="footnote.mdx"
-  code={'Retries back off exponentially.[^backoff]\n\n[^backoff]: 1s, 2s, 4s, 8s, then 16s, with up to 20% jitter.'}
-/>
+<CodeBlock language="mdx" filename="footnote.mdx">
+
+```
+Retries back off exponentially.[^backoff]
+
+[^backoff]: 1s, 2s, 4s, 8s, then 16s, with up to 20% jitter.
+```
+
+</CodeBlock>
 
 [^order]: The label in the brackets is only an id. Notes are numbered in the order their markers appear, whatever you call them.
 

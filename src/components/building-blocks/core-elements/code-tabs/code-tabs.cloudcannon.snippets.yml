@@ -1,6 +1,6 @@
 # Raw, not `mdx_component`: CloudCannon writes a multi-line string prop with raw
 # newlines, which MDX can't parse. Each tab's code sits in a fence, read as raw
-# text, and `src/utils/codeTabsPlugin.mjs` folds it back into `tabs`.
+# text, and `src/utils/codeFencePlugin.mjs` folds it back into `tabs`.
 code-tabs:
   snippet: "<CodeTabs[[code_tabs_args]]>[[tabs]]</CodeTabs>"
   inline: false

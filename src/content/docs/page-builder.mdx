@@ -16,11 +16,22 @@ CloudCannon's Visual Editor.
 Both collections share one URL space at the site root, so a page-builder page and a
 documentation page can't have the same path — the build fails and names both files.
 
-<CodeBlock
-  language="yaml"
-  filename="src/content/pages/pricing.md"
-  code={"---\ntitle: Pricing\ndescription: Plans for every size of team.\npageSections:\n  - _component: page-sections/heroes/hero-center\n    heading: Simple pricing\n    subtext: Start free, upgrade when you need to.\n  - _component: page-sections/conversion/cta-split\n    heading: Ready to start?\n---"}
-/>
+<CodeBlock language="yaml" filename="src/content/pages/pricing.md">
+
+```
+---
+title: Pricing
+description: Plans for every size of team.
+pageSections:
+  - _component: page-sections/heroes/hero-center
+    heading: Simple pricing
+    subtext: Start free, upgrade when you need to.
+  - _component: page-sections/conversion/cta-split
+    heading: Ready to start?
+---
+```
+
+</CodeBlock>
 
 Each section names its component in `_component` — the component's folder path under
 `src/components/` — and sets that component's props beside it. A page-builder page has no
@@ -70,11 +81,13 @@ Every component is a folder under `src/components/` with its `.astro` file and t
 configuration beside it. The folder is all the registration there is: a new component appears
 in the picker, renders through `_component`, and becomes an MDX tag named after its file.
 
-<CodeBlock
-  language="bash"
-  filename="terminal"
-  code={"npm run new:component page-sections/explainers/pricing-table"}
-/>
+<CodeBlock language="bash" filename="terminal">
+
+```
+npm run new:component page-sections/explainers/pricing-table
+```
+
+</CodeBlock>
 
 The scaffold writes the three files with the right layer and key, and prints the steps left —
 a preview thumbnail, a snippet if it belongs in documentation pages, and `npm run check`.
