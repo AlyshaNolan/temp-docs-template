@@ -12,7 +12,7 @@ in `src/styles/variables/`, semantic tokens in `src/styles/themes/`, and compone
 properties on a component's own root. Components consume the semantic tier only, so a
 rebrand is a token change rather than a component change.
 
-<CodeBlock language="css" filename="src/styles/themes/_light.css">
+<CodeBlock language="css" filename="src/styles/themes/_light.css" showCopy={true}>
 
 ```
 [data-theme="light"] {
@@ -49,7 +49,7 @@ on the site follows.
 the default color scheme, two accent colors, two brand colors and a corner radius. `BaseLayout` turns them into custom
 properties on `<html>`, and the theme files read those as optional overrides.
 
-<CodeBlock language="json" filename="src/data/theme.json">
+<CodeBlock language="json" filename="src/data/theme.json" showCopy={true}>
 
 ```
 {
@@ -113,7 +113,7 @@ That button is the starter's worked example of the [CloudCannon Visual Editor Ja
 API](https://cloudcannon.com/documentation/developer-articles/read-and-write-data-with-the-visual-editor-api/),
 in `src/components/navigation/theme-selector/setup.ts`:
 
-<CodeBlock language="js" filename="src/components/navigation/theme-selector/setup.ts">
+<CodeBlock language="js" filename="src/components/navigation/theme-selector/setup.ts" showCopy={true}>
 
 ```
 const api = window.CloudCannonAPI.useVersion("v1", true);
@@ -155,7 +155,7 @@ preview.
 One sans for interface and prose, one mono for code and labels, both registered in
 `site-fonts.mjs` — the only place to change them.
 
-<CodeBlock language="js" filename="site-fonts.mjs">
+<CodeBlock language="js" filename="site-fonts.mjs" showCopy={true}>
 
 ```
 export const siteFonts = [

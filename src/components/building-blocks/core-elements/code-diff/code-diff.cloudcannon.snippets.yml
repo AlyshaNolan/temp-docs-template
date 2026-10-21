@@ -37,6 +37,7 @@ code-diff:
             remove_empty: true
           - editor_key: showCopy
             type: boolean
+            optional: true
             default: true
         format:
           root_value_delimiter: "="

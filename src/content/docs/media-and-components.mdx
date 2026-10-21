@@ -10,6 +10,7 @@ showFeedback: true
 showCopyPage: true
 showPager: true
 ---
+
 ## Collapsible sections
 
 Wrap optional depth in a disclosure. It uses the native `<details>` element, so it is keyboard accessible and prints expanded.
@@ -28,7 +29,7 @@ When each choice needs more than one code sample, such as an explanation, a call
 
 Install the package, then add it to your project's config.
 
-<CodeBlock language="bash" filename="terminal">
+<CodeBlock language="bash" filename="terminal" showCopy={true}>
 
 ```
 npm install @stratus/sdk
@@ -42,7 +43,7 @@ npm install @stratus/sdk
 
 Yarn Classic and Yarn Berry use the same command.
 
-<CodeBlock language="bash" filename="terminal">
+<CodeBlock language="bash" filename="terminal" showCopy={true}>
 
 ```
 yarn add @stratus/sdk
@@ -99,10 +100,14 @@ An embed takes the video's ID, not its URL — the part after `v=` on YouTube, o
 
 <Video type="youtube" title="Build your editing experience locally with the CloudCannon dev server" videoId="fxWuYi5jPkA"/>
 
-<CodeBlock language="mdx" filename="video.mdx">
+<CodeBlock language="mdx" filename="video.mdx" showCopy={true}>
 
 ```
-<Video type="youtube" title="Build your editing experience locally with the CloudCannon dev server" videoId="fxWuYi5jPkA"/>
+<Video
+  type="youtube"
+  videoId="fxWuYi5jPkA"
+  title="Build your editing experience locally with the CloudCannon dev server"
+/>
 ```
 
 </CodeBlock>
@@ -113,10 +118,14 @@ Put the file under `public/videos/` and pass its path from `public/`. Upload a `
 
 <Video type="local-source" title="Glass" source="/videos/glass.mp4"/>
 
-<CodeBlock language="mdx" filename="video.mdx">
+<CodeBlock language="mdx" filename="video.mdx" showCopy={true}>
 
 ```
-<Video type="local-source" title="Glass" source="/videos/glass.mp4"/>
+<Video
+  type="local-source"
+  source="/videos/glass.mp4"
+  title="Glass"
+/>
 ```
 
 </CodeBlock>

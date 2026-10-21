@@ -43,7 +43,7 @@ Four kinds. Use them for things a reader would otherwise learn the hard way.
 <Alert variant="warning" title="Warning" text="Something that will surprise them if they skip it." />
 <Alert variant="danger" title="Danger" text="Data loss, irreversible actions, breaking changes." />
 
-<CodeBlock language="mdx" filename="callout.mdx">
+<CodeBlock language="mdx" filename="callout.mdx" showCopy={true}>
 
 ```
 <Alert
@@ -61,10 +61,10 @@ Four kinds. Use them for things a reader would otherwise learn the hard way.
 to highlight. The sample goes in a fence between the tags, so it keeps its indentation
 exactly; leave the fence bare and put the language on `CodeBlock`.
 
-<CodeBlock language="mdx" filename="sample.mdx">
+<CodeBlock language="mdx" filename="sample.mdx" showCopy={true}>
 
 ````
-<CodeBlock language="json" filename="src/data/theme.json" highlight="3">
+<CodeBlock language="json" filename="src/data/theme.json" highlight="3" showCopy={true}>
 
 ```
 …
@@ -75,7 +75,7 @@ exactly; leave the fence bare and put the language on `CodeBlock`.
 
 </CodeBlock>
 
-<CodeBlock language="json" filename="src/data/theme.json" highlight="3">
+<CodeBlock language="json" filename="src/data/theme.json" highlight="3" showCopy={true}>
 
 ```
 {
@@ -93,7 +93,7 @@ exactly; leave the fence bare and put the language on `CodeBlock`.
 so it keeps its own language colors instead of going flat the way a `diff` fence
 does, and the copy button hands back something that runs.
 
-<CodeDiff language="json" filename="src/data/theme.json" added="4" removed="3" highlight="6">
+<CodeDiff language="json" filename="src/data/theme.json" added="4" removed="3" highlight="6" showCopy={true}>
 
 ```
 {
@@ -118,7 +118,7 @@ editable as text. Any consistent indent unit works, and it takes the same `added
 `removed` and `highlight` line numbers as a diff — counting the rendered rows, so a
 blank line in the list doesn't shift them.
 
-<FileTree title="Project structure" added="4">
+<FileTree title="Project structure" added="4" showCopy={true}>
 
 ```
 src/
@@ -137,7 +137,7 @@ astro.config.mjs
 Use `CodeTabs` for one sample in several languages. The reader's choice is remembered
 site-wide, so a Python developer stays in Python across every page.
 
-<CodeTabs>
+<CodeTabs showCopy={true}>
 <CodeTab label="cURL" language="bash">
 
 ```
@@ -183,7 +183,7 @@ invoice = acme.invoices.create(
 Notes sit under the block rather than in comments, so the snippet stays copy-paste clean.
 Each note names the line it marks.
 
-<CodeAnnotations language="json" filename="src/data/header.json" notes={[{ line: 2, text: "Builds the search index at compile time and ships it with the site — no search service, no API key." }, { line: 4, text: "Links beside the brand. Add, remove and reorder them on the page in CloudCannon's Visual Editor." }]}>
+<CodeAnnotations language="json" filename="src/data/header.json" notes={[{ line: 2, text: "Builds the search index at compile time and ships it with the site — no search service, no API key." }, { line: 4, text: "Links beside the brand. Add, remove and reorder them on the page in CloudCannon's Visual Editor." }]} showCopy={true}>
 
 ```
 {
@@ -213,7 +213,7 @@ Put a marker in the sentence and the note anywhere in the file. Notes collect at
 page in marker order, each with a link back to where it was cited.[^order] Use them for an aside
 that would break the flow of a sentence, such as a source or an edge case.[^print]
 
-<CodeBlock language="mdx" filename="footnote.mdx">
+<CodeBlock language="mdx" filename="footnote.mdx" showCopy={true}>
 
 ```
 Retries back off exponentially.[^backoff]
