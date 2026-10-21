@@ -172,10 +172,6 @@ if (!_component && !hasText && !hasIcon) return;
         width: var(--spacing-sm);
       }
 
-      .badge-arrow {
-        color: var(--color-text-muted);
-      }
-
       /* The alignment class rides on the inner box — a prop-driven class on a
          region root goes stale in the editor — so `:has()` hoists it back. */
       &:has(> .badge-inner.align-start) {
