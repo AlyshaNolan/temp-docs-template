@@ -98,6 +98,8 @@ const textProp = editableSource ? `${editableSource}.text` : "text";
       display: flex;
       font-size: var(--font-size-sm);
       justify-content: center;
+      /* The close button's 44px `.tap-target` overhangs the right edge and widens the page on phones. */
+      overflow-x: clip;
       padding-block: var(--spacing-sm);
       padding-inline: var(--spacing-2xl);
       position: relative;
