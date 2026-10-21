@@ -36,13 +36,17 @@ const {
   background={background}
   useDefaultEditableBinding={useDefaultEditableBinding}
 >
-  <Heading
-    level={headingLevel}
-    size="lg"
-    alignmentHorizontal="center"
-    text={heading}
-    data-prop="heading"
-  />
+  {
+    heading && (
+      <Heading
+        level={headingLevel}
+        size="lg"
+        alignmentHorizontal="center"
+        text={heading}
+        data-prop="heading"
+      />
+    )
+  }
 
   <Accordion
     label={label}

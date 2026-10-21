@@ -19,7 +19,6 @@ faqSection:
       - editor_key: heading
         type: string
         optional: true
-        remove_empty: true
       - editor_key: headingLevel
         type: string
         optional: true
