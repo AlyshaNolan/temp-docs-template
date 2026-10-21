@@ -72,7 +72,7 @@ Footnotes are GFM: `text.[^id]` in the sentence, `[^id]: note` on its own line a
 
 ### No code fences
 
-Code goes in a `CodeBlock`, never a bare Markdown fence. The fence inside `<CodeBlock>` or `<CodeTab>` (below) is the exception: it belongs to that component's snippet, not to the rich text. The fence pipeline still exists — `fenceMetaTransformer` in `src/utils/markdown.mjs` reads `title=` and `{2,5-7}` off the meta string — but nothing in `src/content/` uses it, and the Content Editor's code-block control is off (`code_block: false`), because a fence cannot survive CloudCannon:
+Code goes in a `CodeBlock`, never a bare Markdown fence. The fence inside a code component or `Diagram` (below) is the exception: it belongs to that component's snippet, not to the rich text. The fence pipeline still exists — `fenceMetaTransformer` in `src/utils/markdown.mjs` reads `title=` and `{2,5-7}` off the meta string — but nothing in `src/content/` uses it, and the Content Editor's code-block control is off (`code_block: false`), because a fence cannot survive CloudCannon:
 
 - Its `title=` and `{2,5-7}` meta have nowhere to live; the editor models a language and nothing else.
 - CloudCannon draws it with its own chrome, so the same sample looks like two different components either side of a save.
@@ -87,12 +87,12 @@ These are available in any `.mdx` page with no import, and each has a CloudCanno
 | `Alert`           | A callout: note, tip, warning, danger                                 | `variant`, `title`, `text` (markdown)                                    |
 | `CodeBlock`       | One code sample, in a fence between the tags                          | the fence, `language`, `filename`, `highlight`, `showCopy`               |
 | `CodeTabs`        | One sample in several languages, choice remembered site-wide          | `<CodeTab label language highlight>` children, `filename`, `showCopy`    |
-| `CodeAnnotations` | Code with numbered notes underneath                                   | `code`, `language`, `filename`, `notes[]` of `{ line, text }`            |
-| `CodeDiff`        | A sample with changed lines marked, still highlighted in its language | `code`, `language`, `filename`, `added`, `removed`, `highlight`          |
-| `FileTree`        | A directory tree drawn from an indented list of paths                 | `paths`, `title`, `added`, `removed`, `highlight`                        |
+| `CodeAnnotations` | Code with numbered notes underneath                                   | the fence, `language`, `filename`, `notes[]` of `{ line, text }`         |
+| `CodeDiff`        | A sample with changed lines marked, still highlighted in its language | the fence, `language`, `filename`, `added`, `removed`, `highlight`       |
+| `FileTree`        | A directory tree drawn from an indented list of paths                 | the fence (the paths), `title`, `added`, `removed`, `highlight`          |
 | `ParamList`       | API reference entries where descriptions run long                     | `params[]` of `{ name, type, required, defaultValue, description }`      |
 | `DefinitionList`  | Glossaries and field terminology                                      | `items[]` of `{ title, text }`, `layout` (`stacked`/`grid`)              |
-| `Diagram`         | A Mermaid diagram                                                     | `definition`, `caption`                                                  |
+| `Diagram`         | A Mermaid diagram                                                     | the fence (the definition), `caption`                                    |
 | `Figure`          | A captioned screenshot with a dark variant and click-to-zoom          | `source`, `alternateSource`, `alt`, `caption`, `zoom`                    |
 | `Changelog`       | Every release in the changelog collection, newest first               | `limit`                                                                  |
 | `Accordion`       | Optional depth in a disclosure                                        | `items[]` of `{ title, contentSections[] }`                              |
@@ -120,7 +120,7 @@ Every building block in the library can be used the same way — the table lists
 
 **MDX quoting bites here.** A prop value in double quotes cannot contain a double quote — the parser reads it as the end of the attribute and then fails on the next character. Avoid quoted words inside prop text.
 
-**`CodeBlock` and `CodeTabs` take their code in a fence between the tags** — not a `code=` or `tabs=` prop. CloudCannon saves a multi-line string prop with raw newlines, which breaks the MDX build, so the code lives in a fence and `src/utils/codeFencePlugin.mjs` turns it back into the prop. Put `language` on the tag, leave the fence bare, and use a longer fence when the sample itself contains three backticks.
+**Multi-line text goes in a fence between the tags** — `CodeBlock`, `CodeDiff` and `CodeAnnotations` (`code`), `FileTree` (`paths`), `Diagram` (`definition`) and each `CodeTab`; never the prop. CloudCannon saves a multi-line string prop with raw newlines, which breaks the MDX build, so the code lives in a fence and `src/utils/codeFencePlugin.mjs` turns it back into the prop. Put `language` on the tag, leave the fence bare, and use a longer fence when the sample itself contains three backticks.
 
 ````mdx
 <CodeBlock language="js" filename="astro.config.mjs">
@@ -156,8 +156,6 @@ pnpm add stratus
 ````
 
 **Array and object props take unquoted keys** — `params={[{ name: "x", type: "string" }]}`, not `"name":`. CloudCannon keeps the quotes as part of the field name, so the item's `_inputs` never match: every field falls back to plain text.
-
-`CodeAnnotations`, `CodeDiff` and `FileTree` still take their code as a prop: one line with `\n` escapes, in braces — `code={"a\n  b"}`. MDX strips two leading spaces from every continuation line of a template literal and _all_ leading whitespace from a quoted attribute that spans lines; both build and render the sample wrong. Reach for `{'…'}` when the sample contains double quotes. A save in CloudCannon breaks these three the same way it broke `CodeBlock`.
 
 **Never an `export const`, and never a bare `{identifier}`.** CloudCannon has no expression to evaluate: the export renders as plain text in the Content Editor, and the component whose prop reads it fails to parse as a snippet, so it renders as plain text too. The value has to sit in the attribute.
 
@@ -205,11 +203,11 @@ when the version is actually cut. Full rule: [`.agents/rules/changelog.md`](../.
 | Before/after of the same file        | `CodeDiff`        |
 | A directory layout                   | `FileTree`        |
 
-All five hold their code in a prop, so it is a field an editor can change and the sample renders identically in Git, in the Content Editor and in the Visual Editor.
+All five hold their code in a fence between the tags, which their snippet exposes as a code field, so an editor can change it and the sample renders identically in Git, in the Content Editor and in the Visual Editor.
 
 ### Marked lines are always named by number
 
-Every one of them names a line the same way — `highlight="2"`, `added="3,7-9"`, `removed="1-2"`, or `CodeAnnotations`' `notes[].line`. Nothing is marked by a character inside the code, so the `code` prop is always the literal sample: copy-pasteable, and free of the collision where a YAML list item or a leading unary minus reads as a marker.
+Every one of them names a line the same way — `highlight="2"`, `added="3,7-9"`, `removed="1-2"`, or `CodeAnnotations`' `notes[].line`. Nothing is marked by a character inside the code, so the fence is always the literal sample: copy-pasteable, and free of the collision where a YAML list item or a leading unary minus reads as a marker.
 
 The cost is that line numbers don't move when the sample does. After adding or removing a line, re-check the ranges — nothing validates them, and an out-of-range number marks nothing rather than failing.
 

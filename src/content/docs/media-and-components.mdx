@@ -10,6 +10,7 @@ showFeedback: true
 showCopyPage: true
 showPager: true
 ---
+
 ## Collapsible sections
 
 Wrap optional depth in a disclosure. It uses the native `<details>` element, so it is keyboard accessible and prints expanded.
@@ -28,7 +29,7 @@ When each choice needs more than one code sample, such as an explanation, a call
 
 Install the package, then add it to your project's config.
 
-<CodeBlock language="bash" filename="terminal" showCopy={false}>
+<CodeBlock language="bash" filename="terminal">
 
 ```
 npm install @stratus/sdk
@@ -42,7 +43,7 @@ npm install @stratus/sdk
 
 Yarn Classic and Yarn Berry use the same command.
 
-<CodeBlock language="bash" filename="terminal" showCopy={false}>
+<CodeBlock language="bash" filename="terminal">
 
 ```
 yarn add @stratus/sdk
@@ -68,14 +69,16 @@ For glossaries and field-by-field terminology, where a table would be three colu
 
 Diagrams are written as Mermaid text, so they diff in review and whoever inherits the page can edit them without opening a design tool.
 
-<Diagram
-definition=
-{"flowchart LR
+<Diagram caption="A webhook delivery, from event to dead letter.">
+
+```
+flowchart LR
   A[Event] --> B{Retry?}
   B -- yes --> C[Queue]
-  B -- no --> D[Dead letter]"}
- caption="A webhook delivery, from event to dead letter."
-/>
+  B -- no --> D[Dead letter]
+```
+
+</Diagram>
 
 <Alert variant="note" title="Diagrams render in the browser" text="Mermaid needs a DOM to lay a diagram out, so the source ships in the page and the SVG replaces it once the library loads — only on pages that contain a diagram. With JavaScript off, and on paper, the reader gets the source instead of an empty box."/>
 
@@ -97,7 +100,7 @@ An embed takes the video's ID, not its URL — the part after `v=` on YouTube, o
 
 <Video type="youtube" title="Build your editing experience locally with the CloudCannon dev server" videoId="fxWuYi5jPkA"/>
 
-<CodeBlock language="mdx" filename="video.mdx" showCopy={false}>
+<CodeBlock language="mdx" filename="video.mdx">
 
 ```
 <Video
@@ -115,7 +118,7 @@ Put the file under `public/videos/` and pass its path from `public/`. Upload a `
 
 <Video type="local-source" title="Glass" source="/videos/glass.mp4"/>
 
-<CodeBlock language="mdx" filename="video.mdx" showCopy={false}>
+<CodeBlock language="mdx" filename="video.mdx">
 
 ```
 <Video

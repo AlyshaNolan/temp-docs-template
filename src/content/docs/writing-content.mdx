@@ -93,14 +93,20 @@ exactly; leave the fence bare and put the language on `CodeBlock`.
 so it keeps its own language colors instead of going flat the way a `diff` fence
 does, and the copy button hands back something that runs.
 
-<CodeDiff
-  filename="src/data/theme.json"
-  language="json"
-  removed="3"
-  added="4"
-  highlight="6"
-  code={'{\n  "themeSelector": true,\n  "defaultTheme": "light",\n  "defaultTheme": "dark",\n  "theme": {\n    "accentLight": "#0f766e"\n  }\n}'}
-/>
+<CodeDiff language="json" filename="src/data/theme.json" added="4" removed="3" highlight="6">
+
+```
+{
+  "themeSelector": true,
+  "defaultTheme": "light",
+  "defaultTheme": "dark",
+  "theme": {
+    "accentLight": "#0f766e"
+  }
+}
+```
+
+</CodeDiff>
 
 Line numbers count the sample's own lines, so they need a look after an edit that
 adds or removes one.
@@ -112,11 +118,19 @@ editable as text. Any consistent indent unit works, and it takes the same `added
 `removed` and `highlight` line numbers as a diff — counting the rendered rows, so a
 blank line in the list doesn't shift them.
 
-<FileTree
-  title="Project structure"
-  added="4"
-  paths={"src/\n  components/\n    Button.astro\n    Callout.astro\n  styles/\n    base.css\nastro.config.mjs"}
-/>
+<FileTree title="Project structure" added="4">
+
+```
+src/
+  components/
+    Button.astro
+    Callout.astro
+  styles/
+    base.css
+astro.config.mjs
+```
+
+</FileTree>
 
 ## Language tabs
 
@@ -169,21 +183,19 @@ invoice = acme.invoices.create(
 Notes sit under the block rather than in comments, so the snippet stays copy-paste clean.
 Each note names the line it marks.
 
-<CodeAnnotations
-  filename="src/data/header.json"
-  language="json"
-  notes={[
-    {
-      line: 2,
-      text: "Builds the search index at compile time and ships it with the site — no search service, no API key."
-    },
-    {
-      line: 4,
-      text: "Links beside the brand. Add, remove and reorder them on the page in CloudCannon's Visual Editor."
-    }
-  ]}
-  code={'{\n  "search": true,\n  "themeToggle": true,\n  "topbarLinks": [\n    { "name": "GitHub", "path": "https://github.com/acme/docs" }\n  ]\n}'}
-/>
+<CodeAnnotations language="json" filename="src/data/header.json" notes={[{ line: 2, text: "Builds the search index at compile time and ships it with the site — no search service, no API key." }, { line: 4, text: "Links beside the brand. Add, remove and reorder them on the page in CloudCannon's Visual Editor." }]}>
+
+```
+{
+  "search": true,
+  "themeToggle": true,
+  "topbarLinks": [
+    { "name": "GitHub", "path": "https://github.com/acme/docs" }
+  ]
+}
+```
+
+</CodeAnnotations>
 
 ## Tables
 

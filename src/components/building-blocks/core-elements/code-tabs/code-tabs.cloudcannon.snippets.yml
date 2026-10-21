@@ -23,8 +23,7 @@ code-tabs:
             remove_empty: true
           - editor_key: showCopy
             type: boolean
-            optional: true
-            remove_empty: true
+            default: true
         format:
           root_value_delimiter: "="
           root_pair_delimiter:
