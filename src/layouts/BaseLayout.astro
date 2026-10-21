@@ -86,6 +86,7 @@ const themeStyle = themeStyleAttribute(themeData.theme);
 
     <script>
       if (window.inEditorMode) {
+        document.documentElement.dataset.editor = "";
         import("../../live-editing");
         import("../../editor-live-sync");
       }
