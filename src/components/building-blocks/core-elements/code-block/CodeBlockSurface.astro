@@ -110,6 +110,8 @@ const hasHeader = Astro.slots.has("header");
 
     .code-surface .code-pre,
     .prose .astro-code {
+      /* iOS still inflates a block wider than the viewport under `100%`; only `none` stops it. */
+      -webkit-text-size-adjust: none;
       background-color: var(--color-code-bg);
       color: var(--color-code-text);
       font-size: var(--font-size-sm);
