@@ -9,6 +9,7 @@ showFeedback: true
 showCopyPage: true
 showPager: true
 ---
+
 ## The file
 
 A documentation page is an `.mdx` file under `src/content/docs/`, and its path is its URL: `src/content/docs/webhooks.mdx` is `/webhooks/`. Only `.mdx` files are loaded — a `.md` file there is silently ignored, with no build error. MDX is Markdown plus components, so everything you know about Markdown still applies.
@@ -17,19 +18,19 @@ A documentation page is an `.mdx` file under `src/content/docs/`, and its path i
 
 Only `title` is required. `group` and `order` place the page in the sidebar; omit `group` and the page still builds and is searchable — it just doesn't appear in the nav.
 
-| Key | Type | Default | Effect |
-| --- | --- | --- | --- |
-| `title` | string | — | Page heading, browser title, search result |
-| `description` | string | — | The lede under the title, and the meta description |
-| `group` | string | — | Sidebar group. No group means no sidebar entry |
-| `order` | number | `0` | Position within the group |
-| `keywords` | string\[\] | — | Meta keywords |
-| `image` | string | — | Social share image |
-| `noindex` | boolean | `false` | Keeps the page out of search engines and site search |
-| `showTableOfContents` | boolean | `true` | On-this-page rail |
-| `showFeedback` | boolean | `true` | The helpful vote at the foot of the page |
-| `showCopyPage` | boolean | `true` | The [Copy page](/copy-page/) menu beside the title |
-| `showPager` | boolean | `true` | Previous/next links |
+| Key                   | Type       | Default | Effect                                               |
+| --------------------- | ---------- | ------- | ---------------------------------------------------- |
+| `title`               | string     | —       | Page heading, browser title, search result           |
+| `description`         | string     | —       | The lede under the title, and the meta description   |
+| `group`               | string     | —       | Sidebar group. No group means no sidebar entry       |
+| `order`               | number     | `0`     | Position within the group                            |
+| `keywords`            | string\[\] | —       | Meta keywords                                        |
+| `image`               | string     | —       | Social share image                                   |
+| `noindex`             | boolean    | `false` | Keeps the page out of search engines and site search |
+| `showTableOfContents` | boolean    | `true`  | On-this-page rail                                    |
+| `showFeedback`        | boolean    | `true`  | The helpful vote at the foot of the page             |
+| `showCopyPage`        | boolean    | `true`  | The [Copy page](/copy-page/) menu beside the title   |
+| `showPager`           | boolean    | `true`  | Previous/next links                                  |
 
 The "Updated" date beside each page's title is not frontmatter — it is the file's last commit, read when the site builds. Edit a page and the date follows.
 
@@ -192,11 +193,11 @@ Notes sit under the block rather than in comments, so the snippet stays copy-pas
 
 Markdown tables get a bordered panel and horizontal scroll on narrow screens.
 
-| Event | Retries | Payload |
-| --- | --- | --- |
-| `invoice.paid` | 5 | Invoice object |
-| `user.created` | 3 | User object |
-| `plan.changed` | 3 | Subscription delta |
+| Event          | Retries | Payload            |
+| -------------- | ------- | ------------------ |
+| `invoice.paid` | 5       | Invoice object     |
+| `user.created` | 3       | User object        |
+| `plan.changed` | 3       | Subscription delta |
 
 ## Footnotes
 
@@ -212,11 +213,9 @@ Retries back off exponentially.[^1]
 
 </CodeBlock>
 
-[^1]:
-    Use a number as the id. The Content Editor only recognizes numbered footnotes, and saves any other id as plain text.
+[^1]: Use a number as the id. The Content Editor only recognizes numbered footnotes, and saves any other id as plain text.
 
-[^2]:
-    Footnotes survive the print layout, so a saved PDF keeps its sources.
+[^2]: Footnotes survive the print layout, so a saved PDF keeps its sources.
 
 ## Cross-links
 
