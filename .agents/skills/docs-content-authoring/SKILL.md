@@ -126,6 +126,8 @@ Every building block in the library can be used the same way — the table lists
 <CodeBlock language="js" code={"export default {\n  search: { provider: 'local' },\n}"} />
 ```
 
+**Array and object props take unquoted keys** — `params={[{ name: "x", type: "string" }]}`, not `"name":`. CloudCannon keeps the quotes as part of the field name, so the item's `_inputs` never match: every field falls back to plain text, and a multi-line `code` value is saved back with raw newlines that break the build.
+
 Reach for `{'…'}` when the sample contains double quotes, so the JSON inside stays unescaped. This bites hardest on `FileTree` and `CodeDiff`, where the indentation _is_ the content: two lost spaces re-parent a whole subtree.
 
 **Never an `export const`, and never a bare `{identifier}`.** CloudCannon has no expression to evaluate: the export renders as plain text in the Content Editor, and the component whose prop reads it fails to parse as a snippet, so it renders as plain text too. The value has to sit in the attribute.

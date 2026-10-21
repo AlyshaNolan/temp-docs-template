@@ -58,20 +58,20 @@ out of it, so pills and avatars are round at every setting.
 <ParamList
   params={[
     {
-      "name": "accentLight / accentDark",
-      "type": "hex color",
-      "description": "The interactive color — links, active sidebar item, focus rings, the brand tile. Use a paler step for dark: a fully saturated accent vibrates against near-black."
+      name: "accentLight / accentDark",
+      type: "hex color",
+      description: "The interactive color — links, active sidebar item, focus rings, the brand tile. Use a paler step for dark: a fully saturated accent vibrates against near-black."
     },
     {
-      "name": "brandLight / brandDark",
-      "type": "hex color",
-      "description": "Primary button and brand fill. Shipped near-black on light and white on dark, so an accent change never floods the page with one hue."
+      name: "brandLight / brandDark",
+      type: "hex color",
+      description: "Primary button and brand fill. Shipped near-black on light and white on dark, so an accent change never floods the page with one hue."
     },
     {
-      "name": "radius",
-      "type": "0–24",
-      "defaultValue": "10",
-      "description": "Corner rounding in pixels, driving the whole scale. 0 is square."
+      name: "radius",
+      type: "0–24",
+      defaultValue: "10",
+      description: "Corner rounding in pixels, driving the whole scale. 0 is square."
     }
   ]}
 />
@@ -141,20 +141,20 @@ Three things decide it, in order:
 <ParamList
   params={[
     {
-      "name": "The reader's choice",
-      "type": "localStorage",
-      "description": "Always wins, and persists across pages and reloads."
+      name: "The reader's choice",
+      type: "localStorage",
+      description: "Always wins, and persists across pages and reloads."
     },
     {
-      "name": "defaultTheme",
-      "type": "\"dark\" | \"light\" | \"system\"",
-      "defaultValue": "\"dark\"",
-      "description": "The site's own default, set in `src/data/theme.json`. This template ships dark."
+      name: "defaultTheme",
+      type: "\"dark\" | \"light\" | \"system\"",
+      defaultValue: "\"dark\"",
+      description: "The site's own default, set in `src/data/theme.json`. This template ships dark."
     },
     {
-      "name": "The operating system",
-      "type": "prefers-color-scheme",
-      "description": "Consulted only when `defaultTheme` is `system`."
+      name: "The operating system",
+      type: "prefers-color-scheme",
+      description: "Consulted only when `defaultTheme` is `system`."
     }
   ]}
 />

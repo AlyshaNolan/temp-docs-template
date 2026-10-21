@@ -108,19 +108,19 @@ site-wide, so a Python developer stays in Python across every page.
 <CodeTabs
   tabs={[
     {
-      "label": "cURL",
-      "language": "bash",
-      "code": "curl https://api.acme.com/v1/invoices \\\n  -H \"Authorization: Bearer $ACME_KEY\" \\\n  -d customer=cus_8Kq2 \\\n  -d amount=4900"
+      label: "cURL",
+      language: "bash",
+      code: "curl https://api.acme.com/v1/invoices \\\n  -H \"Authorization: Bearer $ACME_KEY\" \\\n  -d customer=cus_8Kq2 \\\n  -d amount=4900"
     },
     {
-      "label": "Node",
-      "language": "js",
-      "code": "import { Acme } from '@acme/sdk'\n\nconst acme = new Acme(process.env.ACME_KEY)\n\nconst invoice = await acme.invoices.create({\n  customer: 'cus_8Kq2',\n  amount: 4900,\n})"
+      label: "Node",
+      language: "js",
+      code: "import { Acme } from '@acme/sdk'\n\nconst acme = new Acme(process.env.ACME_KEY)\n\nconst invoice = await acme.invoices.create({\n  customer: 'cus_8Kq2',\n  amount: 4900,\n})"
     },
     {
-      "label": "Python",
-      "language": "python",
-      "code": "from acme import Acme\n\nacme = Acme(os.environ['ACME_KEY'])\n\ninvoice = acme.invoices.create(\n    customer='cus_8Kq2',\n    amount=4900,\n)"
+      label: "Python",
+      language: "python",
+      code: "from acme import Acme\n\nacme = Acme(os.environ['ACME_KEY'])\n\ninvoice = acme.invoices.create(\n    customer='cus_8Kq2',\n    amount=4900,\n)"
     }
   ]}
 />
@@ -135,12 +135,12 @@ Each note names the line it marks.
   language="json"
   notes={[
     {
-      "line": 2,
-      "text": "Builds the search index at compile time and ships it with the site — no search service, no API key."
+      line: 2,
+      text: "Builds the search index at compile time and ships it with the site — no search service, no API key."
     },
     {
-      "line": 4,
-      "text": "Links beside the brand. Add, remove and reorder them on the page in CloudCannon's Visual Editor."
+      line: 4,
+      text: "Links beside the brand. Add, remove and reorder them on the page in CloudCannon's Visual Editor."
     }
   ]}
   code={'{\n  "search": true,\n  "themeToggle": true,\n  "topbarLinks": [\n    { "name": "GitHub", "path": "https://github.com/acme/docs" }\n  ]\n}'}
