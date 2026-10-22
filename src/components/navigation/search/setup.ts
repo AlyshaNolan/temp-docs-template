@@ -1,12 +1,10 @@
 // Also imported by `editor-live-sync.js`. The index exists only after a build;
 // in `astro dev` run `npm run search:dev` or the modal shows its unavailable notice.
 
-import { getInstanceManager } from "@pagefind/component-ui";
-
 import { setupModalShell } from "../../building-blocks/wrappers/modal/setup";
 
 let keyboardShortcutBound = false;
-let errorHookBound = false;
+let pagefindPromise: Promise<typeof import("@pagefind/component-ui")> | undefined;
 
 function currentSearchPopover(): HTMLElement | null {
   return document.querySelector<HTMLElement>(".search .modal-popover");
@@ -135,27 +133,58 @@ export function setupSearch(search: HTMLElement): void {
     true
   );
 
-  const instance = getInstanceManager().getInstance("default");
-
-  // Once module-wide, so view transitions can't stack callbacks on detached DOM.
-  if (!errorHookBound) {
-    errorHookBound = true;
-    instance.on("error", () => {
-      document
-        .querySelectorAll<HTMLElement>(".search")
-        .forEach((el) => el.setAttribute("data-search-unavailable", ""));
-    });
-  }
-
   popover.addEventListener("toggle", (e) => {
-    if ((e as ToggleEvent).newState === "open") {
-      instance.triggerLoad().catch(() => {});
-    }
+    if ((e as ToggleEvent).newState === "open") void openSearch(search, popover);
   });
 
+  const trigger = search.querySelector<HTMLElement>(".search-trigger");
+
+  trigger?.addEventListener("pointerenter", () => void loadPagefind(), { once: true });
+  trigger?.addEventListener("focus", () => void loadPagefind(), { once: true });
+}
+
+/** Kept off the critical path: Pagefind's UI is the largest script on every page. */
+function loadPagefind() {
+  pagefindPromise ??= import("@pagefind/component-ui").then((pagefind) => {
+    pagefind
+      .getInstanceManager()
+      .getInstance("default")
+      .on("error", () => {
+        document
+          .querySelectorAll<HTMLElement>(".search")
+          .forEach((el) => el.setAttribute("data-search-unavailable", ""));
+      });
+
+    return pagefind;
+  });
+
+  return pagefindPromise;
+}
+
+async function openSearch(search: HTMLElement, popover: HTMLElement): Promise<void> {
+  const pagefind = await loadPagefind();
+
   bindResultTemplate(search);
+  pagefind
+    .getInstanceManager()
+    .getInstance("default")
+    .triggerLoad()
+    .catch(() => {});
+
+  // An open before the import finished focused the close button: `<pagefind-input>` had no input yet.
+  const input = popover.querySelector<HTMLInputElement>('input[type="search"]');
+
+  if (popover.matches(":popover-open") && input && document.activeElement !== input) input.focus();
+}
+
+/** Off the critical path, but warm before the reader reaches for search. */
+function preloadWhenIdle(): void {
+  if ("requestIdleCallback" in window) requestIdleCallback(() => void loadPagefind());
+  else setTimeout(() => void loadPagefind(), 2000);
 }
 
 export function setupAllSearch(root: ParentNode = document): void {
   root.querySelectorAll<HTMLElement>(".search").forEach((el) => setupSearch(el));
+  if (document.readyState === "complete") preloadWhenIdle();
+  else addEventListener("load", preloadWhenIdle, { once: true });
 }
