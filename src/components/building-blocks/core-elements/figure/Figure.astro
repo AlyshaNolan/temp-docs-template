@@ -143,6 +143,18 @@ const popoverId = `figure-${slugifyLabel(String(caption || alt || source || "fig
       font-size: var(--font-size-xs);
     }
 
+    /* A phone-width zoom can't be larger than the inline image, so it's off there. */
+    @media (width < 640px) {
+      .figure-zoom-trigger {
+        cursor: auto;
+        pointer-events: none;
+      }
+
+      .figure-caption-hint {
+        display: none;
+      }
+    }
+
     .figure-zoom {
       --figure-zoom-gutter-block: var(--spacing-2xl);
       --figure-zoom-gutter-inline: var(--spacing-md);
