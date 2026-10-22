@@ -85,12 +85,22 @@ const popoverId = `figure-${slugifyLabel(String(caption || alt || source || "fig
         >
           Close
         </button>
-        <Image
-          source={source}
-          alternateSource={alternateSource}
-          alt={alt}
-          useDefaultEditableBinding={false}
-        />
+        <button
+          type="button"
+          class="figure-zoom-dismiss"
+          popovertarget={popoverId}
+          popovertargetaction="hide"
+          tabindex="-1"
+          aria-label="Close"
+        >
+          <Image
+            source={source}
+            alternateSource={alternateSource}
+            alt={alt}
+            sizes="100vw"
+            useDefaultEditableBinding={false}
+          />
+        </button>
       </div>
     )
   }
@@ -134,24 +144,38 @@ const popoverId = `figure-${slugifyLabel(String(caption || alt || source || "fig
     }
 
     .figure-zoom {
+      --figure-zoom-gutter-block: var(--spacing-2xl);
+      --figure-zoom-gutter-inline: var(--spacing-md);
+
       background-color: transparent;
       border: 0;
       height: 100%;
       max-height: none;
       max-width: none;
-      padding: var(--spacing-2xl);
+      padding: 0;
       width: 100%;
 
       &::backdrop {
         background-color: var(--color-overlay);
       }
+    }
 
-      img {
-        display: block;
-        margin-inline: auto;
-        max-height: 100%;
-        max-width: 100%;
+    /* The popover covers the viewport, so clicks around the image never reach
+       the backdrop; this full-size button is what makes them dismiss it. */
+    .figure-zoom-dismiss {
+      background: none;
+      border: 0;
+      cursor: zoom-out;
+      display: grid;
+      height: 100%;
+      padding: 0;
+      place-items: center;
+      width: 100%;
+
+      .image > .image-inner img {
+        height: calc(100dvh - 2 * var(--figure-zoom-gutter-block));
         object-fit: contain;
+        width: calc(100vw - 2 * var(--figure-zoom-gutter-inline));
       }
     }
 
