@@ -18,7 +18,7 @@ caption:
   comment: Optional caption under the image.
 zoom:
   type: switch
-  comment: Let readers click the image to see it full-size.
+  comment: Let readers click the image to see it full-size. Desktop only; phones show it at page size.
 aspectRatio:
   type: select
   comment: Crop the image to a fixed ratio. None keeps its own proportions.
