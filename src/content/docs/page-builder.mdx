@@ -10,7 +10,6 @@ showFeedback: true
 showCopyPage: true
 showPager: true
 ---
-
 ## Two kinds of page
 
 A documentation page is prose: an `.mdx` file in `src/content/docs/` with components dropped into it. A **page-builder page** is a stack of sections instead — the [overview](/) is one. Each lives in `src/content/pages/` as a `.md` file whose frontmatter holds a `pageSections` array, and an editor builds it by adding, reordering and editing sections on the page in CloudCannon's Visual Editor.
@@ -42,30 +41,30 @@ Each section names its component in `_component` — the component's folder path
 
 These go straight into `pageSections`. Each carries its own width, padding and color-scheme settings.
 
-| Section         | For                                                         |
-| --------------- | ----------------------------------------------------------- |
-| Hero center     | A centered heading, supporting text and buttons             |
-| Custom section  | Any blocks you like, with the section chrome around them    |
-| Card collection | A grid of linked cards                                      |
-| Feature list    | Short feature labels with a line of detail each             |
-| CTA split       | A call to action, text on one side and buttons on the other |
-| FAQ section     | Questions and answers in an accordion                       |
-| Stats           | A row of big numbers with labels                            |
-| Steps section   | A numbered how-it-works sequence                            |
-| Tabbed content  | Several panels in one section, behind tabs                  |
+| Section | For |
+| --- | --- |
+| Hero center | A centered heading, supporting text and buttons |
+| Custom section | Any blocks you like, with the section chrome around them |
+| Card collection | A grid of linked cards |
+| Feature list | Short feature labels with a line of detail each |
+| CTA split | A call to action, text on one side and buttons on the other |
+| FAQ section | Questions and answers in an accordion |
+| Stats | A row of big numbers with labels |
+| Steps section | A numbered how-it-works sequence |
+| Tabbed content | Several panels in one section, behind tabs |
 
 ## Building blocks
 
 Blocks go inside a section — in its content, its buttons or its items — and most can also be used in a documentation page; see [Writing content](/writing-content/) and [Media & components](/media-and-components/).
 
-| Kind         | Blocks                                                                                                                                                 |
-| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Text & media | Heading, Text, Simple text, Image, Figure, Video, Embed, Icon, Badge, Counter, Spacer                                                                  |
-| Code         | Code block, Code tabs, Code annotations, Code diff, Command line, File tree                                                                            |
-| Reference    | Alert, Param list, Definition list, Diagram, Changelog                                                                                                 |
-| Actions      | Button, Button group, Social links, Print button                                                                                                       |
-| Layout       | Grid, Split, Card, Card grid, Masonry, Accordion, Content selector, Steps                                                                              |
-| Forms        | Form, Input, Textarea, Select, Choice group, Segments, Toggle, Range, Date, File upload, Hidden, Submit — see [Feedback & forms](/feedback-and-forms/) |
+| Kind | Blocks |
+| --- | --- |
+| Text & media | Heading, Text, Simple text, Image, Figure, Video, Embed, Icon, Badge, Counter, Spacer |
+| Code | Code block, Code tabs, Code annotations, Code diff, Command line, File tree |
+| Reference | Alert, Param list, Definition list, Diagram, Changelog |
+| Actions | Button, Button group, Social links, Print button |
+| Layout | Grid, Split, Card, Card grid, Masonry, Accordion, Content selector, Steps |
+| Forms | Form, Input, Textarea, Select, Choice group, Segments, Toggle, Range, Date, File upload, Hidden, Submit — see [Feedback & forms](/feedback-and-forms/) |
 
 ## Adding your own component
 

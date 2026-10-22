@@ -10,7 +10,6 @@ showFeedback: true
 showCopyPage: true
 showPager: true
 ---
-
 ## Host it on CloudCannon
 
 The repository carries CloudCannon's build settings, so there is nothing to fill in by hand.
@@ -41,21 +40,21 @@ The reset script asks for your site name and URL, then clears the demo content a
 
 `npm run check:placeholders` lists everything still set to the template's values. It runs as part of `npm run check`, as a warning.
 
-| File                            | Replace                                                                |
-| ------------------------------- | ---------------------------------------------------------------------- |
-| `astro.config.mjs`              | `site`                                                                 |
-| `src/data/seo.json`             | `url`, `siteName`, `titleFormat`, `description`, favicons, share image |
-| `src/data/header.json`          | The logo and the topbar links                                          |
-| `src/data/footer.json`          | Links, social icons and the small print                                |
-| `src/data/pageTools.json`       | `repositoryUrl`, which every "Edit this page" link is built from       |
-| `src/content/changelog/`        | The template's releases — the header badge shows the newest            |
-| `src/data/announcementBar.json` | The launch message                                                     |
+| File | Replace |
+| --- | --- |
+| `astro.config.mjs` | `site` |
+| `src/data/seo.json` | `url`, `siteName`, `titleFormat`, `description`, favicons, share image |
+| `src/data/header.json` | The logo and the topbar links |
+| `src/data/footer.json` | Links, social icons and the small print |
+| `src/data/pageTools.json` | `repositoryUrl`, which every "Edit this page" link is built from |
+| `src/content/changelog/` | The template's releases — the header badge shows the newest |
+| `src/data/announcementBar.json` | The launch message |
 
 <Alert variant="tip" title="Make it a hard failure in your own CI" text="Add `npm run check:placeholders -- --strict` to your pipeline and a build with a placeholder URL fails instead of warning."/>
 
 ## Before you launch
 
-- Link a CloudCannon Inbox if you keep the helpful vote or any form — without one, submissions have nowhere to go. See [Setting up CloudCannon Forms](/feedback-and-forms/#setting-up-cloudcannon-forms).
-- Add a redirect in `src/data/redirects.json` for any page you renamed since people started sharing links.
-- Run `npm run check`. It includes `lint:links`, which fails on any internal link that points at no page — a page renamed late in a project leaves them behind.
-- Run `npm run build && npm run preview` and try search (⌘K): the dev server has no index, so this is the first time you see it working.
+* Link a CloudCannon Inbox if you keep the helpful vote or any form — without one, submissions have nowhere to go. See [Setting up CloudCannon Forms](/feedback-and-forms/#setting-up-cloudcannon-forms).
+* Add a redirect in `src/data/redirects.json` for any page you renamed since people started sharing links.
+* Run `npm run check`. It includes `lint:links`, which fails on any internal link that points at no page — a page renamed late in a project leaves them behind.
+* Run `npm run build && npm run preview` and try search (⌘K): the dev server has no index, so this is the first time you see it working.
