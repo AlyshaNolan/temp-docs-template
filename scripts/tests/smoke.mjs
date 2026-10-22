@@ -83,7 +83,7 @@ const tests = [
     },
   },
   {
-    name: "content selector tab switches panels on Enter",
+    name: "content selector switches panels from the keyboard",
     path: "/preview-renders/building-blocks/wrappers/content-selector/",
     viewport: DESKTOP,
     async run(page) {
@@ -94,20 +94,16 @@ const tests = [
 
       const second = items.nth(1);
 
-      await second.locator(".content-selector-tab").focus();
-      await page.keyboard.press("Enter");
+      await items.first().locator(".content-selector-input").focus();
+      await page.keyboard.press("ArrowRight");
       await page.waitForFunction(() => {
         const item = document.querySelectorAll("[data-preview-root] .content-selector-item")[1];
 
         return item?.querySelector(".content-selector-input")?.checked === true;
       });
       assert(
-        (await second.locator(".content-selector-tab").getAttribute("aria-expanded")) === "true",
-        "the activated tab did not report aria-expanded=true"
-      );
-      assert(
-        (await second.locator(".content-selector-panel").getAttribute("aria-hidden")) === "false",
-        "the activated panel is still aria-hidden"
+        await second.locator(".content-selector-panel").isVisible(),
+        "the activated panel is not visible"
       );
     },
   },
@@ -379,6 +375,7 @@ const tests = [
         "the diagram source is missing from the page"
       );
 
+      await diagram.scrollIntoViewIfNeeded();
       await page.waitForFunction(
         () => document.querySelector(".diagram")?.hasAttribute("data-diagram-rendered"),
         undefined,

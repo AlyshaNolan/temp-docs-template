@@ -73,16 +73,34 @@ function watchTheme(): void {
   themeWatcherBound = true;
 
   new MutationObserver(() => {
-    document.querySelectorAll<HTMLElement>(".diagram").forEach((el) => void render(el));
+    document
+      .querySelectorAll<HTMLElement>(".diagram[data-diagram-rendered]")
+      .forEach((el) => void render(el));
   }).observe(document.documentElement, { attributeFilter: ["data-theme"] });
 }
 
+const nearViewport =
+  "IntersectionObserver" in window
+    ? new IntersectionObserver(
+        (entries, observer) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            observer.unobserve(entry.target);
+            void render(entry.target as HTMLElement);
+          });
+        },
+        { rootMargin: "50%" }
+      )
+    : undefined;
+
+/** Renders once the diagram nears the viewport, so Mermaid stays off the critical path. */
 export async function setupDiagram(root: HTMLElement): Promise<void> {
   if (root.hasAttribute("data-diagram-initialized")) return;
   root.setAttribute("data-diagram-initialized", "");
 
   watchTheme();
-  await render(root);
+  if (nearViewport) nearViewport.observe(root);
+  else await render(root);
 }
 
 export function setupAllDiagrams(): void {

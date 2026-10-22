@@ -1,6 +1,6 @@
 /**
- * Panel switching is pure CSS; this syncs aria state, adds Enter/Space to the
- * `<label>` tabs and restores the choice after an editor re-render. Also
+ * Panel switching is pure CSS and the radios are the focusable controls; this
+ * isolates radio groups and restores the choice after an editor re-render. Also
  * registered in `editor-live-sync.js`: the editor strips inline scripts.
  */
 
@@ -19,21 +19,7 @@ function getInputs(contentSelector: HTMLElement): HTMLInputElement[] {
   ).filter((input) => input.closest(".content-selector-items") === contentSelector);
 }
 
-function setAttributeIfChanged(element: Element, name: string, value: string): void {
-  if (element.getAttribute(name) !== value) element.setAttribute(name, value);
-}
-
-function updatePanelAriaState(input: HTMLInputElement, isSelected: boolean): void {
-  const tab = input.nextElementSibling;
-  const panel = tab?.nextElementSibling;
-
-  if (!(tab instanceof HTMLElement) || !(panel instanceof HTMLElement)) return;
-
-  setAttributeIfChanged(tab, "aria-expanded", isSelected.toString());
-  setAttributeIfChanged(panel, "aria-hidden", (!isSelected).toString());
-}
-
-function syncContentSelectorAriaState(contentSelector: HTMLElement): void {
+function syncSelection(contentSelector: HTMLElement): void {
   const inputs = getInputs(contentSelector);
 
   if (!inputs.length) return;
@@ -46,10 +32,6 @@ function syncContentSelectorAriaState(contentSelector: HTMLElement): void {
 
   selectedInput ??= inputs[0];
   if (!selectedInput.checked) selectedInput.checked = true;
-
-  inputs.forEach((input) => {
-    updatePanelAriaState(input, input === selectedInput);
-  });
 }
 
 function handleInputChange(event: Event): void {
@@ -62,26 +44,6 @@ function handleInputChange(event: Event): void {
   if (!(contentSelector instanceof HTMLElement)) return;
 
   selectedIndex.set(stateOwner(contentSelector), getInputs(contentSelector).indexOf(input));
-  syncContentSelectorAriaState(contentSelector);
-}
-
-function handleTabKeydown(event: Event): void {
-  if (!(event instanceof KeyboardEvent)) return;
-  if (event.key !== "Enter" && event.key !== " ") return;
-
-  const tab = event.target;
-
-  if (!(tab instanceof HTMLLabelElement) || !tab.matches(".content-selector-tab")) return;
-
-  event.preventDefault();
-
-  const inputId = tab.getAttribute("for");
-  const input = inputId ? document.getElementById(inputId) : null;
-
-  if (!(input instanceof HTMLInputElement)) return;
-
-  input.checked = true;
-  input.dispatchEvent(new Event("change", { bubbles: true }));
 }
 
 let isolatedGroupCount = 0;
@@ -120,7 +82,7 @@ export function setupContentSelector(contentSelector: HTMLElement): void {
   const owner = stateOwner(contentSelector);
 
   isolateRadioGroup(contentSelector);
-  syncContentSelectorAriaState(contentSelector);
+  syncSelection(contentSelector);
 
   if (observed.has(owner)) return;
   observed.add(owner);
@@ -130,7 +92,6 @@ export function setupContentSelector(contentSelector: HTMLElement): void {
   selectedIndex.set(owner, Math.max(initial, 0));
 
   owner.addEventListener("change", handleInputChange);
-  owner.addEventListener("keydown", handleTabKeydown);
 
   new MutationObserver(() => {
     const current = findContentSelector(owner);
@@ -138,12 +99,12 @@ export function setupContentSelector(contentSelector: HTMLElement): void {
     if (!current) return;
 
     isolateRadioGroup(current);
-    syncContentSelectorAriaState(current);
+    syncSelection(current);
   }).observe(owner, {
     subtree: true,
     childList: true,
     attributes: true,
-    attributeFilter: ["checked", "name", "aria-expanded", "aria-hidden"],
+    attributeFilter: ["checked", "name"],
   });
 }
 

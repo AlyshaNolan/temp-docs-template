@@ -18,7 +18,7 @@
   --color-text-on-muted: var(--black);
   --color-text-on-brand: var(--color-brand-on);
   --color-text-inverse: var(--white);
-  --color-text-faint: var(--gray-500);
+  --color-text-faint: #646b75;
   --color-link: var(--color-accent);
   --color-link-hover: var(--color-accent-hover);
 
